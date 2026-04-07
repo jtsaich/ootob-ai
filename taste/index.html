@@ -81,6 +81,7 @@
       font-weight: 700;
       line-height: 1.35;
       margin-bottom: 0.4rem;
+      text-wrap: balance;
     }
 
     .epigraph {
@@ -98,6 +99,7 @@
       margin-top: 3rem;
       margin-bottom: 1rem;
       line-height: 1.4;
+      text-wrap: balance;
     }
 
     h3 {
@@ -166,6 +168,35 @@
       font-family: 'Inter', sans-serif;
       font-size: 13px;
       color: var(--text-secondary);
+    }
+
+    /* Page load animation */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .site-header { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+    article { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.08s both; }
+    .site-footer { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.16s both; }
+
+    .site-header a {
+      transition: color 0.15s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .site-header a:hover {
+        color: var(--text);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .site-header, article, .site-footer {
+        animation: none;
+      }
+      .site-header a {
+        transition: none;
+      }
     }
 
     @media (max-width: 480px) {

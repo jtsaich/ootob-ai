@@ -41,7 +41,7 @@
     text-align: center;
     padding: 30px 0 20px;
   }
-  header h1 { font-size: 1.6em; margin-bottom: 6px; }
+  header h1 { font-size: 1.6em; margin-bottom: 6px; text-wrap: balance; }
   header .subtitle { color: var(--text-muted); font-size: 0.9em; }
   .stats-bar {
     display: flex;
@@ -52,7 +52,7 @@
     font-size: 0.85em;
     color: var(--text-muted);
   }
-  .stats-bar span strong { color: var(--text); }
+  .stats-bar span strong { color: var(--text); font-variant-numeric: tabular-nums; }
 
   /* Mode selector */
   .mode-selector {
@@ -71,10 +71,9 @@
     color: var(--text-muted);
     font-size: 0.85em;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
     text-align: center;
   }
-  .mode-btn:hover { border-color: var(--accent2); }
   .mode-btn.active {
     border-color: var(--accent);
     color: var(--text);
@@ -96,9 +95,8 @@
     color: var(--text-muted);
     font-size: 0.8em;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
   }
-  .level-btn:hover { border-color: var(--accent2); }
   .level-btn.active {
     border-color: var(--accent);
     color: var(--text);
@@ -183,8 +181,6 @@
     cursor: pointer;
     transition: opacity 0.2s;
   }
-  .submit-btn:hover { opacity: 0.75; }
-
   /* Result feedback */
   .feedback {
     text-align: center;
@@ -225,9 +221,8 @@
     color: var(--text-muted);
     font-size: 0.85em;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.2s ease, color 0.2s ease;
   }
-  .action-btn:hover { border-color: var(--accent); color: var(--text); }
   .action-btn.primary {
     background: var(--accent);
     border-color: var(--accent);
@@ -296,7 +291,6 @@
     border-bottom: 1px solid var(--border);
     font-size: 0.9em;
   }
-  .vocab-item:hover { background: var(--card); }
   .vocab-item .jp { font-size: 1.1em; }
   .vocab-item .reading { color: var(--text-muted); font-size: 0.85em; }
   .vocab-item .zh { color: var(--text-muted); }
@@ -330,14 +324,56 @@
     color: var(--text-muted);
     font-size: 0.9em;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: color 0.2s ease, border-color 0.2s ease;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
+    font-weight: 700;
   }
   .tab-btn.active {
     color: var(--text);
     border-bottom-color: var(--accent);
-    font-weight: 700;
+  }
+
+  /* Page load animation */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  header { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+  #quizSection, #vocabSection { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.08s both; }
+
+  /* Button press feedback */
+  .submit-btn:active, .action-btn:active, .mode-btn:active, .level-btn:active {
+    transform: scale(0.97);
+  }
+
+  /* Feedback slide-in */
+  .feedback.show {
+    animation: fadeInUp 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Hover only on pointer devices */
+  @media (hover: hover) and (pointer: fine) {
+    .mode-btn:hover { border-color: var(--accent2); }
+    .level-btn:hover { border-color: var(--accent2); }
+    .action-btn:hover { border-color: var(--accent); color: var(--text); }
+    .submit-btn:hover { opacity: 0.75; }
+    .vocab-item:hover { background: var(--card); }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    header, #quizSection, #vocabSection, .feedback.show {
+      animation: none;
+    }
+    .mode-btn, .level-btn, .action-btn, .tab-btn,
+    .input-area input, .submit-btn, .progress-bar .fill {
+      transition: none;
+    }
+    .submit-btn:active, .action-btn:active, .mode-btn:active, .level-btn:active {
+      transform: none;
+    }
   }
 </style>
 </head>

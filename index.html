@@ -81,6 +81,7 @@
       font-weight: 700;
       line-height: 1.35;
       margin-bottom: 0.5rem;
+      text-wrap: balance;
     }
 
     .subtitle {
@@ -120,15 +121,11 @@
       display: block;
     }
 
-    .project-list a:hover .project-name {
-      color: var(--text-secondary);
-    }
-
     .project-name {
       font-weight: 700;
       font-size: 1.05rem;
       margin-bottom: 0.2rem;
-      transition: color 0.15s;
+      transition: color 0.15s ease;
     }
 
     .project-desc {
@@ -169,6 +166,33 @@
       font-family: 'Inter', sans-serif;
       font-size: 13px;
       color: var(--text-secondary);
+    }
+
+    /* Page load animation */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .site-header { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+    main { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.08s both; }
+    .site-footer { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.16s both; }
+
+    /* Hover only on pointer devices */
+    @media (hover: hover) and (pointer: fine) {
+      .project-list a:hover .project-name {
+        color: var(--text-secondary);
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .site-header, main, .site-footer {
+        animation: none;
+      }
+      .project-name {
+        transition: none;
+      }
     }
 
     @media (max-width: 480px) {
