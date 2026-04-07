@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本語 N5/N4 每日練習</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --surface: #16213e;
+    --card: #0f3460;
+    --accent: #e94560;
+    --accent2: #533483;
+    --text: #eee;
+    --text-muted: #999;
+    --correct: #4ecca3;
+    --wrong: #e94560;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Noto Sans TC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .container {
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+  }
+  header {
+    text-align: center;
+    padding: 30px 0 20px;
+  }
+  header h1 { font-size: 1.6em; margin-bottom: 6px; }
+  header .subtitle { color: var(--text-muted); font-size: 0.9em; }
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 12px 0;
+    margin-bottom: 16px;
+    font-size: 0.85em;
+    color: var(--text-muted);
+  }
+  .stats-bar span strong { color: var(--text); }
+
+  /* Mode selector */
+  .mode-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .mode-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 12px 8px;
+    border: 2px solid var(--card);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .mode-btn:hover { border-color: var(--accent2); }
+  .mode-btn.active {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--card);
+  }
+
+  /* Level filter */
+  .level-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .level-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--card);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .level-btn:hover { border-color: var(--accent2); }
+  .level-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(233,69,96,0.1);
+  }
+
+  /* Quiz card */
+  .quiz-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .quiz-card .level-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 0.7em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--card);
+    color: var(--text-muted);
+  }
+  .quiz-card .prompt-label {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .quiz-card .prompt {
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .quiz-card .prompt-sub {
+    font-size: 1em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .quiz-card .qa-context {
+    font-size: 0.85em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  /* Input area */
+  .input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .input-area input {
+    flex: 1;
+    padding: 14px 16px;
+    border: 2px solid var(--card);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 1.1em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-area input:focus { border-color: var(--accent2); }
+  .input-area input.correct { border-color: var(--correct); }
+  .input-area input.wrong { border-color: var(--wrong); }
+  .submit-btn {
+    padding: 14px 24px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .submit-btn:hover { opacity: 0.85; }
+
+  /* Result feedback */
+  .feedback {
+    text-align: center;
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    display: none;
+    font-size: 0.95em;
+    line-height: 1.6;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct {
+    background: rgba(78,204,163,0.1);
+    border: 1px solid var(--correct);
+    color: var(--correct);
+  }
+  .feedback.wrong {
+    background: rgba(233,69,96,0.1);
+    border: 1px solid var(--wrong);
+    color: var(--wrong);
+  }
+  .feedback .answer-detail {
+    color: var(--text);
+    margin-top: 8px;
+  }
+
+  /* Action buttons */
+  .actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .action-btn {
+    padding: 10px 20px;
+    border: 1px solid var(--card);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .action-btn:hover { border-color: var(--accent2); color: var(--text); }
+  .action-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* Q&A specific */
+  .qa-hint {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .qa-example {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 0.9em;
+    line-height: 1.8;
+    text-align: left;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--card);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s;
+    border-radius: 2px;
+  }
+
+  /* Vocab browser */
+  .vocab-browser { display: none; }
+  .vocab-browser.show { display: block; }
+  .vocab-search {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--card);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.95em;
+    outline: none;
+    margin-bottom: 12px;
+  }
+  .vocab-list {
+    max-height: 60vh;
+    overflow-y: auto;
+    border-radius: var(--radius);
+  }
+  .vocab-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--card);
+    font-size: 0.9em;
+  }
+  .vocab-item:hover { background: var(--card); }
+  .vocab-item .jp { font-size: 1.1em; }
+  .vocab-item .reading { color: var(--text-muted); font-size: 0.85em; }
+  .vocab-item .zh { color: var(--text-muted); }
+  .vocab-item .lvl {
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text-muted);
+    margin-left: 8px;
+  }
+  .vocab-count {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8em;
+    margin-bottom: 12px;
+  }
+
+  /* Tab bar */
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--card);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+  }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>日本語 每日練習</h1>
+    <div class="subtitle">N5 / N4 單字 + 會話</div>
+  </header>
+
+  <div class="stats-bar">
+    <span>今日: <strong id="todayCount">0</strong> 題</span>
+    <span>正確率: <strong id="accuracy">-</strong></span>
+    <span>連續: <strong id="streak">0</strong></span>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('quiz')">練習</button>
+    <button class="tab-btn" onclick="switchTab('vocab')">單字表</button>
+  </div>
+
+  <!-- Quiz Section -->
+  <div id="quizSection">
+    <div class="mode-selector">
+      <button class="mode-btn active" onclick="setMode('zh2jp')">中 → 日</button>
+      <button class="mode-btn" onclick="setMode('jp2zh')">日 → 中</button>
+      <button class="mode-btn" onclick="setMode('qa')">Q&A 會話</button>
+    </div>
+
+    <div class="level-filter">
+      <button class="level-btn active" data-level="all" onclick="setLevel('all')">全部</button>
+      <button class="level-btn" data-level="N5" onclick="setLevel('N5')">N5</button>
+      <button class="level-btn" data-level="N4" onclick="setLevel('N4')">N4</button>
+    </div>
+
+    <div class="progress-bar"><div class="fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="quiz-card" id="quizCard">
+      <div class="level-tag" id="levelTag">N5</div>
+      <div class="prompt-label" id="promptLabel">請寫出日文</div>
+      <div class="prompt" id="prompt">載入中...</div>
+      <div class="prompt-sub" id="promptSub"></div>
+      <div class="qa-context" id="qaContext" style="display:none"></div>
+    </div>
+
+    <div class="qa-hint" id="qaHint" style="display:none">用日文回答即可，不需要完美</div>
+
+    <div class="input-area">
+      <input type="text" id="answerInput" placeholder="輸入答案..." autocomplete="off">
+      <button class="submit-btn" id="submitBtn" onclick="checkAnswer()">確認</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="actions">
+      <button class="action-btn" onclick="showAnswer()">看答案</button>
+      <button class="action-btn primary" onclick="nextQuestion()" id="nextBtn">下一題</button>
+    </div>
+  </div>
+
+  <!-- File picker fallback (shown if fetch fails on file:// protocol) -->
+  <div id="filePicker" style="display:none; text-align:center; margin-bottom:20px;">
+    <p style="color:var(--text-muted); font-size:0.85em; margin-bottom:12px;">
+      直接開檔無法自動載入 .md，請選擇檔案，或用 local server 開啟：<br>
+      <code style="color:var(--accent); font-size:0.8em;">python3 -m http.server 8000</code>
+    </p>
+    <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+      <label style="padding:8px 16px; border:1px solid var(--card); border-radius:8px; cursor:pointer; color:var(--text-muted); font-size:0.85em;">
+        vocab.md <input type="file" id="vocabFile" accept=".md" style="display:none" onchange="handleFileSelect()">
+      </label>
+      <label style="padding:8px 16px; border:1px solid var(--card); border-radius:8px; cursor:pointer; color:var(--text-muted); font-size:0.85em;">
+        qa.md <input type="file" id="qaFile" accept=".md" style="display:none" onchange="handleFileSelect()">
+      </label>
+    </div>
+  </div>
+
+  <!-- Vocab Browser -->
+  <div id="vocabSection" class="vocab-browser">
+    <input type="text" class="vocab-search" id="vocabSearch" placeholder="搜尋單字 (中文/日文/假名)..." oninput="filterVocab()">
+    <div class="vocab-count" id="vocabCount"></div>
+    <div class="vocab-list" id="vocabList"></div>
+  </div>
+</div>
+
+<script>
+// ========== PARSE MD FILES ==========
+function parseVocabMd(text) {
+  const lines = text.split('\n');
+  const vocab = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('格式')) continue;
+    const parts = trimmed.split('|').map(s => s.trim());
+    if (parts.length >= 5) {
+      vocab.push({ kanji: parts[0], reading: parts[1], zh: parts[2], level: parts[3], pos: parts[4] });
+    }
+  }
+  // dedupe
+  const seen = new Set();
+  return vocab.filter(v => {
+    const key = v.kanji + v.reading;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function parseQaMd(text) {
+  const lines = text.split('\n');
+  const qa = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('格式')) continue;
+    const parts = trimmed.split('|').map(s => s.trim());
+    if (parts.length >= 4) {
+      qa.push({ q: parts[0], zh: parts[1], hint: parts[2], level: parts[3] });
+    }
+  }
+  return qa;
+}
+
+// ========== DATA LOADING ==========
+let VOCAB_CLEAN = [];
+let QA_QUESTIONS = [];
+let dataLoaded = false;
+
+async function loadFromFetch() {
+  const [vocabResp, qaResp] = await Promise.all([
+    fetch('vocab.md'),
+    fetch('qa.md')
+  ]);
+  if (!vocabResp.ok || !qaResp.ok) throw new Error('fetch failed');
+  VOCAB_CLEAN = parseVocabMd(await vocabResp.text());
+  QA_QUESTIONS = parseQaMd(await qaResp.text());
+}
+
+function loadFromFiles(vocabText, qaText) {
+  VOCAB_CLEAN = parseVocabMd(vocabText);
+  QA_QUESTIONS = parseQaMd(qaText);
+  dataLoaded = true;
+  document.getElementById('filePicker').style.display = 'none';
+  nextQuestion();
+}
+
+// File picker fallback UI (hidden by default, shown if fetch fails)
+function showFilePicker() {
+  document.getElementById('filePicker').style.display = 'block';
+  document.getElementById('prompt').textContent = '請載入單字檔';
+  document.getElementById('promptLabel').textContent = '需要 vocab.md 和 qa.md';
+}
+
+// ========== STATE ==========
+let mode = 'zh2jp';
+let level = 'all';
+let currentQ = null;
+let answered = false;
+let stats = { total: 0, correct: 0, streak: 0 };
+
+// ========== HELPERS ==========
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getFilteredVocab() {
+  if (level === 'all') return VOCAB_CLEAN;
+  return VOCAB_CLEAN.filter(v => v.level === level);
+}
+
+function getFilteredQA() {
+  if (level === 'all') return QA_QUESTIONS;
+  return QA_QUESTIONS.filter(q => q.level === level);
+}
+
+function normalize(s) {
+  return s.trim().replace(/\s+/g, '').toLowerCase();
+}
+
+// ========== QUIZ LOGIC ==========
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', ['zh2jp','jp2zh','qa'][i] === m);
+  });
+  document.getElementById('qaHint').style.display = m === 'qa' ? 'block' : 'none';
+  resetFeedback();
+  nextQuestion();
+}
+
+function setLevel(l) {
+  level = l;
+  document.querySelectorAll('.level-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.level === l);
+  });
+  resetFeedback();
+  nextQuestion();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === (tab === 'quiz' ? 0 : 1));
+  });
+  document.getElementById('quizSection').style.display = tab === 'quiz' ? 'block' : 'none';
+  const vb = document.getElementById('vocabSection');
+  vb.classList.toggle('show', tab === 'vocab');
+  if (tab === 'vocab') renderVocabList();
+}
+
+function nextQuestion() {
+  answered = false;
+  resetFeedback();
+  const input = document.getElementById('answerInput');
+  input.value = '';
+  input.className = '';
+  input.focus();
+  document.getElementById('submitBtn').textContent = '確認';
+
+  if (mode === 'qa') {
+    const pool = getFilteredQA();
+    currentQ = pool[Math.floor(Math.random() * pool.length)];
+    document.getElementById('levelTag').textContent = currentQ.level;
+    document.getElementById('promptLabel').textContent = '用日文回答這個問題';
+    document.getElementById('prompt').textContent = currentQ.q;
+    document.getElementById('promptSub').textContent = currentQ.zh;
+    document.getElementById('qaContext').style.display = 'none';
+    input.placeholder = '用日文回答...';
+  } else {
+    const pool = getFilteredVocab();
+    currentQ = pool[Math.floor(Math.random() * pool.length)];
+    document.getElementById('levelTag').textContent = currentQ.level;
+
+    if (mode === 'zh2jp') {
+      document.getElementById('promptLabel').textContent = '請寫出日文（漢字或假名）';
+      document.getElementById('prompt').textContent = currentQ.zh;
+      document.getElementById('promptSub').textContent = '';
+      input.placeholder = '輸入日文...';
+    } else {
+      document.getElementById('promptLabel').textContent = '請寫出中文意思';
+      document.getElementById('prompt').textContent = currentQ.kanji;
+      document.getElementById('promptSub').textContent = currentQ.reading;
+      input.placeholder = '輸入中文...';
+    }
+    document.getElementById('qaContext').style.display = 'none';
+  }
+
+  updateProgress();
+}
+
+function checkAnswer() {
+  if (!currentQ) return;
+  if (answered) { nextQuestion(); return; }
+
+  const input = document.getElementById('answerInput');
+  const userAns = normalize(input.value);
+  if (!userAns) return;
+
+  answered = true;
+  stats.total++;
+
+  if (mode === 'qa') {
+    // Q&A mode: always show hint, no strict right/wrong
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `
+      <div>你的回答：${input.value}</div>
+      <div class="answer-detail" style="margin-top:12px">
+        <strong>參考回答：</strong>${currentQ.hint}
+      </div>
+    `;
+    stats.correct++;
+    stats.streak++;
+    input.classList.add('correct');
+  } else if (mode === 'zh2jp') {
+    const answers = [normalize(currentQ.kanji), normalize(currentQ.reading)];
+    const isCorrect = answers.includes(userAns);
+    showVocabFeedback(isCorrect, `${currentQ.kanji}（${currentQ.reading}）`);
+  } else {
+    // jp2zh: check if any part of zh matches
+    const zhParts = currentQ.zh.split(/[\/\(\)（）]/).map(normalize);
+    const isCorrect = zhParts.some(p => p && (userAns.includes(p) || p.includes(userAns)));
+    showVocabFeedback(isCorrect, currentQ.zh);
+  }
+
+  document.getElementById('submitBtn').textContent = '下一題';
+  updateStats();
+}
+
+function showVocabFeedback(isCorrect, correctAnswer) {
+  const input = document.getElementById('answerInput');
+  const fb = document.getElementById('feedback');
+  if (isCorrect) {
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `正解！`;
+    input.classList.add('correct');
+    stats.correct++;
+    stats.streak++;
+  } else {
+    fb.className = 'feedback show wrong';
+    fb.innerHTML = `<div>不對喔</div><div class="answer-detail">正確答案：${correctAnswer}</div>`;
+    input.classList.add('wrong');
+    stats.streak = 0;
+  }
+}
+
+function showAnswer() {
+  if (!currentQ || answered) return;
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show wrong';
+  if (mode === 'qa') {
+    fb.innerHTML = `<div class="answer-detail"><strong>參考回答：</strong>${currentQ.hint}</div>`;
+  } else if (mode === 'zh2jp') {
+    fb.innerHTML = `<div class="answer-detail">答案：${currentQ.kanji}（${currentQ.reading}）</div>`;
+  } else {
+    fb.innerHTML = `<div class="answer-detail">答案：${currentQ.zh}</div>`;
+  }
+  answered = true;
+  stats.total++;
+  stats.streak = 0;
+  document.getElementById('submitBtn').textContent = '下一題';
+  updateStats();
+}
+
+function resetFeedback() {
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+}
+
+function updateStats() {
+  document.getElementById('todayCount').textContent = stats.total;
+  document.getElementById('accuracy').textContent = stats.total > 0
+    ? Math.round(stats.correct / stats.total * 100) + '%' : '-';
+  document.getElementById('streak').textContent = stats.streak;
+}
+
+function updateProgress() {
+  const pct = Math.min(stats.total / 20 * 100, 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ========== VOCAB BROWSER ==========
+function renderVocabList() {
+  const search = normalize(document.getElementById('vocabSearch').value);
+  const filtered = VOCAB_CLEAN.filter(v => {
+    if (level !== 'all' && v.level !== level) return false;
+    if (!search) return true;
+    return normalize(v.kanji).includes(search) ||
+           normalize(v.reading).includes(search) ||
+           normalize(v.zh).includes(search);
+  });
+  document.getElementById('vocabCount').textContent = `共 ${filtered.length} 個單字`;
+  const html = filtered.map(v => `
+    <div class="vocab-item">
+      <div>
+        <span class="jp">${v.kanji}</span>
+        <span class="reading">${v.reading}</span>
+      </div>
+      <div>
+        <span class="zh">${v.zh}</span>
+        <span class="lvl">${v.level}</span>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('vocabList').innerHTML = html;
+}
+
+function filterVocab() { renderVocabList(); }
+
+// ========== KEYBOARD ==========
+document.getElementById('answerInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (answered) nextQuestion();
+    else checkAnswer();
+  }
+});
+
+// ========== FILE PICKER HANDLER ==========
+function handleFileSelect() {
+  const vocabFile = document.getElementById('vocabFile').files[0];
+  const qaFile = document.getElementById('qaFile').files[0];
+  if (vocabFile && qaFile) {
+    Promise.all([vocabFile.text(), qaFile.text()]).then(([vt, qt]) => {
+      loadFromFiles(vt, qt);
+    });
+  }
+}
+
+// ========== INIT ==========
+(async () => {
+  try {
+    await loadFromFetch();
+    dataLoaded = true;
+    nextQuestion();
+  } catch (e) {
+    // fetch failed (likely file:// protocol), show file picker
+    showFilePicker();
+  }
+})();
+</script>
+</body>
+</html>
