@@ -195,6 +195,51 @@
       }
     }
 
+    .coffee-chat {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 3rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.12s both;
+    }
+
+    .coffee-chat .coffee-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .coffee-chat p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 0.6rem;
+    }
+
+    .coffee-btn {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 0.7rem 1.8rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      border: 1px solid var(--text);
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .coffee-btn:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+
     @media (max-width: 480px) {
       body { font-size: 16px; }
       h1 { font-size: 1.4rem; }
@@ -251,6 +296,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </ul>
   </div>
 </main>
+
+<section class="coffee-chat">
+  <p class="coffee-label">Coffee Chat</p>
+  <p>如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+  <p>Let me know how I can help you.</p>
+  <a class="coffee-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat ☕</a>
+</section>
 
 <footer class="site-footer">
   <p>&copy; 2026 ootob.ai</p>
