@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIエージェントでシステムを構築するガイド / Building Systems with AI Agents</title>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MCWCMS2L');</script>
+<!-- End Google Tag Manager -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CGYGTGF0SW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CGYGTGF0SW');
+</script>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --text: #1c1917;
+    --muted: #78716c;
+    --border: #d6d3d1;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --hint-bg: #fefce8;
+    --hint-border: #ca8a04;
+    --warn-bg: #fef2f2;
+    --warn-border: #dc2626;
+    --code-bg: #f5f5f4;
+    --section-bg: #fff;
+    --cowork-bg: #f0f9ff;
+    --cowork-border: #0284c7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.8; padding: 2rem 1rem;
+    max-width: 820px; margin: 0 auto;
+  }
+  h1 { font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+  h2 { font-size: 1.3rem; margin-top: 2.5rem; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent); }
+  h3 { font-size: 1.1rem; margin-top: 1.8rem; margin-bottom: 0.6rem; }
+  p, li { margin-bottom: 0.6rem; }
+  ul, ol { padding-left: 1.5rem; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+  .ja { margin-bottom: 0.4rem; }
+  .en { color: var(--muted); font-size: 0.92rem; }
+  .bilingual { margin-bottom: 1.2rem; }
+  .phase-card {
+    background: var(--section-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.5rem; margin: 1.2rem 0;
+  }
+  .question-box {
+    background: var(--accent-light); border-left: 4px solid var(--accent);
+    padding: 1rem 1.2rem; margin: 1rem 0; border-radius: 0 6px 6px 0;
+  }
+  .question-box p { margin-bottom: 0.3rem; }
+  .warn-box {
+    background: var(--warn-bg); border-left: 4px solid var(--warn-border);
+    padding: 1rem 1.2rem; margin: 1rem 0; border-radius: 0 6px 6px 0;
+  }
+  .cowork-box {
+    background: var(--cowork-bg); border-left: 4px solid var(--cowork-border);
+    padding: 1rem 1.2rem; margin: 1rem 0; border-radius: 0 6px 6px 0;
+  }
+  details {
+    background: var(--hint-bg); border: 1px solid var(--hint-border);
+    border-radius: 6px; margin: 1rem 0; padding: 0;
+  }
+  details summary {
+    padding: 0.8rem 1.2rem; cursor: pointer; font-weight: 600;
+    font-size: 0.95rem; user-select: none; list-style: none;
+  }
+  details summary::before { content: "▶ "; font-size: 0.8rem; margin-right: 0.3rem; }
+  details[open] summary::before { content: "▼ "; }
+  details .hint-content {
+    padding: 0 1.2rem 1rem 1.2rem;
+    border-top: 1px solid rgba(202,138,4,0.2);
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1rem; overflow-x: auto;
+    font-size: 0.88rem; line-height: 1.6; margin: 0.8rem 0;
+    font-family: "SF Mono","Fira Code",monospace; white-space: pre-wrap;
+  }
+  code {
+    font-family: "SF Mono","Fira Code",monospace;
+    background: var(--code-bg); padding: 0.15rem 0.4rem;
+    border-radius: 3px; font-size: 0.9em;
+  }
+  .step-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; background: var(--accent); color: #fff;
+    border-radius: 50%; font-size: 0.85rem; font-weight: 700;
+    margin-right: 0.5rem; flex-shrink: 0;
+  }
+  .step-header { display: flex; align-items: center; margin-bottom: 0.6rem; }
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding-left: 1.6rem; position: relative; margin-bottom: 0.5rem; }
+  .checklist li::before { content: "☐"; position: absolute; left: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+  th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+  th { background: var(--code-bg); font-weight: 600; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  .toc {
+    background: var(--section-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1.5rem 0;
+  }
+  .toc ul { list-style: none; padding-left: 0; }
+  .toc li { margin-bottom: 0.3rem; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  @media (max-width: 600px) {
+    body { padding: 1rem 0.8rem; }
+    h1 { font-size: 1.3rem; }
+    .phase-card { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>AIエージェントでシステムを構築するガイド<br>
+<span class="en">A Non-Developer's Guide to Building Systems with AI Agents</span></h1>
+
+<p class="subtitle">
+開発経験がなくても、AIとの対話で業務システムを構築できる。このガイドでは「従業員の勤怠管理システム」を題材に、Claude Coworkを使った構築方法を段階的に解説する。<br>
+<span class="en">You can build business systems through conversation with AI, without development experience. This guide uses an employee time-tracking system as a working example, built with Claude Cowork.</span>
+</p>
+
+<div class="cowork-box">
+  <div class="bilingual">
+    <p class="ja"><strong>Claude Coworkとは？</strong>Claudeのデスクトップアプリに搭載された機能で、ファイル操作、ツール連携、タスク自動化を会話ベースで行える。Slack、Google Sheets、Notionなどの外部ツールとconnector（接続）を設定して使う。</p>
+    <p class="en"><strong>What is Claude Cowork?</strong> A feature in Claude's desktop app for file management, tool integration, and task automation through conversation. You connect external tools like Slack, Google Sheets, and Notion via connectors.</p>
+  </div>
+</div>
+
+<div class="warn-box">
+  <div class="bilingual">
+    <p class="ja"><strong>勤怠データは正確性が最重要。</strong>このガイド全体を通して、AIの「幻覚」（もっともらしいが不正確な出力）を防ぐ方法を示す。原則：<strong>計算はスプレッドシートの数式やデータベースに任せる。AIに数値を「推測」させない。結果は必ず自分の目で検証する。</strong></p>
+    <p class="en"><strong>Work hour data demands high accuracy.</strong> This guide shows how to prevent AI hallucination. The principle: <strong>calculations happen in spreadsheet formulas or databases. Never let AI guess numbers. Always verify results yourself.</strong></p>
+  </div>
+</div>
+
+<nav class="toc">
+  <strong>目次 / Contents</strong>
+  <ul>
+    <li><a href="#phase1">Phase 1: 仕様を考える / Figuring Out Your Spec</a></li>
+    <li><a href="#phase2">Phase 2: 設計を組み立てる / Planning Architecture</a></li>
+    <li><a href="#phase3">Phase 3: プロトタイプを作る / Building the Prototype</a></li>
+    <li><a href="#phase4">Phase 4: 本番に備える / Hardening for Launch</a></li>
+    <li><a href="#anti-hallucination">幻覚防止チェックリスト / Anti-Hallucination Checklist</a></li>
+    <li><a href="#templates">会話テンプレート / Conversation Templates</a></li>
+  </ul>
+</nav>
+
+<hr>
+
+<!-- ============================================ -->
+<!-- PHASE 1 -->
+<!-- ============================================ -->
+
+<h2 id="phase1">Phase 1: 仕様を考える / Figuring Out Your Spec</h2>
+
+<div class="bilingual">
+  <p class="ja">いきなりAIに「作って」と頼まない。まず自分で「何を作るか」を考える。AIはその思考を助けるパートナーとして使う。</p>
+  <p class="en">Don't jump straight to "build this." First, think through what you're building. Use AI as a thinking partner.</p>
+</div>
+
+<!-- Step 1 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">1</span>
+    <h3>今の業務を書き出す / Map Your Current Workflow</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">AIに相談する前に、まず自分で現在の業務フローを書き出す。以下の問いに答えてみよう。</p>
+    <p class="en">Before talking to AI, write down your current workflow yourself. Answer these questions:</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>自分に聞く質問：</strong></p>
+    <p class="en"><strong>Questions to ask yourself:</strong></p>
+    <ul>
+      <li>従業員は今、勤怠をどうやって記録しているか？ / How do employees currently record their hours?</li>
+      <li>そのデータはどこに保存されているか？ / Where is that data stored?</li>
+      <li>月末に誰が何をしているか？ / What happens at month-end, and who does it?</li>
+      <li>今の方法で一番面倒なのはどこか？ / What's the most painful part?</li>
+      <li>二重入力や手作業はどこにあるか？ / Where does double-entry or manual work happen?</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>ヒント：書き出しの例 / Hint: Example write-up</summary>
+    <div class="hint-content">
+<pre>
+現在のフロー：
+1. 従業員がSlackワークフローで打刻（開始時刻＋タスクを入力）
+2. 退勤時に別のSlackワークフローを送信
+3. Google Sheetにも時間を記入（予定時間も設定できる）
+4. 月末にマネージャーがSheetを確認・集計し、HRツールに転記
+
+問題点：
+- SlackとSheetの二重入力
+- 月末の集計が手作業で間違いやすい
+- マネージャーがリアルタイムで状況を把握できない
+
+Current flow:
+1. Employees check in via Slack workflow (start time + tasks)
+2. Send another Slack workflow to check out
+3. Also update a Google Sheet with hours and expected hours
+4. Managers consolidate at month-end and enter into HR tool
+
+Problems:
+- Double data entry (Slack + Sheet)
+- Monthly consolidation is manual and error-prone
+- No real-time visibility for managers
+</pre>
+    </div>
+  </details>
+</div>
+
+<!-- Step 2 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">2</span>
+    <h3>AIに質問してもらう / Let AI Interview You</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">書き出した内容をAIに渡して、<strong>自分では気づかなかった論点</strong>を引き出してもらう。AIに仕様を書かせるのではなく、AIに質問させる。</p>
+    <p class="en">Hand your write-up to AI and ask it to <strong>surface questions you haven't thought of</strong>. Don't ask AI to write the spec — ask AI to interview you.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>AIへのプロンプト：</strong></p>
+    <p class="en"><strong>Prompt for AI:</strong></p>
+<pre>
+これは今の勤怠管理フローです。[上で書いた内容を貼る]
+
+このフローを改善するシステムを作りたい。
+仕様を決めるために、私に質問してください。
+以下の観点を網羅してほしい：
+- 利用者の種類と権限
+- 記録すべきデータ項目
+- 業務ルール（残業計算、丸め処理など）
+- エッジケース（打刻忘れ、深夜勤務など）
+- 既存ツールとの連携
+
+一度に5つまでの質問にしてください。
+</pre>
+  </div>
+
+  <details>
+    <summary>ヒント：AIが聞いてくるはずの質問例 / Hint: Questions AI should ask</summary>
+    <div class="hint-content">
+      <div class="bilingual">
+        <p class="ja">AIから出てくるべき質問の例。もし出てこなければ、自分から考えてみよう：</p>
+        <p class="en">Examples of questions AI should raise. If it doesn't, think about them yourself:</p>
+      </div>
+      <ul>
+        <li>従業員は何人か？ / How many employees?</li>
+        <li>タイムゾーンは？複数拠点か？ / What time zones? Multiple offices?</li>
+        <li>固定シフトかフレックスか？ / Fixed shifts or flexible?</li>
+        <li>退勤打刻を忘れたらどうする？ / What if someone forgets to check out?</li>
+        <li>誰がシフト変更を承認するか？ / Who approves schedule changes?</li>
+        <li>HRツールが求めるデータ形式は？ / What format does the HR tool expect?</li>
+        <li>残業の定義と計算方法は？ / How is overtime defined and calculated?</li>
+      </ul>
+    </div>
+  </details>
+
+  <div class="bilingual">
+    <p class="ja"><strong>重要：すべての質問に丁寧に答える。</strong>ここで省略すると、後で問題になる。</p>
+    <p class="en"><strong>Important: Answer every question thoroughly.</strong> Shortcuts here become problems later.</p>
+  </div>
+</div>
+
+<!-- Step 3 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">3</span>
+    <h3>仕様書を自分の言葉でまとめる / Write the Spec in Your Own Words</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">Q&Aが終わったら、<strong>AIではなく自分で</strong>仕様をまとめてみる。完璧でなくていい。その後AIにレビューしてもらう。</p>
+    <p class="en">After the Q&A, try writing the spec <strong>yourself</strong>. It doesn't need to be perfect. Then ask AI to review it.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>自分に聞く質問：</strong></p>
+    <p class="en"><strong>Questions to ask yourself:</strong></p>
+    <ul>
+      <li>このシステムを使う人は誰か？それぞれ何ができるべきか？ / Who uses this? What can each role do?</li>
+      <li>絶対に必要な機能はどれか？あると嬉しい機能は？ / Must-have vs. nice-to-have features?</li>
+      <li>データの正確性をどう保証するか？ / How do we ensure data accuracy?</li>
+      <li>既存のSlackやSheetの流れをどう変えるか？ / How does this change existing workflows?</li>
+    </ul>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>AIへのプロンプト（レビュー依頼）：</strong></p>
+    <p class="en"><strong>Prompt for AI (review request):</strong></p>
+<pre>
+これが私がまとめた仕様書です。[自分の仕様を貼る]
+
+以下の観点でレビューしてください：
+- 抜け漏れている要件はないか
+- 矛盾している箇所はないか
+- 曖昧で判断できない箇所はないか
+- エッジケースの考慮漏れはないか
+
+改善案ではなく、問題点だけ指摘してください。修正は自分で判断します。
+</pre>
+  </div>
+
+  <details>
+    <summary>ヒント：仕様書に含めるべき項目 / Hint: What a spec should cover</summary>
+    <div class="hint-content">
+      <ul>
+        <li>ユーザーの種類と権限（従業員、マネージャー、管理者） / User roles and permissions</li>
+        <li>機能一覧と受け入れ条件 / Feature list with acceptance criteria</li>
+        <li>データモデル（何を保存するか） / Data model</li>
+        <li>業務ルール（残業、丸め、承認フロー） / Business rules</li>
+        <li>エッジケースの処理方法 / Edge case handling</li>
+        <li>他システムとの連携方法 / Integration points</li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!-- Step 4 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">4</span>
+    <h3>関係者にフィードバックをもらう / Get Stakeholder Feedback</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">仕様書をマネージャーと従業員数人に見せて、フィードバックをもらう。その結果をAIとの次の会話に持ち込む。</p>
+    <p class="en">Show the spec to managers and employees. Bring feedback into your next AI conversation.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>AIへのプロンプト：</strong></p>
+    <p class="en"><strong>Prompt for AI:</strong></p>
+<pre>
+仕様書にフィードバックをもらいました：
+- [フィードバック1]
+- [フィードバック2]
+
+それぞれについて、仕様のどこをどう変えるべきか教えてください。
+影響範囲も示してください（他の機能に波及するか）。
+</pre>
+  </div>
+
+  <div class="warn-box">
+    <div class="bilingual">
+      <p class="ja"><strong>幻覚防止チェック：</strong></p>
+      <p class="en"><strong>Hallucination check:</strong></p>
+    </div>
+    <ul class="checklist">
+      <li>業務ルールはすべてチームから来たもので、AIの推測ではないか？ / All business rules from your team, not AI?</li>
+      <li>タイムゾーンの扱いが明示的に定義されているか？ / Timezone handling explicitly defined?</li>
+      <li>残業・丸めルールは自社ポリシーと一致しているか？ / Overtime rules match your policy?</li>
+      <li>頼んでいない機能が紛れ込んでいないか？ / Any features you didn't ask for?</li>
+    </ul>
+  </div>
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<!-- PHASE 2 -->
+<!-- ============================================ -->
+
+<h2 id="phase2">Phase 2: 設計を組み立てる / Planning Architecture</h2>
+
+<div class="bilingual">
+  <p class="ja">仕様が固まったら、どのツールでどう作るかを考える。開発者向けのツールは不要で、既に使い慣れたツールの組み合わせで十分。</p>
+  <p class="en">With a solid spec, decide which tools to use. You don't need developer tools — familiar tools combined smartly are enough.</p>
+</div>
+
+<!-- Step 5 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">5</span>
+    <h3>使うツールを選ぶ / Choose Your Tools</h3>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>自分に聞く質問：</strong></p>
+    <p class="en"><strong>Questions to ask yourself:</strong></p>
+    <ul>
+      <li>チームが既に使い慣れているツールは何か？ / What tools does your team already use?</li>
+      <li>予算はいくらか？無料ツールで足りるか？ / What's your budget? Will free tools suffice?</li>
+      <li>Slackの打刻フローは残したいか、変えたいか？ / Keep or change the Slack check-in flow?</li>
+      <li>データは社内に置く必要があるか？ / Must data stay on-premise?</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>ヒント：非開発者向けツールの組み合わせ例 / Hint: Tool combinations for non-developers</summary>
+    <div class="hint-content">
+      <p class="ja"><strong>パターンA：Google Sheets中心</strong>（現在のワークフローに最も近い）</p>
+      <p class="en"><strong>Pattern A: Google Sheets-centric</strong> (closest to current workflow)</p>
+      <table>
+        <tr><th>用途</th><th>ツール</th><th>理由</th></tr>
+        <tr><td>データ保存</td><td>Google Sheets</td><td>チームが使い慣れている。数式で計算可能</td></tr>
+        <tr><td>打刻入力</td><td>Slack Workflow + Google Forms</td><td>既存のSlack体験を維持</td></tr>
+        <tr><td>ダッシュボード</td><td>Google Sheetsの別シート or Looker Studio</td><td>追加ツール不要</td></tr>
+        <tr><td>月次集計</td><td>Sheetsの数式 + Claude Cowork</td><td>自動計算＋AIで検証</td></tr>
+        <tr><td>自動化</td><td>Claude Cowork + connectors</td><td>Slack/Sheets連携を自動化</td></tr>
+      </table>
+
+      <p class="ja" style="margin-top:1rem;"><strong>パターンB：Notion Database中心</strong>（より構造化されたデータ管理）</p>
+      <p class="en"><strong>Pattern B: Notion Database-centric</strong> (more structured data management)</p>
+      <table>
+        <tr><th>用途</th><th>ツール</th><th>理由</th></tr>
+        <tr><td>データ保存</td><td>Notion Database</td><td>リレーション、フィルター、ビューが強力</td></tr>
+        <tr><td>打刻入力</td><td>Slack &rarr; Notion連携</td><td>Slackから直接DBに記録</td></tr>
+        <tr><td>ダッシュボード</td><td>Notionのビュー機能</td><td>フィルター、カレンダー、テーブルを組み合わせ</td></tr>
+        <tr><td>月次集計</td><td>Notionの数式 + Claude Cowork</td><td>計算プロパティ＋AIで検証</td></tr>
+        <tr><td>自動化</td><td>Claude Cowork + connectors</td><td>Slack/Notion連携を自動化</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <div class="cowork-box">
+    <div class="bilingual">
+      <p class="ja"><strong>Claude Coworkの役割：</strong>Claude Coworkはこれらのツールを<strong>つなぐ</strong>ハブとして機能する。Slack connector、Google Sheets connector、Notion connectorを設定すれば、「Slackの打刻をSheetsに記録して」「月末の集計を作って」といった指示を会話ベースで実行できる。</p>
+      <p class="en"><strong>Claude Cowork's role:</strong> Cowork acts as the <strong>hub</strong> connecting these tools. With Slack, Google Sheets, and Notion connectors set up, you can give instructions like "log this Slack check-in to the Sheet" or "generate the monthly summary" through conversation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Step 6 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">6</span>
+    <h3>データの構造を決める / Design Your Data Structure</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">正確性が最も重要な部分。まず自分で「何を記録する必要があるか」をリストアップしてから、AIに構造化してもらう。</p>
+    <p class="en">This is where accuracy matters most. List what you need to track, then ask AI to structure it.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>自分に聞く質問：</strong></p>
+    <p class="en"><strong>Questions to ask yourself:</strong></p>
+    <ul>
+      <li>従業員について何を記録するか？（名前、部署、契約時間...） / What do you track per employee?</li>
+      <li>1回の打刻で何を保存するか？ / What data per time entry?</li>
+      <li>「誰が何をいつ変更したか」を追跡する必要があるか？ / Need an audit trail?</li>
+      <li>将来のシフト計画にはどんなデータが必要か？ / What does shift planning need?</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>ヒント：Google Sheetsの場合のシート構成例 / Hint: Google Sheets structure</summary>
+    <div class="hint-content">
+      <p class="ja"><strong>シート1：従業員マスター</strong></p>
+      <table>
+        <tr><th>列</th><th>内容</th></tr>
+        <tr><td>employee_id</td><td>一意のID</td></tr>
+        <tr><td>name</td><td>氏名</td></tr>
+        <tr><td>department</td><td>部署</td></tr>
+        <tr><td>expected_hours</td><td>月間予定時間</td></tr>
+      </table>
+
+      <p class="ja" style="margin-top:1rem;"><strong>シート2：勤怠記録</strong></p>
+      <table>
+        <tr><th>列</th><th>内容</th></tr>
+        <tr><td>entry_id</td><td>一意のID</td></tr>
+        <tr><td>employee_id</td><td>従業員ID</td></tr>
+        <tr><td>date</td><td>日付</td></tr>
+        <tr><td>check_in</td><td>出勤時刻</td></tr>
+        <tr><td>check_out</td><td>退勤時刻（空白=未退勤）</td></tr>
+        <tr><td>hours_worked</td><td>=数式で自動計算</td></tr>
+        <tr><td>tasks</td><td>作業内容メモ</td></tr>
+        <tr><td>status</td><td>open / closed / flagged</td></tr>
+      </table>
+
+      <p class="ja" style="margin-top:1rem;"><strong>シート3：月次サマリー</strong></p>
+      <table>
+        <tr><th>列</th><th>内容</th></tr>
+        <tr><td>employee_id</td><td>従業員ID</td></tr>
+        <tr><td>month</td><td>対象月</td></tr>
+        <tr><td>total_days</td><td>=COUNTIF数式</td></tr>
+        <tr><td>total_hours</td><td>=SUMIF数式</td></tr>
+        <tr><td>expected_hours</td><td>=VLOOKUP数式</td></tr>
+        <tr><td>difference</td><td>=total - expected</td></tr>
+      </table>
+
+      <p class="ja" style="margin-top:0.8rem;"><strong>重要：</strong><code>hours_worked</code>は必ずスプレッドシートの数式（例：<code>=(D2-C2)*24</code>）で計算する。AIに計算させない。</p>
+      <p class="en"><strong>Important:</strong> <code>hours_worked</code> must be a spreadsheet formula (e.g., <code>=(D2-C2)*24</code>). Never let AI calculate this.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>ヒント：Notion Databaseの場合の構成例 / Hint: Notion Database structure</summary>
+    <div class="hint-content">
+      <p class="ja"><strong>DB1：従業員</strong></p>
+      <p>プロパティ: Name (title), Department (select), Expected Hours (number)</p>
+      <p class="ja" style="margin-top:0.8rem;"><strong>DB2：勤怠記録</strong></p>
+      <p>プロパティ: Employee (relation &rarr; DB1), Date (date), Check In (date with time), Check Out (date with time), Hours Worked (formula), Tasks (text), Status (select: open/closed/flagged)</p>
+      <p class="ja" style="margin-top:0.8rem;"><strong>DB3：月次サマリー</strong></p>
+      <p>プロパティ: Employee (relation &rarr; DB1), Month (select), Total Hours (rollup from DB2), Expected Hours (rollup from DB1), Difference (formula)</p>
+      <p class="ja" style="margin-top:0.8rem;"><strong>重要：</strong>Hours WorkedはNotionのformulaプロパティで計算する。AIに計算させない。</p>
+    </div>
+  </details>
+</div>
+
+<!-- Step 7 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">7</span>
+    <h3>データフローを整理する / Map the Data Flows</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">各シナリオでデータがどう流れるかを明確にする。ここが曖昧だと、あとで必ず問題になる。</p>
+    <p class="en">Clarify how data flows in each scenario. Ambiguity here becomes bugs later.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>考えるべきシナリオ：</strong></p>
+    <p class="en"><strong>Scenarios to think through:</strong></p>
+    <ul>
+      <li>従業員がSlackで出勤 &rarr; データはどこに記録される？ / Slack check-in &rarr; where is data logged?</li>
+      <li>退勤 &rarr; 勤怠レコードはどう完成する？ / Check-out &rarr; how is the entry completed?</li>
+      <li>マネージャーがダッシュボードを見る &rarr; 何が表示される？ / Manager views dashboard &rarr; what's shown?</li>
+      <li>月末 &rarr; サマリーはどう生成される？ / Month-end &rarr; how is the summary generated?</li>
+      <li>退勤忘れ &rarr; どう検知・対処する？ / Forgot check-out &rarr; how is it detected?</li>
+    </ul>
+  </div>
+
+  <div class="cowork-box">
+    <div class="bilingual">
+      <p class="ja"><strong>Coworkでの実現イメージ：</strong>Slackで打刻 &rarr; Slack connectorが検知 &rarr; Coworkが Google Sheet/Notionに自動記録。マネージャーは「今日の出勤状況を教えて」とCoworkに聞くだけでサマリーを取得できる。</p>
+      <p class="en"><strong>How it works with Cowork:</strong> Slack check-in &rarr; Slack connector detects &rarr; Cowork auto-logs to Sheet/Notion. Managers just ask Cowork "show me today's attendance" to get a summary.</p>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <div class="bilingual">
+      <p class="ja"><strong>幻覚防止チェック：</strong></p>
+      <p class="en"><strong>Hallucination check:</strong></p>
+    </div>
+    <ul class="checklist">
+      <li>時間計算はスプレッドシート数式/DB関数で行っているか？ / Time calcs use formulas, not AI?</li>
+      <li>集計はデータから計算され、手入力やAI生成ではないか？ / Aggregations computed from data?</li>
+      <li>変更の記録（誰がいつ修正したか）が残るか？ / Change history tracked?</li>
+      <li>退勤忘れの検知フローが定義されているか？ / Missing check-out detection defined?</li>
+    </ul>
+  </div>
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<!-- PHASE 3 -->
+<!-- ============================================ -->
+
+<h2 id="phase3">Phase 3: プロトタイプを作る / Building the Prototype</h2>
+
+<div class="bilingual">
+  <p class="ja">ここからClaude Coworkと一緒に実際に構築する。鉄則は<strong>「小さく作って、すぐ検証して、段階的に拡張する」</strong>。</p>
+  <p class="en">Now build with Claude Cowork. The rule: <strong>build small, test immediately, expand gradually.</strong></p>
+</div>
+
+<!-- Step 8 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">8</span>
+    <h3>Coworkのconnectorを設定する / Set Up Cowork Connectors</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">まず、必要なツールとの接続を設定する。Claude Coworkで以下のconnectorを追加する。</p>
+    <p class="en">First, set up connections to your tools. Add these connectors in Claude Cowork.</p>
+  </div>
+
+  <div class="cowork-box">
+    <p class="ja"><strong>設定するconnector：</strong></p>
+    <p class="en"><strong>Connectors to set up:</strong></p>
+    <ul>
+      <li><strong>Slack</strong> — 打刻メッセージの読み取り / Read check-in messages</li>
+      <li><strong>Google Sheets</strong> or <strong>Google Drive</strong> — 勤怠データの読み書き / Read and write time data</li>
+      <li><strong>Notion</strong>（Notion DBを使う場合）— データベースの操作 / Database operations</li>
+    </ul>
+    <p class="ja" style="margin-top: 0.5rem;">Coworkに「Slackのconnectorを設定したい」と伝えれば、手順を案内してくれる。</p>
+    <p class="en">Tell Cowork "I want to set up the Slack connector" and it will guide you through the setup.</p>
+  </div>
+</div>
+
+<!-- Step 9 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">9</span>
+    <h3>データの入れ物を作る / Create the Data Structure</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">Google SheetまたはNotion Databaseに、Step 6で考えた構造を実際に作る。Coworkに依頼できる。</p>
+    <p class="en">Create the structure from Step 6 in your Sheet or Notion DB. You can ask Cowork to help.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>Coworkへのプロンプト例：</strong></p>
+    <p class="en"><strong>Example prompt for Cowork:</strong></p>
+<pre>
+Google Sheetsに勤怠管理用のスプレッドシートを作りたい。
+以下のシートが必要です：
+
+1. 従業員マスター：[自分で決めた列を記載]
+2. 勤怠記録：[自分で決めた列を記載]
+3. 月次サマリー：[自分で決めた列を記載]
+
+勤務時間の計算は必ずスプレッドシートの数式で行ってください。
+AIが計算した数値を直接入力しないでください。
+</pre>
+  </div>
+
+  <div class="warn-box">
+    <div class="bilingual">
+      <p class="ja"><strong>重要：「数式で計算する」を必ず指示に含める。</strong>AIは数値を直接入力しがち。数式にしておけば、元データが変わっても自動で再計算される。</p>
+      <p class="en"><strong>Critical: Always include "use formulas" in your instructions.</strong> AI tends to hard-code values. Formulas auto-recalculate when source data changes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Step 10 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">10</span>
+    <h3>テストデータで検証する / Test with Sample Data</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">テスト従業員のデータを入れて、計算が正しいか手動で確認する。</p>
+    <p class="en">Enter test employee data and manually verify that calculations are correct.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>Coworkへのプロンプト例：</strong></p>
+    <p class="en"><strong>Example prompt for Cowork:</strong></p>
+<pre>
+テストデータを入れて検証したい。以下のデータを登録して：
+- 従業員A：9:00出勤、17:30退勤 → 8.5時間のはず
+- 従業員B：8:00出勤、退勤なし → 「未退勤」とフラグされるべき
+- 従業員C：9:00-13:00、14:00-18:00 → 合計8時間のはず
+
+登録したら、勤怠記録シートの内容を見せて。
+計算された時間数が正しいか、一緒に確認したい。
+</pre>
+  </div>
+
+  <div class="warn-box">
+    <div class="bilingual">
+      <p class="ja"><strong>結果を自分の目で確認する。</strong>従業員Aが8.5時間以外の数値を示していたら、期待値と実際値をCoworkに伝えて修正させる。「動いてるっぽい」で済ませない。</p>
+      <p class="en"><strong>Check results with your own eyes.</strong> If Employee A shows anything other than 8.5 hours, tell Cowork the expected vs. actual value. Never settle for "seems to work."</p>
+    </div>
+  </div>
+</div>
+
+<!-- Step 11 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">11</span>
+    <h3>Slack連携を作る / Build the Slack Integration</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">Slackでの打刻がデータに自動反映される仕組みを作る。Coworkのscheduled taskやSlack connectorを使う。</p>
+    <p class="en">Make Slack check-ins auto-populate your data. Use Cowork's scheduled tasks and Slack connector.</p>
+  </div>
+
+  <details>
+    <summary>ヒント：Slack連携の構築アプローチ / Hint: Approaches for Slack integration</summary>
+    <div class="hint-content">
+      <div class="bilingual">
+        <p class="ja">いくつかのアプローチがある。自分の技術レベルに合ったものを選ぶ：</p>
+        <p class="en">Several approaches exist. Choose based on your comfort level:</p>
+      </div>
+      <ul>
+        <li><strong>方法1（最もシンプル）：</strong>Slack Workflowは現状のまま残す。Coworkに「Slackの#check-inチャンネルの新しいメッセージを読んで、Google Sheetに記録して」と定期的に依頼する。<br>
+        <span class="en"><strong>Method 1 (simplest):</strong> Keep existing Slack Workflow. Periodically ask Cowork to read new messages from #check-in and log to Sheet.</span></li>
+        <li><strong>方法2（半自動）：</strong>Coworkのscheduled taskを設定して、定期的にSlackの打刻を読み取り、Sheetに書き込む。<br>
+        <span class="en"><strong>Method 2 (semi-auto):</strong> Set up a Cowork scheduled task to periodically read Slack and write to Sheet.</span></li>
+        <li><strong>方法3（自動化ツール併用）：</strong>ZapierやMakeでSlack &rarr; Google Sheetsの連携を作り、CoworkはダッシュボードとサマリーにHMする。<br>
+        <span class="en"><strong>Method 3 (with automation tools):</strong> Use Zapier/Make for Slack &rarr; Sheets, Cowork handles dashboard and summaries.</span></li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!-- Step 12 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">12</span>
+    <h3>月次サマリーを作る / Build the Monthly Summary</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">正確性の要求が最も高い部分。自分で期待値を計算してから、結果と照合する。</p>
+    <p class="en">Highest accuracy requirement. Calculate expected results yourself, then compare.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>考えるべきこと：</strong></p>
+    <p class="en"><strong>Think about:</strong></p>
+    <ul>
+      <li>深夜勤務（日付をまたぐシフト）の扱い / Shifts crossing midnight</li>
+      <li>休憩時間の控除 / Break deductions</li>
+      <li>丸め処理（小数点以下何桁？） / Rounding rules</li>
+      <li>怪しいデータの検出（16時間超、5分未満など） / Suspicious data flags</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>ヒント：月次サマリーのプロンプト例 / Hint: Monthly summary prompt</summary>
+    <div class="hint-content">
+<pre>
+先月の勤怠サマリーを作ってください。表示項目：
+- 従業員名
+- 出勤日数
+- 合計勤務時間
+- 予定時間（従業員マスターから）
+- 差分（超過/不足）
+- 不完全な記録の数（退勤忘れ）
+
+注意：
+- 合計時間はスプレッドシートの数式から取得してください
+- AI側で時間の足し算をしないでください
+- 結果を出したら、私が手計算で2-3人分検証します
+</pre>
+    </div>
+  </details>
+</div>
+
+<!-- Step 13 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">13</span>
+    <h3>マネージャー向けの確認方法を作る / Create Manager Views</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">マネージャーが状況を確認する方法を整備する。専用ダッシュボードを作る必要はない場合もある。</p>
+    <p class="en">Set up how managers check status. You may not need a dedicated dashboard.</p>
+  </div>
+
+  <details>
+    <summary>ヒント：マネージャー向けの確認方法 / Hint: Manager view options</summary>
+    <div class="hint-content">
+      <ul>
+        <li><strong>Google Sheets：</strong>専用の「ダッシュボード」シートを作り、QUERY関数やフィルターで今日の状況を表示<br>
+        <span class="en">Create a "Dashboard" sheet with QUERY functions showing today's status</span></li>
+        <li><strong>Notion：</strong>フィルター付きのビュー（今日の出勤者、今週のサマリーなど）を作成<br>
+        <span class="en">Create filtered views (today's workers, this week's summary)</span></li>
+        <li><strong>Cowork：</strong>マネージャーがCoworkに「今日の出勤状況を教えて」と聞くだけで、Sheets/Notionのデータを読んでサマリーを返す<br>
+        <span class="en">Managers ask Cowork "show me today's attendance" and it reads from Sheets/Notion</span></li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!-- Build Cycle -->
+<div class="phase-card" style="border-color: var(--accent); border-width: 2px;">
+  <h3>構築の基本サイクル / The Build Cycle</h3>
+
+  <div class="bilingual">
+    <p class="ja">すべての構築作業でこのサイクルを繰り返す：</p>
+    <p class="en">Repeat this cycle for everything you build:</p>
+  </div>
+
+  <ol>
+    <li><strong>Coworkに作業を依頼する</strong> / Ask Cowork to build something</li>
+    <li><strong>結果を自分の目で確認する</strong> / Check results with your own eyes</li>
+    <li><strong>計算結果を手計算で検証する</strong>（最低2-3件） / Verify calculations manually (at least 2-3 entries)</li>
+    <li><strong>問題があれば具体的に伝える</strong>（「8.5時間のはずが9時間と表示されている」） / Report issues specifically ("should be 8.5h but shows 9h")</li>
+    <li><strong>修正を確認してから次に進む</strong> / Confirm fix before moving on</li>
+  </ol>
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<!-- PHASE 4 -->
+<!-- ============================================ -->
+
+<h2 id="phase4">Phase 4: 本番に備える / Hardening for Launch</h2>
+
+<!-- Step 14 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">14</span>
+    <h3>問題になりそうなケースを洗い出す / Identify Failure Points</h3>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>Coworkに聞く：</strong></p>
+    <p class="en"><strong>Ask Cowork:</strong></p>
+<pre>
+この勤怠システムで問題になりそうなケースを洗い出してください：
+- 打刻忘れ
+- 二重打刻
+- 日付をまたぐ勤務
+- 間違ったデータの修正
+- シートやDBへのアクセス権限
+
+それぞれの対処方法も提案してください。
+</pre>
+  </div>
+</div>
+
+<!-- Step 15 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">15</span>
+    <h3>アクセス権限を設定する / Set Up Access Controls</h3>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">誰が何を見られるか、何を変更できるかを制限する。Google SheetsならシートごとのHMを、Notionならページ/DB単位のHMを設定する。</p>
+    <p class="en">Restrict who can see and edit what. Use per-sheet protection in Google Sheets, or page/DB-level permissions in Notion.</p>
+  </div>
+</div>
+
+<!-- Step 16 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">16</span>
+    <h3>テスト運用する / Run a Pilot Test</h3>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>Coworkに依頼：</strong></p>
+    <p class="en"><strong>Ask Cowork:</strong></p>
+<pre>
+従業員3人とマネージャー1人で1週間テスト運用したい。
+テスト計画を作ってください：
+- 毎日やること
+- 確認すべきポイント
+- 問題報告の方法
+- 既知の制限事項
+</pre>
+  </div>
+</div>
+
+<!-- Step 17 -->
+<div class="phase-card">
+  <div class="step-header">
+    <span class="step-number">17</span>
+    <h3>移行計画を立てる / Plan the Migration</h3>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>考えるべきこと：</strong></p>
+    <p class="en"><strong>Think about:</strong></p>
+    <ul>
+      <li>旧システムと並行運用する期間は？ / How long to run old and new in parallel?</li>
+      <li>既存Google Sheetのデータ移行は？ / How to import existing Sheet data?</li>
+      <li>問題が起きたときのロールバックは？ / Rollback plan?</li>
+      <li>従業員に必要なトレーニングは？ / Training needed?</li>
+    </ul>
+  </div>
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<!-- ANTI-HALLUCINATION -->
+<!-- ============================================ -->
+
+<h2 id="anti-hallucination">幻覚防止チェックリスト / Anti-Hallucination Checklist</h2>
+
+<div class="bilingual">
+  <p class="ja">構築プロセス全体を通して繰り返し確認する。</p>
+  <p class="en">Use throughout the entire build process.</p>
+</div>
+
+<h3>データの正確性 / Data Accuracy</h3>
+<ul class="checklist">
+  <li>時間計算はスプレッドシート数式/DB関数で行っているか？ / Time calcs use formulas?</li>
+  <li>月次合計は個別記録から数式で計算されているか？ / Monthly totals from formulas, not AI?</li>
+  <li>元のタイムスタンプを保存しているか（事前計算値ではなく）？ / Raw timestamps stored?</li>
+  <li>丸め処理は表示時のみ？ / Rounding at display only?</li>
+</ul>
+
+<h3>テスト / Testing</h3>
+<ul class="checklist">
+  <li>すべての計算を既知のテストデータで検証したか？ / Verified with known test data?</li>
+  <li>エッジケースをテストしたか（深夜、日付変更線）？ / Edge cases tested?</li>
+  <li>退勤忘れがフラグされ、無視されていないか？ / Missing check-outs flagged?</li>
+</ul>
+
+<h3>AIとのやり取り / AI Interaction</h3>
+<ul class="checklist">
+  <li>実際のデータをAIに見せているか（「推測して」と言っていないか）？ / Showing real data to AI?</li>
+  <li>AIが出した数値を手計算で検証しているか？ / Hand-checking AI's numbers?</li>
+  <li>数値の直接入力ではなく数式を使わせているか？ / Using formulas, not hard-coded values?</li>
+  <li>変更の履歴を残しているか？ / Keeping change history?</li>
+</ul>
+
+<hr>
+
+<!-- ============================================ -->
+<!-- TEMPLATES -->
+<!-- ============================================ -->
+
+<h2 id="templates">会話テンプレート / Conversation Templates</h2>
+
+<div class="phase-card">
+  <h3>新しいセッションを始めるとき / Starting a New Session</h3>
+<pre>
+勤怠管理システムを構築しています。現在の状態：
+- データ保存先：Google Sheet / Notion（どちらか記載）
+- 完成した部分：[リスト]
+- 作業中：[現在のタスク]
+- 既知の問題：[リスト]
+
+今日やりたいこと：[具体的なタスク]
+
+I'm building a time-tracking system. Current state:
+- Data storage: Google Sheet / Notion
+- Done: [list]
+- In progress: [current task]
+- Known issues: [list]
+
+Today I want to: [specific task]
+</pre>
+</div>
+
+<div class="phase-card">
+  <h3>データが間違っているとき / When Data is Wrong</h3>
+<pre>
+勤怠記録シートの従業員Aのデータがおかしい：
+
+期待した結果：8.5時間（9:00-17:30）
+実際の表示：9時間
+
+使われている数式：[数式を貼る]
+該当セルの値：[値を貼る]
+
+原因を調べて修正してください。
+
+Employee A's data is wrong:
+Expected: 8.5 hours (9:00-17:30)
+Actual: 9 hours
+Formula: [paste]
+Cell values: [paste]
+</pre>
+</div>
+
+<div class="phase-card">
+  <h3>AIの提案を理解したいとき / Understanding AI's Suggestion</h3>
+<pre>
+この数式/設定を提案してくれましたが：[内容を貼る]
+
+説明してください：
+- なぜこの方法にしたのか？
+- [特定のケース]では何が起きるか？
+- もっとシンプルな方法はあるか？
+</pre>
+</div>
+
+<hr>
+
+<div class="bilingual" style="margin-top:2rem; padding:1.5rem; background:var(--section-bg); border-radius:8px; border:1px solid var(--border);">
+  <h3>まとめ / Summary</h3>
+  <p class="ja" style="margin-top:0.8rem;">
+    まず自分で考え、AIを壁打ち相手にして仕様を固める（Phase 1-2）。次にClaude Coworkを使い、一度に1つずつ小さく作り、実データで毎回検証する（Phase 3）。最後に実際のユーザーでテストし、慎重に移行する（Phase 4）。
+  </p>
+  <p class="ja">
+    最も大切な習慣：<strong>AIが出した数値を信用しない。計算は数式に任せ、結果は自分で検証する。</strong>
+  </p>
+  <p class="en" style="margin-top:0.5rem;">
+    Think first, use AI to refine the spec (Phase 1-2). Build one piece at a time with Cowork, verifying with real data every time (Phase 3). Test with real users and migrate carefully (Phase 4).
+  </p>
+  <p class="en">
+    The most important habit: <strong>never trust AI-generated numbers. Let formulas calculate, and verify results yourself.</strong>
+  </p>
+</div>
+
+</body>
+</html>
