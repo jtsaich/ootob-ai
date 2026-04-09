@@ -133,6 +133,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="en">You can build business systems through conversation with AI, without development experience. This guide uses an employee time-tracking system as a working example, built with Claude Cowork.</span>
 </p>
 
+<p style="font-size:0.88rem;color:var(--muted);margin-bottom:2rem;">
+Inspired by <a href="https://x.com/i/status/2032817897119096855" target="_blank" rel="noopener" style="color:var(--accent);">this post on X</a>.
+</p>
+
 <div class="cowork-box">
   <div class="bilingual">
     <p class="ja"><strong>Claude Coworkとは？</strong>Claudeのデスクトップアプリに搭載された機能で、ファイル操作、ツール連携、タスク自動化を会話ベースで行える。Slack、Google Sheets、Notionなどの外部ツールとconnector（接続）を設定して使う。</p>
@@ -150,6 +154,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav class="toc">
   <strong>目次 / Contents</strong>
   <ul>
+    <li><a href="#phase0">Phase 0: Claude Coworkを準備する / Getting Started with Claude Cowork</a></li>
     <li><a href="#phase1">Phase 1: 仕様を考える / Figuring Out Your Spec</a></li>
     <li><a href="#phase2">Phase 2: 設計を組み立てる / Planning Architecture</a></li>
     <li><a href="#phase3">Phase 3: プロトタイプを作る / Building the Prototype</a></li>
@@ -158,6 +163,225 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <li><a href="#templates">会話テンプレート / Conversation Templates</a></li>
   </ul>
 </nav>
+
+<hr>
+
+<!-- ============================================ -->
+<!-- PHASE 0 -->
+<!-- ============================================ -->
+
+<h2 id="phase0">Phase 0: Claude Coworkを準備する / Getting Started with Claude Cowork</h2>
+
+<div class="bilingual">
+  <p class="ja">このガイドではClaude Coworkを使ってシステムを構築する。まずCoworkのインストールから基本的な使い方までを説明する。</p>
+  <p class="en">This guide uses Claude Cowork to build systems. Let's start with installation and basics.</p>
+</div>
+
+<!-- What is Cowork -->
+<div class="phase-card">
+  <h3>Claude Coworkとは何か / What is Claude Cowork?</h3>
+
+  <div class="bilingual">
+    <p class="ja">Claude Coworkは、Claudeデスクトップアプリに搭載された自律型タスク実行モードだ。通常のチャットが「1問1答」の対話なのに対し、Coworkは複数のステップにまたがる作業を自律的にこなす。あなたのパソコン上のファイルを直接読み書きし、接続した外部ツール（Slack、Google Sheets、Notionなど）と連携しながら、完成した成果物を届ける。</p>
+    <p class="en">Claude Cowork is an autonomous task execution mode built into the Claude desktop app. While regular chat is a back-and-forth Q&A, Cowork autonomously handles multi-step work. It directly reads and writes files on your computer, coordinates with connected external tools (Slack, Google Sheets, Notion, etc.), and delivers finished outputs.</p>
+  </div>
+
+  <table>
+    <tr><th></th><th>チャット / Chat</th><th>Cowork</th></tr>
+    <tr><td><strong>動作 / Behavior</strong></td><td>1問1答 / One question, one answer</td><td>複数ステップを自律実行 / Autonomous multi-step execution</td></tr>
+    <tr><td><strong>ファイル操作 / File access</strong></td><td>アップロードしたファイルのみ / Uploaded files only</td><td>パソコン上のフォルダに直接アクセス / Direct access to local folders</td></tr>
+    <tr><td><strong>外部ツール / External tools</strong></td><td>限定的 / Limited</td><td>Connectorで多数のツールと連携 / Many tools via connectors</td></tr>
+    <tr><td><strong>出力 / Output</strong></td><td>チャット内のテキスト / Text in chat</td><td>Excel、PowerPoint、PDFなど実ファイル / Actual files (Excel, PowerPoint, PDF, etc.)</td></tr>
+    <tr><td><strong>適した作業 / Best for</strong></td><td>質問、アイデア出し / Questions, brainstorming</td><td>ファイル整理、文書作成、データ抽出、リサーチ / File management, docs, data extraction, research</td></tr>
+  </table>
+</div>
+
+<!-- Use Cases -->
+<div class="phase-card">
+  <h3>Claude Coworkで何ができるか / What People Do with Claude Cowork</h3>
+
+  <div class="bilingual">
+    <p class="ja"><strong>1. ファイル整理</strong> — ダウンロードフォルダや共有ドライブの中身を、リネーム、分類、重複削除してくれる。「このフォルダの中身を種類ごとに整理して」と伝えるだけでいい。</p>
+    <p class="en"><strong>1. File Organization</strong> — Point Claude at a folder and ask it to rename, sort, and deduplicate. Just say "organize this folder by type."</p>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja"><strong>2. ドキュメント作成</strong> — 複数のソース資料から、フォーマット済みのWord文書やPowerPoint、Excelを組み立てる。数式付きのスプレッドシートも作れる。</p>
+    <p class="en"><strong>2. Document Preparation</strong> — Assemble formatted Word docs, PowerPoint decks, and Excel sheets from multiple sources. It can create spreadsheets with working formulas.</p>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja"><strong>3. リサーチ・要約</strong> — 複数の文書を横断的に読み、重要なポイントを抽出してレポートにまとめる。</p>
+    <p class="en"><strong>3. Research &amp; Synthesis</strong> — Read across multiple documents, extract key points, and compile them into a report.</p>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja"><strong>4. データ抽出</strong> — 契約書、レポート、記録簿などの密度の高い文書から、必要な情報を構造化して取り出す。</p>
+    <p class="en"><strong>4. Data Extraction</strong> — Extract structured information from dense documents like contracts, reports, and records.</p>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja"><strong>5. 定期タスクの自動化</strong> — 「毎週月曜にSlackのチャンネルを要約して」といった繰り返しタスクをスケジュール設定できる。</p>
+    <p class="en"><strong>5. Scheduled Automation</strong> — Set up recurring tasks like "summarize this Slack channel every Monday."</p>
+  </div>
+</div>
+
+<!-- Installation -->
+<div class="phase-card">
+  <h3>インストール手順 / Installation Steps</h3>
+
+  <div class="warn-box">
+    <div class="bilingual">
+      <p class="ja"><strong>必要なもの：</strong> macOSまたはWindowsのパソコン、Claudeの有料プラン（Pro / Max / Team / Enterprise）、インターネット接続（タスク実行中は常時必要）</p>
+      <p class="en"><strong>Requirements:</strong> A Mac or Windows computer, a paid Claude plan (Pro / Max / Team / Enterprise), internet connection (required throughout task execution)</p>
+    </div>
+  </div>
+
+  <ol>
+    <li>
+      <strong>Claude Desktopをダウンロード / Download Claude Desktop</strong><br>
+      <span class="ja"><a href="https://claude.com/download">claude.com/download</a> にアクセスし、自分のOS（macOS / Windows）に合ったバージョンを選択</span><br>
+      <span class="en">Visit <a href="https://claude.com/download">claude.com/download</a> and select your OS</span>
+    </li>
+    <li>
+      <strong>インストール / Install</strong><br>
+      <span class="ja">macOS：ダウンロードしたファイルを開き、アプリをApplicationsフォルダにドラッグ。Windows：インストーラーを実行</span><br>
+      <span class="en">macOS: Open and drag to Applications. Windows: Run the installer</span>
+    </li>
+    <li>
+      <strong>ログイン / Log in</strong><br>
+      <span class="ja">Claude Desktopを起動し、Claudeアカウントでログイン</span><br>
+      <span class="en">Launch Claude Desktop and log in with your Claude account</span>
+    </li>
+    <li>
+      <strong>Coworkモードに切り替え / Switch to Cowork mode</strong><br>
+      <span class="ja">画面上部のモード切り替えで「Chat」と「Cowork」のタブが表示される。「Cowork」タブをクリック</span><br>
+      <span class="en">Look for the mode selector at the top showing "Chat" and "Cowork" tabs. Click "Cowork"</span>
+    </li>
+    <li>
+      <strong>フォルダを選択 / Select a folder</strong><br>
+      <span class="ja">Coworkに作業してもらいたいフォルダを指定する。ここで選んだフォルダ内のファイルをClaudeが読み書きできるようになる</span><br>
+      <span class="en">Select the folder you want Cowork to operate on. Claude will be able to read and write files in this folder</span>
+    </li>
+  </ol>
+</div>
+
+<!-- Connectors -->
+<div class="phase-card">
+  <h3>Connectorを追加する / Adding Connectors</h3>
+
+  <div class="bilingual">
+    <p class="ja">Connectorは、ClaudeをSlack、Google Drive、Notionなどの外部サービスに接続する仕組み。接続すると、Claudeがそのサービスのデータを読み取ったり、操作したりできるようになる。</p>
+    <p class="en">Connectors link Claude to external services like Slack, Google Drive, and Notion. Once connected, Claude can read data from and take actions within those services.</p>
+  </div>
+
+  <div class="cowork-box">
+    <p class="ja"><strong>追加手順：</strong></p>
+    <p class="en"><strong>How to add:</strong></p>
+    <ol>
+      <li>Claude Desktopの左サイドバーで <strong>「Customize」</strong> をクリック / Click <strong>"Customize"</strong> in the left sidebar</li>
+      <li><strong>「Connectors」</strong> セクションの <strong>「+」</strong> ボタンをクリック / Click the <strong>"+"</strong> button next to <strong>"Connectors"</strong></li>
+      <li>一覧から接続したいサービスを選択 / Select the service you want to connect</li>
+      <li><strong>「Connect」</strong> をクリックし、認証画面でアクセスを許可 / Click <strong>"Connect"</strong> and authorize access</li>
+    </ol>
+  </div>
+
+  <div class="warn-box">
+    <div class="bilingual">
+      <p class="ja"><strong>注意：</strong>Connectorを追加すると、Claudeにそのサービスのデータへのアクセス権を与えることになる。必要なサービスだけを接続すること。</p>
+      <p class="en"><strong>Note:</strong> Adding a connector grants Claude access to that service's data. Only connect services you actually need.</p>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja"><strong>このガイドで使うconnector：</strong></p>
+    <p class="en"><strong>Connectors used in this guide:</strong></p>
+  </div>
+  <ul>
+    <li><strong>Slack</strong> — 打刻メッセージの読み取り / Read check-in messages</li>
+    <li><strong>Google Drive</strong> — Google Sheetsの読み書き / Read and write Google Sheets</li>
+    <li><strong>Notion</strong>（Notion DBを使う場合）— データベースの操作 / Database operations</li>
+  </ul>
+</div>
+
+<!-- Skills -->
+<div class="phase-card">
+  <h3>Skillを追加する / Adding Skills</h3>
+
+  <div class="bilingual">
+    <p class="ja">Skillは、Claudeに特定の専門知識やワークフローを追加する拡張機能。例えば、Excel操作の専門スキルを有効にすると、数式付きの本格的なスプレッドシートを作れるようになる。</p>
+    <p class="en">Skills add specialized knowledge and workflows to Claude. For example, enabling the Excel skill lets Claude create professional spreadsheets with working formulas.</p>
+  </div>
+
+  <div class="cowork-box">
+    <p class="ja"><strong>追加手順：</strong></p>
+    <p class="en"><strong>How to add:</strong></p>
+    <ol>
+      <li>Claude Desktopの左サイドバーで <strong>「Customize」</strong> をクリック / Click <strong>"Customize"</strong> in the left sidebar</li>
+      <li><strong>「Skills」</strong> セクションの <strong>「+」</strong> ボタンをクリック / Click the <strong>"+"</strong> button next to <strong>"Skills"</strong></li>
+      <li><strong>「Browse skills」</strong> を選択してスキル一覧を表示 / Select <strong>"Browse skills"</strong> to view available skills</li>
+      <li>使いたいスキルの <strong>「Install」</strong> をクリック / Click <strong>"Install"</strong> on the skill you want</li>
+    </ol>
+    <p class="ja" style="margin-top:0.5rem;">インストール済みスキルは <strong>Customize &gt; Skills</strong> に表示され、デフォルトで有効。Claudeが必要に応じて自動的に使用する。</p>
+    <p class="en">Installed skills appear in <strong>Customize &gt; Skills</strong> and are enabled by default. Claude uses them automatically when relevant.</p>
+  </div>
+
+  <details>
+    <summary>ヒント：組み込みスキルとプラグイン / Hint: Built-in skills and plugins</summary>
+    <div class="hint-content">
+      <p class="ja"><strong>Anthropic公式の組み込みスキル：</strong></p>
+      <p class="en"><strong>Built-in skills from Anthropic:</strong></p>
+      <ul>
+        <li><strong>Excel</strong> — 数式・書式付きスプレッドシートの作成・編集 / Create and edit spreadsheets with formulas and formatting</li>
+        <li><strong>Word</strong> — フォーマット済み文書の作成 / Create formatted documents</li>
+        <li><strong>PowerPoint</strong> — プレゼンテーションの作成 / Create presentations</li>
+        <li><strong>PDF</strong> — PDFの作成・処理 / Create and process PDFs</li>
+      </ul>
+
+      <p class="ja" style="margin-top:1rem;"><strong>Plugin（プラグイン）：</strong>Skills、Connectors、サブエージェントを1つのパッケージにまとめたもの。特定の業務領域（営業、マーケティング、エンジニアリングなど）向けに最適化されたセットが用意されている。左サイドバーの <strong>「Customize」&rarr;「Browse plugins」</strong> から追加できる。</p>
+      <p class="en"><strong>Plugins:</strong> Bundles of Skills, Connectors, and sub-agents in a single package. Pre-configured for specific domains (sales, marketing, engineering, etc.). Add from <strong>"Customize" &rarr; "Browse plugins"</strong> in the left sidebar.</p>
+    </div>
+  </details>
+</div>
+
+<!-- Customize Summary -->
+<div class="cowork-box">
+  <div class="bilingual">
+    <p class="ja"><strong>まとめ：Customize画面の構成</strong> — すべて左サイドバーの「Customize」からアクセスする。</p>
+    <p class="en"><strong>Summary: The Customize panel</strong> — All accessible from "Customize" in the left sidebar.</p>
+  </div>
+  <table>
+    <tr><th>項目 / Item</th><th>役割 / Role</th><th>例 / Examples</th></tr>
+    <tr><td>Connectors</td><td>外部サービスとの接続 / Connect to external services</td><td>Slack, Google Drive, Notion</td></tr>
+    <tr><td>Skills</td><td>専門知識・ワークフローの追加 / Add specialized knowledge</td><td>Excel, Word, PowerPoint, PDF</td></tr>
+    <tr><td>Plugins</td><td>Skills + Connectors + サブエージェントのパッケージ / Bundled packages</td><td>Sales, Marketing, Engineering, Finance</td></tr>
+  </table>
+</div>
+
+<!-- First Task -->
+<div class="phase-card">
+  <h3>最初のタスクを実行してみる / Running Your First Task</h3>
+
+  <div class="bilingual">
+    <p class="ja">セットアップが終わったら、簡単なタスクで動作確認する。</p>
+    <p class="en">After setup, try a simple task to verify everything works.</p>
+  </div>
+
+  <div class="question-box">
+    <p class="ja"><strong>試してみよう：</strong></p>
+    <p class="en"><strong>Try this:</strong></p>
+<pre>
+デスクトップにある「test」フォルダの中身を教えて。
+
+Show me the contents of the "test" folder on my desktop.
+</pre>
+  </div>
+
+  <div class="bilingual">
+    <p class="ja">Coworkが正しくフォルダにアクセスし、ファイル一覧を返してくれれば準備完了。次のPhaseに進もう。</p>
+    <p class="en">If Cowork correctly accesses the folder and returns a file list, you're ready. Move on to the next phase.</p>
+  </div>
+</div>
 
 <hr>
 
