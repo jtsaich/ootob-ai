@@ -302,6 +302,17 @@
     color: var(--text-muted);
     margin-left: 8px;
   }
+  .mastery-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .dot-gray { background: #ccc; }
+  .dot-red { background: #c62828; }
+  .dot-yellow { background: #f9a825; }
+  .dot-green { background: #2e7d32; }
   .vocab-count {
     text-align: center;
     color: var(--text-muted);
@@ -381,13 +392,14 @@
 <div class="container">
   <header>
     <h1>日本語 每日練習</h1>
-    <div class="subtitle">N5 / N4 單字 + 會話</div>
+    <div class="subtitle">N5 / N4 單字 + 會話 <span style="margin-left:8px;font-size:0.75em;cursor:pointer;color:var(--text-muted);text-decoration:underline;" onclick="if(confirm('確定要重置所有學習記錄嗎？'))srsReset()">重置記錄</span></div>
   </header>
 
   <div class="stats-bar">
     <span>今日: <strong id="todayCount">0</strong> 題</span>
     <span>正確率: <strong id="accuracy">-</strong></span>
     <span>連續: <strong id="streak">0</strong></span>
+    <span>已學: <strong id="learnedCount">0</strong></span>
   </div>
 
   <div class="tab-bar">
@@ -401,6 +413,7 @@
       <button class="mode-btn active" onclick="setMode('zh2jp')">中 → 日</button>
       <button class="mode-btn" onclick="setMode('jp2zh')">日 → 中</button>
       <button class="mode-btn" onclick="setMode('qa')">Q&A 會話</button>
+      <button class="mode-btn" onclick="setMode('weak')">弱點複習</button>
     </div>
 
     <div class="level-filter">
@@ -515,6 +528,8 @@ function loadFromFiles(vocabText, qaText) {
   QA_QUESTIONS = parseQaMd(qaText);
   dataLoaded = true;
   document.getElementById('filePicker').style.display = 'none';
+  srsLoad();
+  updateStats();
   nextQuestion();
 }
 
@@ -531,6 +546,88 @@ let level = 'all';
 let currentQ = null;
 let answered = false;
 let stats = { total: 0, correct: 0, streak: 0 };
+
+// ========== SRS PERSISTENCE ==========
+let srsData = null;
+let recentKeys = [];
+
+function srsDefault() {
+  return { version: 1, items: {}, session: { date: '', total: 0, correct: 0, streak: 0 } };
+}
+
+function srsLoad() {
+  try {
+    const raw = localStorage.getItem('jpquiz_srs');
+    srsData = raw ? JSON.parse(raw) : srsDefault();
+    if (!srsData.items) srsData.items = {};
+    if (!srsData.session) srsData.session = { date: '', total: 0, correct: 0, streak: 0 };
+  } catch (e) {
+    srsData = srsDefault();
+  }
+  // Reset session counters on new day
+  const today = new Date().toISOString().slice(0, 10);
+  if (srsData.session.date !== today) {
+    srsData.session = { date: today, total: 0, correct: 0, streak: 0 };
+  }
+  stats.total = srsData.session.total;
+  stats.correct = srsData.session.correct;
+  stats.streak = srsData.session.streak;
+}
+
+function srsSave() {
+  try { localStorage.setItem('jpquiz_srs', JSON.stringify(srsData)); } catch (e) {}
+}
+
+function srsGetKey(item) {
+  if (item.kanji !== undefined) return 'v:' + item.kanji + '|' + item.reading;
+  return 'q:' + item.q;
+}
+
+function srsRecord(item, isCorrect) {
+  const key = srsGetKey(item);
+  if (!srsData.items[key]) srsData.items[key] = { c: 0, w: 0, s: 0, ts: 0 };
+  const entry = srsData.items[key];
+  if (isCorrect) {
+    entry.c++;
+    entry.s++;
+  } else {
+    entry.w++;
+    entry.s = 0;
+  }
+  entry.ts = Date.now();
+  srsSave();
+}
+
+function srsReset() {
+  srsData = srsDefault();
+  srsData.session.date = new Date().toISOString().slice(0, 10);
+  srsSave();
+  stats = { total: 0, correct: 0, streak: 0 };
+  recentKeys = [];
+  updateStats();
+  nextQuestion();
+}
+
+function getWeight(item) {
+  const key = srsGetKey(item);
+  if (recentKeys.includes(key)) return 0.05;
+  const entry = srsData.items[key];
+  if (!entry) return 1.5; // unseen — slightly boosted
+  return Math.max(0.1, 1.0 + (entry.w * 1.5) - (entry.s * 0.3));
+}
+
+function weightedPick(pool) {
+  if (pool.length === 0) return null;
+  if (pool.length === 1) return pool[0];
+  const weights = pool.map(item => getWeight(item));
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < pool.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return pool[i];
+  }
+  return pool[pool.length - 1];
+}
 
 // ========== HELPERS ==========
 function shuffle(arr) {
@@ -560,7 +657,7 @@ function normalize(s) {
 function setMode(m) {
   mode = m;
   document.querySelectorAll('.mode-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', ['zh2jp','jp2zh','qa'][i] === m);
+    btn.classList.toggle('active', ['zh2jp','jp2zh','qa','weak'][i] === m);
   });
   document.getElementById('qaHint').style.display = m === 'qa' ? 'block' : 'none';
   resetFeedback();
@@ -595,9 +692,35 @@ function nextQuestion() {
   input.focus();
   document.getElementById('submitBtn').textContent = '確認';
 
-  if (mode === 'qa') {
+  if (mode === 'weak') {
+    // Weak point review: only vocab items answered wrong before
+    const pool = VOCAB_CLEAN.filter(v => {
+      const entry = srsData.items[srsGetKey(v)];
+      return entry && entry.w > 0;
+    });
+    if (pool.length === 0) {
+      currentQ = null;
+      document.getElementById('levelTag').textContent = '';
+      document.getElementById('promptLabel').textContent = '';
+      document.getElementById('prompt').textContent = '沒有弱點單字，繼續加油！';
+      document.getElementById('promptSub').textContent = '';
+      document.getElementById('qaContext').style.display = 'none';
+      return;
+    }
+    currentQ = weightedPick(pool);
+    recentKeys.push(srsGetKey(currentQ));
+    if (recentKeys.length > 3) recentKeys.shift();
+    document.getElementById('levelTag').textContent = currentQ.level;
+    document.getElementById('promptLabel').textContent = '弱點複習：請寫出日文';
+    document.getElementById('prompt').textContent = currentQ.zh;
+    document.getElementById('promptSub').textContent = '';
+    document.getElementById('qaContext').style.display = 'none';
+    input.placeholder = '輸入日文...';
+  } else if (mode === 'qa') {
     const pool = getFilteredQA();
-    currentQ = pool[Math.floor(Math.random() * pool.length)];
+    currentQ = weightedPick(pool);
+    recentKeys.push(srsGetKey(currentQ));
+    if (recentKeys.length > 3) recentKeys.shift();
     document.getElementById('levelTag').textContent = currentQ.level;
     document.getElementById('promptLabel').textContent = '用日文回答這個問題';
     document.getElementById('prompt').textContent = currentQ.q;
@@ -606,7 +729,9 @@ function nextQuestion() {
     input.placeholder = '用日文回答...';
   } else {
     const pool = getFilteredVocab();
-    currentQ = pool[Math.floor(Math.random() * pool.length)];
+    currentQ = weightedPick(pool);
+    recentKeys.push(srsGetKey(currentQ));
+    if (recentKeys.length > 3) recentKeys.shift();
     document.getElementById('levelTag').textContent = currentQ.level;
 
     if (mode === 'zh2jp') {
@@ -650,15 +775,18 @@ function checkAnswer() {
     stats.correct++;
     stats.streak++;
     input.classList.add('correct');
-  } else if (mode === 'zh2jp') {
+    srsRecord(currentQ, true);
+  } else if (mode === 'zh2jp' || mode === 'weak') {
     const answers = [normalize(currentQ.kanji), normalize(currentQ.reading)];
     const isCorrect = answers.includes(userAns);
     showVocabFeedback(isCorrect, `${currentQ.kanji}（${currentQ.reading}）`);
+    srsRecord(currentQ, isCorrect);
   } else {
     // jp2zh: check if any part of zh matches
     const zhParts = currentQ.zh.split(/[\/\(\)（）]/).map(normalize);
     const isCorrect = zhParts.some(p => p && (userAns.includes(p) || p.includes(userAns)));
     showVocabFeedback(isCorrect, currentQ.zh);
+    srsRecord(currentQ, isCorrect);
   }
 
   document.getElementById('submitBtn').textContent = '下一題';
@@ -688,7 +816,7 @@ function showAnswer() {
   fb.className = 'feedback show wrong';
   if (mode === 'qa') {
     fb.innerHTML = `<div class="answer-detail"><strong>參考回答：</strong>${currentQ.hint}</div>`;
-  } else if (mode === 'zh2jp') {
+  } else if (mode === 'zh2jp' || mode === 'weak') {
     fb.innerHTML = `<div class="answer-detail">答案：${currentQ.kanji}（${currentQ.reading}）</div>`;
   } else {
     fb.innerHTML = `<div class="answer-detail">答案：${currentQ.zh}</div>`;
@@ -696,6 +824,7 @@ function showAnswer() {
   answered = true;
   stats.total++;
   stats.streak = 0;
+  srsRecord(currentQ, false);
   document.getElementById('submitBtn').textContent = '下一題';
   updateStats();
 }
@@ -711,6 +840,14 @@ function updateStats() {
   document.getElementById('accuracy').textContent = stats.total > 0
     ? Math.round(stats.correct / stats.total * 100) + '%' : '-';
   document.getElementById('streak').textContent = stats.streak;
+  if (srsData) {
+    const learned = Object.values(srsData.items).filter(e => e.c > 0).length;
+    document.getElementById('learnedCount').textContent = learned;
+    srsData.session.total = stats.total;
+    srsData.session.correct = stats.correct;
+    srsData.session.streak = stats.streak;
+    srsSave();
+  }
 }
 
 function updateProgress() {
@@ -729,9 +866,20 @@ function renderVocabList() {
            normalize(v.zh).includes(search);
   });
   document.getElementById('vocabCount').textContent = `共 ${filtered.length} 個單字`;
-  const html = filtered.map(v => `
+  const html = filtered.map(v => {
+    let dotClass = 'dot-gray';
+    if (srsData) {
+      const entry = srsData.items[srsGetKey(v)];
+      if (entry) {
+        if (entry.w > entry.c) dotClass = 'dot-red';
+        else if (entry.s >= 3) dotClass = 'dot-green';
+        else dotClass = 'dot-yellow';
+      }
+    }
+    return `
     <div class="vocab-item">
       <div>
+        <span class="mastery-dot ${dotClass}"></span>
         <span class="jp">${v.kanji}</span>
         <span class="reading">${v.reading}</span>
       </div>
@@ -739,8 +887,8 @@ function renderVocabList() {
         <span class="zh">${v.zh}</span>
         <span class="lvl">${v.level}</span>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
   document.getElementById('vocabList').innerHTML = html;
 }
 
@@ -770,6 +918,8 @@ function handleFileSelect() {
   try {
     await loadFromFetch();
     dataLoaded = true;
+    srsLoad();
+    updateStats();
     nextQuestion();
   } catch (e) {
     // fetch failed (likely file:// protocol), show file picker
