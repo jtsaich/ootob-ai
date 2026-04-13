@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Notion Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — Notion Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --white: #ffffff;
+      --warm-white: #f6f5f4;
+      --text-primary: rgba(0, 0, 0, 0.95);
+      --text-secondary: #615d59;
+      --text-tertiary: #a39e98;
+      --notion-blue: #0075de;
+      --notion-blue-hover: #0062bd;
+      --notion-blue-active: #097fe8;
+      --pill-bg: #f2f9ff;
+      --pill-text: #097fe8;
+      --border-whisper: rgba(0, 0, 0, 0.1);
+      --border-whisper-light: rgba(0, 0, 0, 0.05);
+      --border-whisper-medium: rgba(0, 0, 0, 0.2);
+      --shadow-l1: rgba(0, 0, 0, 0.04) 0px 4px 18px;
+      --shadow-l2: rgba(0, 0, 0, 0.02) 0px 1px 3px;
+      --shadow-l3: rgba(0, 0, 0, 0.06) 0px 8px 24px;
+      --radius-card: 12px;
+      --radius-btn: 4px;
+      --radius-pill: 9999px;
+      --max-w: 900px;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-primary);
+      background: var(--white);
+      line-height: 1.50;
+      font-size: 16px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* -- Top navigation bar -- */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-whisper);
+    }
+
+    .top-bar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-btn);
+      transition: background 0.12s ease, color 0.12s ease;
+    }
+
+    .back-link:hover {
+      background: var(--warm-white);
+      color: var(--text-primary);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.12s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-2px);
+    }
+
+    .design-badge {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--pill-text);
+      background: var(--pill-bg);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* -- Hero section -- */
+    .hero {
+      padding: 120px 2rem 72px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .logo-wordmark {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--notion-blue);
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 700;
+      letter-spacing: -2.125px;
+      line-height: 1.00;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      max-width: 720px;
+    }
+
+    .hero-tagline {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--text-secondary);
+      max-width: 600px;
+    }
+
+    /* -- Divider -- */
+    .section-divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-divider hr {
+      border: none;
+      height: 1px;
+      background: var(--border-whisper);
+    }
+
+    /* -- Content sections -- */
+    .content-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 64px 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 40px;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.10;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+    }
+
+    /* -- Project cards -- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border-whisper);
+      border-radius: var(--radius-card);
+      padding: 24px 20px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+      position: relative;
+      box-shadow: var(--shadow-l2);
+    }
+
+    .card:hover {
+      box-shadow:
+        rgba(0, 0, 0, 0.04) 0px 4px 18px,
+        rgba(0, 0, 0, 0.02) 0px 1px 3px,
+        rgba(0, 0, 0, 0.06) 0px 8px 24px;
+      border-color: var(--border-whisper-medium);
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+
+    .card-icon--blue {
+      background: var(--pill-bg);
+      color: var(--notion-blue);
+    }
+
+    .card-icon--muted {
+      background: var(--warm-white);
+      color: var(--text-tertiary);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+      flex: 1;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--pill-text);
+      background: var(--pill-bg);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      margin-top: 14px;
+      align-self: flex-start;
+    }
+
+    .card-tag--muted {
+      color: var(--text-tertiary);
+      background: var(--warm-white);
+    }
+
+    .card--disabled {
+      opacity: 0.50;
+      pointer-events: none;
+    }
+
+    .card--disabled .card-title {
+      color: var(--text-secondary);
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 24px;
+      right: 20px;
+      color: var(--notion-blue);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.12s ease, transform 0.12s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* -- Writing cards -- */
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .writing-card {
+      background: var(--white);
+      border: 1px solid var(--border-whisper);
+      border-radius: var(--radius-card);
+      padding: 24px 20px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+      position: relative;
+      box-shadow: var(--shadow-l2);
+    }
+
+    .writing-card:hover {
+      box-shadow:
+        rgba(0, 0, 0, 0.04) 0px 4px 18px,
+        rgba(0, 0, 0, 0.02) 0px 1px 3px,
+        rgba(0, 0, 0, 0.06) 0px 8px 24px;
+      border-color: var(--border-whisper-medium);
+    }
+
+    .writing-card .card-arrow {
+      top: 24px;
+      right: 20px;
+    }
+
+    .writing-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .writing-source {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .writing-source::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--notion-blue);
+    }
+
+    .writing-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      line-height: 1.30;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .writing-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+    }
+
+    /* -- CTA / Coffee chat -- */
+    .cta-section {
+      background: var(--warm-white);
+    }
+
+    .cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+    }
+
+    .cta-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+    }
+
+    .cta-title {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.00;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+      max-width: 520px;
+      margin: 0 auto 12px;
+    }
+
+    .cta-desc-en {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      margin-bottom: 32px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 10px 24px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--notion-blue);
+      border: none;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      transition: background 0.12s ease, transform 0.08s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .cta-btn:hover {
+      background: var(--notion-blue-hover);
+    }
+
+    .cta-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* -- Showcase: Design Highlights -- */
+    .showcase-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 64px 2rem;
+    }
+
+    .showcase-header {
+      margin-bottom: 48px;
+    }
+
+    .showcase-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .showcase-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.10;
+      color: var(--text-primary);
+    }
+
+    /* Whisper Border demo */
+    .whisper-demo {
+      margin-bottom: 64px;
+    }
+
+    .whisper-demo-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .whisper-demo-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.50;
+    }
+
+    .whisper-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .whisper-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow:
+        rgba(0, 0, 0, 0.04) 0px 4px 18px,
+        rgba(0, 0, 0, 0.02) 0px 1px 3px;
+    }
+
+    .whisper-card--05 {
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .whisper-card--10 {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .whisper-card--20 {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .whisper-opacity-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--pill-text);
+      background: var(--pill-bg);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 16px;
+    }
+
+    .whisper-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .whisper-card-value {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      font-family: 'Inter', monospace;
+    }
+
+    .whisper-card-note {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--notion-blue);
+      margin-top: 12px;
+    }
+
+    /* Warm vs Standard White */
+    .warm-compare {
+      margin-bottom: 64px;
+    }
+
+    .warm-compare-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .warm-compare-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.50;
+    }
+
+    .warm-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .warm-card {
+      border-radius: var(--radius-card);
+      padding: 40px 28px;
+      text-align: center;
+      border: 1px solid var(--border-whisper);
+      box-shadow:
+        rgba(0, 0, 0, 0.04) 0px 4px 18px,
+        rgba(0, 0, 0, 0.02) 0px 1px 3px;
+      position: relative;
+    }
+
+    .warm-card--warm {
+      background: #f6f5f4;
+    }
+
+    .warm-card--neutral {
+      background: #f8f8f8;
+    }
+
+    .warm-swatch {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      border: 1px solid var(--border-whisper);
+    }
+
+    .warm-swatch--warm {
+      background: #f6f5f4;
+      box-shadow: inset 0 0 0 2px var(--white);
+    }
+
+    .warm-swatch--neutral {
+      background: #f8f8f8;
+      box-shadow: inset 0 0 0 2px var(--white);
+    }
+
+    .warm-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .warm-card-hex {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      font-family: 'Inter', monospace;
+      margin-bottom: 8px;
+    }
+
+    .warm-card-desc {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+    }
+
+    .warm-card-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--pill-text);
+      background: var(--pill-bg);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      margin-top: 12px;
+    }
+
+    /* Active State Animation */
+    .active-demo {
+      margin-bottom: 48px;
+    }
+
+    .active-demo-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .active-demo-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.50;
+    }
+
+    .active-demo-box {
+      background: var(--warm-white);
+      border: 1px solid var(--border-whisper);
+      border-radius: var(--radius-card);
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow:
+        rgba(0, 0, 0, 0.04) 0px 4px 18px,
+        rgba(0, 0, 0, 0.02) 0px 1px 3px;
+    }
+
+    .active-demo-instruction {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      margin-bottom: 24px;
+    }
+
+    .demo-btn {
+      display: inline-block;
+      padding: 10px 24px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--notion-blue);
+      border: none;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s ease, transform 0.08s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .demo-btn:hover {
+      background: var(--notion-blue-hover);
+    }
+
+    .demo-btn:active {
+      transform: scale(0.9);
+    }
+
+    .active-demo-code {
+      margin-top: 20px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      font-family: 'Inter', monospace;
+    }
+
+    /* -- Footer -- */
+    .site-footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-whisper);
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.12s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--notion-blue);
+    }
+
+    /* -- Animations -- */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    .animate-in--d1 { animation-delay: 0.05s; }
+    .animate-in--d2 { animation-delay: 0.1s; }
+    .animate-in--d3 { animation-delay: 0.15s; }
+    .animate-in--d4 { animation-delay: 0.2s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in {
+        animation: none;
+        opacity: 1;
+      }
+      .cta-btn:active,
+      .demo-btn:active {
+        transform: none;
+      }
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 860px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero h1 {
+        font-size: 48px;
+        letter-spacing: -1.5px;
+      }
+      .cta-title {
+        font-size: 36px;
+        letter-spacing: -1px;
+      }
+      .whisper-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-inner {
+        padding: 0 1.25rem;
+      }
+      .hero {
+        padding: 100px 1.25rem 48px;
+      }
+      .hero h1 {
+        font-size: 36px;
+        letter-spacing: -1px;
+      }
+      .hero-tagline {
+        font-size: 15px;
+      }
+      .content-section {
+        padding: 40px 1.25rem;
+      }
+      .section-title {
+        font-size: 24px;
+        letter-spacing: -0.5px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-inner {
+        padding: 56px 1.25rem;
+      }
+      .cta-title {
+        font-size: 28px;
+        letter-spacing: -0.8px;
+      }
+      .cta-desc {
+        font-size: 15px;
+      }
+      .site-footer {
+        padding: 28px 1.25rem;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .section-divider {
+        padding: 0 1.25rem;
+      }
+      .showcase-section {
+        padding: 40px 1.25rem;
+      }
+      .whisper-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .warm-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .showcase-title {
+        font-size: 24px;
+        letter-spacing: -0.5px;
+      }
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius-card);
+      transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+      border: 1px solid var(--border-whisper);
+      background: var(--white);
+      color: var(--text-secondary);
+    }
+
+    .design-nav a:hover {
+      background: var(--warm-white);
+      border-color: var(--border-whisper-medium);
+      color: var(--text-primary);
+      box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 18px;
+    }
+
+    .design-nav .nav-dir {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.45;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .design-nav a {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-link" href="/try-awesome-design/">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back
+    </a>
+    <span class="design-badge">Design: Notion</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="logo-mark animate-in">
+    <span class="logo-wordmark">ootob<span class="logo-dot"></span>ai</span>
+  </div>
+  <h1 class="animate-in animate-in--d1">小專案</h1>
+  <p class="hero-tagline animate-in animate-in--d2">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+</header>
+
+<div class="section-divider"><hr></div>
+
+<!-- Tools section -->
+<section class="content-section animate-in animate-in--d3">
+  <div class="section-header">
+    <p class="section-eyebrow">Tools</p>
+    <h2 class="section-title">做著玩的東西</h2>
+    <p class="section-subtitle">有的有用，有的純粹好玩。</p>
+  </div>
+
+  <div class="card-grid">
+    <!-- Japanese Quiz -->
+    <a class="card" href="/japanese/quiz.html">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </span>
+      <div class="card-icon card-icon--blue">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="card-title">Japanese Quiz</div>
+      <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+      <span class="card-tag">learning</span>
+    </a>
+
+    <!-- Threads to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">Threads to Markdown</div>
+      <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+
+    <!-- X Thread to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">X Thread to Markdown</div>
+      <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Writing section -->
+<section class="content-section animate-in animate-in--d4">
+  <div class="section-header">
+    <p class="section-eyebrow">Writing</p>
+    <h2 class="section-title">文章</h2>
+    <p class="section-subtitle">思考的紀錄，關於品味、AI、與經驗不可取代的東西。</p>
+  </div>
+
+  <div class="writing-grid">
+    <!-- 品味不可說 -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">品味不可說</div>
+      <div class="writing-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+    </a>
+
+    <!-- Mastery -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+      <div class="writing-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+    </a>
+  </div>
+</section>
+
+<!-- Coffee Chat CTA (warm white section) -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="cta-eyebrow">Coffee Chat</p>
+    <h2 class="cta-title">聊一杯咖啡</h2>
+    <p class="cta-desc">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="cta-desc-en">Let me know how I can help you.</p>
+    <a class="cta-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </div>
+</section>
+
+<!-- Notion Design Highlights -->
+<div class="section-divider"><hr></div>
+
+<section class="showcase-section">
+  <div class="showcase-header">
+    <p class="showcase-eyebrow">Design Showcase</p>
+    <h2 class="showcase-title">Notion 設計特色</h2>
+  </div>
+
+  <!-- Whisper Border demo -->
+  <div class="whisper-demo">
+    <div class="whisper-demo-label">Whisper Border</div>
+    <div class="whisper-demo-desc">Notion 使用極細的邊框來定義空間，而非強烈的分隔線。透過控制 rgba 的 alpha 值，讓邊框若有似無，營造出乾淨卻有層次的介面。</div>
+    <div class="whisper-grid">
+      <div class="whisper-card whisper-card--05">
+        <span class="whisper-opacity-badge">opacity 0.05</span>
+        <div class="whisper-card-title">最輕</div>
+        <div class="whisper-card-value">rgba(0, 0, 0, 0.05)</div>
+        <div class="whisper-card-note">幾乎隱形的分隔</div>
+      </div>
+      <div class="whisper-card whisper-card--10">
+        <span class="whisper-opacity-badge">opacity 0.10</span>
+        <div class="whisper-card-title">標準</div>
+        <div class="whisper-card-value">rgba(0, 0, 0, 0.1)</div>
+        <div class="whisper-card-note">Notion 的主要選擇</div>
+      </div>
+      <div class="whisper-card whisper-card--20">
+        <span class="whisper-opacity-badge">opacity 0.20</span>
+        <div class="whisper-card-title">明顯</div>
+        <div class="whisper-card-value">rgba(0, 0, 0, 0.2)</div>
+        <div class="whisper-card-note">需要更強調時使用</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warm vs Standard White -->
+  <div class="warm-compare">
+    <div class="warm-compare-label">Warm vs Standard White</div>
+    <div class="warm-compare-desc">Notion 的背景色不是冷灰，而是帶一點黃調的暖白。這個微妙的差異讓整個介面感覺更溫暖、更人性化。</div>
+    <div class="warm-grid">
+      <div class="warm-card warm-card--warm">
+        <div class="warm-swatch warm-swatch--warm"></div>
+        <div class="warm-card-title">Notion Warm White</div>
+        <div class="warm-card-hex">#f6f5f4</div>
+        <div class="warm-card-desc">帶黃色底調的暖白，讓人聯想到紙張的質感，減少螢幕的冰冷感。</div>
+        <span class="warm-card-badge">Notion 的選擇</span>
+      </div>
+      <div class="warm-card warm-card--neutral">
+        <div class="warm-swatch warm-swatch--neutral"></div>
+        <div class="warm-card-title">Standard Neutral</div>
+        <div class="warm-card-hex">#f8f8f8</div>
+        <div class="warm-card-desc">業界常見的中性灰白，乾淨但缺少溫度。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active State Animation -->
+  <div class="active-demo">
+    <div class="active-demo-label">Active State Animation</div>
+    <div class="active-demo-desc">Notion 的按鈕在按下時會有一個快速的 scale(0.9) 縮放效果，讓使用者感受到明確的觸覺回饋。這個動畫快速而不誇張，符合 Notion 內斂的性格。</div>
+    <div class="active-demo-box">
+      <div class="active-demo-instruction">按下按鈕感受 scale(0.9) 效果</div>
+      <button class="demo-btn" onclick="return false;">按我試試</button>
+      <div class="active-demo-code">:active { transform: scale(0.9); } &mdash; transition: 0.08s ease</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 ootob.ai</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="https://open.substack.com/pub/ootobai" target="_blank" rel="noopener">Substack</a>
+  </div>
+</footer>
+
+<nav class="design-nav">
+  <a href="/try-awesome-design/claude/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Claude</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/airbnb/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Airbnb</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+</body>
+</html>

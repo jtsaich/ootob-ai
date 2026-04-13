@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Vercel Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --white: #ffffff;
+      --black: #171717;
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #4d4d4d;
+      --gray-900: #171717;
+      --ship-red: #ff5b4f;
+      --preview-pink: #de1d8d;
+      --develop-blue: #0a72ef;
+      --pill-bg: #ebf5ff;
+      --pill-text: #0068d6;
+      --shadow-border: rgba(0,0,0,0.08) 0px 0px 0px 1px;
+      --shadow-card: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 2px, rgba(0,0,0,0.04) 0px 8px 8px -8px, #fafafa 0px 0px 0px 1px;
+      --max-w: 1080px;
+      --content-w: 680px;
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--black);
+      background: var(--white);
+      line-height: 1.6;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    /* ============================================
+       Navigation bar
+       ============================================ */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .back-link:hover {
+      color: var(--black);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-separator {
+      width: 1px;
+      height: 24px;
+      background: var(--gray-200);
+    }
+
+    .nav-logo {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .design-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: -0.1px;
+    }
+
+    .design-badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ============================================
+       Hero section
+       ============================================ */
+    .hero {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 120px 24px 80px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 32px;
+      letter-spacing: -0.1px;
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 600;
+      letter-spacing: -2.88px;
+      line-height: 1.05;
+      color: var(--black);
+      max-width: 720px;
+      margin: 0 auto 24px;
+    }
+
+    .hero-tagline {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--gray-600);
+      line-height: 1.6;
+      max-width: 560px;
+      margin: 0 auto;
+      letter-spacing: -0.3px;
+    }
+
+    /* ============================================
+       Section headings
+       ============================================ */
+    .section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-header {
+      max-width: var(--content-w);
+      margin: 0 auto;
+      padding: 100px 0 48px;
+    }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -2.0px;
+      line-height: 1.1;
+      color: var(--black);
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--gray-600);
+      margin-top: 12px;
+      letter-spacing: -0.2px;
+    }
+
+    /* ============================================
+       Cards grid
+       ============================================ */
+    .cards-grid {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px 120px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--shadow-card);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: transparent;
+      transition: background 0.2s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .card:hover {
+        box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.06) 0px 4px 8px, rgba(0,0,0,0.06) 0px 16px 24px -8px, #fafafa 0px 0px 0px 1px;
+        transform: translateY(-2px);
+      }
+    }
+
+    .card-accent-blue:hover::before { background: var(--develop-blue); }
+    .card-accent-red:hover::before { background: var(--ship-red); }
+    .card-accent-pink:hover::before { background: var(--preview-pink); }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-border);
+      background: var(--white);
+    }
+
+    .card-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--gray-600);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--black);
+    }
+
+    .card-desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--gray-600);
+      line-height: 1.6;
+      letter-spacing: -0.1px;
+    }
+
+    .card-tag {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: -0.1px;
+      margin-top: auto;
+    }
+
+    .tag-learning {
+      background: var(--pill-bg);
+      color: var(--pill-text);
+    }
+
+    .tag-soon {
+      background: var(--gray-100);
+      color: var(--gray-500);
+    }
+
+    .card-disabled {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .card-disabled .card-title {
+      color: var(--gray-500);
+    }
+
+    /* ============================================
+       Writing section — list style
+       ============================================ */
+    .writing-list {
+      max-width: var(--content-w);
+      margin: 0 auto;
+      padding: 0 24px 120px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .writing-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+      box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.15s ease;
+    }
+
+    .writing-item:first-child {
+      box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.08), inset 0 -1px 0 0 rgba(0,0,0,0.08);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .writing-item:hover {
+        opacity: 0.7;
+      }
+    }
+
+    .writing-content {
+      flex: 1;
+    }
+
+    .writing-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+
+    .writing-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray-500);
+      line-height: 1.5;
+      letter-spacing: -0.1px;
+    }
+
+    .writing-arrow {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: var(--gray-400);
+      transition: transform 0.15s ease, color 0.15s ease;
+    }
+
+    .writing-item:hover .writing-arrow {
+      transform: translateX(3px);
+      color: var(--black);
+    }
+
+    /* ============================================
+       Coffee Chat CTA
+       ============================================ */
+    .cta-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px 160px;
+    }
+
+    .cta-card {
+      max-width: var(--content-w);
+      margin: 0 auto;
+      background: var(--gray-50);
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      padding: 64px 48px;
+      text-align: center;
+    }
+
+    .cta-label {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      margin-bottom: 20px;
+    }
+
+    .cta-heading {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -1.6px;
+      line-height: 1.15;
+      color: var(--black);
+      margin-bottom: 16px;
+    }
+
+    .cta-body {
+      font-size: 16px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      max-width: 420px;
+      margin: 0 auto 32px;
+      letter-spacing: -0.1px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--black);
+      color: var(--white);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: -0.2px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .cta-button:hover {
+      background: #333;
+    }
+
+    .cta-button:active {
+      transform: scale(0.98);
+    }
+
+    .cta-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ============================================
+       Footer
+       ============================================ */
+    .site-footer {
+      box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.08);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--gray-500);
+      letter-spacing: -0.1px;
+    }
+
+    .footer-right {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--gray-400);
+    }
+
+    /* ============================================
+       Animations
+       ============================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.10s; }
+    .delay-3 { animation-delay: 0.15s; }
+    .delay-4 { animation-delay: 0.20s; }
+    .delay-5 { animation-delay: 0.25s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ============================================
+       Responsive
+       ============================================ */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 80px 20px 60px;
+      }
+
+      .hero h1 {
+        font-size: 40px;
+        letter-spacing: -2.0px;
+      }
+
+      .hero-tagline {
+        font-size: 17px;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px 80px;
+      }
+
+      .section-header {
+        padding: 80px 0 36px;
+      }
+
+      .section-title {
+        font-size: 32px;
+        letter-spacing: -1.6px;
+      }
+
+      .section {
+        padding: 0 20px;
+      }
+
+      .writing-list {
+        padding: 0 20px 80px;
+      }
+
+      .writing-item {
+        padding: 20px 0;
+      }
+
+      .writing-title {
+        font-size: 16px;
+      }
+
+      .cta-section {
+        padding: 0 20px 100px;
+      }
+
+      .cta-card {
+        padding: 48px 28px;
+      }
+
+      .cta-heading {
+        font-size: 26px;
+        letter-spacing: -1.2px;
+      }
+
+      .nav-inner {
+        padding: 0 20px;
+      }
+
+      .footer-inner {
+        padding: 28px 20px;
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 32px;
+        letter-spacing: -1.6px;
+      }
+
+      .hero {
+        padding: 64px 16px 48px;
+      }
+
+      .cards-grid {
+        padding: 0 16px 64px;
+      }
+
+      .writing-list {
+        padding: 0 16px 64px;
+      }
+
+      .section {
+        padding: 0 16px;
+      }
+
+      .cta-section {
+        padding: 0 16px 80px;
+      }
+
+      .design-badge span {
+        display: none;
+      }
+    }
+
+    /* ============================================
+       Showcase: Design Highlights
+       ============================================ */
+    .showcase-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .showcase-header {
+      max-width: var(--content-w);
+      margin: 0 auto;
+      padding: 100px 0 48px;
+      box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.08);
+    }
+
+    .showcase-header .section-label {
+      margin-bottom: 16px;
+    }
+
+    /* --- Shadow-as-Border Demo --- */
+    .shadow-demo {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .shadow-demo-heading {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .shadow-demo-sub {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 32px;
+      letter-spacing: -0.1px;
+    }
+
+    .shadow-demo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .shadow-demo-card {
+      border-radius: 12px;
+      padding: 32px 24px;
+      background: var(--white);
+      text-align: center;
+      position: relative;
+    }
+
+    .shadow-demo-card-border {
+      border: 1px solid #e5e5e5;
+    }
+
+    .shadow-demo-card-shadow {
+      border: none;
+      box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px;
+    }
+
+    .shadow-demo-card-full {
+      border: none;
+      box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 2px, rgba(0,0,0,0.04) 0px 8px 8px -8px, #fafafa 0px 0px 0px 1px;
+    }
+
+    .shadow-demo-card .demo-label {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .label-not-vercel {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .label-vercel {
+      background: var(--pill-bg);
+      color: var(--pill-text);
+    }
+
+    .label-fullstack {
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .shadow-demo-card .demo-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .shadow-demo-card .demo-code {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+      font-size: 11px;
+      color: var(--gray-500);
+      line-height: 1.6;
+      background: var(--gray-50);
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: rgba(0,0,0,0.06) 0px 0px 0px 1px;
+      text-align: left;
+      word-break: break-all;
+    }
+
+    /* --- Workflow Pipeline --- */
+    .pipeline-demo {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .pipeline-demo-heading {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .pipeline-demo-sub {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 40px;
+      letter-spacing: -0.1px;
+    }
+
+    .pipeline-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .pipeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      flex: 0 0 auto;
+      min-width: 160px;
+    }
+
+    .pipeline-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .pipeline-circle svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .pipeline-circle-develop {
+      background: rgba(10,114,239,0.1);
+      box-shadow: rgba(10,114,239,0.15) 0px 0px 0px 1px;
+      color: var(--develop-blue);
+    }
+
+    .pipeline-circle-preview {
+      background: rgba(222,29,141,0.1);
+      box-shadow: rgba(222,29,141,0.15) 0px 0px 0px 1px;
+      color: var(--preview-pink);
+    }
+
+    .pipeline-circle-ship {
+      background: rgba(255,91,79,0.1);
+      box-shadow: rgba(255,91,79,0.15) 0px 0px 0px 1px;
+      color: var(--ship-red);
+    }
+
+    .pipeline-step-label {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .pipeline-step-label-develop { color: var(--develop-blue); }
+    .pipeline-step-label-preview { color: var(--preview-pink); }
+    .pipeline-step-label-ship { color: var(--ship-red); }
+
+    .pipeline-step-desc {
+      font-size: 12px;
+      color: var(--gray-500);
+      text-align: center;
+      max-width: 140px;
+    }
+
+    .pipeline-connector {
+      flex: 0 0 80px;
+      height: 2px;
+      position: relative;
+      margin-bottom: 48px;
+    }
+
+    .pipeline-connector::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      border-radius: 1px;
+    }
+
+    .pipeline-connector-1::before {
+      background: linear-gradient(90deg, var(--develop-blue), var(--preview-pink));
+    }
+
+    .pipeline-connector-2::before {
+      background: linear-gradient(90deg, var(--preview-pink), var(--ship-red));
+    }
+
+    .pipeline-connector::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      right: -2px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+
+    .pipeline-connector-1::after {
+      border-left-color: var(--preview-pink);
+    }
+
+    .pipeline-connector-2::after {
+      border-left-color: var(--ship-red);
+    }
+
+    /* --- Letter-spacing Comparison --- */
+    .tracking-demo {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px 120px;
+    }
+
+    .tracking-demo-heading {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .tracking-demo-sub {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 40px;
+      letter-spacing: -0.1px;
+    }
+
+    .tracking-samples {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .tracking-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      padding: 28px 0;
+      box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.06);
+    }
+
+    .tracking-row:first-child {
+      box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.06), inset 0 -1px 0 0 rgba(0,0,0,0.06);
+    }
+
+    .tracking-meta {
+      flex: 0 0 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tracking-value {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-500);
+    }
+
+    .tracking-label-tag {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .tracking-sample {
+      flex: 1;
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1.15;
+    }
+
+    .tracking-normal { letter-spacing: normal; }
+    .tracking-medium { letter-spacing: -1.28px; }
+    .tracking-extreme { letter-spacing: -2.4px; }
+
+    /* Responsive for showcase */
+    @media (max-width: 768px) {
+      .shadow-demo-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .shadow-demo, .pipeline-demo, .tracking-demo {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .showcase-section {
+        padding: 0 20px;
+      }
+
+      .pipeline-row {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .pipeline-connector {
+        width: 2px;
+        height: 40px;
+        flex: 0 0 40px;
+        margin-bottom: 0;
+      }
+
+      .pipeline-connector::before {
+        width: 2px;
+        height: 100%;
+        right: auto;
+        bottom: 0;
+      }
+
+      .pipeline-connector-1::before {
+        background: linear-gradient(180deg, var(--develop-blue), var(--preview-pink));
+      }
+
+      .pipeline-connector-2::before {
+        background: linear-gradient(180deg, var(--preview-pink), var(--ship-red));
+      }
+
+      .pipeline-connector::after {
+        top: auto;
+        bottom: -2px;
+        right: auto;
+        left: -4px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid;
+        border-bottom: none;
+      }
+
+      .pipeline-connector-1::after {
+        border-top-color: var(--preview-pink);
+        border-left-color: transparent;
+      }
+
+      .pipeline-connector-2::after {
+        border-top-color: var(--ship-red);
+        border-left-color: transparent;
+      }
+
+      .tracking-row {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .tracking-meta {
+        flex: none;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .tracking-sample {
+        font-size: 28px;
+      }
+
+      .showcase-header {
+        padding: 80px 0 36px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tracking-sample {
+        font-size: 22px;
+      }
+
+      .shadow-demo, .pipeline-demo, .tracking-demo {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .showcase-section {
+        padding: 0 16px;
+      }
+    }
+  
+/* ── Prev/Next Navigation ── */
+.design-nav{display:flex;justify-content:space-between;align-items:center;max-width:680px;margin:0 auto;padding:24px 24px 48px;gap:16px}
+.design-nav a{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:500;padding:10px 20px;border-radius:8px;transition:background 0.15s,border-color 0.15s,box-shadow 0.15s;border:1px solid #e0e0e0;background:#fff;color:#444}
+.design-nav a:hover{background:#f8f8f8;border-color:#ccc;color:#111;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.design-nav .nav-dir{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;opacity:0.45;display:block;line-height:1}
+.design-nav .nav-name{display:block;line-height:1.3}
+.design-nav .nav-prev{text-align:left}
+.design-nav .nav-next{text-align:right;margin-left:auto}
+.design-nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0}
+@media(max-width:480px){.design-nav a{padding:8px 14px;font-size:13px}}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     Navigation
+     ============================================ -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/try-awesome-design/" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        Back
+      </a>
+      <div class="nav-separator"></div>
+      <a href="/" class="nav-logo">ootob.ai</a>
+    </div>
+    <div class="design-badge">
+      <!-- Vercel triangle -->
+      <svg viewBox="0 0 76 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M37.5274 0L75.0548 65H0L37.5274 0Z"/></svg>
+      <span>Design: Vercel</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================
+     Hero
+     ============================================ -->
+<section class="hero">
+  <div class="hero-eyebrow animate-in">ootob.ai</div>
+  <h1 class="animate-in delay-1">歐兜邁 / オートバイ / autobike</h1>
+  <p class="hero-tagline animate-in delay-2">台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+</section>
+
+<!-- ============================================
+     Tools section
+     ============================================ -->
+<div class="section">
+  <div class="section-header animate-in delay-3">
+    <p class="section-label">Tools</p>
+    <h2 class="section-title">小專案</h2>
+    <p class="section-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+  </div>
+</div>
+
+<div class="cards-grid">
+  <a href="/japanese/quiz.html" class="card card-accent-blue animate-in delay-3">
+    <div class="card-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="m9 10 2 2 4-4"/></svg>
+    </div>
+    <div class="card-title">Japanese Quiz</div>
+    <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+    <span class="card-tag tag-learning">learning</span>
+  </a>
+
+  <div class="card card-disabled card-accent-pink animate-in delay-4">
+    <div class="card-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <div class="card-title">Threads to Markdown</div>
+    <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+    <span class="card-tag tag-soon">coming soon</span>
+  </div>
+
+  <div class="card card-disabled card-accent-red animate-in delay-5">
+    <div class="card-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <div class="card-title">X Thread to Markdown</div>
+    <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+    <span class="card-tag tag-soon">coming soon</span>
+  </div>
+</div>
+
+<!-- ============================================
+     Writing section
+     ============================================ -->
+<div class="section">
+  <div class="section-header">
+    <p class="section-label">Writing</p>
+    <h2 class="section-title">文章</h2>
+  </div>
+</div>
+
+<div class="writing-list">
+  <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener" class="writing-item">
+    <div class="writing-content">
+      <div class="writing-title">品味不可說</div>
+      <div class="writing-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+    </div>
+    <svg class="writing-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+  </a>
+
+  <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener" class="writing-item">
+    <div class="writing-content">
+      <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+      <div class="writing-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+    </div>
+    <svg class="writing-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+  </a>
+</div>
+
+<!-- ============================================
+     Coffee Chat CTA
+     ============================================ -->
+<div class="cta-section">
+  <div class="cta-card">
+    <p class="cta-label">Coffee Chat</p>
+    <h2 class="cta-heading">聊聊吧</h2>
+    <p class="cta-body">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。Let me know how I can help you.</p>
+    <a class="cta-button" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">
+      預約 Coffee Chat
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- ============================================
+     Showcase: Vercel Design Highlights
+     ============================================ -->
+<div class="showcase-section">
+  <div class="showcase-header">
+    <p class="section-label">Design Showcase</p>
+    <h2 class="section-title">Vercel 設計特色</h2>
+    <p class="section-subtitle">三個讓 Vercel 設計系統脫穎而出的關鍵技巧。</p>
+  </div>
+</div>
+
+<!-- Shadow-as-Border Demo -->
+<div class="shadow-demo">
+  <div class="shadow-demo-heading">Shadow-as-Border</div>
+  <div class="shadow-demo-sub">Vercel 用 box-shadow 取代傳統的 CSS border，產生更柔和、更精緻的邊界效果。</div>
+  <div class="shadow-demo-grid">
+    <div class="shadow-demo-card shadow-demo-card-border">
+      <span class="demo-label label-not-vercel">Not Vercel</span>
+      <div class="demo-title">CSS Border</div>
+      <div class="demo-code">border: 1px solid #e5e5e5;</div>
+    </div>
+    <div class="shadow-demo-card shadow-demo-card-shadow">
+      <span class="demo-label label-vercel">Vercel's Approach</span>
+      <div class="demo-title">Shadow Border</div>
+      <div class="demo-code">box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px;</div>
+    </div>
+    <div class="shadow-demo-card shadow-demo-card-full">
+      <span class="demo-label label-fullstack">Full Stack</span>
+      <div class="demo-title">Multi-layer Shadow</div>
+      <div class="demo-code">box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 2px, rgba(0,0,0,0.04) 0px 8px 8px -8px, #fafafa 0px 0px 0px 1px;</div>
+    </div>
+  </div>
+</div>
+
+<!-- Workflow Pipeline -->
+<div class="pipeline-demo">
+  <div class="pipeline-demo-heading">Develop &rarr; Preview &rarr; Ship</div>
+  <div class="pipeline-demo-sub">Vercel 的經典三步驟工作流程，每個階段都有自己的代表色。</div>
+  <div class="pipeline-row">
+    <div class="pipeline-step">
+      <div class="pipeline-circle pipeline-circle-develop">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <span class="pipeline-step-label pipeline-step-label-develop">Develop</span>
+      <span class="pipeline-step-desc">#0a72ef</span>
+    </div>
+    <div class="pipeline-connector pipeline-connector-1"></div>
+    <div class="pipeline-step">
+      <div class="pipeline-circle pipeline-circle-preview">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <span class="pipeline-step-label pipeline-step-label-preview">Preview</span>
+      <span class="pipeline-step-desc">#de1d8d</span>
+    </div>
+    <div class="pipeline-connector pipeline-connector-2"></div>
+    <div class="pipeline-step">
+      <div class="pipeline-circle pipeline-circle-ship">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+      </div>
+      <span class="pipeline-step-label pipeline-step-label-ship">Ship</span>
+      <span class="pipeline-step-desc">#ff5b4f</span>
+    </div>
+  </div>
+</div>
+
+<!-- Letter-spacing Comparison -->
+<div class="tracking-demo">
+  <div class="tracking-demo-heading">Letter-spacing Compression</div>
+  <div class="tracking-demo-sub">Vercel 使用極端的負 letter-spacing，讓大標題更緊湊、更有力量。</div>
+  <div class="tracking-samples">
+    <div class="tracking-row">
+      <div class="tracking-meta">
+        <span class="tracking-value">normal</span>
+        <span class="tracking-label-tag label-not-vercel">Default</span>
+      </div>
+      <div class="tracking-sample tracking-normal">Your Framework, Your Way</div>
+    </div>
+    <div class="tracking-row">
+      <div class="tracking-meta">
+        <span class="tracking-value">-1.28px</span>
+        <span class="tracking-label-tag label-vercel">Tight</span>
+      </div>
+      <div class="tracking-sample tracking-medium">Your Framework, Your Way</div>
+    </div>
+    <div class="tracking-row">
+      <div class="tracking-meta">
+        <span class="tracking-value">-2.4px</span>
+        <span class="tracking-label-tag label-fullstack">Vercel</span>
+      </div>
+      <div class="tracking-sample tracking-extreme">Your Framework, Your Way</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     Footer
+     ============================================ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-copy">&copy; 2026 ootob.ai</p>
+    <p class="footer-right">Design system: Vercel</p>
+  </div>
+</footer>
+
+
+<nav class="design-nav">
+  <a href="/try-awesome-design/stripe/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Stripe</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/spotify/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Spotify</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+</body>
+</html>

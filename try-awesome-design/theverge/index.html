@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — The Verge Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — The Verge Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --canvas: #131313;
+      --surface: #1a1a1a;
+      --surface-raised: #222222;
+      --mint: #3cffd0;
+      --ultraviolet: #5200ff;
+      --yellow: #ffe14d;
+      --pink: #ff5ea0;
+      --white: #ffffff;
+      --text-primary: #e8e8e8;
+      --text-secondary: #949494;
+      --text-muted: #666666;
+      --link-hover: #3860be;
+      --border-white: rgba(255, 255, 255, 0.12);
+      --border-mint: rgba(60, 255, 208, 0.3);
+      --border-uv: rgba(82, 0, 255, 0.4);
+      --max-w: 1080px;
+      --radius-sm: 20px;
+      --radius-md: 24px;
+      --radius-lg: 30px;
+      --radius-xl: 40px;
+    }
+
+    body {
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-primary);
+      background: var(--canvas);
+      line-height: 1.6;
+      font-size: 16px;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* -- Mono labels (kickers, timestamps, buttons) -- */
+    .mono {
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    /* -- Top navigation bar -- */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(19, 19, 19, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-white);
+    }
+
+    .top-bar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--mint);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.15s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-3px);
+    }
+
+    .design-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--mint);
+      background: rgba(60, 255, 208, 0.08);
+      padding: 5px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border-mint);
+    }
+
+    /* -- Hero section -- */
+    .hero {
+      padding: 140px 2rem 80px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Anton', sans-serif;
+      font-size: 107px;
+      font-weight: 400;
+      line-height: 0.90;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      color: var(--white);
+      margin-bottom: 32px;
+      max-width: 900px;
+    }
+
+    .hero-tagline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 19px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 600px;
+    }
+
+    /* -- Hairline divider -- */
+    .divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .divider hr {
+      border: none;
+      height: 1px;
+      background: var(--border-white);
+    }
+
+    /* -- Content sections -- */
+    .content-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 48px;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.5px;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* -- Pill cards (projects) -- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border-white);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      border-color: var(--mint);
+      background: var(--surface-raised);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 18px;
+    }
+
+    .card-icon--mint {
+      background: var(--mint);
+      color: var(--canvas);
+    }
+
+    .card-icon--muted {
+      background: var(--surface-raised);
+      color: var(--text-muted);
+      border: 1px solid var(--border-white);
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--white);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--mint);
+      background: rgba(60, 255, 208, 0.08);
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--border-mint);
+      margin-top: 16px;
+      align-self: flex-start;
+    }
+
+    .card-tag--muted {
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-white);
+    }
+
+    .card--disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 28px;
+      right: 24px;
+      color: var(--mint);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* -- Writing cards -- */
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .writing-card {
+      background: var(--surface);
+      border: 1px solid var(--border-white);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      position: relative;
+    }
+
+    .writing-card:hover {
+      border-color: var(--ultraviolet);
+      background: var(--surface-raised);
+    }
+
+    .writing-card .card-arrow {
+      top: 28px;
+      right: 24px;
+      color: var(--ultraviolet);
+    }
+
+    .writing-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .writing-source {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .writing-source::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+
+    .writing-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.35;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .writing-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* -- CTA / Coffee chat -- */
+    .cta-section {
+      border-top: 1px solid var(--border-white);
+      border-bottom: 1px solid var(--border-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .cta-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 64px;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 0.92;
+      letter-spacing: -0.5px;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .cta-desc {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 520px;
+      margin: 0 auto 12px;
+    }
+
+    .cta-desc-en {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--canvas);
+      background: var(--mint);
+      border: none;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .cta-btn:hover {
+      background: #5bffe0;
+      transform: translateY(-1px);
+    }
+
+    /* -- Links -- */
+    a:hover {
+      color: var(--link-hover);
+    }
+
+    /* ============================
+       SHOWCASE: The Verge Design
+       ============================ */
+
+    .showcase-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .showcase-header {
+      margin-bottom: 56px;
+    }
+
+    .showcase-kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--ultraviolet);
+      margin-bottom: 14px;
+    }
+
+    .showcase-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 48px;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 0.95;
+      color: var(--white);
+    }
+
+    /* -- Hazard Tape Accents -- */
+    .hazard-section {
+      margin-bottom: 72px;
+    }
+
+    .hazard-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .hazard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .hazard-card {
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hazard-card--mint {
+      background: var(--mint);
+      border: 1px solid var(--mint);
+    }
+
+    .hazard-card--mint .hazard-card-title,
+    .hazard-card--mint .hazard-card-hex {
+      color: var(--canvas);
+    }
+
+    .hazard-card--uv {
+      background: var(--ultraviolet);
+      border: 1px solid var(--ultraviolet);
+    }
+
+    .hazard-card--uv .hazard-card-title,
+    .hazard-card--uv .hazard-card-hex {
+      color: var(--white);
+    }
+
+    .hazard-card--outline-mint {
+      background: transparent;
+      border: 1px solid var(--mint);
+    }
+
+    .hazard-card--outline-mint .hazard-card-title {
+      color: var(--mint);
+    }
+    .hazard-card--outline-mint .hazard-card-hex {
+      color: var(--text-secondary);
+    }
+
+    .hazard-card--outline-uv {
+      background: transparent;
+      border: 1px solid rgba(82, 0, 255, 0.6);
+    }
+
+    .hazard-card--outline-uv .hazard-card-title {
+      color: rgb(140, 100, 255);
+    }
+    .hazard-card--outline-uv .hazard-card-hex {
+      color: var(--text-secondary);
+    }
+
+    .hazard-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .hazard-card-hex {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    /* -- Color-Block Story Tiles -- */
+    .tiles-section {
+      margin-bottom: 72px;
+    }
+
+    .tiles-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .tile {
+      border-radius: var(--radius-sm);
+      padding: 24px 18px;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .tile--mint {
+      background: var(--mint);
+      color: var(--canvas);
+    }
+
+    .tile--purple {
+      background: var(--ultraviolet);
+      color: var(--white);
+    }
+
+    .tile--yellow {
+      background: var(--yellow);
+      color: var(--canvas);
+    }
+
+    .tile--pink {
+      background: var(--pink);
+      color: var(--canvas);
+    }
+
+    .tile--white {
+      background: var(--white);
+      color: var(--canvas);
+    }
+
+    .tile-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 6px;
+    }
+
+    .tile-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* -- Whisper vs Shout -- */
+    .whisper-section {
+      margin-bottom: 0;
+    }
+
+    .whisper-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .whisper-demo {
+      background: var(--surface);
+      border: 1px solid var(--border-white);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .whisper-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 19px;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 1.9px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .shout-text {
+      font-family: 'Anton', sans-serif;
+      font-size: 107px;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 0.90;
+      color: var(--white);
+      letter-spacing: -1px;
+    }
+
+    .whisper-caption {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 28px;
+    }
+
+    .whisper-caption span {
+      color: var(--mint);
+    }
+
+    /* -- StoryStream Timeline -- */
+    .timeline-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .timeline-header {
+      margin-bottom: 48px;
+    }
+
+    .timeline-kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 14px;
+    }
+
+    .timeline-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 36px;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 0.95;
+      color: var(--white);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 48px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 16px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      border-left: 1px dashed var(--text-muted);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 40px;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -40px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--mint);
+      border: 2px solid var(--canvas);
+    }
+
+    .timeline-dot--uv {
+      background: var(--ultraviolet);
+    }
+
+    .timeline-timestamp {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .timeline-content {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .timeline-content a {
+      color: var(--mint);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .timeline-content a:hover {
+      color: var(--link-hover);
+    }
+
+    /* -- Footer -- */
+    .site-footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-white);
+    }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--mint);
+    }
+
+    /* -- Prev/Next Navigation -- */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 24px 56px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 12px 22px;
+      border-radius: 100px;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      border: 1px solid var(--border-white);
+      background: var(--surface);
+      color: var(--text-secondary);
+    }
+
+    .design-nav a:hover {
+      border-color: var(--mint);
+      background: var(--surface-raised);
+      color: var(--mint);
+    }
+
+    .design-nav .nav-dir {
+      font-size: 10px;
+      letter-spacing: 1.8px;
+      opacity: 0.45;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.4;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* -- Animations -- */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    .animate-in--d1 { animation-delay: 0.06s; }
+    .animate-in--d2 { animation-delay: 0.12s; }
+    .animate-in--d3 { animation-delay: 0.18s; }
+    .animate-in--d4 { animation-delay: 0.24s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in {
+        animation: none;
+        opacity: 1;
+      }
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 860px) {
+      .hero h1 {
+        font-size: 72px;
+      }
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hazard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tiles-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .cta-title {
+        font-size: 48px;
+      }
+      .shout-text {
+        font-size: 72px;
+      }
+      .section-title,
+      .showcase-title {
+        font-size: 40px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-inner {
+        padding: 0 1.25rem;
+      }
+      .hero {
+        padding: 120px 1.25rem 56px;
+      }
+      .hero h1 {
+        font-size: 52px;
+      }
+      .hero-tagline {
+        font-size: 16px;
+      }
+      .content-section {
+        padding: 48px 1.25rem;
+      }
+      .section-title,
+      .showcase-title {
+        font-size: 32px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+      .hazard-grid {
+        grid-template-columns: 1fr;
+      }
+      .tiles-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .tile {
+        padding: 16px 12px;
+      }
+      .tile-name {
+        font-size: 12px;
+      }
+      .cta-inner {
+        padding: 60px 1.25rem;
+      }
+      .cta-title {
+        font-size: 40px;
+      }
+      .shout-text {
+        font-size: 48px;
+      }
+      .whisper-demo {
+        padding: 36px 24px;
+      }
+      .whisper-text {
+        font-size: 15px;
+        letter-spacing: 1.4px;
+      }
+      .showcase-section {
+        padding: 48px 1.25rem;
+      }
+      .timeline-section {
+        padding: 48px 1.25rem;
+      }
+      .site-footer {
+        padding: 32px 1.25rem;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .divider {
+        padding: 0 1.25rem;
+      }
+      .design-nav a {
+        padding: 10px 16px;
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tile:last-child {
+        grid-column: span 2;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-link" href="/try-awesome-design/">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back
+    </a>
+    <span class="design-badge">Design: The Verge</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <p class="hero-kicker animate-in">ootob.ai</p>
+  <h1 class="animate-in animate-in--d1">Small<br>Projects</h1>
+  <p class="hero-tagline animate-in animate-in--d2">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+</header>
+
+<div class="divider"><hr></div>
+
+<!-- Tools section -->
+<section class="content-section animate-in animate-in--d3">
+  <div class="section-header">
+    <p class="section-kicker">Tools</p>
+    <h2 class="section-title">做著玩的東西</h2>
+    <p class="section-subtitle">有的有用，有的純粹好玩。</p>
+  </div>
+
+  <div class="card-grid">
+    <!-- Japanese Quiz -->
+    <a class="card" href="/japanese/quiz.html">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </span>
+      <div class="card-icon card-icon--mint">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="card-title">Japanese Quiz</div>
+      <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+      <span class="card-tag">learning</span>
+    </a>
+
+    <!-- Threads to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">Threads to Markdown</div>
+      <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+
+    <!-- X Thread to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">X Thread to Markdown</div>
+      <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- Writing section -->
+<section class="content-section animate-in animate-in--d4">
+  <div class="section-header">
+    <p class="section-kicker">Writing</p>
+    <h2 class="section-title">文章</h2>
+    <p class="section-subtitle">思考的紀錄，關於品味、AI、與經驗不可取代的東西。</p>
+  </div>
+
+  <div class="writing-grid">
+    <!-- 品味不可說 -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">品味不可說</div>
+      <div class="writing-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+    </a>
+
+    <!-- Mastery -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+      <div class="writing-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+    </a>
+  </div>
+</section>
+
+<!-- Coffee Chat CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="cta-kicker">Coffee Chat</p>
+    <h2 class="cta-title">聊一杯咖啡</h2>
+    <p class="cta-desc">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="cta-desc-en">Let me know how I can help you.</p>
+    <a class="cta-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </div>
+</section>
+
+<!-- The Verge Design Showcase -->
+<div class="divider"><hr></div>
+
+<section class="showcase-section">
+  <div class="showcase-header">
+    <p class="showcase-kicker">Design Showcase</p>
+    <h2 class="showcase-title">The Verge 設計特色</h2>
+  </div>
+
+  <!-- Hazard Tape Accents -->
+  <div class="hazard-section">
+    <p class="hazard-label">Hazard Tape Accents</p>
+    <div class="hazard-grid">
+      <div class="hazard-card hazard-card--mint">
+        <div class="hazard-card-title">Acid Mint Fill</div>
+        <div class="hazard-card-hex">#3cffd0</div>
+      </div>
+      <div class="hazard-card hazard-card--uv">
+        <div class="hazard-card-title">Ultraviolet Fill</div>
+        <div class="hazard-card-hex">#5200ff</div>
+      </div>
+      <div class="hazard-card hazard-card--outline-mint">
+        <div class="hazard-card-title">Mint Border</div>
+        <div class="hazard-card-hex">1px solid #3cffd0</div>
+      </div>
+      <div class="hazard-card hazard-card--outline-uv">
+        <div class="hazard-card-title">Ultraviolet Border</div>
+        <div class="hazard-card-hex">1px solid #5200ff</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color-Block Story Tiles -->
+  <div class="tiles-section">
+    <p class="tiles-label">Color-Block Story Tiles</p>
+    <div class="tiles-grid">
+      <div class="tile tile--mint">
+        <span class="tile-label">Primary</span>
+        <span class="tile-name">Acid Mint</span>
+      </div>
+      <div class="tile tile--purple">
+        <span class="tile-label">Secondary</span>
+        <span class="tile-name">Ultraviolet</span>
+      </div>
+      <div class="tile tile--yellow">
+        <span class="tile-label">Highlight</span>
+        <span class="tile-name">Signal Yellow</span>
+      </div>
+      <div class="tile tile--pink">
+        <span class="tile-label">Alert</span>
+        <span class="tile-name">Hot Pink</span>
+      </div>
+      <div class="tile tile--white">
+        <span class="tile-label">Neutral</span>
+        <span class="tile-name">Pure White</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Whisper vs Shout -->
+  <div class="whisper-section">
+    <p class="whisper-label">Whisper vs Shout</p>
+    <div class="whisper-demo">
+      <div class="whisper-text">The Contrast Is The Fingerprint</div>
+      <div class="shout-text">Design<br>System</div>
+      <p class="whisper-caption">300-weight 19px uppercase with 1.9px tracking <span>vs</span> 107px Manuka-style Anton display</p>
+    </div>
+  </div>
+</section>
+
+<!-- StoryStream Timeline -->
+<div class="divider"><hr></div>
+
+<section class="timeline-section">
+  <div class="timeline-header">
+    <p class="timeline-kicker">StoryStream</p>
+    <h2 class="timeline-title">Timeline</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="timeline-dot"></span>
+      <div class="timeline-timestamp">2026.04.13 / Now</div>
+      <div class="timeline-content">Applying The Verge design system to <a href="/">ootob.ai</a> portfolio</div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-dot timeline-dot--uv"></span>
+      <div class="timeline-timestamp">2026.04 / Design Experiments</div>
+      <div class="timeline-content">Exploring 20+ design systems via <a href="/try-awesome-design/">awesome-design-md</a></div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-dot"></span>
+      <div class="timeline-timestamp">2026.03 / Launch</div>
+      <div class="timeline-content">Japanese Quiz live at <a href="/japanese/quiz.html">/japanese/quiz</a></div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-dot timeline-dot--uv"></span>
+      <div class="timeline-timestamp">2026.02 / Writing</div>
+      <div class="timeline-content">Published <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">品味不可說</a> on Substack</div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-dot"></span>
+      <div class="timeline-timestamp">2026.01 / Origin</div>
+      <div class="timeline-content">ootob.ai goes live — 歐兜邁，什麼都裝一點</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 ootob.ai</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="https://open.substack.com/pub/ootobai" target="_blank" rel="noopener">Substack</a>
+  </div>
+</footer>
+
+<!-- Prev/Next Navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/nike/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Nike</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/shopify/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Shopify</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

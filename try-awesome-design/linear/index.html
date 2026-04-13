@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Linear Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-marketing: #08090a;
+      --bg-panel: #0f1011;
+      --bg-elevated: #191a1b;
+      --brand-indigo: #5e6ad2;
+      --brand-accent: #7170ff;
+      --brand-hover: #828fff;
+      --text-primary: #f7f8f8;
+      --text-secondary: #d0d6e0;
+      --text-tertiary: #8a8f98;
+      --text-quaternary: #62666d;
+      --border-subtle: rgba(255, 255, 255, 0.05);
+      --border-medium: rgba(255, 255, 255, 0.08);
+      --btn-bg: rgba(255, 255, 255, 0.02);
+      --btn-bg-hover: rgba(255, 255, 255, 0.05);
+      --radius-btn: 6px;
+      --radius-card: 8px;
+      --radius-panel: 12px;
+      --max-w: 680px;
+    }
+
+    html {
+      background: var(--bg-marketing);
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-primary);
+      background: var(--bg-marketing);
+      line-height: 1.6;
+      font-size: 15px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 48px;
+      background: rgba(8, 9, 10, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--text-secondary);
+    }
+
+    .back-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .design-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-quaternary);
+      background: var(--btn-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 100px;
+      padding: 4px 12px;
+    }
+
+    .design-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--brand-indigo);
+    }
+
+    /* ── Layout ── */
+    .page-wrapper {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      padding-top: 96px;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      margin-bottom: 64px;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .site-origin {
+      margin-top: 16px;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      line-height: 1.75;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Hero / H1 ── */
+    .hero-title {
+      font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -1.056px;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+      margin-bottom: 48px;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin-bottom: 48px;
+    }
+
+    /* ── Section labels ── */
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-quaternary);
+      margin-bottom: 20px;
+    }
+
+    /* ── Card list ── */
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 56px;
+    }
+
+    .card-list li {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card-list li:not(.card-disabled):hover {
+      background: var(--bg-elevated);
+      border-color: var(--border-medium);
+    }
+
+    .card-list a {
+      display: block;
+      padding: 20px 24px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card-list .card-disabled {
+      cursor: default;
+    }
+
+    .card-list .card-disabled > div {
+      padding: 20px 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .card-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .card-disabled .card-name {
+      color: var(--text-quaternary);
+    }
+
+    .card-arrow {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-quaternary);
+      stroke-width: 1.5;
+      fill: none;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card-list li:not(.card-disabled):hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      line-height: 1.55;
+      letter-spacing: -0.006em;
+    }
+
+    .card-disabled .card-desc {
+      color: var(--text-quaternary);
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--text-quaternary);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 100px;
+      padding: 2px 10px;
+    }
+
+    .card-tag--active {
+      color: var(--brand-accent);
+      background: rgba(94, 106, 210, 0.08);
+      border-color: rgba(94, 106, 210, 0.15);
+    }
+
+    /* ── Coffee section ── */
+    .coffee-section {
+      margin-top: 8px;
+      margin-bottom: 64px;
+      padding: 40px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-panel);
+      text-align: center;
+    }
+
+    .coffee-section .section-label {
+      margin-bottom: 16px;
+    }
+
+    .coffee-text {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      line-height: 1.7;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .coffee-text-en {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .coffee-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--brand-indigo);
+      border: none;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: background 0.15s ease;
+      cursor: pointer;
+    }
+
+    .coffee-btn:hover {
+      background: var(--brand-hover);
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+      letter-spacing: -0.006em;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .site-header {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+    }
+
+    .hero-title {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+    }
+
+    .hero-subtitle {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.14s both;
+    }
+
+    .section-tools {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+    }
+
+    .section-writing {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+    }
+
+    .coffee-section {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
+    }
+
+    .site-footer {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .hero-title,
+      .hero-subtitle,
+      .section-tools,
+      .section-writing,
+      .coffee-section,
+      .site-footer {
+        animation: none;
+      }
+      .card-arrow {
+        transition: none;
+      }
+      .card-list li {
+        transition: none;
+      }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .page-wrapper {
+        padding: 0 16px;
+        padding-top: 80px;
+      }
+
+      .top-bar {
+        padding: 0 16px;
+      }
+
+      .site-header {
+        margin-bottom: 48px;
+      }
+
+      .hero-title {
+        font-size: 36px;
+        letter-spacing: -0.792px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+        margin-bottom: 36px;
+      }
+
+      .divider {
+        margin-bottom: 36px;
+      }
+
+      .card-list a,
+      .card-list .card-disabled > div {
+        padding: 16px 20px;
+      }
+
+      .card-list {
+        margin-bottom: 44px;
+      }
+
+      .coffee-section {
+        padding: 32px 24px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title {
+        font-size: 30px;
+        letter-spacing: -0.66px;
+      }
+
+      .coffee-section {
+        padding: 28px 20px;
+      }
+    }
+
+    /* ── Showcase section ── */
+    .showcase-section {
+      margin-bottom: 64px;
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+    }
+
+    .showcase-heading {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -0.704px;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .showcase-intro {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+      margin-bottom: 40px;
+    }
+
+    .showcase-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin-bottom: 40px;
+    }
+
+    /* ── Command Palette ── */
+    .showcase-item-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-quaternary);
+      margin-bottom: 16px;
+    }
+
+    .showcase-item-desc {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      line-height: 1.55;
+      letter-spacing: -0.006em;
+      margin-bottom: 24px;
+    }
+
+    .cmd-palette {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-panel);
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.3),
+        0 16px 70px rgba(0, 0, 0, 0.5),
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+
+    .cmd-palette-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .cmd-palette-input svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-quaternary);
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .cmd-palette-input span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+      letter-spacing: -0.01em;
+    }
+
+    .cmd-palette-kbd {
+      margin-left: auto;
+      display: flex;
+      gap: 4px;
+    }
+
+    .cmd-palette-kbd kbd {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-quaternary);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 2px 6px;
+      line-height: 1.4;
+    }
+
+    .cmd-palette-results {
+      padding: 6px;
+    }
+
+    .cmd-palette-group-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-quaternary);
+      padding: 8px 10px 6px;
+    }
+
+    .cmd-result {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 10px;
+      border-radius: var(--radius-btn);
+      cursor: default;
+    }
+
+    .cmd-result--selected {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .cmd-result-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cmd-result-icon {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-quaternary);
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .cmd-result--selected .cmd-result-icon {
+      stroke: var(--text-secondary);
+    }
+
+    .cmd-result-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: -0.006em;
+    }
+
+    .cmd-result--selected .cmd-result-label {
+      color: var(--text-primary);
+    }
+
+    .cmd-result-meta {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+      letter-spacing: -0.006em;
+    }
+
+    .cmd-result-enter {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+      opacity: 0;
+    }
+
+    .cmd-result--selected .cmd-result-enter {
+      opacity: 1;
+    }
+
+    /* ── Luminance Stacking ── */
+    .luminance-demo {
+      margin-bottom: 8px;
+    }
+
+    .luminance-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .luminance-card {
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 140px;
+      position: relative;
+      transition: border-color 0.2s ease;
+    }
+
+    .luminance-card:hover {
+      border-color: var(--border-medium);
+    }
+
+    .lum-0 { background: rgba(255, 255, 255, 0.02); }
+    .lum-1 { background: rgba(255, 255, 255, 0.04); }
+    .lum-2 { background: rgba(255, 255, 255, 0.05); }
+    .lum-3 { background: rgba(255, 255, 255, 0.08); }
+
+    .luminance-level {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -0.704px;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .luminance-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: -0.006em;
+      margin-bottom: 4px;
+    }
+
+    .luminance-value {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+      letter-spacing: 0;
+    }
+
+    .luminance-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 0 0 7px 7px;
+      opacity: 0.6;
+    }
+
+    .lum-0 .luminance-bar { background: rgba(255, 255, 255, 0.06); }
+    .lum-1 .luminance-bar { background: rgba(255, 255, 255, 0.10); }
+    .lum-2 .luminance-bar { background: rgba(255, 255, 255, 0.14); }
+    .lum-3 .luminance-bar { background: rgba(255, 255, 255, 0.20); }
+
+    @media (max-width: 640px) {
+      .showcase-heading {
+        font-size: 26px;
+        letter-spacing: -0.572px;
+      }
+
+      .luminance-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cmd-palette-kbd {
+        display: none;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .luminance-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-heading {
+        font-size: 24px;
+        letter-spacing: -0.528px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .showcase-section {
+        animation: none;
+      }
+      .luminance-card {
+        transition: none;
+      }
+    }
+
+    /* ── Command palette overlay ── */
+    .cmd-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: min(20vh, 160px);
+    }
+
+    .cmd-overlay.open {
+      display: flex;
+    }
+
+    .cmd-palette-live {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 16px;
+      animation: cmdIn 0.15s ease both;
+    }
+
+    @keyframes cmdIn {
+      from { opacity: 0; transform: scale(0.97) translateY(-8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .cmd-palette-live .cmd-palette-input input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      caret-color: var(--brand-accent);
+    }
+
+    .cmd-palette-live .cmd-palette-input input::placeholder {
+      color: var(--text-quaternary);
+    }
+
+    .cmd-palette-live .cmd-result {
+      cursor: pointer;
+      transition: background 0.08s ease;
+    }
+
+    .cmd-palette-live .cmd-result:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .cmd-palette-empty {
+      padding: 24px 16px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-quaternary);
+    }
+
+    .cmd-palette-static {
+      transition: opacity 0.15s ease;
+    }
+    .cmd-palette-static:hover {
+      opacity: 0.85;
+    }
+
+    /* ── Subtle gradient accent on page ── */
+    .page-wrapper::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(94, 106, 210, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+  
+/* ── Prev/Next Navigation ── */
+.design-nav{display:flex;justify-content:space-between;align-items:center;max-width:680px;margin:0 auto;padding:24px 24px 48px;gap:16px}
+.design-nav a{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:500;padding:10px 20px;border-radius:8px;transition:background 0.15s,border-color 0.15s;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.7)}
+.design-nav a:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff}
+.design-nav .nav-dir{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;opacity:0.5;display:block;line-height:1}
+.design-nav .nav-name{display:block;line-height:1.3}
+.design-nav .nav-prev{text-align:left}
+.design-nav .nav-next{text-align:right;margin-left:auto}
+.design-nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0}
+@media(max-width:480px){.design-nav a{padding:8px 14px;font-size:13px}}
+</style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <a href="/try-awesome-design/" class="back-link">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    Back
+  </a>
+  <span class="design-badge">
+    <span class="dot"></span>
+    Design: Linear
+  </span>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="site-header">
+    <span class="logo">ootob.ai</span>
+    <p class="site-origin">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <h1 class="hero-title">小專案</h1>
+    <p class="hero-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+
+    <div class="divider"></div>
+
+    <!-- Tools -->
+    <div class="section-tools">
+      <p class="section-label">Tools</p>
+      <ul class="card-list">
+        <li>
+          <a href="/japanese/quiz.html">
+            <div class="card-header">
+              <span class="card-name">Japanese Quiz</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+            <span class="card-tag card-tag--active">learning</span>
+          </a>
+        </li>
+        <li class="card-disabled">
+          <div>
+            <div class="card-header">
+              <span class="card-name">Threads to Markdown</span>
+            </div>
+            <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+            <span class="card-tag">coming soon</span>
+          </div>
+        </li>
+        <li class="card-disabled">
+          <div>
+            <div class="card-header">
+              <span class="card-name">X Thread to Markdown</span>
+            </div>
+            <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+            <span class="card-tag">coming soon</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Writing -->
+    <div class="section-writing">
+      <p class="section-label">Writing</p>
+      <ul class="card-list">
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <div class="card-header">
+              <span class="card-name">品味不可說</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+          </a>
+        </li>
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <div class="card-header">
+              <span class="card-name">當知識變成免費的，Mastery 還剩下什麼？</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- Coffee Chat -->
+  <section class="coffee-section">
+    <p class="section-label">Coffee Chat</p>
+    <p class="coffee-text">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="coffee-text-en">Let me know how I can help you.</p>
+    <a class="coffee-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </section>
+
+  <!-- Showcase: Linear Design Features -->
+  <section class="showcase-section">
+    <h2 class="showcase-heading">Linear 設計特色</h2>
+    <p class="showcase-intro">Linear 的介面以精準、克制著稱。以下用這個頁面的內容，展示兩個標誌性的設計模式。</p>
+
+    <div class="showcase-divider"></div>
+
+    <!-- Command Palette Demo -->
+    <p class="showcase-item-label">Command Palette</p>
+    <p class="showcase-item-desc">Linear 最具辨識度的互動模式 — 按 <kbd style="font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--text-tertiary);background:rgba(255,255,255,0.06);border:1px solid var(--border-medium);border-radius:4px;padding:2px 7px;">&#8984; K</kbd> 開啟指令面板，輸入搜尋、上下鍵選擇、Enter 導航。真的可以用。</p>
+
+    <!-- Static preview (visible on page) -->
+    <div class="cmd-palette cmd-palette-static" id="cmdPaletteStatic" style="cursor:pointer" title="點擊或按 ⌘K 開啟">
+      <div class="cmd-palette-input">
+        <svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4"/></svg>
+        <span>搜尋專案...</span>
+        <div class="cmd-palette-kbd">
+          <kbd>&#8984;</kbd>
+          <kbd>K</kbd>
+        </div>
+      </div>
+      <div class="cmd-palette-results">
+        <div class="cmd-palette-group-label">Projects</div>
+        <div class="cmd-result cmd-result--selected">
+          <div class="cmd-result-left">
+            <svg class="cmd-result-icon" viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h8"/></svg>
+            <span class="cmd-result-label">Japanese Quiz</span>
+          </div>
+          <span class="cmd-result-meta">Tool</span>
+          <span class="cmd-result-enter">&crarr;</span>
+        </div>
+        <div class="cmd-result">
+          <div class="cmd-result-left">
+            <svg class="cmd-result-icon" viewBox="0 0 16 16"><path d="M3 3h10v10H3zM6 3v10M3 6h10"/></svg>
+            <span class="cmd-result-label">Threads to MD</span>
+          </div>
+          <span class="cmd-result-meta">Tool</span>
+        </div>
+        <div class="cmd-palette-group-label">Writing</div>
+        <div class="cmd-result">
+          <div class="cmd-result-left">
+            <svg class="cmd-result-icon" viewBox="0 0 16 16"><path d="M4 2v12l4-3 4 3V2H4z"/></svg>
+            <span class="cmd-result-label">品味不可說</span>
+          </div>
+          <span class="cmd-result-meta">Substack</span>
+        </div>
+        <div class="cmd-result">
+          <div class="cmd-result-left">
+            <svg class="cmd-result-icon" viewBox="0 0 16 16"><path d="M4 2v12l4-3 4 3V2H4z"/></svg>
+            <span class="cmd-result-label">當知識變成免費的，Mastery 還剩下什麼？</span>
+          </div>
+          <span class="cmd-result-meta">Substack</span>
+        </div>
+        <div class="cmd-palette-group-label">Actions</div>
+        <div class="cmd-result">
+          <div class="cmd-result-left">
+            <svg class="cmd-result-icon" viewBox="0 0 16 16"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v3l2 2"/></svg>
+            <span class="cmd-result-label">Coffee Chat</span>
+          </div>
+          <span class="cmd-result-meta">Calendly</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive overlay command palette -->
+    <div class="cmd-overlay" id="cmdOverlay">
+      <div class="cmd-palette cmd-palette-live" id="cmdPaletteLive">
+        <div class="cmd-palette-input">
+          <svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4"/></svg>
+          <input type="text" id="cmdInput" placeholder="搜尋專案..." autocomplete="off" spellcheck="false">
+          <div class="cmd-palette-kbd">
+            <kbd>ESC</kbd>
+          </div>
+        </div>
+        <div class="cmd-palette-results" id="cmdResults"></div>
+        <div class="cmd-palette-empty" id="cmdEmpty" style="display:none">
+          <span>找不到結果</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Luminance Stacking Model -->
+    <div class="luminance-demo">
+      <p class="showcase-item-label">Luminance Stacking Model</p>
+      <p class="showcase-item-desc">Linear 不使用 box-shadow 來建立層次，而是透過背景亮度的微小遞增來表達深度 — 越高的層級，白色疊加越多。</p>
+
+      <div class="luminance-grid">
+        <div class="luminance-card lum-0">
+          <div class="luminance-level">0</div>
+          <div class="luminance-label">Base</div>
+          <div class="luminance-value">rgba(255,255,255, 0.02)</div>
+          <div class="luminance-bar"></div>
+        </div>
+        <div class="luminance-card lum-1">
+          <div class="luminance-level">1</div>
+          <div class="luminance-label">Surface</div>
+          <div class="luminance-value">rgba(255,255,255, 0.04)</div>
+          <div class="luminance-bar"></div>
+        </div>
+        <div class="luminance-card lum-2">
+          <div class="luminance-level">2</div>
+          <div class="luminance-label">Elevated</div>
+          <div class="luminance-value">rgba(255,255,255, 0.05)</div>
+          <div class="luminance-bar"></div>
+        </div>
+        <div class="luminance-card lum-3">
+          <div class="luminance-level">3</div>
+          <div class="luminance-label">Prominent</div>
+          <div class="luminance-value">rgba(255,255,255, 0.08)</div>
+          <div class="luminance-bar"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 ootob.ai</p>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  var items = [
+    { label: 'Japanese Quiz', meta: 'Tool', group: 'Projects', url: '/japanese/quiz.html', icon: 'list' },
+    { label: 'Threads to MD', meta: 'Tool', group: 'Projects', url: null, icon: 'grid' },
+    { label: 'X Thread to MD', meta: 'Tool', group: 'Projects', url: null, icon: 'grid' },
+    { label: '\u54C1\u5473\u4E0D\u53EF\u8AAA', meta: 'Substack', group: 'Writing', url: 'https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web', icon: 'bookmark' },
+    { label: '\u7576\u77E5\u8B58\u8B8A\u6210\u514D\u8CBB\u7684\uFF0CMastery \u9084\u5269\u4E0B\u4EC0\u9EBC\uFF1F', meta: 'Substack', group: 'Writing', url: 'https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web', icon: 'bookmark' },
+    { label: 'Coffee Chat', meta: 'Calendly', group: 'Actions', url: 'https://calendly.com/jack-ch-tsai/coffee-chat', icon: 'clock' },
+    { label: '\u2190 \u56DE\u5230\u9996\u9801', meta: 'Nav', group: 'Actions', url: '/', icon: 'clock' },
+    { label: '\u2190 \u8A2D\u8A08\u5BE6\u9A57\u5217\u8868', meta: 'Nav', group: 'Actions', url: '/try-awesome-design/', icon: 'clock' },
+  ];
+
+  var iconPaths = {
+    list: 'M2 4h12M2 8h12M2 12h8',
+    grid: 'M3 3h10v10H3zM6 3v10M3 6h10',
+    bookmark: 'M4 2v12l4-3 4 3V2H4z',
+    clock: 'M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v3l2 2',
+  };
+
+  var overlay = document.getElementById('cmdOverlay');
+  var input = document.getElementById('cmdInput');
+  var resultsEl = document.getElementById('cmdResults');
+  var emptyEl = document.getElementById('cmdEmpty');
+  var staticPalette = document.getElementById('cmdPaletteStatic');
+
+  var selectedIdx = 0;
+  var filtered = [];
+
+  function openPalette() {
+    overlay.classList.add('open');
+    input.value = '';
+    selectedIdx = 0;
+    render('');
+    requestAnimationFrame(function() { input.focus(); });
+  }
+
+  function closePalette() {
+    overlay.classList.remove('open');
+  }
+
+  function navigateTo(url) {
+    if (!url) return;
+    closePalette();
+    if (url.indexOf('http') === 0) {
+      window.open(url, '_blank', 'noopener');
+    } else {
+      window.location.href = url;
+    }
+  }
+
+  function createIcon(type) {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'cmd-result-icon');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', iconPaths[type] || iconPaths.list);
+    svg.appendChild(path);
+    return svg;
+  }
+
+  function render(query) {
+    var q = query.toLowerCase().trim();
+    filtered = q ? items.filter(function(i) {
+      return i.label.toLowerCase().indexOf(q) !== -1 ||
+             i.meta.toLowerCase().indexOf(q) !== -1 ||
+             i.group.toLowerCase().indexOf(q) !== -1;
+    }) : items;
+
+    // Clear results using DOM
+    while (resultsEl.firstChild) resultsEl.removeChild(resultsEl.firstChild);
+
+    if (filtered.length === 0) {
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    if (selectedIdx >= filtered.length) selectedIdx = 0;
+
+    var lastGroup = '';
+    filtered.forEach(function(item, i) {
+      if (item.group !== lastGroup) {
+        var groupEl = document.createElement('div');
+        groupEl.className = 'cmd-palette-group-label';
+        groupEl.textContent = item.group;
+        resultsEl.appendChild(groupEl);
+        lastGroup = item.group;
+      }
+
+      var row = document.createElement('div');
+      row.className = 'cmd-result' + (i === selectedIdx ? ' cmd-result--selected' : '');
+      row.dataset.idx = i;
+      if (!item.url) row.style.opacity = '0.45';
+
+      var left = document.createElement('div');
+      left.className = 'cmd-result-left';
+      left.appendChild(createIcon(item.icon));
+      var labelSpan = document.createElement('span');
+      labelSpan.className = 'cmd-result-label';
+      labelSpan.textContent = item.label;
+      left.appendChild(labelSpan);
+      row.appendChild(left);
+
+      var metaSpan = document.createElement('span');
+      metaSpan.className = 'cmd-result-meta';
+      metaSpan.textContent = item.meta;
+      row.appendChild(metaSpan);
+
+      if (i === selectedIdx) {
+        var enterSpan = document.createElement('span');
+        enterSpan.className = 'cmd-result-enter';
+        enterSpan.textContent = '\u21B5';
+        row.appendChild(enterSpan);
+      }
+
+      row.addEventListener('mouseenter', function() {
+        selectedIdx = parseInt(this.dataset.idx);
+        render(input.value);
+      });
+      row.addEventListener('click', function() {
+        var idx = parseInt(this.dataset.idx);
+        if (filtered[idx]) navigateTo(filtered[idx].url);
+      });
+
+      resultsEl.appendChild(row);
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      overlay.classList.contains('open') ? closePalette() : openPalette();
+      return;
+    }
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); if (filtered.length) { selectedIdx = (selectedIdx + 1) % filtered.length; render(input.value); } }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); if (filtered.length) { selectedIdx = (selectedIdx - 1 + filtered.length) % filtered.length; render(input.value); } }
+    else if (e.key === 'Enter') { e.preventDefault(); if (filtered[selectedIdx]) navigateTo(filtered[selectedIdx].url); }
+  });
+
+  input.addEventListener('input', function() { selectedIdx = 0; render(this.value); });
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) closePalette(); });
+  staticPalette.addEventListener('click', openPalette);
+})();
+</script>
+
+<nav class="design-nav">
+  <a href="/try-awesome-design/playstation/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">PlayStation</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/stripe/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Stripe</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+</body>
+</html>

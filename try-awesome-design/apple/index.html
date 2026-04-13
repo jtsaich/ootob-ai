@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Apple Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — Apple Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --light-bg: #f5f5f7;
+      --text-light: #1d1d1f;
+      --text-dark: #ffffff;
+      --text-secondary-light: #6e6e73;
+      --text-secondary-dark: #a1a1a6;
+      --link-light: #0066cc;
+      --link-dark: #2997ff;
+      --apple-blue: #0071e3;
+      --apple-blue-hover: #0077ed;
+      --nav-bg: rgba(0, 0, 0, 0.8);
+      --shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px;
+      --max-w: 980px;
+      --pill-radius: 980px;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      color: var(--text-light);
+      background: var(--white);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* -- Navigation -- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--nav-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      height: 48px;
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 22px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary-dark);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--white);
+    }
+
+    .back-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-2px);
+    }
+
+    .design-badge {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary-dark);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: var(--pill-radius);
+    }
+
+    /* -- Section base -- */
+    .section-dark {
+      background: var(--black);
+      color: var(--text-dark);
+    }
+
+    .section-light {
+      background: var(--light-bg);
+      color: var(--text-light);
+    }
+
+    .section-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 22px;
+    }
+
+    /* -- Hero / Header -- */
+    .hero {
+      background: var(--black);
+      padding-top: 48px;
+    }
+
+    .hero .section-inner {
+      padding-top: 100px;
+      padding-bottom: 80px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .logo span {
+      color: var(--text-secondary-dark);
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    .tagline {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
+      color: var(--text-secondary-dark);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* -- Main Title Section -- */
+    .main-title-section {
+      background: var(--light-bg);
+      text-align: center;
+    }
+
+    .main-title-section .section-inner {
+      padding-top: 100px;
+      padding-bottom: 20px;
+    }
+
+    .display-title {
+      font-size: 56px;
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: -0.28px;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .display-subtitle {
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.38;
+      letter-spacing: 0.011em;
+      color: var(--text-secondary-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* -- Tools Section -- */
+    .tools-section {
+      background: var(--light-bg);
+    }
+
+    .tools-section .section-inner {
+      padding-top: 40px;
+      padding-bottom: 80px;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-eyebrow--light {
+      color: var(--text-secondary-light);
+    }
+
+    .section-eyebrow--dark {
+      color: var(--text-secondary-dark);
+    }
+
+    .section-heading {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.28px;
+      margin-bottom: 40px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .tool-card:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow);
+    }
+
+    .tool-card--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .tool-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+      background: var(--light-bg);
+    }
+
+    .tool-card-title {
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+
+    .tool-card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary-light);
+      line-height: 1.47;
+      flex: 1;
+    }
+
+    .tool-card-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--link-light);
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tool-card-link svg {
+      width: 12px;
+      height: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .tool-card:hover .tool-card-link svg {
+      transform: translateX(3px);
+    }
+
+    .tool-card-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary-light);
+      background: var(--light-bg);
+      padding: 4px 10px;
+      border-radius: var(--pill-radius);
+      margin-top: 16px;
+      align-self: flex-start;
+    }
+
+    /* -- Writing Section -- */
+    .writing-section {
+      background: var(--black);
+    }
+
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .writing-card {
+      background: #1d1d1f;
+      border-radius: 18px;
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .writing-card:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow);
+    }
+
+    .writing-source {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary-dark);
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .writing-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.28px;
+      line-height: 1.17;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .writing-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary-dark);
+      line-height: 1.47;
+      flex: 1;
+    }
+
+    .writing-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--link-dark);
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .writing-link svg {
+      width: 12px;
+      height: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .writing-card:hover .writing-link svg {
+      transform: translateX(3px);
+    }
+
+    /* -- Coffee Chat CTA -- */
+    .cta-section {
+      background: var(--light-bg);
+      text-align: center;
+    }
+
+    .cta-section .section-inner {
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+
+    .cta-emoji {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .cta-title {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.28px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+
+    .cta-desc {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-secondary-light);
+      line-height: 1.47;
+      max-width: 500px;
+      margin: 0 auto 8px;
+    }
+
+    .cta-desc-en {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary-light);
+      opacity: 0.6;
+      margin-bottom: 32px;
+    }
+
+    .pill-btn {
+      display: inline-block;
+      padding: 12px 28px;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--white);
+      background: var(--apple-blue);
+      border: none;
+      border-radius: var(--pill-radius);
+      text-decoration: none;
+      letter-spacing: -0.022em;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .pill-btn:hover {
+      background: var(--apple-blue-hover);
+    }
+
+    .pill-btn--outline {
+      background: transparent;
+      color: var(--apple-blue);
+      border: 2px solid var(--apple-blue);
+    }
+
+    .pill-btn--outline:hover {
+      background: var(--apple-blue);
+      color: var(--white);
+    }
+
+    .pill-btn--outline-dark {
+      background: transparent;
+      color: var(--link-dark);
+      border: 2px solid var(--link-dark);
+    }
+
+    .pill-btn--outline-dark:hover {
+      background: var(--link-dark);
+      color: var(--black);
+    }
+
+    /* -- Showcase Section -- */
+    .showcase-section {
+      background: var(--black);
+    }
+
+    .showcase-section .section-inner {
+      padding-bottom: 40px;
+    }
+
+    .showcase-title {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.28px;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .showcase-desc {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-secondary-dark);
+      line-height: 1.47;
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+
+    /* Cinematic Rhythm Demo */
+    .rhythm-demo {
+      margin-bottom: 64px;
+    }
+
+    .rhythm-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary-dark);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .rhythm-strips {
+      display: flex;
+      border-radius: 14px;
+      overflow: hidden;
+      height: 200px;
+    }
+
+    .rhythm-strip {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rhythm-strip--dark {
+      background: var(--black);
+      border: 1px solid #333;
+    }
+
+    .rhythm-strip--light {
+      background: var(--light-bg);
+    }
+
+    .rhythm-strip-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .rhythm-strip--dark .rhythm-strip-label {
+      color: var(--text-secondary-dark);
+    }
+
+    .rhythm-strip--light .rhythm-strip-label {
+      color: var(--text-secondary-light);
+    }
+
+    .rhythm-strip-hex {
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    .rhythm-strip--dark .rhythm-strip-hex {
+      color: var(--white);
+    }
+
+    .rhythm-strip--light .rhythm-strip-hex {
+      color: var(--text-light);
+    }
+
+    .rhythm-strip-sample {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .rhythm-strip--dark .rhythm-strip-sample {
+      color: var(--white);
+    }
+
+    .rhythm-strip--light .rhythm-strip-sample {
+      color: var(--text-light);
+    }
+
+    /* Pill CTA vs Standard Button */
+    .btn-compare {
+      margin-bottom: 64px;
+    }
+
+    .btn-compare-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary-dark);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .btn-compare-row {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-compare-item {
+      background: #1d1d1f;
+      border-radius: 14px;
+      padding: 40px;
+      flex: 1;
+      min-width: 280px;
+      text-align: center;
+    }
+
+    .btn-compare-item-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary-dark);
+      margin-bottom: 20px;
+    }
+
+    .btn-standard {
+      display: inline-block;
+      padding: 12px 28px;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--white);
+      background: var(--apple-blue);
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-standard:hover {
+      background: var(--apple-blue-hover);
+    }
+
+    .btn-compare-spec {
+      font-size: 11px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      color: var(--text-secondary-dark);
+      margin-top: 16px;
+    }
+
+    /* Product Hero Module */
+    .product-hero-demo {
+      margin-bottom: 64px;
+    }
+
+    .product-hero-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary-dark);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .product-hero-mock {
+      background: var(--light-bg);
+      border-radius: 18px;
+      padding: 80px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-hero-mock::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0, 113, 227, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .product-hero-eyebrow {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--apple-blue);
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .product-hero-name {
+      font-size: 56px;
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: -0.28px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .product-hero-sub {
+      font-size: 21px;
+      font-weight: 400;
+      color: var(--text-secondary-light);
+      line-height: 1.38;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .product-hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      position: relative;
+    }
+
+    .product-hero-spec {
+      font-size: 11px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      color: var(--text-secondary-light);
+      margin-top: 40px;
+      position: relative;
+    }
+
+    /* -- Bottom Navigation -- */
+    .bottom-nav-section {
+      background: var(--light-bg);
+    }
+
+    .bottom-nav {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #d2d2d7;
+    }
+
+    .bottom-nav-link {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: opacity 0.2s ease;
+    }
+
+    .bottom-nav-link:hover {
+      opacity: 0.7;
+    }
+
+    .bottom-nav-link--prev {
+      align-items: flex-start;
+    }
+
+    .bottom-nav-link--next {
+      align-items: flex-end;
+    }
+
+    .bottom-nav-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary-light);
+      letter-spacing: 0.02em;
+    }
+
+    .bottom-nav-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--link-light);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bottom-nav-title svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* -- Footer -- */
+    .footer {
+      background: var(--light-bg);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 16px 22px 40px;
+      text-align: center;
+    }
+
+    .footer-divider {
+      border: none;
+      height: 1px;
+      background: #d2d2d7;
+      margin-bottom: 16px;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary-light);
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 768px) {
+      .display-title {
+        font-size: 40px;
+      }
+
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        font-size: 26px;
+      }
+
+      .showcase-title {
+        font-size: 26px;
+      }
+
+      .cta-title {
+        font-size: 32px;
+      }
+
+      .rhythm-strips {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .rhythm-strip {
+        padding: 32px 20px;
+      }
+
+      .btn-compare-row {
+        flex-direction: column;
+      }
+
+      .btn-compare-item {
+        min-width: 100%;
+      }
+
+      .product-hero-name {
+        font-size: 40px;
+      }
+
+      .product-hero-ctas {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .bottom-nav {
+        flex-direction: column;
+        gap: 24px;
+        align-items: stretch;
+      }
+
+      .bottom-nav-link--next {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .display-title {
+        font-size: 32px;
+      }
+
+      .product-hero-mock {
+        padding: 48px 20px;
+      }
+
+      .product-hero-name {
+        font-size: 32px;
+      }
+
+      .hero .section-inner {
+        padding-top: 72px;
+        padding-bottom: 48px;
+      }
+
+      .section-inner {
+        padding: 56px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/try-awesome-design/" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </a>
+      <span class="design-badge">Design: Apple</span>
+    </div>
+  </nav>
+
+  <!-- Hero / Header -->
+  <section class="hero section-dark">
+    <div class="section-inner">
+      <div class="logo">ootob.ai</div>
+      <p class="tagline">
+        歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Title -->
+  <section class="main-title-section section-light">
+    <div class="section-inner">
+      <h1 class="display-title">小專案</h1>
+      <p class="display-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section class="tools-section section-light">
+    <div class="section-inner">
+      <div class="section-eyebrow section-eyebrow--light">Tools</div>
+      <h2 class="section-heading">小工具</h2>
+      <div class="tool-grid">
+        <a href="/japanese/quiz.html" class="tool-card">
+          <div class="tool-icon">あ</div>
+          <div class="tool-card-title">Japanese Quiz</div>
+          <div class="tool-card-desc">日文小測驗，學著玩。</div>
+          <span class="tool-card-link">
+            開始測驗
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+        <div class="tool-card tool-card--disabled">
+          <div class="tool-icon">T</div>
+          <div class="tool-card-title">Threads to Markdown</div>
+          <div class="tool-card-desc">把 Threads 貼文轉成 Markdown。</div>
+          <span class="tool-card-tag">Coming Soon</span>
+        </div>
+        <div class="tool-card tool-card--disabled">
+          <div class="tool-icon">X</div>
+          <div class="tool-card-title">X Thread to Markdown</div>
+          <div class="tool-card-desc">把 X 的 Thread 轉成 Markdown。</div>
+          <span class="tool-card-tag">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Writing -->
+  <section class="writing-section section-dark">
+    <div class="section-inner">
+      <div class="section-eyebrow section-eyebrow--dark">Writing</div>
+      <h2 class="section-heading" style="color: var(--white);">文章</h2>
+      <div class="writing-grid">
+        <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" class="writing-card" target="_blank" rel="noopener">
+          <div class="writing-source">Substack</div>
+          <div class="writing-title">品味不可說</div>
+          <div class="writing-desc">關於品味、直覺、以及那些說不清楚但知道對的東西。</div>
+          <span class="writing-link">
+            閱讀全文
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+        <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" class="writing-card" target="_blank" rel="noopener">
+          <div class="writing-source">Substack</div>
+          <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+          <div class="writing-desc">知識唾手可得的時代，真正的精通到底意味著什麼。</div>
+          <span class="writing-link">
+            閱讀全文
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coffee Chat CTA -->
+  <section class="cta-section section-light">
+    <div class="section-inner">
+      <div class="cta-emoji">&#9749;</div>
+      <h2 class="cta-title">來杯咖啡聊聊</h2>
+      <p class="cta-desc">想聊 side project、設計、或隨便什麼都好。</p>
+      <p class="cta-desc-en">Let's grab a virtual coffee and chat about anything.</p>
+      <a href="https://calendly.com/jack-ch-tsai/coffee-chat" class="pill-btn" target="_blank" rel="noopener">
+        預約 Coffee Chat
+      </a>
+    </div>
+  </section>
+
+  <!-- Showcase: Apple Design Highlights -->
+  <section class="showcase-section section-dark">
+    <div class="section-inner">
+      <div class="section-eyebrow section-eyebrow--dark">Apple 設計特色</div>
+      <h2 class="showcase-title">Design Showcase</h2>
+      <p class="showcase-desc">
+        Apple 的設計語言以極簡、對比、留白為核心。以下是三個關鍵特徵的互動展示。
+      </p>
+
+      <!-- 1. Cinematic Section Rhythm -->
+      <div class="rhythm-demo">
+        <div class="rhythm-label">Cinematic Section Rhythm</div>
+        <div class="rhythm-strips">
+          <div class="rhythm-strip rhythm-strip--dark">
+            <div class="rhythm-strip-sample">Aa</div>
+            <div class="rhythm-strip-hex">#000000</div>
+            <div class="rhythm-strip-label">Dark Section</div>
+          </div>
+          <div class="rhythm-strip rhythm-strip--light">
+            <div class="rhythm-strip-sample">Aa</div>
+            <div class="rhythm-strip-hex">#F5F5F7</div>
+            <div class="rhythm-strip-label">Light Section</div>
+          </div>
+          <div class="rhythm-strip rhythm-strip--dark">
+            <div class="rhythm-strip-sample">Aa</div>
+            <div class="rhythm-strip-hex">#000000</div>
+            <div class="rhythm-strip-label">Dark Section</div>
+          </div>
+          <div class="rhythm-strip rhythm-strip--light">
+            <div class="rhythm-strip-sample">Aa</div>
+            <div class="rhythm-strip-hex">#F5F5F7</div>
+            <div class="rhythm-strip-label">Light Section</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Pill CTA vs Standard Button -->
+      <div class="btn-compare">
+        <div class="btn-compare-label">Pill CTA vs Standard Button</div>
+        <div class="btn-compare-row">
+          <div class="btn-compare-item">
+            <div class="btn-compare-item-label">Apple Pill CTA</div>
+            <a href="#" class="pill-btn" onclick="event.preventDefault()">Buy</a>
+            <div class="btn-compare-spec">border-radius: 980px</div>
+          </div>
+          <div class="btn-compare-item">
+            <div class="btn-compare-item-label">Standard Button</div>
+            <a href="#" class="btn-standard" onclick="event.preventDefault()">Buy</a>
+            <div class="btn-compare-spec">border-radius: 8px</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Product Hero Module -->
+      <div class="product-hero-demo">
+        <div class="product-hero-label">Product Hero Module</div>
+        <div class="product-hero-mock">
+          <div class="product-hero-eyebrow">All-new</div>
+          <h3 class="product-hero-name">MacBook Pro</h3>
+          <p class="product-hero-sub">Mind-blowing. Head-turning.</p>
+          <div class="product-hero-ctas">
+            <a href="#" class="pill-btn pill-btn--outline" onclick="event.preventDefault()">Learn more</a>
+            <a href="#" class="pill-btn" onclick="event.preventDefault()">Shop</a>
+          </div>
+          <div class="product-hero-spec">
+            Headline: 56px / weight 600 / line-height 1.07 / letter-spacing -0.28px
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Navigation -->
+  <section class="bottom-nav-section section-light">
+    <nav class="bottom-nav">
+      <a href="/try-awesome-design/spacex/" class="bottom-nav-link bottom-nav-link--prev">
+        <span class="bottom-nav-label">Previous</span>
+        <span class="bottom-nav-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          SpaceX
+        </span>
+      </a>
+      <a href="/try-awesome-design/claude/" class="bottom-nav-link bottom-nav-link--next">
+        <span class="bottom-nav-label">Next</span>
+        <span class="bottom-nav-title">
+          Claude
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </a>
+    </nav>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <hr class="footer-divider">
+      <p class="footer-text">&copy; 2026 ootob.ai</p>
+    </div>
+  </footer>
+
+</body>
+</html>

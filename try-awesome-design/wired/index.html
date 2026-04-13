@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — WIRED Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --canvas: #ffffff;
+      --ink: #1a1a1a;
+      --accent: #057dbc;
+      --caption: #757575;
+      --rule-quiet: #e2e8f0;
+      --rule-structural: #000000;
+      --footer-bg: #1a1a1a;
+      --max-w: 780px;
+    }
+
+    html { background: var(--canvas); }
+
+    body {
+      font-family: 'Lora', 'Noto Sans TC', Georgia, serif;
+      color: var(--ink);
+      background: var(--canvas);
+      line-height: 1.50;
+      font-size: 16px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ── Typeface roles ── */
+    .font-display {
+      font-family: 'Playfair Display', 'Noto Sans TC', Georgia, serif;
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+    }
+
+    .font-body {
+      font-family: 'Lora', 'Noto Sans TC', Georgia, serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+    }
+
+    .font-ui {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .font-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule-structural);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    .back-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .design-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      background: var(--canvas);
+      border: 2px solid var(--rule-structural);
+      border-radius: 0;
+      padding: 4px 14px;
+    }
+
+    .design-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--rule-structural);
+    }
+
+    /* ── Layout ── */
+    .page-wrapper {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      padding-top: 96px;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--rule-quiet);
+    }
+
+    .logo {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .site-origin {
+      margin-top: 16px;
+      font-family: 'Lora', 'Noto Sans TC', serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--caption);
+      line-height: 1.65;
+    }
+
+    /* ── Hero ── */
+    .hero-title {
+      font-family: 'Playfair Display', 'Noto Sans TC', Georgia, serif;
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .hero-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-family: 'Lora', 'Noto Sans TC', serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--caption);
+      line-height: 1.55;
+      margin-bottom: 48px;
+      max-width: 540px;
+    }
+
+    /* ── Section ribbon header (full-bleed black bar) ── */
+    .section-ribbon {
+      background: var(--rule-structural);
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      margin: 0 -24px 28px;
+    }
+
+    /* ── Hairline divider ── */
+    .divider {
+      height: 1px;
+      background: var(--rule-structural);
+      margin-bottom: 48px;
+    }
+
+    .divider--quiet {
+      background: var(--rule-quiet);
+    }
+
+    /* ── Editorial list (no cards, no shadows -- hairline rules only) ── */
+    .editorial-list {
+      list-style: none;
+      margin-bottom: 56px;
+    }
+
+    .editorial-list li {
+      border-bottom: 1px solid var(--rule-quiet);
+    }
+
+    .editorial-list li:first-child {
+      border-top: 1px solid var(--rule-quiet);
+    }
+
+    .editorial-list a {
+      display: block;
+      padding: 20px 0;
+      text-decoration: none;
+      color: inherit;
+      transition: none;
+    }
+
+    .editorial-list a:hover .item-name {
+      color: var(--accent);
+    }
+
+    .editorial-list .item-disabled {
+      padding: 20px 0;
+      cursor: default;
+    }
+
+    .item-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .item-name {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink);
+      transition: color 0.15s ease;
+    }
+
+    .item-disabled .item-name {
+      color: var(--caption);
+    }
+
+    .item-arrow {
+      width: 16px;
+      height: 16px;
+      stroke: var(--caption);
+      stroke-width: 1.5;
+      fill: none;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .editorial-list a:hover .item-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .item-desc {
+      font-family: 'Lora', 'Noto Sans TC', serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--caption);
+      line-height: 1.55;
+    }
+
+    .item-tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: transparent;
+      border: 2px solid var(--rule-structural);
+      border-radius: 0;
+      padding: 2px 10px;
+    }
+
+    .item-tag--active {
+      background: var(--ink);
+      color: #ffffff;
+    }
+
+    .item-tag--muted {
+      color: var(--caption);
+      border-color: var(--rule-quiet);
+    }
+
+    /* ── Coffee section ── */
+    .coffee-section {
+      margin-top: 8px;
+      margin-bottom: 64px;
+      padding: 40px;
+      background: var(--canvas);
+      border: 2px solid var(--rule-structural);
+      border-radius: 0;
+      text-align: center;
+    }
+
+    .coffee-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      margin-bottom: 16px;
+    }
+
+    .coffee-text {
+      font-family: 'Lora', 'Noto Sans TC', serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.65;
+      margin-bottom: 4px;
+    }
+
+    .coffee-text-en {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--caption);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .wired-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink);
+      background: var(--canvas);
+      border: 2px solid var(--rule-structural);
+      border-radius: 0;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .wired-btn:hover {
+      background: var(--ink);
+      color: #ffffff;
+    }
+
+    /* ── Showcase Section ── */
+    .showcase-section {
+      margin-bottom: 64px;
+    }
+
+    .showcase-heading {
+      font-family: 'Playfair Display', 'Noto Sans TC', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+
+    .showcase-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .showcase-intro {
+      font-family: 'Lora', 'Noto Sans TC', serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--caption);
+      line-height: 1.55;
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+
+    .showcase-divider {
+      height: 1px;
+      background: var(--rule-structural);
+      margin-bottom: 40px;
+    }
+
+    .showcase-item-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      margin-bottom: 16px;
+    }
+
+    .showcase-item-desc {
+      font-family: 'Lora', 'Noto Sans TC', serif;
+      font-size: 15px;
+      color: var(--caption);
+      line-height: 1.55;
+      margin-bottom: 28px;
+    }
+
+    /* ── Four Typeface Roles Demo ── */
+    .typeface-demo {
+      margin-bottom: 56px;
+    }
+
+    .typeface-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .typeface-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--rule-quiet);
+    }
+
+    .typeface-row:first-child {
+      border-top: 1px solid var(--rule-quiet);
+    }
+
+    .typeface-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+
+    .typeface-sample--display {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.0;
+      color: var(--ink);
+    }
+
+    .typeface-sample--body {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--ink);
+    }
+
+    .typeface-sample--ui {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink);
+    }
+
+    .typeface-sample--mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .typeface-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      color: var(--caption);
+      margin-left: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Editorial Grid Demo ── */
+    .editorial-grid-demo {
+      margin-bottom: 56px;
+    }
+
+    .ed-grid {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 0;
+      border-top: 2px solid var(--rule-structural);
+      border-bottom: 1px solid var(--rule-quiet);
+    }
+
+    .ed-grid-rule {
+      background: var(--rule-quiet);
+    }
+
+    .ed-grid-tile {
+      padding: 24px 20px;
+    }
+
+    .ed-grid-tile:nth-child(n+4) {
+      border-top: 1px solid var(--rule-quiet);
+    }
+
+    .ed-grid-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      margin-bottom: 8px;
+    }
+
+    .ed-grid-headline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .ed-grid-excerpt {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--caption);
+      line-height: 1.50;
+    }
+
+    /* ── Mono Kicker System Demo ── */
+    .kicker-demo {
+      margin-bottom: 56px;
+    }
+
+    .kicker-example {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--rule-quiet);
+    }
+
+    .kicker-example:first-of-type {
+      border-top: 1px solid var(--rule-quiet);
+    }
+
+    .kicker-example .kicker-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .kicker-example .kicker-headline-lg {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .kicker-example .kicker-headline-md {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--ink);
+    }
+
+    .kicker-example .kicker-headline-sm {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink);
+    }
+
+    /* ── Square Everything Demo ── */
+    .square-demo {
+      margin-bottom: 56px;
+    }
+
+    .square-comparison {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 32px 0;
+      border-top: 1px solid var(--rule-quiet);
+      border-bottom: 1px solid var(--rule-quiet);
+    }
+
+    .square-box {
+      text-align: center;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .square-box-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--caption);
+      margin-bottom: 12px;
+    }
+
+    .btn-wired {
+      display: inline-block;
+      padding: 12px 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink);
+      background: var(--canvas);
+      border: 2px solid var(--rule-structural);
+      border-radius: 0;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .btn-wired:hover {
+      background: var(--ink);
+      color: #ffffff;
+    }
+
+    .btn-rounded {
+      display: inline-block;
+      padding: 12px 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #ffffff;
+      background: #6366f1;
+      border: none;
+      border-radius: 8px;
+      cursor: default;
+    }
+
+    .square-box-spec {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      color: var(--caption);
+      margin-top: 10px;
+    }
+
+    .vs-divider {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-style: italic;
+      color: var(--caption);
+      flex-shrink: 0;
+    }
+
+    /* ── Footer (dark) ── */
+    .site-footer {
+      background: var(--footer-bg);
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0 -9999px;
+      padding: 40px 9999px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    .footer-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 32px 24px 56px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      padding: 12px 24px;
+      border-radius: 0;
+      transition: background 0.15s ease, color 0.15s ease;
+      border: 2px solid var(--rule-structural);
+      background: var(--canvas);
+      color: var(--ink);
+    }
+
+    .design-nav a:hover {
+      background: var(--ink);
+      color: #ffffff;
+    }
+
+    .design-nav .nav-dir {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.92px;
+      opacity: 0.5;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev { text-align: left; }
+    .design-nav .nav-next { text-align: right; margin-left: auto; }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .site-header { animation: fadeIn 0.5s ease 0.05s both; }
+    .hero-kicker,
+    .hero-title { animation: fadeIn 0.5s ease 0.1s both; }
+    .hero-subtitle { animation: fadeIn 0.5s ease 0.15s both; }
+    .section-tools { animation: fadeIn 0.5s ease 0.2s both; }
+    .section-writing { animation: fadeIn 0.5s ease 0.25s both; }
+    .coffee-section { animation: fadeIn 0.5s ease 0.3s both; }
+    .showcase-section { animation: fadeIn 0.5s ease 0.35s both; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .hero-kicker,
+      .hero-title,
+      .hero-subtitle,
+      .section-tools,
+      .section-writing,
+      .coffee-section,
+      .showcase-section {
+        animation: none;
+      }
+      .item-arrow { transition: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .page-wrapper {
+        padding: 0 16px;
+        padding-top: 80px;
+      }
+
+      .top-bar { padding: 0 16px; }
+
+      .section-ribbon { margin: 0 -16px 28px; padding: 10px 16px; }
+
+      .site-header { margin-bottom: 36px; padding-bottom: 24px; }
+
+      .hero-title { font-size: 42px; }
+
+      .hero-subtitle { font-size: 16px; margin-bottom: 36px; }
+
+      .divider { margin-bottom: 36px; }
+
+      .editorial-list { margin-bottom: 44px; }
+
+      .coffee-section { padding: 28px 20px; }
+
+      .typeface-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .typeface-role { min-width: unset; }
+
+      .typeface-meta { margin-left: 0; }
+
+      .typeface-sample--display { font-size: 28px; }
+
+      .ed-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ed-grid-rule { display: none; }
+
+      .ed-grid-tile:nth-child(n+2) {
+        border-top: 1px solid var(--rule-quiet);
+      }
+
+      .showcase-heading { font-size: 32px; }
+
+      .square-comparison { flex-direction: column; gap: 24px; }
+
+      .design-nav a { padding: 10px 16px; font-size: 13px; }
+
+      .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title { font-size: 36px; }
+      .coffee-section { padding: 24px 16px; }
+      .kicker-example .kicker-headline-lg { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <a href="/try-awesome-design/" class="back-link">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    Back
+  </a>
+  <span class="design-badge">
+    <span class="dot"></span>
+    DESIGN: WIRED
+  </span>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="site-header">
+    <a href="/" class="logo">OOTOB.AI</a>
+    <p class="site-origin">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <span class="hero-kicker">Side Projects</span>
+    <h1 class="hero-title">小專案</h1>
+    <p class="hero-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+
+    <div class="divider"></div>
+
+    <!-- Tools -->
+    <div class="section-tools">
+      <div class="section-ribbon">Tools</div>
+      <ul class="editorial-list">
+        <li>
+          <a href="/japanese/quiz.html">
+            <span class="item-kicker">Learning</span>
+            <div class="item-header">
+              <span class="item-name">Japanese Quiz</span>
+              <svg class="item-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="item-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+            <span class="item-tag item-tag--active">LEARNING</span>
+          </a>
+        </li>
+        <li>
+          <div class="item-disabled">
+            <span class="item-kicker">Utility</span>
+            <div class="item-header">
+              <span class="item-name">Threads to Markdown</span>
+            </div>
+            <div class="item-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+            <span class="item-tag item-tag--muted">COMING SOON</span>
+          </div>
+        </li>
+        <li>
+          <div class="item-disabled">
+            <span class="item-kicker">Utility</span>
+            <div class="item-header">
+              <span class="item-name">X Thread to Markdown</span>
+            </div>
+            <div class="item-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+            <span class="item-tag item-tag--muted">COMING SOON</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Writing -->
+    <div class="section-writing">
+      <div class="section-ribbon">Writing</div>
+      <ul class="editorial-list">
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <span class="item-kicker">Essay</span>
+            <div class="item-header">
+              <span class="item-name">品味不可說</span>
+              <svg class="item-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="item-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+          </a>
+        </li>
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <span class="item-kicker">Essay</span>
+            <div class="item-header">
+              <span class="item-name">當知識變成免費的，Mastery 還剩下什麼？</span>
+              <svg class="item-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="item-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- Coffee Chat -->
+  <section class="coffee-section">
+    <p class="coffee-kicker">Coffee Chat</p>
+    <p class="coffee-text">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="coffee-text-en">Let me know how I can help you.</p>
+    <a class="wired-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </section>
+
+  <!-- Showcase: WIRED Design Features -->
+  <section class="showcase-section">
+    <span class="showcase-kicker">Design Showcase</span>
+    <h2 class="showcase-heading">WIRED 設計特色</h2>
+    <p class="showcase-intro">WIRED 的設計以排版為結構、以留白為節奏。沒有圓角、沒有陰影，只用字型層級和髮線規則建立秩序。以下用這個頁面的內容，展示四個標誌性的設計模式。</p>
+
+    <div class="showcase-divider"></div>
+
+    <!-- 1. Four Typeface Roles -->
+    <div class="typeface-demo">
+      <p class="showcase-item-label">Four Typeface Roles</p>
+      <p class="showcase-item-desc">WIRED 用四種字型各司其職：Display serif 抓住視線、Body serif 承載閱讀、UI sans 執行操作、Mono kicker 標記分類。同一句話，四種聲音。</p>
+
+      <div class="typeface-grid">
+        <div class="typeface-row">
+          <span class="typeface-role">Display</span>
+          <span class="typeface-sample--display">品味不可說</span>
+          <span class="typeface-meta">Playfair Display / 36px</span>
+        </div>
+        <div class="typeface-row">
+          <span class="typeface-role">Body</span>
+          <span class="typeface-sample--body">品味不可說</span>
+          <span class="typeface-meta">Lora / 18px</span>
+        </div>
+        <div class="typeface-row">
+          <span class="typeface-role">UI Sans</span>
+          <span class="typeface-sample--ui">品味不可說</span>
+          <span class="typeface-meta">Inter 700 / 18px</span>
+        </div>
+        <div class="typeface-row">
+          <span class="typeface-role">Mono Kicker</span>
+          <span class="typeface-sample--mono">品味不可說</span>
+          <span class="typeface-meta">JetBrains Mono / 15px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Editorial Grid -->
+    <div class="editorial-grid-demo">
+      <p class="showcase-item-label">Editorial Grid</p>
+      <p class="showcase-item-desc">不靠卡片和陰影，只靠髮線規則和留白分隔內容。這是報刊排版的靈魂 — 讓文字自己建立結構。</p>
+
+      <div class="ed-grid">
+        <div class="ed-grid-tile">
+          <div class="ed-grid-kicker">Learning</div>
+          <div class="ed-grid-headline">Japanese Quiz</div>
+          <div class="ed-grid-excerpt">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+        </div>
+        <div class="ed-grid-rule"></div>
+        <div class="ed-grid-tile">
+          <div class="ed-grid-kicker">Essay</div>
+          <div class="ed-grid-headline">品味不可說</div>
+          <div class="ed-grid-excerpt">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+        </div>
+        <div class="ed-grid-tile">
+          <div class="ed-grid-kicker">Essay</div>
+          <div class="ed-grid-headline">當知識變成免費的，Mastery 還剩下什麼？</div>
+          <div class="ed-grid-excerpt">探討AI時代中，真正的專業精通還需要親身實踐與判斷力。</div>
+        </div>
+        <div class="ed-grid-rule"></div>
+        <div class="ed-grid-tile">
+          <div class="ed-grid-kicker">Connect</div>
+          <div class="ed-grid-headline">Coffee Chat</div>
+          <div class="ed-grid-excerpt">聊品味、AI、創業、或任何你正在想的事。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Mono Kicker System -->
+    <div class="kicker-demo">
+      <p class="showcase-item-label">Mono Kicker System</p>
+      <p class="showcase-item-desc">每個標題上方都有一行 mono kicker：大寫、寬字距、小字號。它是 WIRED 最具辨識度的排版節奏，讓讀者一眼知道內容分類。</p>
+
+      <div class="kicker-example">
+        <div class="kicker-label">FEATURE STORY</div>
+        <div class="kicker-headline-lg">品味一旦被定義，就已經不是它了</div>
+      </div>
+      <div class="kicker-example">
+        <div class="kicker-label">TECHNOLOGY</div>
+        <div class="kicker-headline-md">當知識變成免費的，Mastery 還剩下什麼？</div>
+      </div>
+      <div class="kicker-example">
+        <div class="kicker-label">SIDE PROJECT</div>
+        <div class="kicker-headline-sm">Japanese Quiz — 日文互動測驗</div>
+      </div>
+    </div>
+
+    <!-- 4. Square Everything -->
+    <div class="square-demo">
+      <p class="showcase-item-label">Square Everything</p>
+      <p class="showcase-item-desc">WIRED 的按鈕、卡片、輸入框一律 border-radius: 0。方正的邊緣傳達出技術感和印刷品質。對比一般 SaaS 常見的 8px 圓角，差異巨大。</p>
+
+      <div class="square-comparison">
+        <div class="square-box">
+          <div class="square-box-label">WIRED STYLE</div>
+          <button class="btn-wired">Subscribe Now</button>
+          <div class="square-box-spec">border-radius: 0</div>
+        </div>
+        <span class="vs-divider">vs</span>
+        <div class="square-box">
+          <div class="square-box-label">TYPICAL SAAS</div>
+          <button class="btn-rounded">Subscribe Now</button>
+          <div class="square-box-spec">border-radius: 8px</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<!-- Footer (dark, full-bleed) -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-copy">&copy; 2026 ootob.ai</span>
+    <span class="footer-mono">WIRED DESIGN SYSTEM</span>
+  </div>
+</footer>
+
+<!-- Prev / Next Navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/meta/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Meta</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/bugatti/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Bugatti</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

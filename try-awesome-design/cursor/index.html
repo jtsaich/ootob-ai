@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Cursor Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — Cursor Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --canvas: #f2f1ed;
+      --surface-1: #f7f7f4;
+      --surface-2: #f2f1ed;
+      --surface-3: #ebeae5;
+      --surface-4: #e6e5e0;
+      --surface-5: #e1e0db;
+      --text: #26251e;
+      --text-secondary: #5c5b53;
+      --text-tertiary: #8a8982;
+      --accent: #f54e00;
+      --accent-hover: #cf2d56;
+      --border: rgba(38, 37, 30, 0.1);
+      --border-strong: rgba(38, 37, 30, 0.18);
+      --thinking: #dfa88f;
+      --grep: #9fc9a2;
+      --read: #9fbbe0;
+      --edit: #c0a8dd;
+      --radius: 8px;
+      --radius-pill: 9999px;
+      --max-w: 1080px;
+      --font-gothic: 'DM Sans', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Lora', 'Noto Sans TC', Georgia, serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+    }
+
+    body {
+      font-family: var(--font-serif);
+      color: var(--text);
+      background: var(--canvas);
+      line-height: 1.65;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* -- Top navigation bar -- */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(242, 241, 237, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-bar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.15s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-2px);
+    }
+
+    .design-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      background: var(--surface-4);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+    }
+
+    /* -- Hero section -- */
+    .hero {
+      padding: 136px 2rem 80px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .logo-wordmark {
+      font-family: var(--font-gothic);
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin: 0 1px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-gothic);
+      font-size: 72px;
+      font-weight: 400;
+      letter-spacing: -2.16px;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 24px;
+      max-width: 720px;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 600px;
+      font-style: italic;
+    }
+
+    /* -- Divider -- */
+    .section-divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-divider hr {
+      border: none;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* -- Content sections -- */
+    .content-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-gothic);
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: -1.2px;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* -- Project cards -- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      box-shadow:
+        0 8px 28px rgba(38, 37, 30, 0.08),
+        0 20px 70px rgba(38, 37, 30, 0.06);
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 18px;
+    }
+
+    .card-icon--accent {
+      background: var(--accent);
+      color: white;
+    }
+
+    .card-icon--muted {
+      background: var(--surface-5);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-family: var(--font-gothic);
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--accent);
+      background: rgba(245, 78, 0, 0.08);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      margin-top: 14px;
+      align-self: flex-start;
+    }
+
+    .card-tag--muted {
+      color: var(--text-tertiary);
+      background: var(--surface-3);
+    }
+
+    .card--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .card--disabled .card-title {
+      color: var(--text-secondary);
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 28px;
+      right: 24px;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* -- Writing cards -- */
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .writing-card {
+      background: var(--surface-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+      position: relative;
+    }
+
+    .writing-card:hover {
+      box-shadow:
+        0 8px 28px rgba(38, 37, 30, 0.08),
+        0 20px 70px rgba(38, 37, 30, 0.06);
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .writing-card .card-arrow {
+      top: 28px;
+      right: 24px;
+    }
+
+    .writing-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .writing-source {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .writing-source::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .writing-title {
+      font-family: var(--font-gothic);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .writing-desc {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* -- CTA / Coffee chat -- */
+    .cta-section {
+      background: var(--text);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(245, 78, 0, 0.12), rgba(207, 45, 86, 0.06), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(242, 241, 237, 0.4);
+      margin-bottom: 16px;
+    }
+
+    .cta-title {
+      font-family: var(--font-gothic);
+      font-size: 48px;
+      font-weight: 400;
+      letter-spacing: -1.6px;
+      line-height: 1.1;
+      color: var(--canvas);
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: 400;
+      color: rgba(242, 241, 237, 0.6);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 12px;
+    }
+
+    .cta-desc-en {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(242, 241, 237, 0.35);
+      margin-bottom: 32px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 12px 32px;
+      font-family: var(--font-gothic);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--canvas);
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+      box-shadow: 0 4px 16px rgba(245, 78, 0, 0.2);
+    }
+
+    .cta-btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 6px 24px rgba(207, 45, 86, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* -- Showcase: Design Highlights -- */
+    .showcase-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .showcase-header {
+      margin-bottom: 48px;
+    }
+
+    .showcase-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .showcase-title {
+      font-family: var(--font-gothic);
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: -1.2px;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    /* Three Typographic Voices */
+    .typo-voices {
+      margin-bottom: 64px;
+    }
+
+    .typo-voices-label {
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .typo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .typo-card {
+      background: var(--surface-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    .typo-card-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(245, 78, 0, 0.08);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .typo-card-text {
+      font-size: 28px;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .typo-card-text--gothic {
+      font-family: var(--font-gothic);
+      font-weight: 400;
+      letter-spacing: -1.2px;
+    }
+
+    .typo-card-text--serif {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .typo-card-text--mono {
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+    }
+
+    .typo-card-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    /* Warm Surface Scale */
+    .surface-scale {
+      margin-bottom: 64px;
+    }
+
+    .surface-scale-label {
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .surface-bars {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .surface-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      transition: transform 0.2s ease;
+    }
+
+    .surface-bar:not(:last-child) {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .surface-bar:hover {
+      transform: translateX(4px);
+    }
+
+    .surface-bar-name {
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .surface-bar-hex {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* AI Timeline */
+    .ai-timeline {
+      margin-bottom: 0;
+    }
+
+    .ai-timeline-label {
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .timeline-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .timeline-step {
+      display: flex;
+      align-items: stretch;
+      gap: 20px;
+      position: relative;
+    }
+
+    .timeline-track {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40px;
+      flex-shrink: 0;
+    }
+
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 20px;
+      box-shadow: 0 0 0 4px var(--canvas);
+    }
+
+    .timeline-line {
+      width: 2px;
+      flex: 1;
+      min-height: 16px;
+      border-radius: 1px;
+    }
+
+    .timeline-step:last-child .timeline-line {
+      display: none;
+    }
+
+    .timeline-content {
+      background: var(--surface-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      flex: 1;
+      margin-bottom: 12px;
+    }
+
+    .timeline-step-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .timeline-step-desc {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Links styling */
+    a.link-orange {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    a.link-orange:hover {
+      color: var(--accent-hover);
+    }
+
+    /* -- Footer -- */
+    .site-footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-copy {
+      font-family: var(--font-gothic);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-gothic);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* -- Animations -- */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    .animate-in--d1 { animation-delay: 0.05s; }
+    .animate-in--d2 { animation-delay: 0.1s; }
+    .animate-in--d3 { animation-delay: 0.15s; }
+    .animate-in--d4 { animation-delay: 0.2s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in {
+        animation: none;
+        opacity: 1;
+      }
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 860px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero h1 {
+        font-size: 52px;
+        letter-spacing: -1.6px;
+      }
+      .cta-title {
+        font-size: 36px;
+        letter-spacing: -1.2px;
+      }
+      .typo-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-inner {
+        padding: 0 1.25rem;
+      }
+      .hero {
+        padding: 116px 1.25rem 56px;
+      }
+      .hero h1 {
+        font-size: 40px;
+        letter-spacing: -1.2px;
+      }
+      .hero-tagline {
+        font-size: 16px;
+      }
+      .content-section {
+        padding: 48px 1.25rem;
+      }
+      .section-title {
+        font-size: 28px;
+        letter-spacing: -0.8px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-inner {
+        padding: 60px 1.25rem;
+      }
+      .cta-title {
+        font-size: 30px;
+        letter-spacing: -0.8px;
+      }
+      .cta-desc {
+        font-size: 15px;
+      }
+      .site-footer {
+        padding: 32px 1.25rem;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .section-divider {
+        padding: 0 1.25rem;
+      }
+      .typo-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .typo-card-text {
+        font-size: 24px;
+      }
+      .typo-card-text--mono {
+        font-size: 18px;
+      }
+      .showcase-section {
+        padding: 48px 1.25rem;
+      }
+      .showcase-title {
+        font-size: 28px;
+        letter-spacing: -0.8px;
+      }
+      .timeline-track {
+        width: 32px;
+      }
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, color 0.15s;
+      border: 1px solid var(--border);
+      background: var(--surface-4);
+      color: var(--text-secondary);
+    }
+
+    .design-nav a:hover {
+      background: var(--surface-5);
+      border-color: var(--border-strong);
+      color: var(--text);
+      box-shadow: 0 4px 16px rgba(38, 37, 30, 0.06);
+    }
+
+    .design-nav .nav-dir {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.45;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .design-nav a {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-link" href="/try-awesome-design/">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back
+    </a>
+    <span class="design-badge">Design: Cursor</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="logo-mark animate-in">
+    <span class="logo-wordmark">ootob<span class="logo-dot"></span>ai</span>
+  </div>
+  <h1 class="animate-in animate-in--d1">小專案</h1>
+  <p class="hero-tagline animate-in animate-in--d2">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+</header>
+
+<div class="section-divider"><hr></div>
+
+<!-- Tools section -->
+<section class="content-section animate-in animate-in--d3">
+  <div class="section-header">
+    <p class="section-eyebrow">Tools</p>
+    <h2 class="section-title">做著玩的東西</h2>
+    <p class="section-subtitle">有的有用，有的純粹好玩。</p>
+  </div>
+
+  <div class="card-grid">
+    <!-- Japanese Quiz -->
+    <a class="card" href="/japanese/quiz.html">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </span>
+      <div class="card-icon card-icon--accent">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="card-title">Japanese Quiz</div>
+      <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+      <span class="card-tag">learning</span>
+    </a>
+
+    <!-- Threads to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">Threads to Markdown</div>
+      <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+
+    <!-- X Thread to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">X Thread to Markdown</div>
+      <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Writing section -->
+<section class="content-section animate-in animate-in--d4">
+  <div class="section-header">
+    <p class="section-eyebrow">Writing</p>
+    <h2 class="section-title">文章</h2>
+    <p class="section-subtitle">思考的紀錄，關於品味、AI、與經驗不可取代的東西。</p>
+  </div>
+
+  <div class="writing-grid">
+    <!-- 品味不可說 -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">品味不可說</div>
+      <div class="writing-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+    </a>
+
+    <!-- Mastery -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+      <div class="writing-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+    </a>
+  </div>
+</section>
+
+<!-- Coffee Chat CTA (dark section) -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="cta-eyebrow">Coffee Chat</p>
+    <h2 class="cta-title">聊一杯咖啡</h2>
+    <p class="cta-desc">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="cta-desc-en">Let me know how I can help you.</p>
+    <a class="cta-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </div>
+</section>
+
+<!-- Cursor Design Highlights -->
+<div class="section-divider"><hr></div>
+
+<section class="showcase-section">
+  <div class="showcase-header">
+    <p class="showcase-eyebrow">Design Showcase</p>
+    <h2 class="showcase-title">Cursor 設計特色</h2>
+  </div>
+
+  <!-- Three Typographic Voices -->
+  <div class="typo-voices">
+    <p class="typo-voices-label">Three Typographic Voices</p>
+    <div class="typo-grid">
+      <div class="typo-card">
+        <span class="typo-card-label">Gothic — DM Sans</span>
+        <div class="typo-card-text typo-card-text--gothic">The AI Code Editor</div>
+        <div class="typo-card-note">weight 400 &middot; letter-spacing -2.16px<br>Display headlines, UI labels</div>
+      </div>
+      <div class="typo-card">
+        <span class="typo-card-label">Serif — Lora</span>
+        <div class="typo-card-text typo-card-text--serif">The AI Code Editor</div>
+        <div class="typo-card-note">weight 400 &middot; italic<br>Editorial body, descriptions</div>
+      </div>
+      <div class="typo-card">
+        <span class="typo-card-label">Mono — JetBrains Mono</span>
+        <div class="typo-card-text typo-card-text--mono">The AI Code Editor</div>
+        <div class="typo-card-note">weight 400 &middot; tabular<br>Tags, labels, code</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warm Surface Scale -->
+  <div class="surface-scale">
+    <p class="surface-scale-label">Warm Surface Scale</p>
+    <div class="surface-bars">
+      <div class="surface-bar" style="background: #f7f7f4;">
+        <span class="surface-bar-name">Surface 1 — Lightest</span>
+        <span class="surface-bar-hex">#f7f7f4</span>
+      </div>
+      <div class="surface-bar" style="background: #f2f1ed;">
+        <span class="surface-bar-name">Surface 2 — Canvas</span>
+        <span class="surface-bar-hex">#f2f1ed</span>
+      </div>
+      <div class="surface-bar" style="background: #ebeae5;">
+        <span class="surface-bar-name">Surface 3 — Subtle</span>
+        <span class="surface-bar-hex">#ebeae5</span>
+      </div>
+      <div class="surface-bar" style="background: #e6e5e0;">
+        <span class="surface-bar-name">Surface 4 — Card</span>
+        <span class="surface-bar-hex">#e6e5e0</span>
+      </div>
+      <div class="surface-bar" style="background: #e1e0db;">
+        <span class="surface-bar-name">Surface 5 — Deepest</span>
+        <span class="surface-bar-hex">#e1e0db</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Timeline -->
+  <div class="ai-timeline">
+    <p class="ai-timeline-label">AI Timeline</p>
+    <div class="timeline-steps">
+
+      <div class="timeline-step">
+        <div class="timeline-track">
+          <div class="timeline-dot" style="background: var(--thinking);"></div>
+          <div class="timeline-line" style="background: linear-gradient(to bottom, var(--thinking), var(--grep));"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-step-label" style="color: #b07a5c;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--thinking);"></span>
+            Thinking
+          </div>
+          <div class="timeline-step-desc">分析使用者意圖、拆解任務、規劃步驟。暖棕色調代表思考的溫度。</div>
+        </div>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-track">
+          <div class="timeline-dot" style="background: var(--grep);"></div>
+          <div class="timeline-line" style="background: linear-gradient(to bottom, var(--grep), var(--read));"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-step-label" style="color: #5a9a5e;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--grep);"></span>
+            Grep
+          </div>
+          <div class="timeline-step-desc">搜尋整個 codebase，找到相關的檔案和模式。綠色代表探索和發現。</div>
+        </div>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-track">
+          <div class="timeline-dot" style="background: var(--read);"></div>
+          <div class="timeline-line" style="background: linear-gradient(to bottom, var(--read), var(--edit));"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-step-label" style="color: #5a8ab0;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--read);"></span>
+            Read
+          </div>
+          <div class="timeline-step-desc">深入閱讀檔案內容，理解上下文和依賴關係。藍色代表理解和吸收。</div>
+        </div>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-track">
+          <div class="timeline-dot" style="background: var(--edit);"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-step-label" style="color: #8a6aad;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--edit);"></span>
+            Edit
+          </div>
+          <div class="timeline-step-desc">執行程式碼修改，精確地插入、替換、刪除。紫色代表創造和轉化。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 ootob.ai</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="https://open.substack.com/pub/ootobai" target="_blank" rel="noopener">Substack</a>
+  </div>
+</footer>
+
+<nav class="design-nav">
+  <a href="/try-awesome-design/airbnb/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Airbnb</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/figma/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Figma</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+</body>
+</html>

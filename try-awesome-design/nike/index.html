@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Nike Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --nike-black: #111111;
+      --white: #ffffff;
+      --surface-1: #FAFAFA;
+      --surface-2: #F5F5F5;
+      --surface-3: #E5E5E5;
+      --text-secondary: #707072;
+      --text-disabled: #9E9EA0;
+      --border-gray: #CACACB;
+      --error-red: #D30005;
+      --link-blue: #1151FF;
+      --radius-pill: 30px;
+      --max-w: 1080px;
+    }
+
+    html {
+      background: var(--white);
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--nike-black);
+      background: var(--white);
+      line-height: 1.75;
+      font-size: 16px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ── Promotional Banner ── */
+    .promo-banner {
+      background: var(--nike-black);
+      color: var(--white);
+      text-align: center;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: var(--white);
+      border-bottom: 1px solid var(--surface-3);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--nike-black);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: opacity 0.15s ease;
+    }
+
+    .back-link:hover {
+      opacity: 0.65;
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .design-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--nike-black);
+      background: var(--white);
+      border: 1.5px solid var(--border-gray);
+      border-radius: var(--radius-pill);
+      padding: 6px 16px;
+    }
+
+    .design-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--nike-black);
+    }
+
+    /* ── Hero Section ── */
+    .hero {
+      background: linear-gradient(180deg, #111111 0%, #1a1a1a 40%, #222222 100%);
+      padding: 100px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -25%;
+      width: 150%;
+      height: 200%;
+      background: radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-logo {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .hero-tagline {
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.75;
+      max-width: 560px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ── Page Layout ── */
+    .page-content {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* ── Section Heading ── */
+    .section-hero {
+      padding: 64px 0 0;
+    }
+
+    .section-hero-title {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 96px;
+      font-weight: 500;
+      line-height: 0.90;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--nike-black);
+      margin-bottom: 20px;
+    }
+
+    .section-hero-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 48px;
+    }
+
+    /* ── Section Labels ── */
+    .section-label {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--nike-black);
+      display: inline-block;
+    }
+
+    /* ── Card Grid ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 64px;
+    }
+
+    .card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--surface-1);
+      border-radius: 0;
+      overflow: hidden;
+      transition: background 0.2s ease;
+      /* ZERO shadows — flat elevation */
+    }
+
+    .card:hover {
+      background: var(--surface-2);
+    }
+
+    .card-body {
+      padding: 24px 20px;
+    }
+
+    .card-name {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--nike-black);
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--nike-black);
+      border-radius: var(--radius-pill);
+      padding: 5px 14px;
+    }
+
+    .card-tag--soon {
+      color: var(--text-disabled);
+      background: transparent;
+      border: 1.5px solid var(--border-gray);
+    }
+
+    .card-disabled {
+      cursor: default;
+    }
+
+    .card-disabled .card-name {
+      color: var(--text-disabled);
+    }
+
+    .card-disabled .card-desc {
+      color: var(--text-disabled);
+    }
+
+    /* ── Arrow indicator ── */
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-arrow {
+      width: 20px;
+      height: 20px;
+      stroke: var(--nike-black);
+      stroke-width: 2;
+      fill: none;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:not(.card-disabled):hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── Writing Section ── */
+    .writing-list {
+      list-style: none;
+      margin-bottom: 64px;
+    }
+
+    .writing-item {
+      border-bottom: 1px solid var(--surface-3);
+    }
+
+    .writing-item a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      text-decoration: none;
+      color: inherit;
+      transition: padding-left 0.2s ease;
+    }
+
+    .writing-item a:hover {
+      padding-left: 8px;
+    }
+
+    .writing-item-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--nike-black);
+      margin-bottom: 4px;
+    }
+
+    .writing-item-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .writing-item-arrow {
+      width: 20px;
+      height: 20px;
+      stroke: var(--nike-black);
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+      margin-left: 16px;
+      opacity: 0.3;
+      transition: opacity 0.2s ease;
+    }
+
+    .writing-item a:hover .writing-item-arrow {
+      opacity: 1;
+    }
+
+    /* ── Coffee Section ── */
+    .coffee-section {
+      background: var(--nike-black);
+      color: var(--white);
+      padding: 64px 40px;
+      text-align: center;
+      margin: 0 -40px;
+    }
+
+    .coffee-label {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 16px;
+    }
+
+    .coffee-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.75;
+      margin-bottom: 4px;
+    }
+
+    .coffee-text-en {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 32px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'Noto Sans TC', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--nike-black);
+      background: var(--white);
+      border: none;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: opacity 0.15s ease;
+      cursor: pointer;
+    }
+
+    .btn-pill:hover {
+      opacity: 0.85;
+    }
+
+    /* ── Showcase Section ── */
+    .showcase-section {
+      padding: 80px 0 64px;
+    }
+
+    .showcase-heading {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 48px;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      color: var(--nike-black);
+      margin-bottom: 12px;
+    }
+
+    .showcase-intro {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+
+    .showcase-divider {
+      height: 2px;
+      background: var(--nike-black);
+      margin-bottom: 48px;
+    }
+
+    .showcase-item {
+      margin-bottom: 56px;
+    }
+
+    .showcase-item-label {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .showcase-item-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      max-width: 600px;
+    }
+
+    /* ── Showcase: Massive Display ── */
+    .massive-display-demo {
+      background: var(--nike-black);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .massive-display-demo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.02) 50%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .massive-display-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 96px;
+      font-weight: 500;
+      line-height: 0.90;
+      text-transform: uppercase;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      position: relative;
+    }
+
+    .massive-display-meta {
+      margin-top: 24px;
+      display: flex;
+      gap: 24px;
+      position: relative;
+    }
+
+    .massive-display-meta span {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── Showcase: Flat Elevation ── */
+    .elevation-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .elevation-card {
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    .elevation-card-label {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .elevation-sample {
+      padding: 24px;
+      border-radius: 0;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .elevation-sample--nike {
+      background: var(--surface-1);
+      /* Deliberately no shadow, no border */
+    }
+
+    .elevation-sample--typical {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.08),
+        0 4px 12px rgba(0,0,0,0.06),
+        0 8px 24px rgba(0,0,0,0.04);
+    }
+
+    .elevation-sample-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--nike-black);
+    }
+
+    .elevation-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-disabled);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Showcase: Pill vs Sharp ── */
+    .pill-sharp-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .pill-sharp-col {
+      text-align: center;
+    }
+
+    .pill-sharp-label {
+      font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .pill-demo-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      padding: 32px 16px;
+      background: var(--surface-1);
+    }
+
+    .pill-btn-primary {
+      display: inline-block;
+      padding: 12px 32px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--nike-black);
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .pill-btn-outline {
+      display: inline-block;
+      padding: 12px 32px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--nike-black);
+      background: transparent;
+      border: 1.5px solid var(--border-gray);
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .sharp-demo {
+      overflow: hidden;
+    }
+
+    .sharp-demo-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 30%, #1a1a1a 60%, #111111 100%);
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sharp-demo-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%);
+    }
+
+    .sharp-demo-image span {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      z-index: 1;
+    }
+
+    .sharp-demo-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-disabled);
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      background: var(--surface-1);
+      padding: 32px 40px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 32px 40px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      transition: background 0.15s, border-color 0.15s;
+      border: 1.5px solid var(--border-gray);
+      background: var(--white);
+      color: var(--nike-black);
+    }
+
+    .design-nav a:hover {
+      background: var(--nike-black);
+      border-color: var(--nike-black);
+      color: var(--white);
+    }
+
+    .design-nav .nav-dir {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero { animation: fadeInUp 0.5s ease both; }
+    .section-hero { animation: fadeInUp 0.5s ease 0.05s both; }
+    .section-tools { animation: fadeInUp 0.5s ease 0.1s both; }
+    .section-writing { animation: fadeInUp 0.5s ease 0.15s both; }
+    .coffee-section { animation: fadeInUp 0.5s ease 0.2s both; }
+    .showcase-section { animation: fadeInUp 0.5s ease 0.25s both; }
+    .site-footer { animation: fadeInUp 0.5s ease 0.3s both; }
+
+    /* ── Reduced Motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero,
+      .section-hero,
+      .section-tools,
+      .section-writing,
+      .coffee-section,
+      .showcase-section,
+      .site-footer {
+        animation: none;
+      }
+      .card, .writing-item a, .card-arrow, .writing-item-arrow {
+        transition: none;
+      }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .top-bar {
+        padding: 0 20px;
+      }
+
+      .hero {
+        padding: 64px 20px 56px;
+      }
+
+      .page-content {
+        padding: 0 20px;
+      }
+
+      .section-hero-title {
+        font-size: 64px;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .coffee-section {
+        padding: 48px 20px;
+        margin: 0 -20px;
+      }
+
+      .showcase-heading {
+        font-size: 36px;
+      }
+
+      .massive-display-demo {
+        padding: 32px 20px;
+      }
+
+      .massive-display-text {
+        font-size: 56px;
+      }
+
+      .elevation-compare {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .pill-sharp-compare {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .design-nav {
+        padding: 24px 20px 40px;
+      }
+
+      .design-nav a {
+        padding: 10px 18px;
+        font-size: 13px;
+      }
+
+      .site-footer {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .section-hero-title {
+        font-size: 48px;
+      }
+
+      .massive-display-text {
+        font-size: 40px;
+      }
+
+      .showcase-heading {
+        font-size: 28px;
+      }
+
+      .hero-tagline {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Promotional Banner -->
+<div class="promo-banner">
+  Design System Experiment — Same content, different design language
+</div>
+
+<!-- Top Navigation Bar -->
+<nav class="top-bar">
+  <a href="/try-awesome-design/" class="back-link">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    Back
+  </a>
+  <span class="design-badge">
+    <span class="dot"></span>
+    Design: Nike
+  </span>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-logo">ootob.ai</div>
+  <p class="hero-tagline">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+</section>
+
+<!-- Main Content -->
+<div class="page-content">
+
+  <!-- Section Hero -->
+  <div class="section-hero">
+    <h1 class="section-hero-title">小專案</h1>
+    <p class="section-hero-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+  </div>
+
+  <!-- Tools -->
+  <div class="section-tools">
+    <p class="section-label">Tools</p>
+    <div class="card-grid">
+      <a href="/japanese/quiz.html" class="card">
+        <div class="card-body">
+          <div class="card-header">
+            <span class="card-name">Japanese Quiz</span>
+            <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+          <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+          <span class="card-tag">learning</span>
+        </div>
+      </a>
+      <div class="card card-disabled">
+        <div class="card-body">
+          <div class="card-header">
+            <span class="card-name">Threads to Markdown</span>
+          </div>
+          <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+          <span class="card-tag card-tag--soon">coming soon</span>
+        </div>
+      </div>
+      <div class="card card-disabled">
+        <div class="card-body">
+          <div class="card-header">
+            <span class="card-name">X Thread to Markdown</span>
+          </div>
+          <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+          <span class="card-tag card-tag--soon">coming soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Writing -->
+  <div class="section-writing">
+    <p class="section-label">Writing</p>
+    <ul class="writing-list">
+      <li class="writing-item">
+        <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+          <div>
+            <div class="writing-item-name">品味不可說</div>
+            <div class="writing-item-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+          </div>
+          <svg class="writing-item-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+        </a>
+      </li>
+      <li class="writing-item">
+        <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+          <div>
+            <div class="writing-item-name">當知識變成免費的，Mastery 還剩下什麼？</div>
+            <div class="writing-item-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+          </div>
+          <svg class="writing-item-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Coffee Chat -->
+  <section class="coffee-section">
+    <p class="coffee-label">Coffee Chat</p>
+    <p class="coffee-text">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="coffee-text-en">Let me know how I can help you.</p>
+    <a class="btn-pill" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </section>
+
+  <!-- Showcase: Nike Design Features -->
+  <section class="showcase-section">
+    <h2 class="showcase-heading">Nike 設計特色</h2>
+    <p class="showcase-intro">Nike 的設計語言以大膽、極端對比著稱。以下用這個頁面的內容，展示三個標誌性的設計模式。</p>
+
+    <div class="showcase-divider"></div>
+
+    <!-- 1. Massive Uppercase Display -->
+    <div class="showcase-item">
+      <p class="showcase-item-label">Massive Uppercase Display</p>
+      <p class="showcase-item-desc">Nike 標誌性的巨大全大寫標題 — 96px、字重 500、行高 0.90。像體育場記分板一樣的壓迫感，字母幾乎要碰在一起。Oswald 模擬 Nike 的 Futura ND Condensed 效果。</p>
+
+      <div class="massive-display-demo">
+        <div class="massive-display-text">
+          JUST DO IT.<br>
+          MOVE FORWARD.
+        </div>
+        <div class="massive-display-meta">
+          <span>Oswald 500</span>
+          <span>96px</span>
+          <span>Line-height 0.90</span>
+          <span>Uppercase</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Flat Elevation -->
+    <div class="showcase-item">
+      <p class="showcase-item-label">Flat Elevation</p>
+      <p class="showcase-item-desc">Nike 的卡片完全不使用陰影 — 零 box-shadow。用背景色差異（#FAFAFA vs #FFFFFF）和邊界來建立層次，保持絕對扁平。</p>
+
+      <div class="elevation-compare">
+        <div class="elevation-card" style="background: var(--surface-1);">
+          <div class="elevation-card-label">Nike Card</div>
+          <div class="elevation-sample elevation-sample--nike">
+            <span class="elevation-sample-text">Zero Shadow</span>
+          </div>
+          <div class="elevation-note">background: #FAFAFA / box-shadow: none</div>
+        </div>
+        <div class="elevation-card" style="background: var(--surface-1);">
+          <div class="elevation-card-label">Typical Card</div>
+          <div class="elevation-sample elevation-sample--typical">
+            <span class="elevation-sample-text">With Shadow</span>
+          </div>
+          <div class="elevation-note">background: #FFF / box-shadow: 0 4px 12px</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Pill vs Sharp -->
+    <div class="showcase-item">
+      <p class="showcase-item-label">Pill vs Sharp</p>
+      <p class="showcase-item-desc">Nike 的設計刻意製造對比 — 按鈕是圓潤的膠囊形（30px radius），但產品圖片是完全銳利的直角（0px radius）。這不是偶然，而是精心設計的視覺張力。</p>
+
+      <div class="pill-sharp-compare">
+        <div class="pill-sharp-col">
+          <div class="pill-sharp-label">Pill Buttons — 30px Radius</div>
+          <div class="pill-demo-buttons">
+            <span class="pill-btn-primary">Shop Now</span>
+            <span class="pill-btn-outline">Explore</span>
+          </div>
+        </div>
+        <div class="pill-sharp-col">
+          <div class="pill-sharp-label">Product Images — 0px Radius</div>
+          <div class="sharp-demo">
+            <div class="sharp-demo-image">
+              <span>Full Bleed</span>
+            </div>
+            <div class="sharp-demo-note">border-radius: 0 / sharp edges</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p>&copy; 2026 ootob.ai</p>
+</footer>
+
+<!-- Prev / Next Navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/miro/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Miro</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/theverge/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">The Verge</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

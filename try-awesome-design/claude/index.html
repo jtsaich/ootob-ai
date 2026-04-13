@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Claude Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — Claude Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --parchment: #f5f4ed;
+      --ivory: #faf9f5;
+      --near-black: #141413;
+      --charcoal: #4d4c48;
+      --olive-gray: #5e5d59;
+      --stone-gray: #87867f;
+      --muted-stone: #b0aea5;
+      --border-cream: #f0eee6;
+      --border-warm: #e8e6dc;
+      --terracotta: #c96442;
+      --terracotta-hover: #b85838;
+      --terracotta-light: rgba(201, 100, 66, 0.08);
+      --whisper-shadow: rgba(0, 0, 0, 0.05) 0px 4px 24px;
+      --ring-shadow: 0px 0px 0px 1px;
+      --radius-card: 8px;
+      --radius-btn: 12px;
+      --radius-hero: 32px;
+      --max-w: 1080px;
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--near-black);
+      background: var(--parchment);
+      line-height: 1.60;
+      font-size: 16px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* -- Top navigation bar -- */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(245, 244, 237, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-warm);
+    }
+
+    .top-bar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--olive-gray);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--terracotta);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.15s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-2px);
+    }
+
+    .design-badge {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--olive-gray);
+      background: var(--terracotta-light);
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid rgba(201, 100, 66, 0.15);
+    }
+
+    /* -- Hero section -- */
+    .hero {
+      padding: 136px 2rem 80px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .logo-wordmark {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: -0.01em;
+      color: var(--near-black);
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--terracotta);
+    }
+
+    .hero-tagline {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--olive-gray);
+      max-width: 620px;
+      margin-bottom: 56px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: 56px;
+      font-weight: bold;
+      letter-spacing: -1.2px;
+      line-height: 1.10;
+      color: var(--near-black);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.60;
+      color: var(--olive-gray);
+      max-width: 520px;
+    }
+
+    /* -- Divider -- */
+    .section-divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-divider hr {
+      border: none;
+      height: 1px;
+      background: var(--border-warm);
+    }
+
+    /* -- Content sections -- */
+    .content-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      line-height: 1.20;
+      color: var(--near-black);
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--olive-gray);
+      line-height: 1.60;
+    }
+
+    /* -- Project cards -- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--ivory);
+      border: 1px solid var(--border-cream);
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      box-shadow: var(--whisper-shadow);
+      transform: translateY(-2px);
+      border-color: var(--border-warm);
+    }
+
+    .card:focus-visible {
+      outline: none;
+      box-shadow: var(--ring-shadow) var(--terracotta);
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 18px;
+    }
+
+    .card-icon--terracotta {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .card-icon--stone {
+      background: var(--stone-gray);
+      color: white;
+    }
+
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: bold;
+      letter-spacing: -0.1px;
+      color: var(--near-black);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--olive-gray);
+      line-height: 1.60;
+      flex: 1;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--terracotta);
+      background: var(--terracotta-light);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-top: 14px;
+      align-self: flex-start;
+    }
+
+    .card-tag--muted {
+      color: var(--stone-gray);
+      background: rgba(135, 134, 127, 0.1);
+    }
+
+    .card--disabled {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .card--disabled .card-title {
+      color: var(--olive-gray);
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 28px;
+      right: 24px;
+      color: var(--terracotta);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* -- Writing cards -- */
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .writing-card {
+      background: var(--ivory);
+      border: 1px solid var(--border-cream);
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .writing-card:hover {
+      box-shadow: var(--whisper-shadow);
+      transform: translateY(-2px);
+      border-color: var(--border-warm);
+    }
+
+    .writing-card:focus-visible {
+      outline: none;
+      box-shadow: var(--ring-shadow) var(--terracotta);
+    }
+
+    .writing-card .card-arrow {
+      top: 28px;
+      right: 24px;
+    }
+
+    .writing-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .writing-source {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--stone-gray);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .writing-source::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--terracotta);
+    }
+
+    .writing-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: -0.3px;
+      line-height: 1.30;
+      color: var(--near-black);
+      margin-bottom: 10px;
+    }
+
+    .writing-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--olive-gray);
+      line-height: 1.65;
+    }
+
+    /* -- CTA / Coffee chat -- */
+    .cta-section {
+      background: var(--near-black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -8%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(201, 100, 66, 0.12), rgba(201, 100, 66, 0.04), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-stone);
+      margin-bottom: 16px;
+    }
+
+    .cta-title {
+      font-family: var(--font-serif);
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: -0.96px;
+      line-height: 1.15;
+      color: var(--ivory);
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--muted-stone);
+      line-height: 1.65;
+      max-width: 520px;
+      margin: 0 auto 12px;
+    }
+
+    .cta-desc-en {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--stone-gray);
+      margin-bottom: 32px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: white;
+      background: var(--terracotta);
+      border: none;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 24px;
+    }
+
+    .cta-btn:hover {
+      background: var(--terracotta-hover);
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 8px 32px;
+      transform: translateY(-1px);
+    }
+
+    .cta-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--ring-shadow) var(--terracotta);
+    }
+
+    /* -- Showcase: Design Highlights -- */
+    .showcase-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .showcase-header {
+      margin-bottom: 48px;
+    }
+
+    .showcase-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 12px;
+    }
+
+    .showcase-title {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      line-height: 1.20;
+      color: var(--near-black);
+    }
+
+    /* -- Warm vs Cool Gray Comparison -- */
+    .compare-section {
+      margin-bottom: 64px;
+    }
+
+    .compare-label {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--near-black);
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .compare-desc {
+      font-size: 15px;
+      color: var(--olive-gray);
+      margin-bottom: 28px;
+      line-height: 1.60;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .compare-column-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .compare-column-label--warm {
+      color: var(--terracotta);
+      background: var(--terracotta-light);
+    }
+
+    .compare-column-label--cool {
+      color: #6c757d;
+      background: rgba(108, 117, 125, 0.08);
+    }
+
+    .compare-card {
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .compare-card--warm {
+      background: #faf9f5;
+      border: 1px solid #e8e6dc;
+    }
+
+    .compare-card--warm:hover {
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 24px;
+    }
+
+    .compare-card--cool {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+    }
+
+    .compare-card--cool:hover {
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 24px;
+    }
+
+    .compare-card-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .compare-card--warm .compare-card-title {
+      color: #141413;
+    }
+
+    .compare-card--cool .compare-card-title {
+      color: #212529;
+    }
+
+    .compare-card-text {
+      font-size: 14px;
+      line-height: 1.60;
+      margin-bottom: 16px;
+    }
+
+    .compare-card--warm .compare-card-text {
+      color: #5e5d59;
+    }
+
+    .compare-card--cool .compare-card-text {
+      color: #6c757d;
+    }
+
+    .compare-card-swatch {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .compare-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-family: monospace;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .compare-chip--warm {
+      background: rgba(201, 100, 66, 0.06);
+      color: var(--olive-gray);
+      border: 1px solid var(--border-warm);
+    }
+
+    .compare-chip--cool {
+      background: rgba(108, 117, 125, 0.06);
+      color: #6c757d;
+      border: 1px solid #dee2e6;
+    }
+
+    .compare-chip-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* -- Serif/Sans Hierarchy Demo -- */
+    .hierarchy-section {
+      margin-bottom: 64px;
+    }
+
+    .hierarchy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .hierarchy-card {
+      background: var(--ivory);
+      border: 1px solid var(--border-cream);
+      border-radius: var(--radius-card);
+      padding: 32px 28px;
+    }
+
+    .hierarchy-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      background: var(--terracotta-light);
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .hierarchy-heading-serif {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 1.15;
+      color: var(--near-black);
+      margin-bottom: 12px;
+    }
+
+    .hierarchy-heading-sans {
+      font-family: var(--font-sans);
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--near-black);
+      margin-bottom: 12px;
+    }
+
+    .hierarchy-body {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.60;
+      color: var(--olive-gray);
+    }
+
+    .hierarchy-note {
+      font-size: 12px;
+      color: var(--stone-gray);
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-cream);
+      font-style: italic;
+    }
+
+    /* -- Parchment Palette Swatch Strip -- */
+    .palette-section {
+      margin-bottom: 0;
+    }
+
+    .palette-strip {
+      display: flex;
+      gap: 0;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid var(--border-cream);
+      margin-bottom: 20px;
+    }
+
+    .palette-block {
+      flex: 1;
+      padding: 28px 12px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 120px;
+      transition: flex 0.3s ease;
+    }
+
+    .palette-block:hover {
+      flex: 1.3;
+    }
+
+    .palette-block-name {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+      opacity: 0.85;
+    }
+
+    .palette-block-hex {
+      font-family: monospace;
+      font-size: 11px;
+      opacity: 0.65;
+    }
+
+    .palette-block--parchment {
+      background: #f5f4ed;
+      color: var(--charcoal);
+    }
+
+    .palette-block--ivory {
+      background: #faf9f5;
+      color: var(--charcoal);
+    }
+
+    .palette-block--border-cream {
+      background: #f0eee6;
+      color: var(--charcoal);
+    }
+
+    .palette-block--border-warm {
+      background: #e8e6dc;
+      color: var(--charcoal);
+    }
+
+    .palette-block--muted-stone {
+      background: #b0aea5;
+      color: white;
+    }
+
+    .palette-block--stone-gray {
+      background: #87867f;
+      color: white;
+    }
+
+    .palette-block--olive-gray {
+      background: #5e5d59;
+      color: white;
+    }
+
+    .palette-block--charcoal {
+      background: #4d4c48;
+      color: white;
+    }
+
+    .palette-block--near-black {
+      background: #141413;
+      color: white;
+    }
+
+    .palette-block--terracotta {
+      background: #c96442;
+      color: white;
+    }
+
+    .palette-desc {
+      font-size: 14px;
+      color: var(--olive-gray);
+      line-height: 1.60;
+    }
+
+    /* -- Dark showcase section -- */
+    .dark-showcase {
+      background: var(--near-black);
+      padding: 80px 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dark-showcase::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--terracotta);
+    }
+
+    .dark-showcase-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dark-showcase-glow {
+      position: absolute;
+      top: -50%;
+      right: -12%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(201, 100, 66, 0.08), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dark-showcase-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-stone);
+      margin-bottom: 16px;
+    }
+
+    .dark-showcase-title {
+      font-family: var(--font-serif);
+      font-size: 40px;
+      font-weight: bold;
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      color: var(--ivory);
+      margin-bottom: 16px;
+    }
+
+    .dark-showcase-desc {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--muted-stone);
+      line-height: 1.65;
+      max-width: 560px;
+      margin-bottom: 32px;
+    }
+
+    .dark-palette-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dark-swatch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .dark-swatch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dark-swatch-label {
+      font-family: monospace;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* -- Footer -- */
+    .site-footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-warm);
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--stone-gray);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--stone-gray);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--terracotta);
+    }
+
+    /* -- Animations -- */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    .animate-in--d1 { animation-delay: 0.05s; }
+    .animate-in--d2 { animation-delay: 0.1s; }
+    .animate-in--d3 { animation-delay: 0.15s; }
+    .animate-in--d4 { animation-delay: 0.2s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in {
+        animation: none;
+        opacity: 1;
+      }
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 860px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero h1 {
+        font-size: 42px;
+        letter-spacing: -0.96px;
+      }
+      .cta-title {
+        font-size: 36px;
+        letter-spacing: -0.64px;
+      }
+      .compare-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .hierarchy-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .dark-showcase-title {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+      .palette-block {
+        padding: 20px 8px 16px;
+        min-height: 100px;
+      }
+      .palette-block-name {
+        font-size: 10px;
+      }
+      .palette-block-hex {
+        font-size: 9px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-inner {
+        padding: 0 1.25rem;
+      }
+      .hero {
+        padding: 116px 1.25rem 56px;
+      }
+      .hero h1 {
+        font-size: 34px;
+        letter-spacing: -0.64px;
+      }
+      .hero-tagline {
+        font-size: 16px;
+      }
+      .hero-subtitle {
+        font-size: 16px;
+      }
+      .content-section {
+        padding: 48px 1.25rem;
+      }
+      .section-title {
+        font-size: 26px;
+        letter-spacing: -0.4px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-inner {
+        padding: 60px 1.25rem;
+      }
+      .cta-title {
+        font-size: 30px;
+        letter-spacing: -0.64px;
+      }
+      .cta-desc {
+        font-size: 15px;
+      }
+      .site-footer {
+        padding: 32px 1.25rem;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .section-divider {
+        padding: 0 1.25rem;
+      }
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+      .hierarchy-grid {
+        grid-template-columns: 1fr;
+      }
+      .showcase-section {
+        padding: 48px 1.25rem;
+      }
+      .compare-label {
+        font-size: 19px;
+      }
+      .dark-showcase {
+        padding: 60px 1.25rem;
+      }
+      .dark-showcase-title {
+        font-size: 28px;
+        letter-spacing: -0.4px;
+      }
+      .palette-strip {
+        flex-wrap: wrap;
+      }
+      .palette-block {
+        flex: none;
+        width: calc(20% - 0px);
+        min-height: 80px;
+        padding: 16px 6px 12px;
+      }
+      .palette-block-name {
+        font-size: 9px;
+      }
+      .palette-block-hex {
+        font-size: 8px;
+      }
+      .hierarchy-heading-serif,
+      .hierarchy-heading-sans {
+        font-size: 22px;
+      }
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius-card);
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+      border: 1px solid var(--border-warm);
+      background: var(--ivory);
+      color: var(--charcoal);
+    }
+
+    .design-nav a:hover {
+      background: var(--parchment);
+      border-color: var(--border-cream);
+      color: var(--near-black);
+      box-shadow: rgba(0, 0, 0, 0.04) 0px 2px 8px;
+    }
+
+    .design-nav .nav-dir {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.45;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .design-nav a {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-link" href="/try-awesome-design/">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back
+    </a>
+    <span class="design-badge">Design: Claude</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="logo-mark animate-in">
+    <span class="logo-wordmark">ootob<span class="logo-dot"></span>ai</span>
+  </div>
+  <p class="hero-tagline animate-in animate-in--d1">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+  <h1 class="animate-in animate-in--d2">小專案</h1>
+  <p class="hero-subtitle animate-in animate-in--d3">做著玩的東西，有的有用，有的純粹好玩。</p>
+</header>
+
+<div class="section-divider"><hr></div>
+
+<!-- Tools section -->
+<section class="content-section animate-in animate-in--d3">
+  <div class="section-header">
+    <p class="section-eyebrow">Tools</p>
+    <h2 class="section-title">小工具</h2>
+    <p class="section-subtitle">有的有用，有的純粹好玩。</p>
+  </div>
+
+  <div class="card-grid">
+    <!-- Japanese Quiz -->
+    <a class="card" href="/japanese/quiz.html">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </span>
+      <div class="card-icon card-icon--terracotta">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="card-title">Japanese Quiz</div>
+      <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+      <span class="card-tag">learning</span>
+    </a>
+
+    <!-- Threads to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--stone">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">Threads to Markdown</div>
+      <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+
+    <!-- X Thread to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--stone">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">X Thread to Markdown</div>
+      <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Writing section -->
+<section class="content-section animate-in animate-in--d4">
+  <div class="section-header">
+    <p class="section-eyebrow">Writing</p>
+    <h2 class="section-title">文章</h2>
+    <p class="section-subtitle">思考的紀錄，關於品味、AI、與經驗不可取代的東西。</p>
+  </div>
+
+  <div class="writing-grid">
+    <!-- 品味不可說 -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">品味不可說</div>
+      <div class="writing-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+    </a>
+
+    <!-- Mastery -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+      <div class="writing-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+    </a>
+  </div>
+</section>
+
+<!-- Coffee Chat CTA (dark section) -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="cta-eyebrow">Coffee Chat</p>
+    <h2 class="cta-title">聊一杯咖啡</h2>
+    <p class="cta-desc">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="cta-desc-en">Let me know how I can help you.</p>
+    <a class="cta-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </div>
+</section>
+
+<!-- Claude Design Highlights -->
+<div class="section-divider"><hr></div>
+
+<section class="showcase-section">
+  <div class="showcase-header">
+    <p class="showcase-eyebrow">Design Showcase</p>
+    <h2 class="showcase-title">Claude 設計特色</h2>
+  </div>
+
+  <!-- Warm vs Cool Gray Comparison -->
+  <div class="compare-section">
+    <h3 class="compare-label">Warm vs Cool Gray</h3>
+    <p class="compare-desc">同一張卡片，左邊用 Claude 的暖色調中性色，右邊用典型的冷灰色。暖色系讓閱讀感更親近、更有溫度。</p>
+    <div class="compare-grid">
+      <div>
+        <span class="compare-column-label compare-column-label--warm">Claude Warm</span>
+        <div class="compare-card compare-card--warm">
+          <div class="compare-card-title">暖色調的閱讀體驗</div>
+          <div class="compare-card-text">Parchment 底色搭配 olive gray 文字，像在紙張上閱讀，眼睛更舒服。每個灰色都帶一點黃綠，整體感覺溫潤。</div>
+          <div class="compare-card-swatch">
+            <span class="compare-chip compare-chip--warm">
+              <span class="compare-chip-dot" style="background: #f5f4ed;border:1px solid #e8e6dc;"></span>
+              #f5f4ed
+            </span>
+            <span class="compare-chip compare-chip--warm">
+              <span class="compare-chip-dot" style="background: #5e5d59;"></span>
+              #5e5d59
+            </span>
+            <span class="compare-chip compare-chip--warm">
+              <span class="compare-chip-dot" style="background: #e8e6dc;"></span>
+              #e8e6dc
+            </span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="compare-column-label compare-column-label--cool">Typical Cool</span>
+        <div class="compare-card compare-card--cool">
+          <div class="compare-card-title">冷灰色的標準做法</div>
+          <div class="compare-card-text">Bootstrap 風格的冷灰底色搭配藍灰文字，清楚但偏冷。色調偏藍，是大多數 UI 框架的預設選擇。</div>
+          <div class="compare-card-swatch">
+            <span class="compare-chip compare-chip--cool">
+              <span class="compare-chip-dot" style="background: #f8f9fa;border:1px solid #dee2e6;"></span>
+              #f8f9fa
+            </span>
+            <span class="compare-chip compare-chip--cool">
+              <span class="compare-chip-dot" style="background: #6c757d;"></span>
+              #6c757d
+            </span>
+            <span class="compare-chip compare-chip--cool">
+              <span class="compare-chip-dot" style="background: #dee2e6;"></span>
+              #dee2e6
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Serif/Sans Hierarchy Demo -->
+  <div class="hierarchy-section">
+    <h3 class="compare-label">Serif / Sans Hierarchy</h3>
+    <p class="compare-desc">Claude 用 serif 標題 + sans 內文製造層次感。Serif 傳遞權威與溫暖，Sans 保持正文的清晰可讀。</p>
+    <div class="hierarchy-grid">
+      <div class="hierarchy-card">
+        <span class="hierarchy-label">Serif Heading</span>
+        <div class="hierarchy-heading-serif">品味不是知識，是經驗的沉澱</div>
+        <div class="hierarchy-body">Georgia serif 標題帶來書卷氣與人文感，搭配 system-ui 正文形成清楚的視覺層次。這是 Claude 設計中最核心的排版選擇。</div>
+        <div class="hierarchy-note">Georgia, serif -- font-weight: bold -- line-height: 1.15</div>
+      </div>
+      <div class="hierarchy-card">
+        <span class="hierarchy-label">Sans Heading</span>
+        <div class="hierarchy-heading-sans">品味不是知識，是經驗的沉澱</div>
+        <div class="hierarchy-body">同樣的內容用 system-ui sans-serif 標題，感覺更現代但少了溫度。大多數 SaaS 產品走這條路。</div>
+        <div class="hierarchy-note">system-ui, sans-serif -- font-weight: 600 -- line-height: 1.15</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parchment Palette Swatch Strip -->
+  <div class="palette-section">
+    <h3 class="compare-label">Parchment Palette</h3>
+    <p class="compare-desc" style="margin-bottom: 28px;">Claude 的暖色調光譜，從最亮的 ivory 到最深的 near-black，每個色階都帶一點黃綠的暖意。最後一格是唯一的品牌色 -- terracotta。</p>
+    <div class="palette-strip">
+      <div class="palette-block palette-block--ivory">
+        <span class="palette-block-name">Ivory</span>
+        <span class="palette-block-hex">#faf9f5</span>
+      </div>
+      <div class="palette-block palette-block--parchment">
+        <span class="palette-block-name">Parchment</span>
+        <span class="palette-block-hex">#f5f4ed</span>
+      </div>
+      <div class="palette-block palette-block--border-cream">
+        <span class="palette-block-name">Cream</span>
+        <span class="palette-block-hex">#f0eee6</span>
+      </div>
+      <div class="palette-block palette-block--border-warm">
+        <span class="palette-block-name">Warm</span>
+        <span class="palette-block-hex">#e8e6dc</span>
+      </div>
+      <div class="palette-block palette-block--muted-stone">
+        <span class="palette-block-name">Muted</span>
+        <span class="palette-block-hex">#b0aea5</span>
+      </div>
+      <div class="palette-block palette-block--stone-gray">
+        <span class="palette-block-name">Stone</span>
+        <span class="palette-block-hex">#87867f</span>
+      </div>
+      <div class="palette-block palette-block--olive-gray">
+        <span class="palette-block-name">Olive</span>
+        <span class="palette-block-hex">#5e5d59</span>
+      </div>
+      <div class="palette-block palette-block--charcoal">
+        <span class="palette-block-name">Charcoal</span>
+        <span class="palette-block-hex">#4d4c48</span>
+      </div>
+      <div class="palette-block palette-block--near-black">
+        <span class="palette-block-name">Near Black</span>
+        <span class="palette-block-hex">#141413</span>
+      </div>
+      <div class="palette-block palette-block--terracotta">
+        <span class="palette-block-name">Terracotta</span>
+        <span class="palette-block-hex">#c96442</span>
+      </div>
+    </div>
+    <p class="palette-desc">不用藍、不用純灰 -- 整套色彩都在暖色調裡完成。Terracotta 只用在最重要的 CTA，其他全靠灰階的溫度差異來建立層次。</p>
+  </div>
+</section>
+
+<!-- Dark Showcase Section -->
+<section class="dark-showcase">
+  <div class="dark-showcase-glow"></div>
+  <div class="dark-showcase-inner">
+    <p class="dark-showcase-eyebrow">Dark Section</p>
+    <h2 class="dark-showcase-title">Claude 的深色區塊用 #141413 而不是純黑</h2>
+    <p class="dark-showcase-desc">near-black 帶一點暖意，搭配 ivory (#faf9f5) 標題和 muted stone (#b0aea5) 正文，維持整體的溫潤感。即使在深色背景上，也不會有冷冰冰的科技感。</p>
+    <div class="dark-palette-row">
+      <div class="dark-swatch">
+        <span class="dark-swatch-dot" style="background: #141413;border:1px solid rgba(255,255,255,0.2);"></span>
+        <span class="dark-swatch-label">#141413 bg</span>
+      </div>
+      <div class="dark-swatch">
+        <span class="dark-swatch-dot" style="background: #faf9f5;"></span>
+        <span class="dark-swatch-label">#faf9f5 heading</span>
+      </div>
+      <div class="dark-swatch">
+        <span class="dark-swatch-dot" style="background: #b0aea5;"></span>
+        <span class="dark-swatch-label">#b0aea5 body</span>
+      </div>
+      <div class="dark-swatch">
+        <span class="dark-swatch-dot" style="background: #c96442;"></span>
+        <span class="dark-swatch-label">#c96442 accent</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 ootob.ai</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="https://open.substack.com/pub/ootobai" target="_blank" rel="noopener">Substack</a>
+  </div>
+</footer>
+
+<!-- Prev / Next Navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/apple/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Apple</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/notion/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Notion</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

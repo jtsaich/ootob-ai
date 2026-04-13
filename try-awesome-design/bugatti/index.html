@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Bugatti Edition</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400&family=Inter:wght@400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --silver: #999999;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      color: var(--white);
+      background: var(--black);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* --- Display Type: Big Shoulders Display --- */
+    .display {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 1.0;
+    }
+
+    /* --- Mono UI: Space Mono --- */
+    .mono {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    /* --- Top Navigation Bar --- */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .top-bar .back-link {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .top-bar .back-link:hover {
+      color: var(--white);
+    }
+
+    .design-badge {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0;
+      padding: 4px 10px;
+    }
+
+    /* --- Hero Section --- */
+    .hero {
+      background: var(--black);
+      color: var(--white);
+      padding: 160px 32px 100px;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 64px;
+    }
+
+    .hero h1 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(80px, 12vw, 200px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      letter-spacing: -2px;
+      margin-bottom: 48px;
+      max-width: 900px;
+    }
+
+    .hero-tagline {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--silver);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* --- Section Spacing --- */
+    .section-tools {
+      background: var(--black);
+      color: var(--white);
+      padding: 64px 32px;
+    }
+
+    .section-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 48px;
+    }
+
+    .section-desc {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--silver);
+      margin-bottom: 48px;
+      margin-top: -32px;
+    }
+
+    /* --- Tool Items --- */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .tool-item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      transition: none;
+    }
+
+    .tool-item:first-child {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tool-item-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .tool-item-content {
+      flex: 1;
+    }
+
+    .tool-item-name {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--white);
+      transition: color 0.2s ease;
+    }
+
+    .tool-item-desc {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--silver);
+      line-height: 1.7;
+    }
+
+    .tool-item-arrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      color: var(--silver);
+      flex-shrink: 0;
+      margin-top: 8px;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .tool-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-top: 12px;
+    }
+
+    .tool-item--coming-soon {
+      cursor: default;
+    }
+
+    .tool-item--coming-soon .tool-item-name {
+      color: var(--silver);
+    }
+
+    .tool-item--coming-soon .tool-item-desc {
+      color: rgba(153, 153, 153, 0.5);
+    }
+
+    .tool-item--coming-soon .tool-tag {
+      color: rgba(153, 153, 153, 0.5);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      a.tool-item:hover .tool-item-name {
+        color: var(--silver);
+      }
+      a.tool-item:hover .tool-item-arrow {
+        transform: translateX(4px);
+        color: var(--white);
+      }
+      .tool-item--coming-soon:hover .tool-item-name {
+        color: var(--silver) !important;
+      }
+    }
+
+    /* --- Writing Section --- */
+    .section-writing {
+      background: var(--black);
+      color: var(--white);
+      padding: 64px 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .writing-item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .writing-item:first-of-type {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .writing-item-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .writing-item-content {
+      flex: 1;
+    }
+
+    .writing-item-name {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--white);
+      transition: color 0.2s ease;
+    }
+
+    .writing-item-desc {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--silver);
+      line-height: 1.7;
+    }
+
+    .writing-item-arrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      color: var(--silver);
+      flex-shrink: 0;
+      margin-top: 8px;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .writing-item:hover .writing-item-name {
+        color: var(--silver);
+      }
+      .writing-item:hover .writing-item-arrow {
+        transform: translateX(4px);
+        color: var(--white);
+      }
+    }
+
+    /* --- Coffee Chat Section --- */
+    .section-coffee {
+      background: var(--black);
+      color: var(--white);
+      padding: 64px 32px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .coffee-headline {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .coffee-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--silver);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 12px;
+    }
+
+    .coffee-body-en {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: rgba(153, 153, 153, 0.6);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 48px;
+    }
+
+    /* --- Pill Button (Primary CTA) --- */
+    .btn-pill {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 12px 24px;
+      border: 1px solid var(--white);
+      border-radius: 9999px;
+      transition: background 0.2s ease, color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-pill:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* --- Secondary Button --- */
+    .btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--silver);
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 12px 24px;
+      border: 1px solid var(--silver);
+      border-radius: 6px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      color: var(--white);
+      border-color: var(--white);
+    }
+
+    /* --- Footer --- */
+    .site-footer {
+      background: var(--black);
+      color: var(--silver);
+      padding: 48px 32px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .footer-text {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    /* --- Thin Divider --- */
+    .section-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--silver);
+      margin: 0 auto 48px;
+      opacity: 0.3;
+    }
+
+    /* --- Page Load Animation --- */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero { animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+    .section-tools { animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both; }
+    .section-writing { animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both; }
+    .section-coffee { animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both; }
+    .site-footer { animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.25s both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero, .section-tools, .section-writing, .section-coffee, .site-footer {
+        animation: none;
+      }
+    }
+
+    /* ============================================
+       SHOWCASE SECTIONS
+       ============================================ */
+
+    .showcase-header {
+      background: var(--black);
+      color: var(--white);
+      padding: 64px 32px 48px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .showcase-header h2 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .showcase-header p {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+
+    .showcase-section-label {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 48px;
+      color: var(--silver);
+    }
+
+    /* --- 1. Monumental Scale --- */
+    .showcase-scale {
+      background: var(--black);
+      padding: 64px 32px;
+    }
+
+    .scale-demo {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .scale-48 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: 48px;
+      line-height: 1.0;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 32px;
+    }
+
+    .scale-120 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(80px, 10vw, 120px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+
+    .scale-200 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(120px, 16vw, 220px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 48px;
+    }
+
+    .scale-caption {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* --- 2. Three Colors Only --- */
+    .showcase-colors {
+      background: var(--black);
+      padding: 64px 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .color-swatches {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      max-width: 600px;
+      margin: 0 auto 48px;
+    }
+
+    .color-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .swatch-block {
+      width: 120px;
+      height: 120px;
+      border-radius: 0;
+    }
+
+    .swatch-block--black {
+      background: var(--black);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .swatch-block--white {
+      background: var(--white);
+    }
+
+    .swatch-block--silver {
+      background: var(--silver);
+    }
+
+    .swatch-label {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+
+    .color-caption {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-align: center;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* --- 3. Three Radii --- */
+    .showcase-radii {
+      background: var(--black);
+      padding: 64px 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .radii-row {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      max-width: 700px;
+      margin: 0 auto 48px;
+    }
+
+    .radii-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .radii-box {
+      width: 120px;
+      height: 64px;
+      border: 1px solid var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radii-box--0 { border-radius: 0; }
+    .radii-box--6 { border-radius: 6px; }
+    .radii-box--pill { border-radius: 9999px; }
+
+    .radii-box span {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .radii-label {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+
+    .radii-caption {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* --- 4. Silent Chrome --- */
+    .showcase-silent {
+      background: var(--black);
+      padding: 120px 32px;
+      text-align: center;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .silent-headline {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 400;
+      font-size: clamp(80px, 12vw, 180px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 64px;
+    }
+
+    .silent-btn {
+      display: inline-block;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.25);
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      cursor: default;
+    }
+
+    /* ============================================
+       PREV / NEXT NAVIGATION
+       ============================================ */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: border-color 0.2s ease, color 0.2s ease;
+      border: 1px solid var(--silver);
+      background: transparent;
+      color: var(--silver);
+    }
+
+    .design-nav a:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    .design-nav .nav-dir {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      opacity: 0.45;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 640px) {
+      .top-bar {
+        padding: 14px 20px;
+      }
+
+      .hero {
+        padding: 140px 20px 80px;
+      }
+
+      .hero-logo {
+        margin-bottom: 48px;
+      }
+
+      .section-tools,
+      .section-writing,
+      .section-coffee {
+        padding: 48px 20px;
+      }
+
+      .tool-item,
+      .writing-item {
+        padding: 24px 0;
+      }
+
+      .tool-item-name,
+      .writing-item-name {
+        font-size: 28px;
+      }
+
+      .site-footer {
+        padding: 32px 20px;
+      }
+
+      .showcase-header,
+      .showcase-scale,
+      .showcase-colors,
+      .showcase-radii,
+      .showcase-silent {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .swatch-block {
+        width: 80px;
+        height: 80px;
+      }
+
+      .radii-row {
+        gap: 24px;
+      }
+
+      .radii-box {
+        width: 100px;
+        height: 56px;
+      }
+
+      .showcase-silent {
+        padding-top: 80px;
+        padding-bottom: 80px;
+        min-height: 60vh;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .design-nav a {
+        padding: 8px 14px;
+        font-size: 12px;
+      }
+
+      .color-swatches {
+        gap: 16px;
+      }
+
+      .swatch-block {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .hero h1 {
+        font-size: 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<nav class="top-bar">
+  <a href="/try-awesome-design/" class="back-link">&larr; BACK</a>
+  <span class="design-badge">Design: Bugatti</span>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <p class="hero-logo">ootob.ai</p>
+  <h1>小專案</h1>
+  <p class="hero-tagline">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+</section>
+
+<!-- Tools Section -->
+<section class="section-tools">
+  <div class="section-inner">
+    <p class="section-label">Tools</p>
+    <p class="section-desc">做著玩的東西，有的有用，有的純粹好玩。</p>
+
+    <div class="tool-grid">
+      <a href="/japanese/quiz.html" class="tool-item">
+        <div class="tool-item-inner">
+          <div class="tool-item-content">
+            <div class="tool-item-name">Japanese Quiz</div>
+            <div class="tool-item-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+            <span class="tool-tag">learning</span>
+          </div>
+          <span class="tool-item-arrow">&rarr;</span>
+        </div>
+      </a>
+
+      <div class="tool-item tool-item--coming-soon">
+        <div class="tool-item-inner">
+          <div class="tool-item-content">
+            <div class="tool-item-name">Threads to Markdown</div>
+            <div class="tool-item-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+            <span class="tool-tag">coming soon</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-item tool-item--coming-soon">
+        <div class="tool-item-inner">
+          <div class="tool-item-content">
+            <div class="tool-item-name">X Thread to Markdown</div>
+            <div class="tool-item-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+            <span class="tool-tag">coming soon</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Writing Section -->
+<section class="section-writing">
+  <div class="section-inner">
+    <p class="section-label">Writing</p>
+
+    <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener" class="writing-item">
+      <div class="writing-item-inner">
+        <div class="writing-item-content">
+          <div class="writing-item-name">品味不可說</div>
+          <div class="writing-item-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+        </div>
+        <span class="writing-item-arrow">&rarr;</span>
+      </div>
+    </a>
+
+    <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener" class="writing-item">
+      <div class="writing-item-inner">
+        <div class="writing-item-content">
+          <div class="writing-item-name">當知識變成免費的，Mastery 還剩下什麼？</div>
+          <div class="writing-item-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+        </div>
+        <span class="writing-item-arrow">&rarr;</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Coffee Chat Section -->
+<section class="section-coffee">
+  <div class="section-inner">
+    <p class="section-label" style="margin-bottom: 24px;">Coffee Chat</p>
+    <div class="section-divider"></div>
+    <p class="coffee-body">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="coffee-body-en">Let me know how I can help you.</p>
+    <a class="btn-pill" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 COFFEE CHAT</a>
+  </div>
+</section>
+
+<!-- ============================================
+     SHOWCASE: BUGATTI 設計特色
+     ============================================ -->
+
+<!-- Showcase Header -->
+<section class="showcase-header">
+  <h2>Bugatti 設計特色</h2>
+  <p>Bugatti Design Highlights</p>
+</section>
+
+<!-- 1. Monumental Scale -->
+<section class="showcase-scale">
+  <div class="section-inner" style="max-width: 900px;">
+    <p class="showcase-section-label">Monumental Scale</p>
+    <div class="scale-demo">
+      <div class="scale-48">Scale</div>
+      <div class="scale-120">Scale</div>
+      <div class="scale-200">Scale</div>
+      <p class="scale-caption">Hierarchy through size alone. No bold. No color. Same weight, three sizes. The eye knows exactly where to look.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Three Colors Only -->
+<section class="showcase-colors">
+  <div class="section-inner">
+    <p class="showcase-section-label">Three Colors Only</p>
+    <div class="color-swatches">
+      <div class="color-swatch">
+        <div class="swatch-block swatch-block--black"></div>
+        <span class="swatch-label">#000000</span>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block swatch-block--white"></div>
+        <span class="swatch-label">#FFFFFF</span>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block swatch-block--silver"></div>
+        <span class="swatch-label">#999999</span>
+      </div>
+    </div>
+    <p class="color-caption">The entire palette.</p>
+  </div>
+</section>
+
+<!-- 3. Three Radii -->
+<section class="showcase-radii">
+  <div class="section-inner">
+    <p class="showcase-section-label">Three Radii</p>
+    <div class="radii-row">
+      <div class="radii-item">
+        <div class="radii-box radii-box--0"><span>0PX</span></div>
+        <span class="radii-label">Sharp</span>
+      </div>
+      <div class="radii-item">
+        <div class="radii-box radii-box--6"><span>6PX</span></div>
+        <span class="radii-label">Subtle</span>
+      </div>
+      <div class="radii-item">
+        <div class="radii-box radii-box--pill"><span>9999PX</span></div>
+        <span class="radii-label">Pill</span>
+      </div>
+    </div>
+    <p class="radii-caption">The complete radius system. Three values. No exceptions.</p>
+  </div>
+</section>
+
+<!-- 4. Silent Chrome -->
+<section class="showcase-silent">
+  <p class="showcase-section-label">Silent Chrome</p>
+  <div class="silent-headline">Silence</div>
+  <span class="silent-btn">Disappear</span>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p class="footer-text">&copy; 2026 ootob.ai</p>
+</footer>
+
+<!-- Prev / Next Navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/wired/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">WIRED</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/playstation/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">PlayStation</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+</body>
+</html>

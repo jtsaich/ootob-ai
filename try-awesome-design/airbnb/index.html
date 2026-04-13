@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Airbnb Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --text-primary: #222222;
+      --text-secondary: #6a6a6a;
+      --text-tertiary: #999999;
+      --rausch: #ff385c;
+      --rausch-hover: #e31c5f;
+      --rausch-light: rgba(255, 56, 92, 0.08);
+      --border: #dddddd;
+      --border-light: #ebebeb;
+      --bg-hover: #f7f7f7;
+      --shadow-card:
+        rgba(0,0,0,0.02) 0px 0px 0px 1px,
+        rgba(0,0,0,0.04) 0px 2px 6px,
+        rgba(0,0,0,0.1) 0px 4px 8px;
+      --shadow-card-hover:
+        rgba(0,0,0,0.04) 0px 0px 0px 1px,
+        rgba(0,0,0,0.06) 0px 4px 12px,
+        rgba(0,0,0,0.14) 0px 8px 16px;
+      --radius-btn: 8px;
+      --radius-card: 20px;
+      --radius-pill: 50px;
+      --max-w: 720px;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      font-family: 'Nunito', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-primary);
+      background: var(--bg);
+      line-height: 1.6;
+      font-size: 14px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--rausch);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .design-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.18px;
+      color: var(--text-secondary);
+      background: var(--bg-hover);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+    }
+
+    .design-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--rausch);
+    }
+
+    /* ── Layout ── */
+    .page-wrapper {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      padding-top: 96px;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      margin-bottom: 48px;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.44px;
+      color: var(--rausch);
+      text-decoration: none;
+    }
+
+    .site-origin {
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── Hero / H1 ── */
+    .hero-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.44px;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border-light);
+      margin-bottom: 40px;
+    }
+
+    /* ── Section labels (category pill bar) ── */
+    .section-label {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.18px;
+      color: var(--text-primary);
+      background: var(--bg);
+      border: 2px solid var(--text-primary);
+      border-radius: var(--radius-pill);
+      padding: 6px 18px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Card list ── */
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .card-list li {
+      background: var(--bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .card-list li:not(.card-disabled):hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-list a {
+      display: block;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card-list .card-disabled {
+      cursor: default;
+      opacity: 0.55;
+    }
+
+    .card-list .card-disabled > div {
+      padding: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .card-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.18px;
+    }
+
+    .card-disabled .card-name {
+      color: var(--text-tertiary);
+    }
+
+    .card-arrow {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-tertiary);
+      stroke-width: 2;
+      fill: none;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card-list li:not(.card-disabled):hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .card-disabled .card-desc {
+      color: var(--text-tertiary);
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      background: var(--bg-hover);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-pill);
+      padding: 3px 12px;
+    }
+
+    .card-tag--active {
+      color: var(--rausch);
+      background: var(--rausch-light);
+      border-color: transparent;
+    }
+
+    /* ── Coffee section ── */
+    .coffee-section {
+      margin-top: 8px;
+      margin-bottom: 56px;
+      padding: 48px 40px;
+      background: var(--bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      text-align: center;
+    }
+
+    .coffee-section .section-label {
+      margin-bottom: 20px;
+    }
+
+    .coffee-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    .coffee-text-en {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .coffee-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      font-family: 'Nunito', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      background: var(--rausch);
+      border: none;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+      cursor: pointer;
+    }
+
+    .coffee-btn:hover {
+      background: var(--rausch-hover);
+    }
+
+    .coffee-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--border-light);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .site-header { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+    .hero-title { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+    .hero-subtitle { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.14s both; }
+    .section-tools { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both; }
+    .section-writing { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both; }
+    .coffee-section { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both; }
+    .site-footer { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .hero-title,
+      .hero-subtitle,
+      .section-tools,
+      .section-writing,
+      .coffee-section,
+      .site-footer,
+      .showcase-section {
+        animation: none;
+      }
+      .card-list li { transition: none; }
+      .card-arrow { transition: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .page-wrapper {
+        padding: 0 16px;
+        padding-top: 80px;
+      }
+
+      .top-bar { padding: 0 16px; }
+      .site-header { margin-bottom: 36px; }
+
+      .hero-title {
+        font-size: 24px;
+        letter-spacing: -0.36px;
+      }
+
+      .hero-subtitle {
+        font-size: 15px;
+        margin-bottom: 32px;
+      }
+
+      .divider { margin-bottom: 32px; }
+
+      .card-list a,
+      .card-list .card-disabled > div {
+        padding: 20px;
+      }
+
+      .card-list { margin-bottom: 36px; }
+      .coffee-section { padding: 32px 20px; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title {
+        font-size: 22px;
+        letter-spacing: -0.28px;
+      }
+      .coffee-section { padding: 28px 16px; }
+    }
+
+    /* ══════════════════════════════════════
+       SHOWCASE: Airbnb 設計特色
+       ══════════════════════════════════════ */
+    .showcase-section {
+      margin-bottom: 56px;
+      animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+    }
+
+    .showcase-heading {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.44px;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .showcase-intro {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .showcase-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin-bottom: 36px;
+    }
+
+    .showcase-item-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.18px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .showcase-item-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* ── Three-Layer Shadow Demo ── */
+    .shadow-demo {
+      margin-bottom: 48px;
+    }
+
+    .shadow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .shadow-card {
+      background: var(--bg);
+      border-radius: var(--radius-card);
+      padding: 28px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 150px;
+      transition: transform 0.2s ease;
+    }
+
+    .shadow-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .shadow-1 {
+      box-shadow: rgba(0,0,0,0.02) 0px 0px 0px 1px;
+    }
+
+    .shadow-2 {
+      box-shadow: rgba(0,0,0,0.04) 0px 2px 6px;
+    }
+
+    .shadow-3 {
+      box-shadow: rgba(0,0,0,0.1) 0px 4px 8px;
+    }
+
+    .shadow-combined {
+      box-shadow: var(--shadow-card);
+    }
+
+    .shadow-level {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.44px;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .shadow-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.18px;
+      margin-bottom: 4px;
+    }
+
+    .shadow-value {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      word-break: break-all;
+      line-height: 1.4;
+      padding: 0 4px;
+    }
+
+    /* ── Rausch Red Restraint ── */
+    .rausch-demo {
+      margin-bottom: 48px;
+    }
+
+    .listing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .listing-card {
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .listing-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--border-light);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .listing-img-inner {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      border-radius: 14px;
+    }
+
+    .listing-img-1 {
+      background: linear-gradient(135deg, #e8d5b7 0%, #c4a882 50%, #a88c6a 100%);
+    }
+    .listing-img-2 {
+      background: linear-gradient(135deg, #b5c7d3 0%, #8aa5b8 50%, #6d8fa6 100%);
+    }
+    .listing-img-3 {
+      background: linear-gradient(135deg, #c5d5c0 0%, #9bb893 50%, #7da074 100%);
+    }
+
+    .listing-heart {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .listing-heart svg {
+      width: 22px;
+      height: 22px;
+      fill: rgba(0, 0, 0, 0.5);
+      stroke: #ffffff;
+      stroke-width: 1.5;
+    }
+
+    .listing-info {
+      padding: 10px 2px;
+    }
+
+    .listing-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.18px;
+      margin-bottom: 2px;
+    }
+
+    .listing-meta {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+
+    .listing-price {
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .listing-price strong {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .rausch-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px 10px 20px;
+      background: var(--bg);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+    }
+
+    .rausch-search-bar .search-text {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.18px;
+    }
+
+    .rausch-search-bar .search-text span {
+      font-weight: 400;
+      color: var(--text-secondary);
+      padding-left: 4px;
+    }
+
+    .rausch-search-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--rausch);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .rausch-search-btn:hover {
+      background: var(--rausch-hover);
+    }
+
+    .rausch-search-btn:active {
+      transform: scale(0.95);
+    }
+
+    .rausch-search-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .rausch-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-style: italic;
+      padding: 8px 0;
+    }
+
+    /* ── Radius Gallery ── */
+    .radius-demo {
+      margin-bottom: 16px;
+    }
+
+    .radius-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .radius-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 130px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .radius-card:hover {
+      border-color: var(--rausch);
+      transform: translateY(-2px);
+    }
+
+    .radius-shape {
+      width: 56px;
+      height: 56px;
+      background: var(--rausch-light);
+      border: 2px solid var(--rausch);
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    .r-8 .radius-shape { border-radius: 8px; }
+    .r-14 .radius-shape { border-radius: 14px; }
+    .r-20 .radius-shape { border-radius: 20px; }
+    .r-32 .radius-shape { border-radius: 32px; }
+    .r-50 .radius-shape { border-radius: 50%; }
+
+    .r-8 { border-radius: 8px; }
+    .r-14 { border-radius: 14px; }
+    .r-20 { border-radius: 20px; }
+    .r-32 { border-radius: 32px; }
+    .r-50 { border-radius: 50px; }
+
+    .radius-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.18px;
+      margin-bottom: 2px;
+    }
+
+    .radius-use {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+    }
+
+    @media (max-width: 640px) {
+      .showcase-heading {
+        font-size: 24px;
+        letter-spacing: -0.36px;
+      }
+
+      .shadow-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .listing-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+      }
+
+      .radius-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 400px) {
+      .shadow-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .radius-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .showcase-heading {
+        font-size: 22px;
+        letter-spacing: -0.28px;
+      }
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+    }
+
+    .design-nav a:hover {
+      background: var(--bg-hover);
+      box-shadow: var(--shadow-card);
+    }
+
+    .design-nav .nav-dir {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-tertiary);
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+      letter-spacing: -0.18px;
+    }
+
+    .design-nav .nav-prev { text-align: left; }
+    .design-nav .nav-next { text-align: right; margin-left: auto; }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .design-nav a {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <a href="/try-awesome-design/" class="back-link">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    Back
+  </a>
+  <span class="design-badge">
+    <span class="dot"></span>
+    Design: Airbnb
+  </span>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="site-header">
+    <a class="logo" href="/">ootob.ai</a>
+    <p class="site-origin">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <h1 class="hero-title">小專案</h1>
+    <p class="hero-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+
+    <div class="divider"></div>
+
+    <!-- Tools -->
+    <div class="section-tools">
+      <span class="section-label">Tools</span>
+      <ul class="card-list">
+        <li>
+          <a href="/japanese/quiz.html">
+            <div class="card-header">
+              <span class="card-name">Japanese Quiz</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+            <span class="card-tag card-tag--active">learning</span>
+          </a>
+        </li>
+        <li class="card-disabled">
+          <div>
+            <div class="card-header">
+              <span class="card-name">Threads to Markdown</span>
+            </div>
+            <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+            <span class="card-tag">coming soon</span>
+          </div>
+        </li>
+        <li class="card-disabled">
+          <div>
+            <div class="card-header">
+              <span class="card-name">X Thread to Markdown</span>
+            </div>
+            <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+            <span class="card-tag">coming soon</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Writing -->
+    <div class="section-writing">
+      <span class="section-label">Writing</span>
+      <ul class="card-list">
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <div class="card-header">
+              <span class="card-name">品味不可說</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+          </a>
+        </li>
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <div class="card-header">
+              <span class="card-name">當知識變成免費的，Mastery 還剩下什麼？</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- Coffee Chat -->
+  <section class="coffee-section">
+    <span class="section-label">Coffee Chat</span>
+    <p class="coffee-text">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="coffee-text-en">Let me know how I can help you.</p>
+    <a class="coffee-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       Showcase: Airbnb 設計特色
+       ══════════════════════════════════════ -->
+  <section class="showcase-section">
+    <h2 class="showcase-heading">Airbnb 設計特色</h2>
+    <p class="showcase-intro">Airbnb 的設計以溫暖、圓潤、克制的紅色聞名。以下用三個互動展示，拆解其最具辨識度的視覺語言。</p>
+
+    <div class="showcase-divider"></div>
+
+    <!-- 1. Three-Layer Shadow -->
+    <div class="shadow-demo">
+      <p class="showcase-item-label">Three-Layer Shadow</p>
+      <p class="showcase-item-desc">Airbnb 的卡片陰影由三層組成：第一層 1px 實線邊框感、第二層柔和擴散、第三層深度錨定。分開看各自微弱，合起來卻讓卡片自然浮起。</p>
+
+      <div class="shadow-grid">
+        <div class="shadow-card shadow-1">
+          <div class="shadow-level">1</div>
+          <div class="shadow-label">Border</div>
+          <div class="shadow-value">0 0 0 1px<br>rgba(0,0,0,0.02)</div>
+        </div>
+        <div class="shadow-card shadow-2">
+          <div class="shadow-level">2</div>
+          <div class="shadow-label">Diffuse</div>
+          <div class="shadow-value">0 2px 6px<br>rgba(0,0,0,0.04)</div>
+        </div>
+        <div class="shadow-card shadow-3">
+          <div class="shadow-level">3</div>
+          <div class="shadow-label">Anchor</div>
+          <div class="shadow-value">0 4px 8px<br>rgba(0,0,0,0.1)</div>
+        </div>
+        <div class="shadow-card shadow-combined">
+          <div class="shadow-level" style="color: var(--rausch);">All</div>
+          <div class="shadow-label">Combined</div>
+          <div class="shadow-value">三層疊加</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Rausch Red Restraint -->
+    <div class="rausch-demo">
+      <p class="showcase-item-label">Rausch Red Restraint</p>
+      <p class="showcase-item-desc">Rausch Red (#ff385c) 得名於 Airbnb 舊金山總部所在的 Rausch Street。在整個介面中，這個紅色只出現在搜尋按鈕和 CTA — 越少用，越有力。</p>
+
+      <!-- Mock search bar -->
+      <div class="rausch-search-bar">
+        <div class="search-text">
+          台北<span>&middot; 任何日期 &middot; 任何人數</span>
+        </div>
+        <button class="rausch-search-btn" aria-label="搜尋">
+          <svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4"/></svg>
+        </button>
+      </div>
+
+      <!-- Mock listings (no red anywhere) -->
+      <div class="listing-grid">
+        <div class="listing-card">
+          <div class="listing-img">
+            <div class="listing-img-inner listing-img-1"></div>
+            <div class="listing-heart">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          </div>
+          <div class="listing-info">
+            <div class="listing-title">大安森林公園旁小屋</div>
+            <div class="listing-meta">整套公寓 &middot; 2 位</div>
+            <div class="listing-price"><strong>$2,800</strong> / 晚</div>
+          </div>
+        </div>
+        <div class="listing-card">
+          <div class="listing-img">
+            <div class="listing-img-inner listing-img-2"></div>
+            <div class="listing-heart">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          </div>
+          <div class="listing-info">
+            <div class="listing-title">信義區景觀套房</div>
+            <div class="listing-meta">獨立房間 &middot; 1 位</div>
+            <div class="listing-price"><strong>$1,950</strong> / 晚</div>
+          </div>
+        </div>
+        <div class="listing-card">
+          <div class="listing-img">
+            <div class="listing-img-inner listing-img-3"></div>
+            <div class="listing-heart">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          </div>
+          <div class="listing-info">
+            <div class="listing-title">北投溫泉旅宿</div>
+            <div class="listing-meta">整套公寓 &middot; 4 位</div>
+            <div class="listing-price"><strong>$4,200</strong> / 晚</div>
+          </div>
+        </div>
+      </div>
+      <p class="rausch-note">整個列表區域沒有任何紅色 — 只有搜尋按鈕和 CTA 使用 Rausch Red</p>
+    </div>
+
+    <!-- 3. Radius Gallery -->
+    <div class="radius-demo">
+      <p class="showcase-item-label">Radius Gallery</p>
+      <p class="showcase-item-desc">Airbnb 大量使用圓角，從按鈕的 8px 到卡片的 20px 再到控制項的 50%，營造溫暖、友善的視覺感。</p>
+
+      <div class="radius-grid">
+        <div class="radius-card r-8">
+          <div class="radius-shape"></div>
+          <div class="radius-label">8px</div>
+          <div class="radius-use">Buttons</div>
+        </div>
+        <div class="radius-card r-14">
+          <div class="radius-shape"></div>
+          <div class="radius-label">14px</div>
+          <div class="radius-use">Images</div>
+        </div>
+        <div class="radius-card r-20">
+          <div class="radius-shape"></div>
+          <div class="radius-label">20px</div>
+          <div class="radius-use">Cards</div>
+        </div>
+        <div class="radius-card r-32">
+          <div class="radius-shape"></div>
+          <div class="radius-label">32px</div>
+          <div class="radius-use">Panels</div>
+        </div>
+        <div class="radius-card r-50">
+          <div class="radius-shape"></div>
+          <div class="radius-label">50%</div>
+          <div class="radius-use">Controls</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 ootob.ai</p>
+  </footer>
+
+</div>
+
+<!-- Prev / Next navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/notion/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Notion</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/cursor/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Cursor</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

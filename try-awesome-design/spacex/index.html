@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — SpaceX Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --spectral-white: #f0f0fa;
+      --spectral-dim: rgba(240, 240, 250, 0.55);
+      --spectral-ghost: rgba(240, 240, 250, 0.35);
+      --spectral-faint: rgba(240, 240, 250, 0.1);
+      --font: 'Exo 2', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--black);
+      color: var(--spectral-white);
+      text-transform: uppercase;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ── Starfield background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background:
+        radial-gradient(1px 1px at 10% 15%, rgba(240,240,250,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 35%, rgba(240,240,250,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 10%, rgba(240,240,250,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 50%, rgba(240,240,250,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 20%, rgba(240,240,250,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 45%, rgba(240,240,250,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 70%, rgba(240,240,250,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 85%, rgba(240,240,250,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 75%, rgba(240,240,250,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 90%, rgba(240,240,250,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 65%, rgba(240,240,250,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 80%, rgba(240,240,250,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 50%, rgba(240,240,250,0.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 48% 30%, rgba(240,240,250,0.45) 0%, transparent 100%),
+        radial-gradient(1px 1px at 73% 55%, rgba(240,240,250,0.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 20% 25%, rgba(240,240,250,0.8) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 60% 70%, rgba(240,240,250,0.7) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 35% 60%, rgba(240,240,250,0.5) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 88% 15%, rgba(240,240,250,0.4) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 45% 95%, rgba(240,240,250,0.5) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 12% 40%, rgba(240,240,250,0.3) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 78% 38%, rgba(240,240,250,0.4) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 95% 55%, rgba(240,240,250,0.35) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 3% 88%, rgba(240,240,250,0.45) 0%, transparent 100%),
+        radial-gradient(0.5px 0.5px at 58% 12%, rgba(240,240,250,0.3) 0%, transparent 100%);
+    }
+
+    /* ── Second starfield layer, offset ── */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(240,240,250,0.02) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(240,240,250,0.015) 0%, transparent 50%);
+    }
+
+    /* ── Typography ── */
+    a {
+      color: var(--spectral-white);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    /* ── Top Navigation ── */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    .back-link {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.17px;
+      line-height: 1;
+      color: var(--spectral-dim);
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: var(--spectral-white);
+    }
+
+    .design-badge {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      color: var(--spectral-ghost);
+      line-height: 1;
+    }
+
+    /* ── Section base ── */
+    .section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 40px;
+      position: relative;
+      scroll-snap-align: start;
+    }
+
+    /* ── Hero section ── */
+    .section--hero {
+      background:
+        radial-gradient(ellipse at 50% 100%, rgba(20, 20, 40, 0.4) 0%, transparent 70%),
+        radial-gradient(ellipse at 50% 0%, rgba(10, 10, 25, 0.3) 0%, transparent 60%);
+    }
+
+    .hero-logo {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--spectral-dim);
+      margin-bottom: 48px;
+    }
+
+    .hero-tagline {
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1.6;
+      color: var(--spectral-dim);
+      max-width: 680px;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scroll-indicator span {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      color: var(--spectral-ghost);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--spectral-ghost), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ── Projects section ── */
+    .section--projects {
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(15, 15, 30, 0.3) 0%, transparent 60%);
+    }
+
+    .section-heading {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 0.96px;
+      line-height: 0.94;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1;
+      color: var(--spectral-dim);
+      margin-bottom: 80px;
+    }
+
+    .category-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--spectral-ghost);
+      margin-bottom: 48px;
+    }
+
+    .project-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .project-item {
+      text-align: center;
+    }
+
+    .project-item a {
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    .project-item a:hover {
+      opacity: 0.7;
+    }
+
+    .project-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.96px;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .project-description {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1.5;
+      color: var(--spectral-dim);
+      margin-bottom: 12px;
+    }
+
+    .project-status {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--spectral-ghost);
+    }
+
+    .project-item--disabled {
+      opacity: 0.35;
+    }
+
+    .project-item--disabled .project-title {
+      font-weight: 400;
+    }
+
+    .project-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--spectral-ghost);
+      margin: 0 auto;
+    }
+
+    /* ── Writing section ── */
+    .section--writing {
+      background:
+        radial-gradient(ellipse at 70% 40%, rgba(15, 15, 30, 0.3) 0%, transparent 60%);
+    }
+
+    .writing-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .writing-item a {
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    .writing-item a:hover {
+      opacity: 0.7;
+    }
+
+    .writing-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.96px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .writing-description {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1.6;
+      color: var(--spectral-dim);
+    }
+
+    /* ── Coffee Chat section ── */
+    .section--coffee {
+      background:
+        radial-gradient(ellipse at 50% 60%, rgba(15, 15, 35, 0.3) 0%, transparent 60%);
+    }
+
+    .coffee-text {
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1.6;
+      color: var(--spectral-dim);
+      max-width: 520px;
+      margin-bottom: 12px;
+    }
+
+    .coffee-text-en {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1;
+      color: var(--spectral-ghost);
+      margin-bottom: 48px;
+    }
+
+    /* ── Ghost button ── */
+    .ghost-btn {
+      display: inline-block;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--spectral-white);
+      background: var(--spectral-faint);
+      border: 1px solid var(--spectral-ghost);
+      border-radius: 32px;
+      padding: 18px 40px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .ghost-btn:hover {
+      background: rgba(240, 240, 250, 0.18);
+      border-color: rgba(240, 240, 250, 0.55);
+    }
+
+    /* ── Footer section ── */
+    .section--footer {
+      min-height: auto;
+      padding: 60px 40px;
+      justify-content: flex-end;
+    }
+
+    .footer-text {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      color: var(--spectral-ghost);
+      line-height: 1;
+    }
+
+    /* ── Fade-in animation ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .top-nav {
+        padding: 16px 24px;
+      }
+
+      .section {
+        padding: 80px 24px;
+      }
+
+      .section-heading {
+        font-size: 32px;
+      }
+
+      .hero-tagline {
+        font-size: 14px;
+      }
+
+      .writing-title {
+        font-size: 18px;
+      }
+
+      .project-title {
+        font-size: 17px;
+      }
+
+      .ghost-btn {
+        padding: 16px 32px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .top-nav {
+        padding: 14px 18px;
+      }
+
+      .section {
+        padding: 60px 18px;
+        min-height: 100svh;
+      }
+
+      .section-heading {
+        font-size: 26px;
+      }
+
+      .hero-logo {
+        margin-bottom: 32px;
+      }
+
+      .hero-tagline {
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .section-sub {
+        font-size: 13px;
+        margin-bottom: 56px;
+      }
+
+      .project-grid {
+        gap: 36px;
+      }
+
+      .writing-grid {
+        gap: 40px;
+      }
+
+      .writing-title {
+        font-size: 16px;
+      }
+
+      .coffee-text {
+        font-size: 13px;
+      }
+    }
+
+    /* ── Showcase: Section divider ── */
+    .showcase-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--spectral-ghost), transparent);
+    }
+
+    .showcase-heading {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--spectral-ghost);
+      margin-bottom: 80px;
+    }
+
+    /* ── Cinematic Scenes ── */
+    .section--cinematic-1 {
+      background:
+        radial-gradient(ellipse at 50% 90%, rgba(25, 20, 50, 0.5) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(15, 15, 40, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 10% 60%, rgba(20, 15, 35, 0.3) 0%, transparent 40%);
+    }
+
+    .section--cinematic-2 {
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(10, 10, 30, 0.5) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(20, 15, 40, 0.4) 0%, transparent 40%),
+        linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,10,25,0.3) 100%);
+    }
+
+    .section--cinematic-3 {
+      background:
+        radial-gradient(ellipse at 60% 50%, rgba(15, 12, 35, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 5% 95%, rgba(20, 18, 45, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 95% 5%, rgba(18, 15, 40, 0.25) 0%, transparent 35%);
+    }
+
+    .cinematic-headline {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: 0.96px;
+      line-height: 0.94;
+      margin-bottom: 48px;
+      max-width: 800px;
+    }
+
+    .cinematic-sub {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1;
+      color: var(--spectral-dim);
+      margin-bottom: 48px;
+    }
+
+    /* ── Zero UI Comparison ── */
+    .comparison-wrap {
+      display: flex;
+      gap: 40px;
+      max-width: 900px;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .comparison-box {
+      flex: 1;
+      padding: 40px 32px;
+      text-align: left;
+      position: relative;
+    }
+
+    .comparison-box--typical {
+      background: #1a1a2e;
+      border: 2px solid #444;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(100, 100, 200, 0.15), 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .comparison-box--spacex {
+      background: transparent;
+    }
+
+    .comparison-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 32px;
+      display: block;
+    }
+
+    .comparison-box--typical .comparison-label {
+      color: #8888cc;
+    }
+
+    .comparison-box--spacex .comparison-label {
+      color: var(--spectral-ghost);
+    }
+
+    .typical-card {
+      background: #252540;
+      border: 1px solid #555;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .typical-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ddd;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      text-transform: none;
+    }
+
+    .typical-card-desc {
+      font-size: 12px;
+      color: #999;
+      line-height: 1.4;
+      text-transform: none;
+    }
+
+    .typical-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 24px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+      text-transform: none;
+    }
+
+    .spacex-text-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.96px;
+      line-height: 1;
+      color: var(--spectral-white);
+      margin-bottom: 16px;
+    }
+
+    .spacex-text-desc {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.17px;
+      line-height: 1.5;
+      color: var(--spectral-dim);
+      margin-bottom: 16px;
+    }
+
+    .spacex-text-title + .spacex-text-desc + .spacex-text-title {
+      margin-top: 32px;
+    }
+
+    .spacex-ghost-inline {
+      display: inline-block;
+      margin-top: 24px;
+      font-family: var(--font);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--spectral-white);
+      background: var(--spectral-faint);
+      border: 1px solid var(--spectral-ghost);
+      border-radius: 32px;
+      padding: 14px 28px;
+    }
+
+    /* ── Typography Demo ── */
+    .typo-demo {
+      max-width: 700px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    .typo-row {
+      text-align: left;
+    }
+
+    .typo-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--spectral-ghost);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .typo-sample-normal {
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: normal;
+      line-height: 1.5;
+      color: var(--spectral-dim);
+      text-transform: none;
+    }
+
+    .typo-sample-upper {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.96px;
+      line-height: 1;
+      color: var(--spectral-white);
+    }
+
+    .typo-specs {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+    }
+
+    .typo-spec {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      color: var(--spectral-ghost);
+    }
+
+    .typo-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--spectral-ghost);
+      font-size: 20px;
+      letter-spacing: 0;
+      margin: -16px 0;
+    }
+
+    /* ── Ghost Button Spotlight ── */
+    .ghost-spotlight {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .ghost-spotlight-btn {
+      display: inline-block;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--spectral-white);
+      background: var(--spectral-faint);
+      border: 1px solid var(--spectral-ghost);
+      border-radius: 32px;
+      padding: 22px 56px;
+      position: relative;
+    }
+
+    .ghost-annotations {
+      position: relative;
+      width: 500px;
+      height: 260px;
+      margin-top: 40px;
+    }
+
+    .annotation {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      color: var(--spectral-ghost);
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .annotation::before {
+      content: '';
+      position: absolute;
+      background: var(--spectral-ghost);
+    }
+
+    /* Top-left: background */
+    .annotation--bg {
+      top: 0;
+      left: 0;
+    }
+    .annotation--bg::before {
+      width: 1px;
+      height: 40px;
+      top: 100%;
+      left: 50%;
+      margin-top: 4px;
+    }
+
+    /* Top-right: border */
+    .annotation--border {
+      top: 0;
+      right: 0;
+    }
+    .annotation--border::before {
+      width: 1px;
+      height: 40px;
+      top: 100%;
+      left: 50%;
+      margin-top: 4px;
+    }
+
+    /* Bottom-left: radius */
+    .annotation--radius {
+      bottom: 0;
+      left: 0;
+    }
+    .annotation--radius::before {
+      width: 1px;
+      height: 40px;
+      bottom: 100%;
+      left: 50%;
+      margin-bottom: 4px;
+    }
+
+    /* Bottom-right: padding */
+    .annotation--padding {
+      bottom: 0;
+      right: 0;
+    }
+    .annotation--padding::before {
+      width: 1px;
+      height: 40px;
+      bottom: 100%;
+      left: 50%;
+      margin-bottom: 4px;
+    }
+
+    /* Center label */
+    .annotation--only {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: var(--spectral-dim);
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    /* ── Responsive adjustments for showcase ── */
+    @media (max-width: 768px) {
+      .cinematic-headline {
+        font-size: 36px;
+      }
+
+      .comparison-wrap {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .ghost-annotations {
+        width: 300px;
+        height: 220px;
+      }
+
+      .annotation {
+        font-size: 9px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cinematic-headline {
+        font-size: 28px;
+      }
+
+      .typo-sample-normal,
+      .typo-sample-upper {
+        font-size: 16px;
+      }
+
+      .ghost-spotlight-btn {
+        font-size: 13px;
+        padding: 18px 40px;
+      }
+
+      .ghost-annotations {
+        width: 260px;
+        height: 200px;
+      }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      .fade-in {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .scroll-line {
+        animation: none;
+      }
+    }
+  
+/* ── Prev/Next Navigation ── */
+.design-nav{display:flex;justify-content:space-between;align-items:center;max-width:680px;margin:0 auto;padding:24px 24px 48px;gap:16px}
+.design-nav a{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:500;padding:10px 20px;border-radius:8px;transition:background 0.15s,border-color 0.15s;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.7)}
+.design-nav a:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff}
+.design-nav .nav-dir{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;opacity:0.5;display:block;line-height:1}
+.design-nav .nav-name{display:block;line-height:1.3}
+.design-nav .nav-prev{text-align:left}
+.design-nav .nav-next{text-align:right;margin-left:auto}
+.design-nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0}
+@media(max-width:480px){.design-nav a{padding:8px 14px;font-size:13px}}
+</style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav class="top-nav">
+  <a href="/try-awesome-design/" class="back-link">&larr; Back</a>
+  <span class="design-badge">Design: SpaceX</span>
+</nav>
+
+<!-- Hero -->
+<section class="section section--hero">
+  <div class="fade-in">
+    <div class="hero-logo">ootob.ai</div>
+    <p class="hero-tagline">
+      歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。
+    </p>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Tools -->
+<section class="section section--projects">
+  <div class="fade-in">
+    <h1 class="section-heading">小專案</h1>
+    <p class="section-sub">做著玩的東西，有的有用，有的純粹好玩。</p>
+    <p class="category-label">Tools</p>
+    <div class="project-grid">
+      <div class="project-item">
+        <a href="/japanese/quiz.html">
+          <div class="project-title">Japanese Quiz</div>
+          <div class="project-description">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+          <span class="project-status">Learning</span>
+        </a>
+      </div>
+      <div class="project-divider"></div>
+      <div class="project-item project-item--disabled">
+        <div class="project-title">Threads to Markdown</div>
+        <div class="project-description">把 Threads 貼文轉成 Markdown 格式保存。</div>
+        <span class="project-status">Coming Soon</span>
+      </div>
+      <div class="project-divider"></div>
+      <div class="project-item project-item--disabled">
+        <div class="project-title">X Thread to Markdown</div>
+        <div class="project-description">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+        <span class="project-status">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Writing -->
+<section class="section section--writing">
+  <div class="fade-in">
+    <p class="category-label">Writing</p>
+    <div class="writing-grid">
+      <div class="writing-item">
+        <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+          <div class="writing-title">品味不可說</div>
+          <div class="writing-description">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+        </a>
+      </div>
+      <div class="project-divider"></div>
+      <div class="writing-item">
+        <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+          <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+          <div class="writing-description">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Coffee Chat -->
+<section class="section section--coffee">
+  <div class="fade-in">
+    <h2 class="section-heading">Coffee Chat</h2>
+    <p class="section-sub" style="margin-bottom: 48px;">&nbsp;</p>
+    <p class="coffee-text">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="coffee-text-en">Let me know how I can help you.</p>
+    <a class="ghost-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SHOWCASE: SPACEX 設計特色                   -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="showcase-divider"></div>
+
+<!-- Showcase intro -->
+<section class="section section--cinematic-1">
+  <div class="fade-in">
+    <p class="showcase-heading">SpaceX 設計特色</p>
+    <div class="cinematic-headline">Full-Viewport Cinematic Sections</div>
+    <p class="cinematic-sub">Every section is a scene. Photography + type + one button.</p>
+    <a class="ghost-btn" href="#" onclick="return false;">Explore the Void</a>
+  </div>
+</section>
+
+<!-- Cinematic scene 2 -->
+<section class="section section--cinematic-2">
+  <div class="fade-in">
+    <div class="cinematic-headline">The Darkness is the Design</div>
+    <p class="cinematic-sub">Pure #000000. No gradients for decoration. No color for comfort.</p>
+    <a class="ghost-btn" href="#" onclick="return false;">Into the Black</a>
+  </div>
+</section>
+
+<!-- Cinematic scene 3 -->
+<section class="section section--cinematic-3">
+  <div class="fade-in">
+    <div class="cinematic-headline">Spectral White on Void</div>
+    <p class="cinematic-sub">#F0F0FA — not pure white. A slight blue-violet tint, like starlight.</p>
+    <a class="ghost-btn" href="#" onclick="return false;">See the Light</a>
+  </div>
+</section>
+
+<div class="showcase-divider"></div>
+
+<!-- Zero UI Comparison -->
+<section class="section" style="background: radial-gradient(ellipse at 40% 60%, rgba(15,12,30,0.3) 0%, transparent 60%);">
+  <div class="fade-in">
+    <p class="showcase-heading">Zero UI Elements</p>
+    <div class="section-heading" style="margin-bottom: 56px;">Radical Minimalism</div>
+    <div class="comparison-wrap">
+      <!-- Typical website -->
+      <div class="comparison-box comparison-box--typical">
+        <span class="comparison-label">Typical Website</span>
+        <div class="typical-card">
+          <div class="typical-card-title">Japanese Quiz</div>
+          <div class="typical-card-desc">Interactive vocabulary and grammar quizzes.</div>
+        </div>
+        <div class="typical-card">
+          <div class="typical-card-title">Threads to Markdown</div>
+          <div class="typical-card-desc">Convert Threads posts to Markdown.</div>
+        </div>
+        <span class="typical-btn">Get Started</span>
+      </div>
+      <!-- SpaceX -->
+      <div class="comparison-box comparison-box--spacex">
+        <span class="comparison-label">SpaceX</span>
+        <div class="spacex-text-title">Japanese Quiz</div>
+        <div class="spacex-text-desc">Interactive vocabulary and grammar quizzes.</div>
+        <div class="spacex-text-title" style="margin-top: 32px;">Threads to Markdown</div>
+        <div class="spacex-text-desc">Convert Threads posts to Markdown.</div>
+        <span class="spacex-ghost-inline">Get Started</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="showcase-divider"></div>
+
+<!-- Uppercase Typography Demo -->
+<section class="section" style="background: radial-gradient(ellipse at 70% 30%, rgba(12,10,30,0.3) 0%, transparent 55%);">
+  <div class="fade-in">
+    <p class="showcase-heading">Uppercase Everything</p>
+    <div class="section-heading" style="margin-bottom: 56px;">Aerospace Stencil Aesthetic</div>
+    <div class="typo-demo">
+      <div class="typo-row">
+        <span class="typo-label">Normal Case / Default Tracking</span>
+        <div class="typo-sample-normal">品味不可說 — About Taste</div>
+        <div class="typo-specs">
+          <span class="typo-spec">text-transform: none</span>
+          <span class="typo-spec">letter-spacing: normal</span>
+          <span class="typo-spec">font-weight: 400</span>
+        </div>
+      </div>
+      <div class="typo-arrow">&darr;</div>
+      <div class="typo-row">
+        <span class="typo-label">Uppercase / 0.96px Tracking / 700</span>
+        <div class="typo-sample-upper">品味不可說 — About Taste</div>
+        <div class="typo-specs">
+          <span class="typo-spec">text-transform: uppercase</span>
+          <span class="typo-spec">letter-spacing: 0.96px</span>
+          <span class="typo-spec">font-weight: 700</span>
+        </div>
+      </div>
+      <div class="typo-arrow">&darr;</div>
+      <div class="typo-row">
+        <span class="typo-label">Nav Scale / 1.17px Tracking / 13px</span>
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 1.17px; line-height: 1; color: var(--spectral-white);">品味不可說 — About Taste</div>
+        <div class="typo-specs">
+          <span class="typo-spec">text-transform: uppercase</span>
+          <span class="typo-spec">letter-spacing: 1.17px</span>
+          <span class="typo-spec">font-size: 13px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="showcase-divider"></div>
+
+<!-- Ghost Button Spotlight -->
+<section class="section" style="background: radial-gradient(ellipse at 50% 50%, rgba(15,12,35,0.25) 0%, transparent 50%);">
+  <div class="fade-in">
+    <p class="showcase-heading">Ghost Button</p>
+    <div class="section-heading" style="margin-bottom: 16px;">The Only Interactive Element</div>
+    <p class="section-sub" style="margin-bottom: 64px;">One button type. No variants. No hierarchy of colors.</p>
+    <div class="ghost-spotlight">
+      <div class="ghost-spotlight-btn">Launch Mission</div>
+      <div class="ghost-annotations">
+        <div class="annotation annotation--bg">
+          BG: rgba(240,240,250,0.1)
+        </div>
+        <div class="annotation annotation--border">
+          Border: 1px solid<br>rgba(240,240,250,0.35)
+        </div>
+        <div class="annotation annotation--radius">
+          Border-Radius: 32px
+        </div>
+        <div class="annotation annotation--padding">
+          Padding: 18px 40px
+        </div>
+        <div class="annotation annotation--only">
+          The only button in the<br>entire design system
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<section class="section section--footer">
+  <p class="footer-text">&copy; 2026 ootob.ai</p>
+</section>
+
+<script>
+  // Intersection Observer for fade-in animations
+  (function() {
+    var targets = document.querySelectorAll('.fade-in');
+    if (!targets.length) return;
+
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      targets.forEach(function(el) {
+        observer.observe(el);
+      });
+    } else {
+      // Fallback: show everything immediately
+      targets.forEach(function(el) {
+        el.classList.add('visible');
+      });
+    }
+  })();
+</script>
+
+
+<nav class="design-nav">
+  <a href="/try-awesome-design/ferrari/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Ferrari</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/apple/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Apple</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+</body>
+</html>

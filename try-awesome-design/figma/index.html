@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Figma Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --fg: #000000;
+      --fg-secondary: rgba(0, 0, 0, 0.55);
+      --fg-tertiary: rgba(0, 0, 0, 0.35);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-medium: rgba(0, 0, 0, 0.12);
+      --glass-dark: rgba(0, 0, 0, 0.08);
+      --glass-light: rgba(255, 255, 255, 0.16);
+      --radius-pill: 50px;
+      --radius-card: 16px;
+      --max-w: 720px;
+      --gradient-vibrant: linear-gradient(135deg, #0ACF83 0%, #A259FF 35%, #F24E1E 65%, #FF7262 85%, #FFC700 100%);
+      --gradient-hero: linear-gradient(135deg, #0ACF83 0%, #A259FF 40%, #F24E1E 70%, #FFC700 100%);
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.6;
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: -0.14px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--fg-secondary);
+      text-decoration: none;
+      letter-spacing: -0.14px;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--fg);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .design-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: var(--fg-tertiary);
+      background: var(--bg);
+      border: 2px dashed var(--border-medium);
+      border-radius: var(--radius-pill);
+      padding: 5px 16px;
+    }
+
+    .design-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gradient-vibrant);
+    }
+
+    /* ── Layout ── */
+    .page-wrapper {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      padding-top: 100px;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      margin-bottom: 64px;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    .site-origin {
+      margin-top: 16px;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--fg-secondary);
+      line-height: 1.75;
+      letter-spacing: -0.14px;
+    }
+
+    /* ── Hero gradient section ── */
+    .hero-gradient {
+      background: var(--gradient-hero);
+      border-radius: 24px;
+      padding: 64px 48px;
+      margin-bottom: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-gradient::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.08);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 86px;
+      font-weight: 400;
+      letter-spacing: -1.72px;
+      line-height: 1.0;
+      color: #ffffff;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.5;
+      letter-spacing: -0.14px;
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 48px;
+    }
+
+    /* ── Section labels ── */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: var(--fg-tertiary);
+      margin-bottom: 20px;
+    }
+
+    /* ── Card list ── */
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 56px;
+    }
+
+    .card-list li {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card-list li:not(.card-disabled):hover {
+      border-color: var(--border-medium);
+      box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.06);
+    }
+
+    .card-list li:not(.card-disabled):focus-within {
+      outline: 2px dashed var(--fg);
+      outline-offset: 2px;
+    }
+
+    .card-list a {
+      display: block;
+      padding: 20px 24px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card-list .card-disabled {
+      cursor: default;
+    }
+
+    .card-list .card-disabled > div {
+      padding: 20px 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .card-name {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg);
+      letter-spacing: -0.14px;
+    }
+
+    .card-disabled .card-name {
+      color: var(--fg-tertiary);
+    }
+
+    .card-arrow {
+      width: 20px;
+      height: 20px;
+      stroke: var(--fg-tertiary);
+      stroke-width: 1.5;
+      fill: none;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card-list li:not(.card-disabled):hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--fg-secondary);
+      line-height: 1.6;
+      letter-spacing: -0.14px;
+    }
+
+    .card-disabled .card-desc {
+      color: var(--fg-tertiary);
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: var(--fg-tertiary);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 3px 12px;
+    }
+
+    .card-tag--active {
+      color: #0ACF83;
+      border-color: #0ACF83;
+      background: rgba(10, 207, 131, 0.06);
+    }
+
+    /* ── Coffee section ── */
+    .coffee-section {
+      margin-top: 8px;
+      margin-bottom: 64px;
+      padding: 48px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      text-align: center;
+    }
+
+    .coffee-section .section-label {
+      margin-bottom: 16px;
+    }
+
+    .coffee-text {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--fg-secondary);
+      line-height: 1.7;
+      letter-spacing: -0.14px;
+      margin-bottom: 4px;
+    }
+
+    .coffee-text-en {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--fg-tertiary);
+      line-height: 1.6;
+      letter-spacing: -0.14px;
+      margin-bottom: 28px;
+    }
+
+    .coffee-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 32px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #ffffff;
+      background: var(--fg);
+      border: none;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      letter-spacing: -0.14px;
+      transition: opacity 0.15s ease;
+      cursor: pointer;
+    }
+
+    .coffee-btn:hover {
+      opacity: 0.8;
+    }
+
+    .coffee-btn:focus-visible {
+      outline: 2px dashed var(--fg);
+      outline-offset: 4px;
+    }
+
+    /* ── Showcase section ── */
+    .showcase-section {
+      margin-bottom: 64px;
+    }
+
+    .showcase-heading {
+      font-size: 48px;
+      font-weight: 400;
+      letter-spacing: -1.72px;
+      line-height: 1.05;
+      color: var(--fg);
+      margin-bottom: 12px;
+    }
+
+    .showcase-intro {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--fg-secondary);
+      line-height: 1.6;
+      letter-spacing: -0.14px;
+      margin-bottom: 48px;
+      max-width: 560px;
+    }
+
+    .showcase-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 48px;
+    }
+
+    .showcase-item-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: var(--fg-tertiary);
+      margin-bottom: 16px;
+    }
+
+    .showcase-item-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--fg-secondary);
+      line-height: 1.6;
+      letter-spacing: -0.14px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Demo 1: Monochrome + Gradient ── */
+    .mono-gradient-demo {
+      margin-bottom: 56px;
+    }
+
+    .mono-gradient-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .mono-side {
+      background: #ffffff;
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .mono-side .mono-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: rgba(0, 0, 0, 0.35);
+      margin-bottom: 16px;
+    }
+
+    .mono-side .mono-heading {
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -1.72px;
+      line-height: 1.1;
+      color: #000000;
+      margin-bottom: 10px;
+    }
+
+    .mono-side .mono-body {
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: -0.14px;
+      color: rgba(0, 0, 0, 0.55);
+      line-height: 1.6;
+    }
+
+    .mono-side .mono-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 400;
+      color: #000000;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: var(--radius-pill);
+      cursor: default;
+      letter-spacing: -0.14px;
+    }
+
+    .mono-side .mono-elements {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .mono-side .mono-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mono-side .mono-circle svg {
+      width: 14px;
+      height: 14px;
+      stroke: #000000;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .gradient-side {
+      background: var(--gradient-hero);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gradient-side::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.05);
+      pointer-events: none;
+    }
+
+    .gradient-side .grad-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .gradient-side .grad-heading {
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -1.72px;
+      line-height: 1.1;
+      color: #ffffff;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .gradient-side .grad-body {
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: -0.14px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .gradient-side .grad-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 400;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: var(--radius-pill);
+      cursor: default;
+      letter-spacing: -0.14px;
+      backdrop-filter: blur(8px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Demo 2: Variable Weight Scale ── */
+    .weight-demo {
+      margin-bottom: 56px;
+    }
+
+    .weight-scale {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+    }
+
+    .weight-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
+
+    .weight-row:last-child {
+      border-bottom: none;
+    }
+
+    .weight-row:hover {
+      background: rgba(0, 0, 0, 0.015);
+    }
+
+    .weight-sample {
+      font-family: 'Inter', sans-serif;
+      font-size: 32px;
+      line-height: 1.2;
+      letter-spacing: -1.72px;
+      color: var(--fg);
+      flex: 1;
+    }
+
+    .weight-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .weight-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: var(--fg-tertiary);
+      min-width: 48px;
+      text-align: right;
+    }
+
+    .weight-bar {
+      width: 80px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .weight-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--fg);
+      transition: width 0.3s ease;
+    }
+
+    /* ── Demo 3: Dashed Focus ── */
+    .focus-demo {
+      margin-bottom: 24px;
+    }
+
+    .focus-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .focus-example {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    .focus-example-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+      color: var(--fg-tertiary);
+      margin-bottom: 20px;
+    }
+
+    .focus-btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .focus-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: -0.14px;
+      color: var(--fg);
+      background: var(--bg);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-pill);
+      cursor: default;
+    }
+
+    .focus-btn--dashed {
+      outline: 2px dashed #000000;
+      outline-offset: 3px;
+    }
+
+    .focus-btn--solid {
+      outline: 2px solid #000000;
+      outline-offset: 3px;
+    }
+
+    .focus-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border-medium);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+
+    .focus-circle svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--fg);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .focus-circle--dashed {
+      outline: 2px dashed #000000;
+      outline-offset: 3px;
+    }
+
+    .focus-circle--solid {
+      outline: 2px solid #000000;
+      outline-offset: 3px;
+    }
+
+    .focus-note {
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--fg-tertiary);
+      letter-spacing: -0.14px;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--fg-tertiary);
+      letter-spacing: -0.14px;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .site-header { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+    .hero-gradient { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+    .section-tools { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+    .section-writing { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+    .coffee-section { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+    .showcase-section { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+    .site-footer { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .hero-gradient,
+      .section-tools,
+      .section-writing,
+      .coffee-section,
+      .showcase-section,
+      .site-footer {
+        animation: none;
+      }
+      .card-arrow,
+      .card-list li,
+      .weight-row {
+        transition: none;
+      }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .page-wrapper {
+        padding: 0 16px;
+        padding-top: 84px;
+      }
+
+      .top-bar {
+        padding: 0 16px;
+      }
+
+      .site-header {
+        margin-bottom: 48px;
+      }
+
+      .hero-gradient {
+        padding: 40px 24px;
+        border-radius: 16px;
+      }
+
+      .hero-title {
+        font-size: 48px;
+        letter-spacing: -0.96px;
+      }
+
+      .hero-subtitle {
+        font-size: 17px;
+      }
+
+      .divider {
+        margin-bottom: 36px;
+      }
+
+      .card-list a,
+      .card-list .card-disabled > div {
+        padding: 16px 20px;
+      }
+
+      .card-list {
+        margin-bottom: 44px;
+      }
+
+      .coffee-section {
+        padding: 32px 20px;
+      }
+
+      .showcase-heading {
+        font-size: 32px;
+        letter-spacing: -1.2px;
+      }
+
+      .mono-gradient-container {
+        grid-template-columns: 1fr;
+      }
+
+      .mono-side {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .weight-sample {
+        font-size: 24px;
+      }
+
+      .weight-bar {
+        width: 48px;
+      }
+
+      .focus-comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title {
+        font-size: 38px;
+        letter-spacing: -0.76px;
+      }
+
+      .coffee-section {
+        padding: 24px 16px;
+      }
+
+      .weight-sample {
+        font-size: 20px;
+      }
+
+      .weight-meta {
+        gap: 10px;
+      }
+
+      .weight-bar {
+        width: 36px;
+      }
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      transition: background 0.15s, border-color 0.15s;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg-secondary);
+      letter-spacing: -0.14px;
+    }
+
+    .design-nav a:hover {
+      border-color: var(--border-medium);
+      color: var(--fg);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .design-nav a:focus-visible {
+      outline: 2px dashed var(--fg);
+      outline-offset: 2px;
+    }
+
+    .design-nav .nav-dir {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.54px;
+      color: var(--fg-tertiary);
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .design-nav a {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+      .design-nav {
+        padding: 24px 16px 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <a href="/try-awesome-design/" class="back-link">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    Back
+  </a>
+  <span class="design-badge">
+    <span class="dot"></span>
+    Design: Figma
+  </span>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="site-header">
+    <span class="logo">ootob.ai</span>
+    <p class="site-origin">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+  </header>
+
+  <!-- Hero Gradient -->
+  <div class="hero-gradient">
+    <h1 class="hero-title">小專案</h1>
+    <p class="hero-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Tools -->
+    <div class="section-tools">
+      <p class="section-label">Tools</p>
+      <ul class="card-list">
+        <li>
+          <a href="/japanese/quiz.html">
+            <div class="card-header">
+              <span class="card-name">Japanese Quiz</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+            <span class="card-tag card-tag--active">learning</span>
+          </a>
+        </li>
+        <li class="card-disabled">
+          <div>
+            <div class="card-header">
+              <span class="card-name">Threads to Markdown</span>
+            </div>
+            <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+            <span class="card-tag">coming soon</span>
+          </div>
+        </li>
+        <li class="card-disabled">
+          <div>
+            <div class="card-header">
+              <span class="card-name">X Thread to Markdown</span>
+            </div>
+            <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+            <span class="card-tag">coming soon</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Writing -->
+    <div class="section-writing">
+      <p class="section-label">Writing</p>
+      <ul class="card-list">
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <div class="card-header">
+              <span class="card-name">品味不可說</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+          </a>
+        </li>
+        <li>
+          <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+            <div class="card-header">
+              <span class="card-name">當知識變成免費的，Mastery 還剩下什麼？</span>
+              <svg class="card-arrow" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+            <div class="card-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- Coffee Chat -->
+  <section class="coffee-section">
+    <p class="section-label">Coffee Chat</p>
+    <p class="coffee-text">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="coffee-text-en">Let me know how I can help you.</p>
+    <a class="coffee-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </section>
+
+  <!-- Showcase: Figma Design Features -->
+  <section class="showcase-section">
+    <h2 class="showcase-heading">Figma 設計特色</h2>
+    <p class="showcase-intro">Figma 的設計語言以純粹的黑白介面搭配鮮豔的漸層色塊為標誌。以下用這個頁面的內容，展示三個標誌性的設計模式。</p>
+
+    <div class="showcase-divider"></div>
+
+    <!-- Demo 1: Monochrome + Gradient -->
+    <div class="mono-gradient-demo">
+      <p class="showcase-item-label">Monochrome + Gradient</p>
+      <p class="showcase-item-desc">Figma 的核心視覺張力 — 介面永遠是純黑白，色彩只出現在漸層 hero 區塊。兩者並置時，克制與活力的對比讓人一眼認出。</p>
+
+      <div class="mono-gradient-container">
+        <div class="mono-side">
+          <div class="mono-label">Interface Chrome</div>
+          <div class="mono-heading">Black & White</div>
+          <div class="mono-body">#000000 和 #FFFFFF，沒有灰階捷徑。所有 UI 元素只用這兩色加上透明度。</div>
+          <div class="mono-elements">
+            <span class="mono-btn">Pill Button</span>
+            <span class="mono-circle">
+              <svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg>
+            </span>
+            <span class="mono-circle">
+              <svg viewBox="0 0 16 16"><path d="M4 8h8M4 5h8M4 11h5"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="gradient-side">
+          <div class="grad-label">Hero Section</div>
+          <div class="grad-heading">Vibrant Color</div>
+          <div class="grad-body">Green, yellow, purple, pink — 色彩只在這裡爆發，讓漸層成為視覺焦點。</div>
+          <span class="grad-btn">Glass Button</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo 2: Variable Weight Scale -->
+    <div class="weight-demo">
+      <p class="showcase-item-label">Variable Weight Scale</p>
+      <p class="showcase-item-desc">Figma 使用 Inter 的可變字重，從極輕的 300 到粗體 700，每一級都有精確的用途。以下展示五個關鍵字重。</p>
+
+      <div class="weight-scale">
+        <div class="weight-row">
+          <span class="weight-sample" style="font-weight: 300;">Lightweight typography</span>
+          <div class="weight-meta">
+            <span class="weight-label">300</span>
+            <div class="weight-bar"><div class="weight-bar-fill" style="width: 20%;"></div></div>
+          </div>
+        </div>
+        <div class="weight-row">
+          <span class="weight-sample" style="font-weight: 340;">Subtle distinction</span>
+          <div class="weight-meta">
+            <span class="weight-label">340</span>
+            <div class="weight-bar"><div class="weight-bar-fill" style="width: 32%;"></div></div>
+          </div>
+        </div>
+        <div class="weight-row">
+          <span class="weight-sample" style="font-weight: 400;">Regular body text</span>
+          <div class="weight-meta">
+            <span class="weight-label">400</span>
+            <div class="weight-bar"><div class="weight-bar-fill" style="width: 45%;"></div></div>
+          </div>
+        </div>
+        <div class="weight-row">
+          <span class="weight-sample" style="font-weight: 540;">Semi-bold emphasis</span>
+          <div class="weight-meta">
+            <span class="weight-label">540</span>
+            <div class="weight-bar"><div class="weight-bar-fill" style="width: 68%;"></div></div>
+          </div>
+        </div>
+        <div class="weight-row">
+          <span class="weight-sample" style="font-weight: 700;">Bold headings</span>
+          <div class="weight-meta">
+            <span class="weight-label">700</span>
+            <div class="weight-bar"><div class="weight-bar-fill" style="width: 100%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo 3: Dashed Focus -->
+    <div class="focus-demo">
+      <p class="showcase-item-label">Dashed Focus</p>
+      <p class="showcase-item-desc">Figma 編輯器中的選取框是虛線（dashed），這個視覺語言延伸到 focus outline，形成獨特的品牌識別。以下比較 dashed 與 solid 兩種 focus 風格。</p>
+
+      <div class="focus-comparison">
+        <div class="focus-example">
+          <div class="focus-example-label">Figma Dashed</div>
+          <div class="focus-btn-row">
+            <span class="focus-btn focus-btn--dashed">Button</span>
+            <span class="focus-circle focus-circle--dashed">
+              <svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg>
+            </span>
+          </div>
+          <p class="focus-note">2px dashed outline, 3px offset</p>
+        </div>
+        <div class="focus-example">
+          <div class="focus-example-label">Standard Solid</div>
+          <div class="focus-btn-row">
+            <span class="focus-btn focus-btn--solid">Button</span>
+            <span class="focus-circle focus-circle--solid">
+              <svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg>
+            </span>
+          </div>
+          <p class="focus-note">2px solid outline, 3px offset</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 ootob.ai</p>
+  </footer>
+
+</div>
+
+<!-- Prev/Next Navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/cursor/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Cursor</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/miro/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Miro</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

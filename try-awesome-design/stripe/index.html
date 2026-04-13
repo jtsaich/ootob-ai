@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Stripe Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — Stripe Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --white: #ffffff;
+      --navy: #061b31;
+      --purple: #533afd;
+      --purple-hover: #6b56fd;
+      --purple-light: rgba(83, 58, 253, 0.06);
+      --slate: #64748d;
+      --dark-slate: #273951;
+      --border: #e5edf5;
+      --shadow-blue: rgba(50, 50, 93, 0.25);
+      --shadow-black: rgba(0, 0, 0, 0.1);
+      --dark-bg: #1c1e54;
+      --ruby: #ea2261;
+      --magenta: #f96bee;
+      --green: #15be53;
+      --radius: 6px;
+      --max-w: 1080px;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--navy);
+      background: var(--white);
+      line-height: 1.6;
+      font-size: 16px;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* -- Top navigation bar -- */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-bar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--slate);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--purple);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.15s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-2px);
+    }
+
+    .design-badge {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--slate);
+      background: linear-gradient(135deg, rgba(83, 58, 253, 0.08), rgba(249, 107, 238, 0.08));
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid rgba(83, 58, 253, 0.12);
+    }
+
+    /* -- Hero section -- */
+    .hero {
+      padding: 136px 2rem 80px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .logo-wordmark {
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--purple);
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 300;
+      letter-spacing: -1.4px;
+      line-height: 1.12;
+      color: var(--navy);
+      margin-bottom: 20px;
+      max-width: 720px;
+      text-wrap: balance;
+    }
+
+    .hero-tagline {
+      font-size: 19px;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--slate);
+      max-width: 580px;
+    }
+
+    /* -- Divider -- */
+    .section-divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-divider hr {
+      border: none;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* -- Content sections -- */
+    .content-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: -0.64px;
+      line-height: 1.25;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+
+    /* -- Project cards -- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      box-shadow:
+        0 13px 27px -5px var(--shadow-blue),
+        0 8px 16px -8px var(--shadow-black);
+      transform: translateY(-2px);
+      border-color: transparent;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 18px;
+    }
+
+    .card-icon--purple {
+      background: linear-gradient(135deg, var(--purple), #7b61ff);
+      color: white;
+    }
+
+    .card-icon--slate {
+      background: linear-gradient(135deg, #8898aa, #a3b1c2);
+      color: white;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      color: var(--navy);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--slate);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--purple);
+      background: var(--purple-light);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-top: 14px;
+      align-self: flex-start;
+    }
+
+    .card-tag--muted {
+      color: var(--slate);
+      background: rgba(100, 116, 141, 0.08);
+    }
+
+    .card--disabled {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .card--disabled .card-title {
+      color: var(--slate);
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 28px;
+      right: 24px;
+      color: var(--purple);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* -- Writing cards -- */
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .writing-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .writing-card:hover {
+      box-shadow:
+        0 13px 27px -5px var(--shadow-blue),
+        0 8px 16px -8px var(--shadow-black);
+      transform: translateY(-2px);
+      border-color: transparent;
+    }
+
+    .writing-card .card-arrow {
+      top: 28px;
+      right: 24px;
+    }
+
+    .writing-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .writing-source {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--slate);
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .writing-source::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .writing-title {
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: -0.4px;
+      line-height: 1.35;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .writing-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--slate);
+      line-height: 1.65;
+    }
+
+    /* -- CTA / Coffee chat -- */
+    .cta-section {
+      background: var(--dark-bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(234, 34, 97, 0.15), rgba(249, 107, 238, 0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -5%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(83, 58, 253, 0.2), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 16px;
+    }
+
+    .cta-title {
+      font-size: 48px;
+      font-weight: 300;
+      letter-spacing: -0.96px;
+      line-height: 1.15;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-size: 17px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.65;
+      max-width: 520px;
+      margin: 0 auto 12px;
+    }
+
+    .cta-desc-en {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 32px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 12px 32px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--white);
+      background: var(--purple);
+      border: none;
+      border-radius: var(--radius);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+      box-shadow:
+        0 4px 6px rgba(50, 50, 93, 0.11),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .cta-btn:hover {
+      background: var(--purple-hover);
+      box-shadow:
+        0 7px 14px rgba(50, 50, 93, 0.1),
+        0 3px 6px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* -- Showcase: Design Highlights -- */
+    .showcase-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 2rem;
+    }
+
+    .showcase-header {
+      margin-bottom: 48px;
+    }
+
+    .showcase-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 12px;
+    }
+
+    .showcase-title {
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: -0.64px;
+      line-height: 1.25;
+      color: var(--navy);
+    }
+
+    /* Shadow gallery */
+    .shadow-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+
+    .shadow-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s ease;
+    }
+
+    .shadow-card:hover {
+      border-color: transparent;
+    }
+
+    .shadow-card--l1 {
+      box-shadow: rgba(23, 23, 23, 0.06) 0px 3px 6px;
+    }
+
+    .shadow-card--l2 {
+      box-shadow: rgba(23, 23, 23, 0.08) 0px 15px 35px;
+    }
+
+    .shadow-card--l3 {
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 45px -30px, rgba(0, 0, 0, 0.1) 0px 18px 36px -18px;
+    }
+
+    .shadow-card--l4 {
+      box-shadow: rgba(3, 3, 39, 0.25) 0px 14px 21px -14px, rgba(0, 0, 0, 0.1) 0px 8px 17px -8px;
+    }
+
+    .shadow-level {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--purple);
+      background: var(--purple-light);
+      padding: 3px 10px;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+
+    .shadow-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dark-slate);
+      margin-bottom: 6px;
+    }
+
+    .shadow-value {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 10px;
+      color: var(--slate);
+      line-height: 1.5;
+      word-break: break-all;
+    }
+
+    /* Dark brand section */
+    .dark-brand-section {
+      background: var(--dark-bg);
+      padding: 80px 2rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+
+    .dark-brand-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--ruby), var(--magenta), var(--purple));
+    }
+
+    .dark-brand-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dark-brand-glow {
+      position: absolute;
+      top: -60%;
+      right: -15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(234, 34, 97, 0.12), rgba(249, 107, 238, 0.06), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dark-brand-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 16px;
+    }
+
+    .dark-brand-title {
+      font-size: 40px;
+      font-weight: 300;
+      letter-spacing: -0.96px;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .dark-brand-desc {
+      font-size: 17px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.65;
+      max-width: 560px;
+      margin-bottom: 32px;
+    }
+
+    .gradient-accent {
+      display: inline-block;
+      height: 3px;
+      width: 80px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--ruby), var(--magenta));
+      margin-bottom: 28px;
+    }
+
+    .dark-brand-palette {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .palette-swatch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .palette-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .palette-label {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Weight comparison */
+    .weight-compare {
+      margin-top: 64px;
+    }
+
+    .weight-compare-label {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--dark-slate);
+      margin-bottom: 8px;
+    }
+
+    .weight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .weight-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .weight-card-label {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 11px;
+      color: var(--slate);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .weight-card-text {
+      font-size: 32px;
+      letter-spacing: -0.64px;
+      line-height: 1.3;
+      color: var(--navy);
+    }
+
+    .weight-card-text--300 {
+      font-weight: 300;
+    }
+
+    .weight-card-text--400 {
+      font-weight: 400;
+    }
+
+    .weight-card-text--600 {
+      font-weight: 600;
+    }
+
+    .weight-card-note {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--slate);
+      margin-top: 12px;
+    }
+
+    .weight-card-note--highlight {
+      color: var(--purple);
+    }
+
+    @media (max-width: 860px) {
+      .shadow-gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .weight-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .dark-brand-title {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shadow-gallery {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .shadow-card {
+        padding: 24px 16px;
+      }
+      .shadow-value {
+        font-size: 9px;
+      }
+      .weight-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .weight-card-text {
+        font-size: 26px;
+      }
+      .dark-brand-section {
+        padding: 60px 1.25rem;
+      }
+      .dark-brand-title {
+        font-size: 28px;
+        letter-spacing: -0.4px;
+      }
+      .showcase-section {
+        padding: 48px 1.25rem;
+      }
+    }
+
+    /* -- Footer -- */
+    .site-footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--slate);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--slate);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--purple);
+    }
+
+    /* -- Animations -- */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    .animate-in--d1 { animation-delay: 0.05s; }
+    .animate-in--d2 { animation-delay: 0.1s; }
+    .animate-in--d3 { animation-delay: 0.15s; }
+    .animate-in--d4 { animation-delay: 0.2s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in {
+        animation: none;
+        opacity: 1;
+      }
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 860px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero h1 {
+        font-size: 42px;
+        letter-spacing: -0.96px;
+      }
+      .cta-title {
+        font-size: 36px;
+        letter-spacing: -0.64px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-inner {
+        padding: 0 1.25rem;
+      }
+      .hero {
+        padding: 116px 1.25rem 56px;
+      }
+      .hero h1 {
+        font-size: 34px;
+        letter-spacing: -0.64px;
+      }
+      .hero-tagline {
+        font-size: 16px;
+      }
+      .content-section {
+        padding: 48px 1.25rem;
+      }
+      .section-title {
+        font-size: 26px;
+        letter-spacing: -0.4px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-inner {
+        padding: 60px 1.25rem;
+      }
+      .cta-title {
+        font-size: 30px;
+        letter-spacing: -0.64px;
+      }
+      .cta-desc {
+        font-size: 15px;
+      }
+      .site-footer {
+        padding: 32px 1.25rem;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .section-divider {
+        padding: 0 1.25rem;
+      }
+    }
+  
+/* ── Prev/Next Navigation ── */
+.design-nav{display:flex;justify-content:space-between;align-items:center;max-width:680px;margin:0 auto;padding:24px 24px 48px;gap:16px}
+.design-nav a{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:500;padding:10px 20px;border-radius:8px;transition:background 0.15s,border-color 0.15s,box-shadow 0.15s;border:1px solid #e0e0e0;background:#fff;color:#444}
+.design-nav a:hover{background:#f8f8f8;border-color:#ccc;color:#111;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.design-nav .nav-dir{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;opacity:0.45;display:block;line-height:1}
+.design-nav .nav-name{display:block;line-height:1.3}
+.design-nav .nav-prev{text-align:left}
+.design-nav .nav-next{text-align:right;margin-left:auto}
+.design-nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0}
+@media(max-width:480px){.design-nav a{padding:8px 14px;font-size:13px}}
+</style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<nav class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-link" href="/try-awesome-design/">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back
+    </a>
+    <span class="design-badge">Design: Stripe</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="logo-mark animate-in">
+    <span class="logo-wordmark">ootob<span class="logo-dot"></span>ai</span>
+  </div>
+  <h1 class="animate-in animate-in--d1">小專案</h1>
+  <p class="hero-tagline animate-in animate-in--d2">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+</header>
+
+<div class="section-divider"><hr></div>
+
+<!-- Tools section -->
+<section class="content-section animate-in animate-in--d3">
+  <div class="section-header">
+    <p class="section-eyebrow">Tools</p>
+    <h2 class="section-title">做著玩的東西</h2>
+    <p class="section-subtitle">有的有用，有的純粹好玩。</p>
+  </div>
+
+  <div class="card-grid">
+    <!-- Japanese Quiz -->
+    <a class="card" href="/japanese/quiz.html">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </span>
+      <div class="card-icon card-icon--purple">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="card-title">Japanese Quiz</div>
+      <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+      <span class="card-tag">learning</span>
+    </a>
+
+    <!-- Threads to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--slate">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">Threads to Markdown</div>
+      <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+
+    <!-- X Thread to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--slate">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">X Thread to Markdown</div>
+      <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Writing section -->
+<section class="content-section animate-in animate-in--d4">
+  <div class="section-header">
+    <p class="section-eyebrow">Writing</p>
+    <h2 class="section-title">文章</h2>
+    <p class="section-subtitle">思考的紀錄，關於品味、AI、與經驗不可取代的東西。</p>
+  </div>
+
+  <div class="writing-grid">
+    <!-- 品味不可說 -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">品味不可說</div>
+      <div class="writing-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+    </a>
+
+    <!-- Mastery -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+      <div class="writing-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+    </a>
+  </div>
+</section>
+
+<!-- Coffee Chat CTA (dark section) -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="cta-eyebrow">Coffee Chat</p>
+    <h2 class="cta-title">聊一杯咖啡</h2>
+    <p class="cta-desc">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="cta-desc-en">Let me know how I can help you.</p>
+    <a class="cta-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </div>
+</section>
+
+<!-- Stripe Design Highlights -->
+<div class="section-divider"><hr></div>
+
+<section class="showcase-section">
+  <div class="showcase-header">
+    <p class="showcase-eyebrow">Design Showcase</p>
+    <h2 class="showcase-title">Stripe 設計特色</h2>
+  </div>
+
+  <!-- Blue-tinted Shadow Gallery -->
+  <p class="section-subtitle" style="margin-bottom: 28px;">Blue-tinted Shadow Gallery</p>
+  <div class="shadow-gallery">
+    <div class="shadow-card shadow-card--l1">
+      <span class="shadow-level">Level 1</span>
+      <div class="shadow-label">Ambient</div>
+      <div class="shadow-value">rgba(23,23,23,0.06) 0px 3px 6px</div>
+    </div>
+    <div class="shadow-card shadow-card--l2">
+      <span class="shadow-level">Level 2</span>
+      <div class="shadow-label">Standard</div>
+      <div class="shadow-value">rgba(23,23,23,0.08) 0px 15px 35px</div>
+    </div>
+    <div class="shadow-card shadow-card--l3">
+      <span class="shadow-level">Level 3</span>
+      <div class="shadow-label">Elevated</div>
+      <div class="shadow-value">rgba(50,50,93,0.25) 0px 30px 45px -30px, rgba(0,0,0,0.1) 0px 18px 36px -18px</div>
+    </div>
+    <div class="shadow-card shadow-card--l4">
+      <span class="shadow-level">Level 4</span>
+      <div class="shadow-label">Deep</div>
+      <div class="shadow-value">rgba(3,3,39,0.25) 0px 14px 21px -14px, rgba(0,0,0,0.1) 0px 8px 17px -8px</div>
+    </div>
+  </div>
+
+  <!-- Weight 300 comparison -->
+  <div class="weight-compare">
+    <p class="section-subtitle" style="margin-bottom: 28px;">Weight 300 — Stripe 的招牌輕量感</p>
+    <div class="weight-grid">
+      <div class="weight-card">
+        <span class="weight-card-label">font-weight: 300</span>
+        <div class="weight-card-text weight-card-text--300">Financial infrastructure</div>
+        <div class="weight-card-note weight-card-note--highlight">Stripe 的選擇</div>
+      </div>
+      <div class="weight-card">
+        <span class="weight-card-label">font-weight: 400</span>
+        <div class="weight-card-text weight-card-text--400">Financial infrastructure</div>
+        <div class="weight-card-note">業界標準</div>
+      </div>
+      <div class="weight-card">
+        <span class="weight-card-label">font-weight: 600</span>
+        <div class="weight-card-text weight-card-text--600">Financial infrastructure</div>
+        <div class="weight-card-note">傳統做法</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dark Brand Section -->
+<section class="dark-brand-section">
+  <div class="dark-brand-glow"></div>
+  <div class="dark-brand-inner">
+    <p class="dark-brand-eyebrow">Dark Brand Section</p>
+    <div class="gradient-accent"></div>
+    <h2 class="dark-brand-title">Stripe 用深色區塊創造節奏感</h2>
+    <p class="dark-brand-desc">白底與 #1c1e54 深色區塊交替出現，搭配 ruby (#ea2261) 到 magenta (#f96bee) 的漸層裝飾，營造出金融級的視覺精緻度。</p>
+    <div class="dark-brand-palette">
+      <div class="palette-swatch">
+        <span class="palette-dot" style="background: #1c1e54;"></span>
+        <span class="palette-label">#1c1e54</span>
+      </div>
+      <div class="palette-swatch">
+        <span class="palette-dot" style="background: linear-gradient(135deg, #ea2261, #f96bee);"></span>
+        <span class="palette-label">#ea2261 → #f96bee</span>
+      </div>
+      <div class="palette-swatch">
+        <span class="palette-dot" style="background: #533afd;"></span>
+        <span class="palette-label">#533afd</span>
+      </div>
+      <div class="palette-swatch">
+        <span class="palette-dot" style="background: #15be53;"></span>
+        <span class="palette-label">#15be53</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 ootob.ai</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="https://open.substack.com/pub/ootobai" target="_blank" rel="noopener">Substack</a>
+  </div>
+</footer>
+
+
+<nav class="design-nav">
+  <a href="/try-awesome-design/linear/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Linear</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/vercel/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Vercel</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+</body>
+</html>

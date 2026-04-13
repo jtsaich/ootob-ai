@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — Meta Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — Meta Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --white: #ffffff;
+      --meta-blue: #0064E0;
+      --meta-blue-hover: #0143B5;
+      --meta-blue-pressed: #004BB9;
+      --text-primary: #050505;
+      --text-dolly: #1C2B33;
+      --text-secondary: #5D6C7B;
+      --surface-soft: #F1F4F7;
+      --divider: #DEE3E9;
+      --dark-section: #1C1E21;
+      --quest-purple: #A121CE;
+      --rayban-red: #D6311F;
+      --nav-bg: rgba(241, 244, 247, 0.8);
+      --card-shadow: 0 12px 28px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1);
+      --card-radius: 20px;
+      --pill-radius: 100px;
+      --max-w: 980px;
+    }
+
+    body {
+      font-family: 'Montserrat', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      color: var(--text-primary);
+      background: var(--white);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.44;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* -- Navigation (Frosted Glass) -- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--nav-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      height: 56px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--meta-blue);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--meta-blue-hover);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-3px);
+    }
+
+    .design-badge {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--meta-blue);
+      background: rgba(0, 100, 224, 0.08);
+      padding: 5px 14px;
+      border-radius: var(--pill-radius);
+    }
+
+    /* -- Section base -- */
+    .section-white {
+      background: var(--white);
+      color: var(--text-primary);
+    }
+
+    .section-soft {
+      background: var(--surface-soft);
+      color: var(--text-primary);
+    }
+
+    .section-dark {
+      background: var(--dark-section);
+      color: var(--white);
+    }
+
+    .section-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    /* -- Hero -- */
+    .hero {
+      background: var(--white);
+      padding-top: 56px;
+    }
+
+    .hero .section-inner {
+      padding-top: 100px;
+      padding-bottom: 80px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    .logo-dot {
+      color: var(--meta-blue);
+    }
+
+    .tagline {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.44;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* -- Main Title -- */
+    .main-title-section {
+      background: var(--surface-soft);
+      text-align: center;
+    }
+
+    .main-title-section .section-inner {
+      padding-top: 100px;
+      padding-bottom: 24px;
+    }
+
+    .display-title {
+      font-size: 64px;
+      font-weight: 500;
+      line-height: 1.16;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .display-subtitle {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.44;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* -- Tools Section -- */
+    .tools-section {
+      background: var(--surface-soft);
+    }
+
+    .tools-section .section-inner {
+      padding-top: 40px;
+      padding-bottom: 80px;
+    }
+
+    .section-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-eyebrow--light {
+      color: var(--meta-blue);
+    }
+
+    .section-eyebrow--dark {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .section-heading {
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1.16;
+      margin-bottom: 40px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border-radius: var(--card-radius);
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow);
+    }
+
+    .tool-card--disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 600;
+      background: var(--surface-soft);
+      color: var(--meta-blue);
+    }
+
+    .tool-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .tool-card-desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .tool-card-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--meta-blue);
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tool-card-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .tool-card:hover .tool-card-link svg {
+      transform: translateX(4px);
+    }
+
+    .tool-card-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--surface-soft);
+      padding: 4px 12px;
+      border-radius: var(--pill-radius);
+      margin-top: 16px;
+      align-self: flex-start;
+    }
+
+    /* -- Writing Section (Dark) -- */
+    .writing-section {
+      background: var(--dark-section);
+    }
+
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .writing-card {
+      background: #2D3035;
+      border-radius: var(--card-radius);
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .writing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow);
+    }
+
+    .writing-source {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .writing-title {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .writing-desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .writing-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: #5B9EF4;
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .writing-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .writing-card:hover .writing-link svg {
+      transform: translateX(4px);
+    }
+
+    /* -- Coffee Chat CTA -- */
+    .cta-section {
+      background: var(--white);
+      text-align: center;
+    }
+
+    .cta-section .section-inner {
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+
+    .cta-emoji {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .cta-title {
+      font-size: 44px;
+      font-weight: 600;
+      line-height: 1.16;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .cta-desc {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.44;
+      max-width: 500px;
+      margin: 0 auto 8px;
+    }
+
+    .cta-desc-en {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      margin-bottom: 32px;
+    }
+
+    /* Pill Buttons (Meta Style) */
+    .pill-btn {
+      display: inline-block;
+      padding: 10px 22px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--meta-blue);
+      border: none;
+      border-radius: var(--pill-radius);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+      user-select: none;
+    }
+
+    .pill-btn:hover {
+      background: var(--meta-blue-hover);
+      transform: scale(1.1);
+    }
+
+    .pill-btn:active {
+      background: var(--meta-blue-pressed);
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+
+    .pill-btn--outline {
+      background: transparent;
+      color: var(--meta-blue);
+      border: 2px solid var(--meta-blue);
+    }
+
+    .pill-btn--outline:hover {
+      background: rgba(0, 100, 224, 0.06);
+      color: var(--meta-blue-hover);
+      border-color: var(--meta-blue-hover);
+      transform: scale(1.1);
+    }
+
+    .pill-btn--outline:active {
+      background: rgba(0, 100, 224, 0.1);
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+
+    .pill-btn--outline-dark {
+      background: transparent;
+      color: #5B9EF4;
+      border: 2px solid #5B9EF4;
+    }
+
+    .pill-btn--outline-dark:hover {
+      background: rgba(91, 158, 244, 0.1);
+      transform: scale(1.1);
+    }
+
+    .pill-btn--outline-dark:active {
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+
+    /* -- Showcase Section -- */
+    .showcase-section {
+      background: var(--surface-soft);
+    }
+
+    .showcase-section .section-inner {
+      padding-bottom: 40px;
+    }
+
+    .showcase-title {
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1.16;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .showcase-desc {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.44;
+      margin-bottom: 48px;
+      max-width: 640px;
+    }
+
+    /* Pill Button States Demo */
+    .pill-states-demo {
+      margin-bottom: 64px;
+    }
+
+    .demo-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dolly);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .pill-states-row {
+      display: flex;
+      gap: 32px;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+
+    .pill-state-card {
+      background: var(--white);
+      border-radius: var(--card-radius);
+      padding: 40px 32px;
+      flex: 1;
+      min-width: 220px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .pill-state-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .pill-state-btn {
+      display: inline-block;
+      padding: 10px 22px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--meta-blue);
+      border: none;
+      border-radius: var(--pill-radius);
+      cursor: default;
+      transition: none;
+    }
+
+    .pill-state-btn--hover {
+      background: var(--meta-blue-hover);
+      transform: scale(1.1);
+    }
+
+    .pill-state-btn--pressed {
+      background: var(--meta-blue-pressed);
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+
+    .pill-state-spec {
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Animated pill button */
+    .pill-animated-wrapper {
+      margin-top: 24px;
+      background: var(--white);
+      border-radius: var(--card-radius);
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .pill-animated-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .pill-animated-btn {
+      display: inline-block;
+      padding: 10px 22px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--meta-blue);
+      border: none;
+      border-radius: var(--pill-radius);
+      cursor: pointer;
+      animation: pillCycle 3s ease-in-out infinite;
+    }
+
+    @keyframes pillCycle {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        background: var(--meta-blue);
+      }
+      30% {
+        transform: scale(1.1);
+        opacity: 1;
+        background: var(--meta-blue-hover);
+      }
+      50% {
+        transform: scale(0.9);
+        opacity: 0.5;
+        background: var(--meta-blue-pressed);
+      }
+      70% {
+        transform: scale(1);
+        opacity: 1;
+        background: var(--meta-blue);
+      }
+    }
+
+    /* Frosted Glass Nav Demo */
+    .frosted-demo {
+      margin-bottom: 64px;
+    }
+
+    .frosted-viewport {
+      position: relative;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      height: 320px;
+      background: linear-gradient(135deg, #A121CE 0%, #0064E0 40%, #D6311F 80%, #0064E0 100%);
+    }
+
+    .frosted-bg-shapes {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .frosted-shape {
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .frosted-shape--1 {
+      width: 200px;
+      height: 200px;
+      background: var(--quest-purple);
+      opacity: 0.6;
+      top: 20px;
+      left: 10%;
+      animation: floatShape 6s ease-in-out infinite;
+    }
+
+    .frosted-shape--2 {
+      width: 160px;
+      height: 160px;
+      background: var(--meta-blue);
+      opacity: 0.5;
+      top: 80px;
+      right: 15%;
+      animation: floatShape 8s ease-in-out infinite reverse;
+    }
+
+    .frosted-shape--3 {
+      width: 120px;
+      height: 120px;
+      background: var(--rayban-red);
+      opacity: 0.5;
+      bottom: 30px;
+      left: 40%;
+      animation: floatShape 5s ease-in-out infinite 1s;
+    }
+
+    @keyframes floatShape {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(20px, -15px) scale(1.1); }
+    }
+
+    .frosted-nav-mock {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: rgba(241, 244, 247, 0.8);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 32px;
+      border-bottom: 1px solid rgba(222, 227, 233, 0.6);
+      z-index: 2;
+    }
+
+    .frosted-nav-logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .frosted-nav-logo span {
+      color: var(--meta-blue);
+    }
+
+    .frosted-nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .frosted-nav-item {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dolly);
+      opacity: 0.8;
+    }
+
+    .frosted-content {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      right: 24px;
+      z-index: 1;
+    }
+
+    .frosted-content-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 12px 18px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    .frosted-spec {
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      color: var(--text-secondary);
+      margin-top: 12px;
+    }
+
+    /* Light/Dark Alternation Demo */
+    .alternation-demo {
+      margin-bottom: 64px;
+    }
+
+    .alternation-strips {
+      display: flex;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      height: 200px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .alt-strip {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .alt-strip--white {
+      background: var(--white);
+    }
+
+    .alt-strip--dark {
+      background: var(--dark-section);
+    }
+
+    .alt-strip--soft {
+      background: var(--surface-soft);
+    }
+
+    .alt-strip-sample {
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .alt-strip--white .alt-strip-sample,
+    .alt-strip--soft .alt-strip-sample {
+      color: var(--text-primary);
+    }
+
+    .alt-strip--dark .alt-strip-sample {
+      color: var(--white);
+    }
+
+    .alt-strip-hex {
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Courier New', monospace;
+    }
+
+    .alt-strip--white .alt-strip-hex,
+    .alt-strip--soft .alt-strip-hex {
+      color: var(--text-secondary);
+    }
+
+    .alt-strip--dark .alt-strip-hex {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .alt-strip-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .alt-strip--white .alt-strip-label,
+    .alt-strip--soft .alt-strip-label {
+      color: var(--text-secondary);
+    }
+
+    .alt-strip--dark .alt-strip-label {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* -- Bottom Navigation -- */
+    .bottom-nav-section {
+      background: var(--white);
+    }
+
+    .bottom-nav {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--divider);
+    }
+
+    .bottom-nav-link {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: opacity 0.2s ease;
+    }
+
+    .bottom-nav-link:hover {
+      opacity: 0.7;
+    }
+
+    .bottom-nav-link--prev {
+      align-items: flex-start;
+    }
+
+    .bottom-nav-link--next {
+      align-items: flex-end;
+    }
+
+    .bottom-nav-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .bottom-nav-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--meta-blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bottom-nav-title svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* -- Footer -- */
+    .footer {
+      background: var(--white);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 16px 24px 40px;
+      text-align: center;
+    }
+
+    .footer-divider {
+      border: none;
+      height: 1px;
+      background: var(--divider);
+      margin-bottom: 16px;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 768px) {
+      .display-title {
+        font-size: 44px;
+      }
+
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        font-size: 28px;
+      }
+
+      .showcase-title {
+        font-size: 28px;
+      }
+
+      .cta-title {
+        font-size: 34px;
+      }
+
+      .pill-states-row {
+        flex-direction: column;
+      }
+
+      .pill-state-card {
+        min-width: 100%;
+      }
+
+      .alternation-strips {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .alt-strip {
+        padding: 32px 20px;
+      }
+
+      .frosted-viewport {
+        height: 260px;
+      }
+
+      .frosted-nav-links {
+        display: none;
+      }
+
+      .bottom-nav {
+        flex-direction: column;
+        gap: 24px;
+        align-items: stretch;
+      }
+
+      .bottom-nav-link--next {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .display-title {
+        font-size: 36px;
+      }
+
+      .hero .section-inner {
+        padding-top: 72px;
+        padding-bottom: 48px;
+      }
+
+      .section-inner {
+        padding: 56px 16px;
+      }
+
+      .frosted-viewport {
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation (Frosted Glass) -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/try-awesome-design/" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </a>
+      <span class="design-badge">Design: Meta</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero section-white">
+    <div class="section-inner">
+      <div class="logo">ootob<span class="logo-dot">.</span>ai</div>
+      <p class="tagline">
+        歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Title -->
+  <section class="main-title-section section-soft">
+    <div class="section-inner">
+      <h1 class="display-title">小專案</h1>
+      <p class="display-subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section class="tools-section section-soft">
+    <div class="section-inner">
+      <div class="section-eyebrow section-eyebrow--light">Tools</div>
+      <h2 class="section-heading">小工具</h2>
+      <div class="tool-grid">
+        <a href="/japanese/quiz.html" class="tool-card">
+          <div class="tool-icon">あ</div>
+          <div class="tool-card-title">Japanese Quiz</div>
+          <div class="tool-card-desc">日文小測驗，學著玩。</div>
+          <span class="tool-card-link">
+            開始測驗
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+        <div class="tool-card tool-card--disabled">
+          <div class="tool-icon">T</div>
+          <div class="tool-card-title">Threads to Markdown</div>
+          <div class="tool-card-desc">把 Threads 貼文轉成 Markdown。</div>
+          <span class="tool-card-tag">Coming Soon</span>
+        </div>
+        <div class="tool-card tool-card--disabled">
+          <div class="tool-icon">X</div>
+          <div class="tool-card-title">X Thread to Markdown</div>
+          <div class="tool-card-desc">把 X 的 Thread 轉成 Markdown。</div>
+          <span class="tool-card-tag">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Writing (Dark Section) -->
+  <section class="writing-section section-dark">
+    <div class="section-inner">
+      <div class="section-eyebrow section-eyebrow--dark">Writing</div>
+      <h2 class="section-heading" style="color: #ffffff;">文章</h2>
+      <div class="writing-grid">
+        <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" class="writing-card" target="_blank" rel="noopener">
+          <div class="writing-source">Substack</div>
+          <div class="writing-title">品味不可說</div>
+          <div class="writing-desc">關於品味、直覺、以及那些說不清楚但知道對的東西。</div>
+          <span class="writing-link">
+            閱讀全文
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+        <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" class="writing-card" target="_blank" rel="noopener">
+          <div class="writing-source">Substack</div>
+          <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+          <div class="writing-desc">知識唾手可得的時代，真正的精通到底意味著什麼。</div>
+          <span class="writing-link">
+            閱讀全文
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coffee Chat CTA (White Section) -->
+  <section class="cta-section section-white">
+    <div class="section-inner">
+      <div class="cta-emoji">&#9749;</div>
+      <h2 class="cta-title">來杯咖啡聊聊</h2>
+      <p class="cta-desc">想聊 side project、設計、或隨便什麼都好。</p>
+      <p class="cta-desc-en">Let's grab a virtual coffee and chat about anything.</p>
+      <a href="https://calendly.com/jack-ch-tsai/coffee-chat" class="pill-btn" target="_blank" rel="noopener">
+        預約 Coffee Chat
+      </a>
+    </div>
+  </section>
+
+  <!-- Showcase: Meta Design Highlights -->
+  <section class="showcase-section section-soft">
+    <div class="section-inner">
+      <div class="section-eyebrow section-eyebrow--light">Meta 設計特色</div>
+      <h2 class="showcase-title">Design Showcase</h2>
+      <p class="showcase-desc">
+        Meta 的設計語言以清晰、可及、一致為核心。圓潤的 Pill 按鈕、霧化玻璃導覽、以及明暗交替的節奏構成了其獨特的視覺系統。
+      </p>
+
+      <!-- 1. Pill Button States -->
+      <div class="pill-states-demo">
+        <div class="demo-label">Pill Button States</div>
+        <div class="pill-states-row">
+          <div class="pill-state-card">
+            <div class="pill-state-label">Default</div>
+            <button class="pill-state-btn">Connect</button>
+            <div class="pill-state-spec">scale(1)<br>opacity: 1<br>#0064E0</div>
+          </div>
+          <div class="pill-state-card">
+            <div class="pill-state-label">Hover</div>
+            <button class="pill-state-btn pill-state-btn--hover">Connect</button>
+            <div class="pill-state-spec">scale(1.1)<br>opacity: 1<br>#0143B5</div>
+          </div>
+          <div class="pill-state-card">
+            <div class="pill-state-label">Pressed</div>
+            <button class="pill-state-btn pill-state-btn--pressed">Connect</button>
+            <div class="pill-state-spec">scale(0.9)<br>opacity: 0.5<br>#004BB9</div>
+          </div>
+        </div>
+
+        <!-- Animated cycle -->
+        <div class="pill-animated-wrapper">
+          <div class="pill-animated-label">Animation Cycle (auto)</div>
+          <button class="pill-animated-btn">Connect</button>
+        </div>
+      </div>
+
+      <!-- 2. Frosted Glass Nav -->
+      <div class="frosted-demo">
+        <div class="demo-label">Frosted Glass Nav</div>
+        <div class="frosted-viewport">
+          <div class="frosted-bg-shapes">
+            <div class="frosted-shape frosted-shape--1"></div>
+            <div class="frosted-shape frosted-shape--2"></div>
+            <div class="frosted-shape frosted-shape--3"></div>
+          </div>
+          <div class="frosted-nav-mock">
+            <div class="frosted-nav-logo"><span>M</span>eta</div>
+            <div class="frosted-nav-links">
+              <span class="frosted-nav-item">Products</span>
+              <span class="frosted-nav-item">Quest</span>
+              <span class="frosted-nav-item">Ray-Ban</span>
+              <span class="frosted-nav-item">Horizon</span>
+            </div>
+          </div>
+          <div class="frosted-content">
+            <div class="frosted-content-text">
+              backdrop-filter: blur(20px) over colored shapes
+            </div>
+          </div>
+        </div>
+        <div class="frosted-spec">
+          background: rgba(241, 244, 247, 0.8) + backdrop-filter: saturate(180%) blur(20px)
+        </div>
+      </div>
+
+      <!-- 3. Light/Dark Alternation -->
+      <div class="alternation-demo">
+        <div class="demo-label">Light / Dark Alternation</div>
+        <div class="alternation-strips">
+          <div class="alt-strip alt-strip--white">
+            <div class="alt-strip-sample">Aa</div>
+            <div class="alt-strip-hex">#FFFFFF</div>
+            <div class="alt-strip-label">White</div>
+          </div>
+          <div class="alt-strip alt-strip--dark">
+            <div class="alt-strip-sample">Aa</div>
+            <div class="alt-strip-hex">#1C1E21</div>
+            <div class="alt-strip-label">Dark</div>
+          </div>
+          <div class="alt-strip alt-strip--soft">
+            <div class="alt-strip-sample">Aa</div>
+            <div class="alt-strip-hex">#F1F4F7</div>
+            <div class="alt-strip-label">Soft Gray</div>
+          </div>
+          <div class="alt-strip alt-strip--dark">
+            <div class="alt-strip-sample">Aa</div>
+            <div class="alt-strip-hex">#1C1E21</div>
+            <div class="alt-strip-label">Dark</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Navigation -->
+  <section class="bottom-nav-section section-white">
+    <nav class="bottom-nav">
+      <a href="/try-awesome-design/shopify/" class="bottom-nav-link bottom-nav-link--prev">
+        <span class="bottom-nav-label">Previous</span>
+        <span class="bottom-nav-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Shopify
+        </span>
+      </a>
+      <a href="/try-awesome-design/wired/" class="bottom-nav-link bottom-nav-link--next">
+        <span class="bottom-nav-label">Next</span>
+        <span class="bottom-nav-title">
+          WIRED
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </a>
+    </nav>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <hr class="footer-divider">
+      <p class="footer-text">&copy; 2026 ootob.ai</p>
+    </div>
+  </footer>
+
+</body>
+</html>

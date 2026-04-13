@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ootob.ai — PlayStation Design</title>
+  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
+  <meta property="og:title" content="ootob.ai — PlayStation Design">
+  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ps-black: #000000;
+      --ps-white: #ffffff;
+      --ps-blue: #0070cc;
+      --ps-cyan: #1eaedb;
+      --ps-orange: #d53b00;
+      --text-display: #000000;
+      --text-body: #1f1f1f;
+      --text-secondary: #6b6b6b;
+      --card-shadow: rgba(0, 0, 0, 0.07) 0px 5px 9px;
+      --card-radius: 16px;
+      --pill-radius: 999px;
+      --max-w: 1080px;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-body);
+      background: var(--ps-white);
+      line-height: 1.50;
+      font-size: 18px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Frosted Nav (always black) ── */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--ps-black);
+    }
+
+    .top-bar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.18s ease;
+    }
+
+    .back-link:hover {
+      color: var(--ps-cyan);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.18s ease;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-2px);
+    }
+
+    .design-badge {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(0, 112, 204, 0.25);
+      padding: 4px 14px;
+      border-radius: var(--pill-radius);
+      border: 1px solid rgba(0, 112, 204, 0.35);
+    }
+
+    /* ── Hero (Black Surface) ── */
+    .hero {
+      background: var(--ps-black);
+      padding: 136px 2rem 96px;
+    }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .logo-wordmark {
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ps-blue);
+    }
+
+    .hero h1 {
+      font-size: 54px;
+      font-weight: 300;
+      letter-spacing: -0.1px;
+      line-height: 1.25;
+      color: var(--ps-white);
+      margin-bottom: 24px;
+      max-width: 720px;
+      text-wrap: balance;
+    }
+
+    .hero-tagline {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 600px;
+    }
+
+    /* ── Content Sections (White Surface) ── */
+    .content-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-label {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ps-blue);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: -0.1px;
+      line-height: 1.25;
+      color: var(--text-display);
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+    }
+
+    .section-divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-divider hr {
+      border: none;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    /* ── Project Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--ps-white);
+      border-radius: var(--card-radius);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 18px;
+    }
+
+    .card-icon--blue {
+      background: var(--ps-blue);
+      color: white;
+    }
+
+    .card-icon--muted {
+      background: #e0e0e0;
+      color: #999;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.1px;
+      color: var(--text-display);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+      flex: 1;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ps-blue);
+      background: rgba(0, 112, 204, 0.08);
+      padding: 4px 12px;
+      border-radius: var(--pill-radius);
+      margin-top: 16px;
+      align-self: flex-start;
+    }
+
+    .card-tag--muted {
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .card--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .card--disabled .card-title {
+      color: var(--text-secondary);
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 28px;
+      right: 24px;
+      color: var(--ps-blue);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── Writing Cards ── */
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .writing-card {
+      background: var(--ps-white);
+      border-radius: var(--card-radius);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      position: relative;
+    }
+
+    .writing-card:hover {
+      transform: translateY(-3px);
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    }
+
+    .writing-card .card-arrow {
+      top: 28px;
+      right: 24px;
+    }
+
+    .writing-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .writing-source {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .writing-source::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ps-blue);
+    }
+
+    .writing-title {
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: -0.1px;
+      line-height: 1.35;
+      color: var(--text-display);
+      margin-bottom: 10px;
+    }
+
+    .writing-desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.50;
+    }
+
+    /* ── CTA / Coffee Chat (Blue Surface) ── */
+    .cta-section {
+      background: var(--ps-blue);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-label {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 16px;
+    }
+
+    .cta-title {
+      font-size: 48px;
+      font-weight: 300;
+      letter-spacing: -0.1px;
+      line-height: 1.25;
+      color: var(--ps-white);
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-size: 18px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.50;
+      max-width: 520px;
+      margin: 0 auto 12px;
+    }
+
+    .cta-desc-en {
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 32px;
+    }
+
+    /* Pill button with signature hover */
+    .ps-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ps-blue);
+      background: var(--ps-white);
+      border: 2px solid transparent;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      border-radius: var(--pill-radius);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+
+    .ps-btn:hover {
+      background: var(--ps-cyan);
+      color: var(--ps-white);
+      border: 2px solid var(--ps-white);
+      outline: 2px solid var(--ps-blue);
+      outline-offset: 2px;
+      transform: scale(1.05);
+    }
+
+    /* ── Showcase Section ── */
+    .showcase-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 80px 2rem;
+    }
+
+    .showcase-header {
+      margin-bottom: 56px;
+    }
+
+    .showcase-label {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ps-blue);
+      margin-bottom: 12px;
+    }
+
+    .showcase-title {
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: -0.1px;
+      line-height: 1.25;
+      color: var(--text-display);
+    }
+
+    /* Power-On Hover Demo */
+    .power-on-demo {
+      margin-bottom: 72px;
+    }
+
+    .demo-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-display);
+      margin-bottom: 8px;
+    }
+
+    .demo-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    .power-on-stage {
+      background: var(--ps-black);
+      border-radius: var(--card-radius);
+      padding: 56px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .power-on-btn {
+      display: inline-block;
+      padding: 16px 48px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ps-white);
+      background: var(--ps-blue);
+      border: 2px solid transparent;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      border-radius: var(--pill-radius);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .power-on-btn:hover {
+      background: var(--ps-cyan);
+      border: 2px solid var(--ps-white);
+      outline: 2px solid var(--ps-blue);
+      outline-offset: 2px;
+      transform: scale(1.2);
+    }
+
+    .power-on-btn--ghost {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .power-on-btn--ghost:hover {
+      background: var(--ps-cyan);
+      border: 2px solid var(--ps-white);
+      outline: 2px solid var(--ps-blue);
+      outline-offset: 2px;
+      color: var(--ps-white);
+      transform: scale(1.2);
+    }
+
+    .power-on-btn--orange {
+      background: var(--ps-orange);
+    }
+
+    .power-on-btn--orange:hover {
+      background: var(--ps-cyan);
+      border: 2px solid var(--ps-white);
+      outline: 2px solid var(--ps-blue);
+      outline-offset: 2px;
+      transform: scale(1.2);
+    }
+
+    .power-on-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Quiet Authority Typography */
+    .typo-demo {
+      margin-bottom: 72px;
+    }
+
+    .typo-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .typo-card {
+      background: var(--ps-white);
+      border-radius: var(--card-radius);
+      padding: 40px 32px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+
+    .typo-card-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .typo-card-text {
+      font-size: 54px;
+      letter-spacing: -0.1px;
+      line-height: 1.25;
+      color: var(--text-display);
+      margin-bottom: 16px;
+    }
+
+    .typo-card-text--light {
+      font-weight: 300;
+    }
+
+    .typo-card-text--bold {
+      font-weight: 700;
+    }
+
+    .typo-card-verdict {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 16px;
+      border-radius: var(--pill-radius);
+      display: inline-block;
+    }
+
+    .typo-card-verdict--ps {
+      color: var(--ps-blue);
+      background: rgba(0, 112, 204, 0.08);
+    }
+
+    .typo-card-verdict--not {
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Three-Surface Layout Demo */
+    .surface-demo {
+      margin-bottom: 0;
+    }
+
+    .surface-stack {
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .surface-black {
+      background: var(--ps-black);
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .surface-black-text {
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--ps-white);
+      letter-spacing: -0.1px;
+      line-height: 1.25;
+    }
+
+    .surface-black-sub {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: 8px;
+    }
+
+    .surface-white {
+      background: var(--ps-white);
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .surface-white-text {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-body);
+    }
+
+    .surface-white-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .surface-blue {
+      background: var(--ps-blue);
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .surface-blue-text {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--ps-white);
+    }
+
+    .surface-blue-sub {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
+    }
+
+    /* ── Footer (Blue Surface) ── */
+    .site-footer {
+      background: var(--ps-blue);
+      color: var(--ps-white);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: color 0.18s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--ps-cyan);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    .animate-in--d1 { animation-delay: 0.06s; }
+    .animate-in--d2 { animation-delay: 0.12s; }
+    .animate-in--d3 { animation-delay: 0.18s; }
+    .animate-in--d4 { animation-delay: 0.24s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in {
+        animation: none;
+        opacity: 1;
+      }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero h1 {
+        font-size: 42px;
+      }
+      .cta-title {
+        font-size: 36px;
+      }
+      .typo-card-text {
+        font-size: 40px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-inner {
+        padding: 0 1.25rem;
+      }
+      .hero {
+        padding: 116px 1.25rem 64px;
+      }
+      .hero h1 {
+        font-size: 32px;
+      }
+      .hero-tagline {
+        font-size: 16px;
+      }
+      .content-section {
+        padding: 56px 1.25rem;
+      }
+      .section-title {
+        font-size: 28px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-inner {
+        padding: 60px 1.25rem;
+      }
+      .cta-title {
+        font-size: 28px;
+      }
+      .cta-desc {
+        font-size: 16px;
+      }
+      .showcase-section {
+        padding: 56px 1.25rem;
+      }
+      .showcase-title {
+        font-size: 28px;
+      }
+      .typo-compare {
+        grid-template-columns: 1fr;
+      }
+      .typo-card-text {
+        font-size: 36px;
+      }
+      .power-on-stage {
+        padding: 40px 24px;
+        gap: 20px;
+      }
+      .site-footer .footer-inner {
+        flex-direction: column;
+        gap: 12px;
+        padding: 32px 1.25rem;
+      }
+      .section-divider {
+        padding: 0 1.25rem;
+      }
+    }
+
+    /* ── Prev/Next Navigation ── */
+    .design-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      gap: 16px;
+    }
+
+    .design-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 24px;
+      border-radius: var(--pill-radius);
+      transition: all 0.18s ease;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      background: var(--ps-white);
+      color: var(--text-body);
+    }
+
+    .design-nav a:hover {
+      background: var(--ps-cyan);
+      color: var(--ps-white);
+      border-color: var(--ps-white);
+      outline: 2px solid var(--ps-blue);
+      outline-offset: 2px;
+      transform: scale(1.05);
+    }
+
+    .design-nav .nav-dir {
+      font-size: 11px;
+      letter-spacing: 0.03em;
+      opacity: 0.45;
+      display: block;
+      line-height: 1;
+    }
+
+    .design-nav .nav-name {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .design-nav .nav-prev {
+      text-align: left;
+    }
+
+    .design-nav .nav-next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .design-nav svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .design-nav a {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar (always black) -->
+<nav class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-link" href="/try-awesome-design/">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back
+    </a>
+    <span class="design-badge">Design: PlayStation</span>
+  </div>
+</nav>
+
+<!-- Hero (Black Surface) -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="logo-mark animate-in">
+      <span class="logo-wordmark">ootob<span class="logo-dot"></span>ai</span>
+    </div>
+    <h1 class="animate-in animate-in--d1">小專案</h1>
+    <p class="hero-tagline animate-in animate-in--d2">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
+  </div>
+</header>
+
+<!-- Tools section (White Surface) -->
+<section class="content-section animate-in animate-in--d3">
+  <div class="section-header">
+    <p class="section-label">Tools</p>
+    <h2 class="section-title">做著玩的東西</h2>
+    <p class="section-subtitle">有的有用，有的純粹好玩。</p>
+  </div>
+
+  <div class="card-grid">
+    <!-- Japanese Quiz -->
+    <a class="card" href="/japanese/quiz.html">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </span>
+      <div class="card-icon card-icon--blue">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="card-title">Japanese Quiz</div>
+      <div class="card-desc">日文單字與文法的互動測驗，用 Markdown 管理題庫。</div>
+      <span class="card-tag">learning</span>
+    </a>
+
+    <!-- Threads to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">Threads to Markdown</div>
+      <div class="card-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+
+    <!-- X Thread to Markdown -->
+    <div class="card card--disabled">
+      <div class="card-icon card-icon--muted">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-title">X Thread to Markdown</div>
+      <div class="card-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
+      <span class="card-tag card-tag--muted">coming soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Writing section -->
+<section class="content-section animate-in animate-in--d4">
+  <div class="section-header">
+    <p class="section-label">Writing</p>
+    <h2 class="section-title">文章</h2>
+    <p class="section-subtitle">思考的紀錄，關於品味、AI、與經驗不可取代的東西。</p>
+  </div>
+
+  <div class="writing-grid">
+    <!-- 品味不可說 -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">品味不可說</div>
+      <div class="writing-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
+    </a>
+
+    <!-- Mastery -->
+    <a class="writing-card" href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
+      <span class="card-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
+      <span class="writing-source">Substack</span>
+      <div class="writing-title">當知識變成免費的，Mastery 還剩下什麼？</div>
+      <div class="writing-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
+    </a>
+  </div>
+</section>
+
+<!-- Coffee Chat CTA (Blue Surface) -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="cta-label">Coffee Chat</p>
+    <h2 class="cta-title">聊一杯咖啡</h2>
+    <p class="cta-desc">如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
+    <p class="cta-desc-en">Let me know how I can help you.</p>
+    <a class="ps-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat</a>
+  </div>
+</section>
+
+<!-- PlayStation Design Showcase -->
+<div class="section-divider"><hr></div>
+
+<section class="showcase-section">
+  <div class="showcase-header">
+    <p class="showcase-label">Design Showcase</p>
+    <h2 class="showcase-title">PlayStation 設計特色</h2>
+  </div>
+
+  <!-- 1. Power-On Hover -->
+  <div class="power-on-demo">
+    <div class="demo-label">Power-On Hover</div>
+    <div class="demo-desc">PlayStation 的招牌互動：hover 觸發 cyan 填充 + 白色邊框 + 藍色外環 + scale(1.2)，全部在 180ms 內完成。試試看。</div>
+    <div class="power-on-stage">
+      <button class="power-on-btn">Primary</button>
+      <button class="power-on-btn power-on-btn--ghost">Ghost</button>
+      <button class="power-on-btn power-on-btn--orange">Purchase</button>
+    </div>
+    <p class="power-on-note">Hover over the buttons to see the signature PlayStation animation.</p>
+  </div>
+
+  <!-- 2. Quiet Authority Typography -->
+  <div class="typo-demo">
+    <div class="demo-label">Quiet Authority Typography</div>
+    <div class="demo-desc">PlayStation 選擇 weight 300 而非 700。輕量字重搭配大字級，營造出沉靜的權威感 — 不需要大喊也能讓人注意。</div>
+    <div class="typo-compare">
+      <div class="typo-card">
+        <span class="typo-card-label">font-weight: 300 / 54px</span>
+        <div class="typo-card-text typo-card-text--light">Play has no limits</div>
+        <span class="typo-card-verdict typo-card-verdict--ps">PlayStation voice</span>
+      </div>
+      <div class="typo-card">
+        <span class="typo-card-label">font-weight: 700 / 54px</span>
+        <div class="typo-card-text typo-card-text--bold">Play has no limits</div>
+        <span class="typo-card-verdict typo-card-verdict--not">Not the PlayStation voice</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Three-Surface Layout -->
+  <div class="surface-demo">
+    <div class="demo-label">Three-Surface Layout</div>
+    <div class="demo-desc">Black hero, white content, PlayStation Blue footer — 三個表面構成完整的頻道節奏。</div>
+    <div class="surface-stack">
+      <div class="surface-black">
+        <div class="surface-black-text">Black #000000</div>
+        <div class="surface-black-sub">Hero and cinematic moments</div>
+      </div>
+      <div class="surface-white">
+        <div class="surface-white-text">White #ffffff</div>
+        <div class="surface-white-sub">Content and interaction areas</div>
+      </div>
+      <div class="surface-blue">
+        <div class="surface-blue-text">PlayStation Blue #0070cc</div>
+        <div class="surface-blue-sub">Footer and primary CTAs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer (Blue Surface) -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-copy">&copy; 2026 ootob.ai</p>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="https://open.substack.com/pub/ootobai" target="_blank" rel="noopener">Substack</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Prev/Next Navigation -->
+<nav class="design-nav">
+  <a href="/try-awesome-design/bugatti/" class="nav-prev">
+    <svg viewBox="0 0 16 16"><path d="M10 12L6 8l4-4"/></svg>
+    <div>
+      <span class="nav-dir">Previous</span>
+      <span class="nav-name">Bugatti</span>
+    </div>
+  </a>
+  <a href="/try-awesome-design/linear/" class="nav-next">
+    <div>
+      <span class="nav-dir">Next</span>
+      <span class="nav-name">Linear</span>
+    </div>
+    <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

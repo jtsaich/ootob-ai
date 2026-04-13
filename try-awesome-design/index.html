@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System Experiments — ootob.ai</title>
+  <meta name="description" content="Same content, 20 different design systems. Exploring awesome-design-md.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --text: #171717;
+      --text-secondary: #4d4d4d;
+      --text-tertiary: #808080;
+      --bg: #ffffff;
+      --max-w: 1080px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--text); }
+
+    header {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 2rem 1.5rem 0;
+    }
+
+    main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: -1.6px;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      max-width: 640px;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 2rem;
+    }
+
+    .count-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      background: #171717;
+      color: #fff;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+      margin-top: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow:
+        rgba(0,0,0,0.08) 0px 0px 0px 1px,
+        rgba(0,0,0,0.04) 0px 2px 4px,
+        rgba(0,0,0,0.03) 0px 8px 16px -4px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        rgba(0,0,0,0.1) 0px 0px 0px 1px,
+        rgba(0,0,0,0.06) 0px 4px 8px,
+        rgba(0,0,0,0.06) 0px 16px 32px -8px;
+    }
+
+    .card-preview {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-preview .design-name {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.6px;
+      z-index: 1;
+    }
+
+    .card-body {
+      padding: 12px 16px 16px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 5px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Card Themes ── */
+    .card-linear .card-preview { background: #08090a; }
+    .card-linear .design-name { color: #f7f8f8; }
+    .card-linear .tag-brand { background: rgba(94,106,210,0.15); color: #7170ff; }
+    .card-linear .tag-theme { background: #1a1a1c; color: #8a8f98; }
+
+    .card-stripe .card-preview { background: linear-gradient(135deg, #fff 0%, #f8f7ff 50%, #f0eeff 100%); }
+    .card-stripe .design-name { color: #061b31; }
+    .card-stripe .tag-brand { background: rgba(83,58,253,0.1); color: #533afd; }
+    .card-stripe .tag-theme { background: #f6f9fc; color: #64748d; }
+
+    .card-vercel .card-preview { background: #fff; border-bottom: 1px solid #ebebeb; }
+    .card-vercel .design-name { color: #171717; }
+    .card-vercel .tag-brand { background: #171717; color: #fff; }
+    .card-vercel .tag-theme { background: #fafafa; color: #666; }
+
+    .card-spotify .card-preview { background: #121212; }
+    .card-spotify .design-name { color: #1ed760; }
+    .card-spotify .tag-brand { background: rgba(30,215,96,0.15); color: #1ed760; }
+    .card-spotify .tag-theme { background: #1f1f1f; color: #b3b3b3; }
+
+    .card-ferrari .card-preview { background: #000; }
+    .card-ferrari .design-name { color: #DA291C; }
+    .card-ferrari .tag-brand { background: rgba(218,41,28,0.1); color: #DA291C; }
+    .card-ferrari .tag-theme { background: #f5f5f5; color: #666; }
+
+    .card-spacex .card-preview { background: #000; background-image: radial-gradient(circle at 30% 40%, rgba(240,240,250,0.03) 0%, transparent 50%); }
+    .card-spacex .design-name { color: #f0f0fa; text-transform: uppercase; letter-spacing: 2px; font-size: 20px; }
+    .card-spacex .tag-brand { background: rgba(240,240,250,0.1); color: #f0f0fa; border: 1px solid rgba(240,240,250,0.2); }
+    .card-spacex .tag-theme { background: #1a1a1a; color: #999; }
+
+    .card-apple .card-preview { background: #000; }
+    .card-apple .design-name { color: #fff; font-weight: 500; }
+    .card-apple .tag-brand { background: rgba(0,113,227,0.12); color: #0071e3; }
+    .card-apple .tag-theme { background: #f5f5f7; color: #86868b; }
+
+    .card-claude .card-preview { background: #f5f4ed; }
+    .card-claude .design-name { color: #141413; font-family: Georgia, serif; }
+    .card-claude .tag-brand { background: rgba(201,100,66,0.12); color: #c96442; }
+    .card-claude .tag-theme { background: #faf9f5; color: #87867f; }
+
+    .card-notion .card-preview { background: #fff; border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .card-notion .design-name { color: rgba(0,0,0,0.95); }
+    .card-notion .tag-brand { background: rgba(0,117,222,0.1); color: #0075de; }
+    .card-notion .tag-theme { background: #f6f5f4; color: #615d59; }
+
+    .card-airbnb .card-preview { background: #fff; border-bottom: 1px solid #eee; }
+    .card-airbnb .design-name { color: #222; }
+    .card-airbnb .tag-brand { background: rgba(255,56,92,0.1); color: #ff385c; }
+    .card-airbnb .tag-theme { background: #f7f7f7; color: #6a6a6a; }
+
+    .card-cursor .card-preview { background: #f2f1ed; }
+    .card-cursor .design-name { color: #26251e; }
+    .card-cursor .tag-brand { background: rgba(245,78,0,0.1); color: #f54e00; }
+    .card-cursor .tag-theme { background: #ebeae5; color: #5e5d59; }
+
+    .card-figma .card-preview { background: linear-gradient(135deg, #0ACF83, #A259FF, #F24E1E, #FFC700); }
+    .card-figma .design-name { color: #fff; }
+    .card-figma .tag-brand { background: #000; color: #fff; }
+    .card-figma .tag-theme { background: #f5f5f5; color: #666; }
+
+    .card-miro .card-preview { background: #fff; border-bottom: 2px solid #5b76fe; }
+    .card-miro .design-name { color: #1c1c1e; }
+    .card-miro .tag-brand { background: rgba(91,118,254,0.1); color: #5b76fe; }
+    .card-miro .tag-theme { background: #ffc6c6; color: #600000; }
+
+    .card-nike .card-preview { background: #111; }
+    .card-nike .design-name { color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+    .card-nike .tag-brand { background: #111; color: #fff; }
+    .card-nike .tag-theme { background: #f5f5f5; color: #707072; }
+
+    .card-theverge .card-preview { background: #131313; }
+    .card-theverge .design-name { color: #3cffd0; font-weight: 900; text-transform: uppercase; }
+    .card-theverge .tag-brand { background: rgba(60,255,208,0.15); color: #3cffd0; }
+    .card-theverge .tag-theme { background: #2d2d2d; color: #949494; }
+
+    .card-shopify .card-preview { background: linear-gradient(135deg, #000 0%, #061A1C 50%, #102620 100%); }
+    .card-shopify .design-name { color: #fff; font-weight: 300; }
+    .card-shopify .tag-brand { background: rgba(54,244,164,0.15); color: #36F4A4; }
+    .card-shopify .tag-theme { background: #02090A; color: #A1A1AA; border: 1px solid #1E2C31; }
+
+    .card-meta .card-preview { background: #fff; border-bottom: 2px solid #0064E0; }
+    .card-meta .design-name { color: #050505; }
+    .card-meta .tag-brand { background: rgba(0,100,224,0.1); color: #0064E0; }
+    .card-meta .tag-theme { background: #F1F4F7; color: #5D6C7B; }
+
+    .card-wired .card-preview { background: #fff; border-bottom: 2px solid #000; }
+    .card-wired .design-name { color: #1a1a1a; font-family: Georgia, serif; font-style: italic; }
+    .card-wired .tag-brand { background: #000; color: #fff; }
+    .card-wired .tag-theme { background: #f8f8f8; color: #757575; }
+
+    .card-bugatti .card-preview { background: #000; }
+    .card-bugatti .design-name { color: #fff; text-transform: uppercase; letter-spacing: 3px; font-size: 20px; font-weight: 400; }
+    .card-bugatti .tag-brand { background: transparent; color: #fff; border: 1px solid #999; }
+    .card-bugatti .tag-theme { background: #000; color: #999; border: 1px solid #333; }
+
+    .card-playstation .card-preview { background: linear-gradient(135deg, #000 0%, #001a44 100%); }
+    .card-playstation .design-name { color: #fff; font-weight: 300; }
+    .card-playstation .tag-brand { background: rgba(0,112,204,0.15); color: #0070cc; }
+    .card-playstation .tag-theme { background: #f5f7fa; color: #6b6b6b; }
+
+    footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    header { animation: fadeInUp 0.4s ease both; }
+    main { animation: fadeInUp 0.4s ease 0.05s both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      header, main, .card { animation: none; }
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2rem; letter-spacing: -1px; }
+      .subtitle { font-size: 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-preview { height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="/">← ootob.ai</a>
+</header>
+
+<main>
+  <h1>Design System Experiments <span class="count-badge">20</span></h1>
+  <p class="subtitle">同一個網站，二十種設計語言。用 awesome-design-md 的 DESIGN.md 把 ootob.ai 重新穿衣服。</p>
+  <p class="meta">Powered by <a href="https://github.com/VoltAgent/awesome-design-md" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">awesome-design-md</a> &middot; Each page includes interactive showcase sections highlighting what makes each system unique.</p>
+
+  <p class="section-label">Developer Tools & Platforms</p>
+  <div class="grid">
+    <a href="linear/" class="card card-linear">
+      <div class="card-preview"><span class="design-name">Linear</span></div>
+      <div class="card-body">
+        <div class="card-title">Linear</div>
+        <div class="card-desc">Dark-mode-native, indigo-violet accent, luminance stacking, command palette.</div>
+        <div class="card-tags"><span class="tag tag-brand">Indigo</span><span class="tag tag-theme">Dark</span></div>
+      </div>
+    </a>
+    <a href="vercel/" class="card card-vercel">
+      <div class="card-preview"><span class="design-name">Vercel</span></div>
+      <div class="card-body">
+        <div class="card-title">Vercel</div>
+        <div class="card-desc">Shadow-as-border, extreme letter compression, gallery emptiness.</div>
+        <div class="card-tags"><span class="tag tag-brand">B&W</span><span class="tag tag-theme">Light</span></div>
+      </div>
+    </a>
+    <a href="cursor/" class="card card-cursor">
+      <div class="card-preview"><span class="design-name">Cursor</span></div>
+      <div class="card-body">
+        <div class="card-title">Cursor</div>
+        <div class="card-desc">Warm off-white, three typographic voices, AI timeline aesthetic.</div>
+        <div class="card-tags"><span class="tag tag-brand">Orange</span><span class="tag tag-theme">Warm</span></div>
+      </div>
+    </a>
+    <a href="figma/" class="card card-figma">
+      <div class="card-preview"><span class="design-name">Figma</span></div>
+      <div class="card-body">
+        <div class="card-title">Figma</div>
+        <div class="card-desc">Monochrome chrome + vibrant gradients. Variable weight precision, dashed focus.</div>
+        <div class="card-tags"><span class="tag tag-brand">Gradient</span><span class="tag tag-theme">B&W</span></div>
+      </div>
+    </a>
+    <a href="notion/" class="card card-notion">
+      <div class="card-preview"><span class="design-name">Notion</span></div>
+      <div class="card-body">
+        <div class="card-title">Notion</div>
+        <div class="card-desc">Warm neutrals, whisper borders, multi-layer shadows, blank-canvas philosophy.</div>
+        <div class="card-tags"><span class="tag tag-brand">Blue</span><span class="tag tag-theme">Warm</span></div>
+      </div>
+    </a>
+    <a href="miro/" class="card card-miro">
+      <div class="card-preview"><span class="design-name">Miro</span></div>
+      <div class="card-body">
+        <div class="card-title">Miro</div>
+        <div class="card-desc">Pastel accent palette, collaborative canvas aesthetic, ring shadows.</div>
+        <div class="card-tags"><span class="tag tag-brand">Blue 450</span><span class="tag tag-theme">Pastel</span></div>
+      </div>
+    </a>
+  </div>
+
+  <p class="section-label">Fintech & AI</p>
+  <div class="grid">
+    <a href="stripe/" class="card card-stripe">
+      <div class="card-preview"><span class="design-name">Stripe</span></div>
+      <div class="card-body">
+        <div class="card-title">Stripe</div>
+        <div class="card-desc">Weight 300 elegance, blue-tinted chromatic shadows, financial-grade precision.</div>
+        <div class="card-tags"><span class="tag tag-brand">Purple</span><span class="tag tag-theme">Light</span></div>
+      </div>
+    </a>
+    <a href="claude/" class="card card-claude">
+      <div class="card-preview"><span class="design-name">Claude</span></div>
+      <div class="card-body">
+        <div class="card-title">Claude</div>
+        <div class="card-desc">Warm parchment canvas, serif headlines, terracotta accent. Literary salon aesthetic.</div>
+        <div class="card-tags"><span class="tag tag-brand">Terracotta</span><span class="tag tag-theme">Parchment</span></div>
+      </div>
+    </a>
+    <a href="shopify/" class="card card-shopify">
+      <div class="card-preview"><span class="design-name">Shopify</span></div>
+      <div class="card-body">
+        <div class="card-title">Shopify</div>
+        <div class="card-desc">Dark-first cinema, ultra-light 330 weight, neon green accent, forest-teal surfaces.</div>
+        <div class="card-tags"><span class="tag tag-brand">Neon Green</span><span class="tag tag-theme">Dark</span></div>
+      </div>
+    </a>
+  </div>
+
+  <p class="section-label">Consumer & Media</p>
+  <div class="grid">
+    <a href="apple/" class="card card-apple">
+      <div class="card-preview"><span class="design-name">Apple</span></div>
+      <div class="card-body">
+        <div class="card-title">Apple</div>
+        <div class="card-desc">Cinematic black/gray alternation, single blue accent, pill CTAs, product-as-hero.</div>
+        <div class="card-tags"><span class="tag tag-brand">Blue</span><span class="tag tag-theme">B&W</span></div>
+      </div>
+    </a>
+    <a href="spotify/" class="card card-spotify">
+      <div class="card-preview"><span class="design-name">Spotify</span></div>
+      <div class="card-body">
+        <div class="card-title">Spotify</div>
+        <div class="card-desc">Dark immersive, green accent, pill buttons, uppercase labels, now-playing bar.</div>
+        <div class="card-tags"><span class="tag tag-brand">Green</span><span class="tag tag-theme">Dark</span></div>
+      </div>
+    </a>
+    <a href="airbnb/" class="card card-airbnb">
+      <div class="card-preview"><span class="design-name">Airbnb</span></div>
+      <div class="card-body">
+        <div class="card-title">Airbnb</div>
+        <div class="card-desc">Photography-first, Rausch Red accent, three-layer warm shadows, generous radii.</div>
+        <div class="card-tags"><span class="tag tag-brand">Red</span><span class="tag tag-theme">Light</span></div>
+      </div>
+    </a>
+    <a href="nike/" class="card card-nike">
+      <div class="card-preview"><span class="design-name">Nike</span></div>
+      <div class="card-body">
+        <div class="card-title">Nike</div>
+        <div class="card-desc">Massive uppercase Futura, zero shadows, monochrome UI, full-bleed photography.</div>
+        <div class="card-tags"><span class="tag tag-brand">Black</span><span class="tag tag-theme">Flat</span></div>
+      </div>
+    </a>
+    <a href="meta/" class="card card-meta">
+      <div class="card-preview"><span class="design-name">Meta</span></div>
+      <div class="card-body">
+        <div class="card-title">Meta</div>
+        <div class="card-desc">Photography-first retail, pill CTAs, frosted glass nav, scale hover animations.</div>
+        <div class="card-tags"><span class="tag tag-brand">Blue</span><span class="tag tag-theme">Light/Dark</span></div>
+      </div>
+    </a>
+    <a href="playstation/" class="card card-playstation">
+      <div class="card-preview"><span class="design-name">PlayStation</span></div>
+      <div class="card-body">
+        <div class="card-title">PlayStation</div>
+        <div class="card-desc">Three-surface channel, weight 300 quiet authority, signature power-on hover.</div>
+        <div class="card-tags"><span class="tag tag-brand">PS Blue</span><span class="tag tag-theme">Dark/Light/Blue</span></div>
+      </div>
+    </a>
+  </div>
+
+  <p class="section-label">Editorial & Magazine</p>
+  <div class="grid">
+    <a href="theverge/" class="card card-theverge">
+      <div class="card-preview"><span class="design-name">The Verge</span></div>
+      <div class="card-body">
+        <div class="card-title">The Verge</div>
+        <div class="card-desc">Acid-mint + ultraviolet hazard tape, massive Manuka display, color-block tiles.</div>
+        <div class="card-tags"><span class="tag tag-brand">Mint</span><span class="tag tag-theme">Dark</span></div>
+      </div>
+    </a>
+    <a href="wired/" class="card card-wired">
+      <div class="card-preview"><span class="design-name">WIRED</span></div>
+      <div class="card-body">
+        <div class="card-title">WIRED</div>
+        <div class="card-desc">Broadsheet density, square corners, four typeface roles, mono kicker system.</div>
+        <div class="card-tags"><span class="tag tag-brand">Ink</span><span class="tag tag-theme">Paper</span></div>
+      </div>
+    </a>
+  </div>
+
+  <p class="section-label">Automotive & Luxury</p>
+  <div class="grid">
+    <a href="ferrari/" class="card card-ferrari">
+      <div class="card-preview"><span class="design-name">Ferrari</span></div>
+      <div class="card-body">
+        <div class="card-title">Ferrari</div>
+        <div class="card-desc">Chiaroscuro editorial, razor-sharp 2px corners, extreme red sparseness.</div>
+        <div class="card-tags"><span class="tag tag-brand">Rosso Corsa</span><span class="tag tag-theme">B&W</span></div>
+      </div>
+    </a>
+    <a href="spacex/" class="card card-spacex">
+      <div class="card-preview"><span class="design-name">SpaceX</span></div>
+      <div class="card-body">
+        <div class="card-title">SpaceX</div>
+        <div class="card-desc">Full-viewport cinematic, uppercase everything, zero UI, one ghost button.</div>
+        <div class="card-tags"><span class="tag tag-brand">Spectral</span><span class="tag tag-theme">Void</span></div>
+      </div>
+    </a>
+    <a href="bugatti/" class="card card-bugatti">
+      <div class="card-preview"><span class="design-name">Bugatti</span></div>
+      <div class="card-body">
+        <div class="card-title">Bugatti</div>
+        <div class="card-desc">Cinema-black void, monumental 200px+ display, three colors only, silent chrome.</div>
+        <div class="card-tags"><span class="tag tag-brand">White</span><span class="tag tag-theme">Void</span></div>
+      </div>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 ootob.ai &middot; 20 design experiments</p>
+</footer>
+
+</body>
+</html>
