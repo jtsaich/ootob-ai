@@ -14,6 +14,205 @@ You can build business systems through conversation with AI, without development
 
 ---
 
+## Phase 0: Claude Coworkを準備する / Getting Started with Claude Cowork
+
+このガイドではClaude Coworkを使ってシステムを構築する。まずCoworkのインストールから基本的な使い方までを説明する。
+
+This guide uses Claude Cowork to build systems. Let's start with installation and basics.
+
+### Claude Coworkとは何か / What is Claude Cowork?
+
+Claude Coworkは、Claudeデスクトップアプリに搭載された自律型タスク実行モードだ。通常のチャットが「1問1答」の対話なのに対し、Coworkは複数のステップにまたがる作業を自律的にこなす。あなたのパソコン上のファイルを直接読み書きし、接続した外部ツール（Slack、Google Sheets、Notionなど）と連携しながら、完成した成果物を届ける。
+
+Claude Cowork is an autonomous task execution mode built into the Claude desktop app. While regular chat is a back-and-forth Q&A, Cowork autonomously handles multi-step work. It directly reads and writes files on your computer, coordinates with connected external tools (Slack, Google Sheets, Notion, etc.), and delivers finished outputs.
+
+**通常のチャットとの違い / How it differs from regular chat:**
+
+| | チャット / Chat | Cowork |
+|---|---|---|
+| 動作 / Behavior | 1問1答 / One question, one answer | 複数ステップを自律実行 / Autonomous multi-step execution |
+| ファイル操作 / File access | アップロードしたファイルのみ / Uploaded files only | パソコン上のフォルダに直接アクセス / Direct access to local folders |
+| 外部ツール / External tools | 限定的 / Limited | Connectorで多数のツールと連携 / Many tools via connectors |
+| 出力 / Output | チャット内のテキスト / Text in chat | Excel、PowerPoint、PDFなど実ファイル / Actual files (Excel, PowerPoint, PDF, etc.) |
+| 適した作業 / Best for | 質問、アイデア出し / Questions, brainstorming | ファイル整理、文書作成、データ抽出、リサーチ / File management, document creation, data extraction, research |
+
+### Claude Coworkで何ができるか / What People Do with Claude Cowork
+
+具体的なユースケースをいくつか紹介する。
+
+Here are concrete use cases:
+
+**1. ファイル整理 / File Organization**
+ダウンロードフォルダや共有ドライブの中身を、リネーム、分類、重複削除してくれる。「このフォルダの中身を種類ごとに整理して」と伝えるだけでいい。
+
+Point Claude at a folder and ask it to rename, sort, and deduplicate. Just say "organize this folder by type."
+
+**2. ドキュメント作成 / Document Preparation**
+複数のソース資料から、フォーマット済みのWord文書やPowerPoint、Excelを組み立てる。数式付きのスプレッドシートも作れる。
+
+Assemble formatted Word docs, PowerPoint decks, and Excel sheets from multiple sources. It can create spreadsheets with working formulas.
+
+**3. リサーチ・要約 / Research & Synthesis**
+複数の文書を横断的に読み、重要なポイントを抽出してレポートにまとめる。
+
+Read across multiple documents, extract key points, and compile them into a report.
+
+**4. データ抽出 / Data Extraction**
+契約書、レポート、記録簿などの密度の高い文書から、必要な情報を構造化して取り出す。
+
+Extract structured information from dense documents like contracts, reports, and records.
+
+**5. 定期タスクの自動化 / Scheduled Automation**
+「毎週月曜にSlackのチャンネルを要約して」といった繰り返しタスクをスケジュール設定できる。
+
+Set up recurring tasks like "summarize this Slack channel every Monday."
+
+### インストール手順 / Installation Steps
+
+**必要なもの / Requirements:**
+
+- macOSまたはWindowsのパソコン / A Mac or Windows computer
+- Claudeの有料プラン（Pro、Max、Team、Enterpriseのいずれか） / A paid Claude plan (Pro, Max, Team, or Enterprise)
+- インターネット接続（タスク実行中は常時必要） / Internet connection (required throughout task execution)
+
+**手順 / Steps:**
+
+1. **Claude Desktopをダウンロード / Download Claude Desktop**
+   - [claude.com/download](https://claude.com/download) にアクセス
+   - 自分のOS（macOS / Windows）に合ったバージョンを選択
+   - Visit [claude.com/download](https://claude.com/download) and select your OS
+
+2. **インストール / Install**
+   - macOS：ダウンロードしたファイルを開き、アプリをApplicationsフォルダにドラッグ
+   - Windows：インストーラーを実行
+   - macOS: Open the downloaded file and drag the app to Applications
+   - Windows: Run the installer
+
+3. **ログイン / Log in**
+   - Claude Desktopを起動し、Claudeアカウントでログイン
+   - Launch Claude Desktop and log in with your Claude account
+
+4. **Coworkモードに切り替え / Switch to Cowork mode**
+   - 画面上部のモード切り替えで「Chat」と「Cowork」のタブが表示される
+   - 「Cowork」タブをクリック
+   - Look for the mode selector showing "Chat" and "Cowork" tabs at the top
+   - Click the "Cowork" tab
+
+5. **フォルダを選択 / Select a folder**
+   - Coworkに作業してもらいたいフォルダを指定する。ここで選んだフォルダ内のファイルをClaudeが読み書きできるようになる
+   - Select the folder you want Cowork to operate on. Claude will be able to read and write files in this folder
+
+### Connectorを追加する / Adding Connectors
+
+Connectorは、ClaudeをSlack、Google Drive、Notionなどの外部サービスに接続する仕組み。接続すると、Claudeがそのサービスのデータを読み取ったり、操作したりできるようになる。
+
+Connectors link Claude to external services like Slack, Google Drive, and Notion. Once connected, Claude can read data from and take actions within those services.
+
+**追加手順 / How to add:**
+
+1. Claude Desktopの左サイドバーで **「Customize」** をクリック
+   Click **"Customize"** in the left sidebar
+
+2. **「Connectors」** セクションの **「+」** ボタンをクリック
+   Click the **"+"** button next to **"Connectors"**
+
+3. 一覧から接続したいサービスを選択（例：Slack、Google Drive、Notion）
+   Select the service you want to connect (e.g., Slack, Google Drive, Notion)
+
+4. **「Connect」** をクリックし、認証画面でアクセスを許可
+   Click **"Connect"** and authorize access in the authentication screen
+
+5. 接続が完了すると、ConnectorsリストにそのサービスのHMが表示される
+   Once connected, the service appears in your Connectors list
+
+> **注意：** Connectorを追加すると、Claudeにそのサービスのデータへのアクセス権を与えることになる。必要なサービスだけを接続すること。
+>
+> **Note:** Adding a connector grants Claude access to that service's data. Only connect services you actually need.
+
+**このガイドで使うconnector / Connectors used in this guide:**
+
+- **Slack** — 打刻メッセージの読み取り / Read check-in messages
+- **Google Drive** — Google Sheetsの読み書き / Read and write Google Sheets
+- **Notion**（Notion DBを使う場合） — データベースの操作 / Database operations
+
+### Skillを追加する / Adding Skills
+
+Skillは、Claudeに特定の専門知識やワークフローを追加する拡張機能。例えば、Excel操作の専門スキルを有効にすると、数式付きの本格的なスプレッドシートを作れるようになる。
+
+Skills add specialized knowledge and workflows to Claude. For example, enabling the Excel skill lets Claude create professional spreadsheets with working formulas.
+
+**追加手順 / How to add:**
+
+1. Claude Desktopの左サイドバーで **「Customize」** をクリック
+   Click **"Customize"** in the left sidebar
+
+2. **「Skills」** セクションの **「+」** ボタンをクリック
+   Click the **"+"** button next to **"Skills"**
+
+3. **「Browse skills」** を選択してスキル一覧を表示
+   Select **"Browse skills"** to view available skills
+
+4. 使いたいスキルの **「Install」** をクリック
+   Click **"Install"** on the skill you want
+
+5. インストール済みスキルは **Customize > Skills** に表示され、デフォルトで有効になる。Claudeが必要に応じて自動的に使用する
+   Installed skills appear in **Customize > Skills** and are enabled by default. Claude uses them automatically when relevant
+
+**Anthropic公式の組み込みスキル / Built-in skills from Anthropic:**
+
+- **Excel** — 数式・書式付きスプレッドシートの作成・編集 / Create and edit spreadsheets with formulas and formatting
+- **Word** — フォーマット済み文書の作成 / Create formatted documents
+- **PowerPoint** — プレゼンテーションの作成 / Create presentations
+- **PDF** — PDFの作成・処理 / Create and process PDFs
+
+### Pluginを追加する / Adding Plugins
+
+Pluginは、Skills、Connectors、サブエージェントを1つのパッケージにまとめたもの。特定の業務領域（営業、マーケティング、エンジニアリングなど）向けに最適化されたセットが用意されている。
+
+Plugins bundle Skills, Connectors, and sub-agents into a single package. Pre-configured sets are available for specific domains like sales, marketing, and engineering.
+
+**追加手順 / How to add:**
+
+1. Claude Desktopの左サイドバーで **「Customize」** をクリック
+   Click **"Customize"** in the left sidebar
+
+2. **「Browse plugins」** を選択
+   Select **"Browse plugins"**
+
+3. 使いたいプラグインの **「Install」** をクリック
+   Click **"Install"** on the plugin you want
+
+> **まとめ：Customize画面の構成 / Summary: The Customize panel**
+>
+> | 項目 / Item | 役割 / Role | 例 / Examples |
+> |---|---|---|
+> | Connectors | 外部サービスとの接続 / Connect to external services | Slack, Google Drive, Notion |
+> | Skills | 専門知識・ワークフローの追加 / Add specialized knowledge | Excel, Word, PowerPoint, PDF |
+> | Plugins | Skills + Connectors + サブエージェントのパッケージ / Bundled packages | Sales, Marketing, Engineering, Finance |
+>
+> すべて左サイドバーの **「Customize」** からアクセスする。
+> All accessible from **"Customize"** in the left sidebar.
+
+### 最初のタスクを実行してみる / Running Your First Task
+
+セットアップが終わったら、簡単なタスクで動作確認する。
+
+After setup, try a simple task to verify everything works.
+
+**試してみよう / Try this:**
+
+```
+デスクトップにある「test」フォルダの中身を教えて。
+
+Show me the contents of the "test" folder on my desktop.
+```
+
+Coworkが正しくフォルダにアクセスし、ファイル一覧を返してくれれば準備完了。次のPhaseに進もう。
+
+If Cowork correctly accesses the folder and returns a file list, you're ready. Move on to the next phase.
+
+---
+
 ## Phase 1: 仕様を考える / Figuring Out Your Spec
 
 いきなりAIに「作って」と頼まない。まず自分で「何を作るか」を考える。AIはその思考を助けるパートナーとして使う。
