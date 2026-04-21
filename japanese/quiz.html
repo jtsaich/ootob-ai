@@ -61,7 +61,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .stats-bar {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    flex-wrap: wrap;
+    gap: 8px 16px;
     padding: 12px 0;
     margin-bottom: 16px;
     font-size: 0.85em;
@@ -244,6 +245,47 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     color: var(--bg);
   }
 
+  /* Rating buttons (FSRS) */
+  .rating-bar {
+    display: none;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .rating-bar.show { display: flex; }
+  .rating-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .rating-btn.suggested {
+    border-color: var(--accent);
+    background: var(--card);
+  }
+  .rating-btn .label { font-weight: 600; font-family: 'Inter', sans-serif; }
+  .rating-btn .interval {
+    font-size: 0.7em;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+  }
+  .rating-btn.again .label { color: #c62828; }
+  .rating-btn.hard  .label { color: #ef6c00; }
+  .rating-btn.good  .label { color: #2e7d32; }
+  .rating-btn.easy  .label { color: #1565c0; }
+  .rating-btn.again.suggested { border-color: #c62828; background: rgba(198,40,40,0.06); }
+  .rating-btn.hard.suggested  { border-color: #ef6c00; background: rgba(239,108,0,0.06); }
+  .rating-btn.good.suggested  { border-color: #2e7d32; background: rgba(46,125,50,0.06); }
+  .rating-btn.easy.suggested  { border-color: #1565c0; background: rgba(21,101,192,0.06); }
+
   /* Q&A specific */
   .qa-hint {
     font-size: 0.8em;
@@ -411,8 +453,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </header>
 
   <div class="stats-bar">
-    <span>今日: <strong id="todayCount">0</strong> 題</span>
-    <span>正確率: <strong id="accuracy">-</strong></span>
+    <span>待複習: <strong id="dueCount">0</strong></span>
+    <span>新卡: <strong id="newCount">0</strong></span>
+    <span>今日: <strong id="todayCount">0</strong></span>
+    <span>保持率: <strong id="retention">-</strong></span>
     <span>連續: <strong id="streak">0</strong></span>
     <span>已學: <strong id="learnedCount">0</strong></span>
   </div>
@@ -455,6 +499,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 
     <div class="feedback" id="feedback"></div>
+
+    <div class="rating-bar" id="ratingBar">
+      <button class="rating-btn again" onclick="rateCard(1)"><span class="label">Again</span><span class="interval" id="int1">—</span></button>
+      <button class="rating-btn hard" onclick="rateCard(2)"><span class="label">Hard</span><span class="interval" id="int2">—</span></button>
+      <button class="rating-btn good" onclick="rateCard(3)"><span class="label">Good</span><span class="interval" id="int3">—</span></button>
+      <button class="rating-btn easy" onclick="rateCard(4)"><span class="label">Easy</span><span class="interval" id="int4">—</span></button>
+    </div>
 
     <div class="actions">
       <button class="action-btn" onclick="showAnswer()">看答案</button>
@@ -561,13 +612,19 @@ let level = 'all';
 let currentQ = null;
 let answered = false;
 let stats = { total: 0, correct: 0, streak: 0 };
+const NEW_CARDS_PER_DAY = 20;
 
 // ========== SRS PERSISTENCE ==========
 let srsData = null;
 let recentKeys = [];
 
 function srsDefault() {
-  return { version: 1, items: {}, session: { date: '', total: 0, correct: 0, streak: 0 } };
+  return {
+    version: 1,
+    items: {},
+    session: { date: '', total: 0, correct: 0, streak: 0, newDone: 0 },
+    fsrs: { totalRated: 0, goodRated: 0 },
+  };
 }
 
 function srsLoad() {
@@ -575,14 +632,16 @@ function srsLoad() {
     const raw = localStorage.getItem('jpquiz_srs');
     srsData = raw ? JSON.parse(raw) : srsDefault();
     if (!srsData.items) srsData.items = {};
-    if (!srsData.session) srsData.session = { date: '', total: 0, correct: 0, streak: 0 };
+    if (!srsData.session) srsData.session = { date: '', total: 0, correct: 0, streak: 0, newDone: 0 };
+    if (typeof srsData.session.newDone !== 'number') srsData.session.newDone = 0;
+    if (!srsData.fsrs) srsData.fsrs = { totalRated: 0, goodRated: 0 };
   } catch (e) {
     srsData = srsDefault();
   }
   // Reset session counters on new day
   const today = new Date().toISOString().slice(0, 10);
   if (srsData.session.date !== today) {
-    srsData.session = { date: today, total: 0, correct: 0, streak: 0 };
+    srsData.session = { date: today, total: 0, correct: 0, streak: 0, newDone: 0 };
   }
   stats.total = srsData.session.total;
   stats.correct = srsData.session.correct;
@@ -591,6 +650,63 @@ function srsLoad() {
 
 function srsSave() {
   try { localStorage.setItem('jpquiz_srs', JSON.stringify(srsData)); } catch (e) {}
+}
+
+// ========== FSRS-4.5 ==========
+const FSRS = (() => {
+  const w = [0.4072, 1.1829, 3.1262, 15.4722, 7.2102, 0.5316, 1.0651, 0.0234, 1.616, 0.1544, 1.0824, 1.9813, 0.0953, 0.2975, 2.2042, 0.2407, 2.9466, 0.5034, 0.6567];
+  const DECAY = -0.5;
+  const FACTOR = 19 / 81;
+  const TARGET_R = 0.9;
+  const clamp = (x, lo, hi) => Math.min(Math.max(x, lo), hi);
+  const initD = (g) => clamp(w[4] - Math.exp(w[5] * (g - 1)) + 1, 1, 10);
+  const initS = (g) => Math.max(w[g - 1], 0.1);
+  const retrievability = (t, S) => Math.pow(1 + FACTOR * t / S, DECAY);
+  const nextInterval = (S) => Math.max(Math.round(S / FACTOR * (Math.pow(TARGET_R, 1 / DECAY) - 1)), 1);
+  const nextD = (D, g) => clamp(w[7] * initD(4) + (1 - w[7]) * (D - w[6] * (g - 3)), 1, 10);
+  const nextSuccessS = (D, S, R, g) => {
+    const hardP = g === 2 ? w[15] : 1;
+    const easyB = g === 4 ? w[16] : 1;
+    return S * (1 + Math.exp(w[8]) * (11 - D) * Math.pow(S, -w[9]) * (Math.exp((1 - R) * w[10]) - 1) * hardP * easyB);
+  };
+  const nextLapseS = (D, S, R) => w[11] * Math.pow(D, -w[12]) * (Math.pow(S + 1, w[13]) - 1) * Math.exp((1 - R) * w[14]);
+  const dayMs = 86400000;
+
+  function review(f, rating, now) {
+    now = now || Date.now();
+    const r = Object.assign({}, f || {});
+    if (!r.state || r.state === 'new') {
+      r.S = initS(rating);
+      r.D = initD(rating);
+      r.state = rating === 1 ? 'learning' : 'review';
+    } else {
+      const elapsed = r.lastReview ? Math.max((now - r.lastReview) / dayMs, 0) : 0;
+      const R = retrievability(elapsed, r.S);
+      r.D = nextD(r.D, rating);
+      if (rating === 1) {
+        r.S = nextLapseS(r.D, r.S, R);
+        r.state = 'relearning';
+      } else {
+        r.S = nextSuccessS(r.D, r.S, R, rating);
+        r.state = 'review';
+      }
+    }
+    r.interval = nextInterval(r.S);
+    r.lastReview = now;
+    r.due = now + r.interval * dayMs;
+    return r;
+  }
+  function previewIntervals(f, now) {
+    return [1, 2, 3, 4].map(g => review(f, g, now).interval);
+  }
+  return { review, previewIntervals };
+})();
+
+function formatInterval(d) {
+  if (d < 1) return '<1d';
+  if (d < 30) return d + 'd';
+  if (d < 365) return (d / 30).toFixed(1) + 'mo';
+  return (d / 365).toFixed(1) + 'y';
 }
 
 function srsGetKey(item) {
@@ -642,6 +758,50 @@ function weightedPick(pool) {
     if (r <= 0) return pool[i];
   }
   return pool[pool.length - 1];
+}
+
+// FSRS-aware queue: due cards (oldest due first) → new cards within daily quota → fallback weighted pick
+function pickFSRSNext(pool) {
+  if (!pool || pool.length === 0) return null;
+  const now = Date.now();
+  const due = [];
+  const news = [];
+  for (const item of pool) {
+    const key = srsGetKey(item);
+    const entry = srsData && srsData.items[key];
+    const fsrs = entry && entry.fsrs;
+    if (fsrs && fsrs.due != null) {
+      if (fsrs.due <= now) due.push({ item, due: fsrs.due });
+    } else {
+      news.push(item);
+    }
+  }
+  if (due.length) {
+    due.sort((a, b) => a.due - b.due);
+    return due[0].item;
+  }
+  if (news.length && srsData.session.newDone < NEW_CARDS_PER_DAY) {
+    return weightedPick(news);
+  }
+  // No due, no new quota → fall back to existing weighted behavior over full pool
+  return weightedPick(pool);
+}
+
+function countDueAndNew(pool) {
+  if (!pool) return { due: 0, newLeft: 0 };
+  const now = Date.now();
+  let due = 0, newAvail = 0;
+  for (const item of pool) {
+    const entry = srsData && srsData.items[srsGetKey(item)];
+    const fsrs = entry && entry.fsrs;
+    if (fsrs && fsrs.due != null) {
+      if (fsrs.due <= now) due++;
+    } else {
+      newAvail++;
+    }
+  }
+  const quotaLeft = Math.max(0, NEW_CARDS_PER_DAY - (srsData ? srsData.session.newDone : 0));
+  return { due, newLeft: Math.min(newAvail, quotaLeft) };
 }
 
 // ========== HELPERS ==========
@@ -733,7 +893,7 @@ function nextQuestion() {
     input.placeholder = '輸入日文...';
   } else if (mode === 'qa') {
     const pool = getFilteredQA();
-    currentQ = weightedPick(pool);
+    currentQ = pickFSRSNext(pool);
     recentKeys.push(srsGetKey(currentQ));
     if (recentKeys.length > 3) recentKeys.shift();
     document.getElementById('levelTag').textContent = currentQ.level;
@@ -744,7 +904,7 @@ function nextQuestion() {
     input.placeholder = '用日文回答...';
   } else {
     const pool = getFilteredVocab();
-    currentQ = weightedPick(pool);
+    currentQ = pickFSRSNext(pool);
     recentKeys.push(srsGetKey(currentQ));
     if (recentKeys.length > 3) recentKeys.shift();
     document.getElementById('levelTag').textContent = currentQ.level;
@@ -777,6 +937,7 @@ function checkAnswer() {
   answered = true;
   stats.total++;
 
+  let answerCorrect = true;
   if (mode === 'qa') {
     // Q&A mode: always show hint, no strict right/wrong
     const fb = document.getElementById('feedback');
@@ -793,19 +954,20 @@ function checkAnswer() {
     srsRecord(currentQ, true);
   } else if (mode === 'zh2jp' || mode === 'weak') {
     const answers = [normalize(currentQ.kanji), normalize(currentQ.reading)];
-    const isCorrect = answers.includes(userAns);
-    showVocabFeedback(isCorrect, `${currentQ.kanji}（${currentQ.reading}）`);
-    srsRecord(currentQ, isCorrect);
+    answerCorrect = answers.includes(userAns);
+    showVocabFeedback(answerCorrect, `${currentQ.kanji}（${currentQ.reading}）`);
+    srsRecord(currentQ, answerCorrect);
   } else {
     // jp2zh: check if any part of zh matches
     const zhParts = currentQ.zh.split(/[\/\(\)（）]/).map(normalize);
-    const isCorrect = zhParts.some(p => p && (userAns.includes(p) || p.includes(userAns)));
-    showVocabFeedback(isCorrect, currentQ.zh);
-    srsRecord(currentQ, isCorrect);
+    answerCorrect = zhParts.some(p => p && (userAns.includes(p) || p.includes(userAns)));
+    showVocabFeedback(answerCorrect, currentQ.zh);
+    srsRecord(currentQ, answerCorrect);
   }
 
   document.getElementById('submitBtn').textContent = '下一題';
   updateStats();
+  showRatingBar(answerCorrect ? 3 : 1);
 }
 
 function showVocabFeedback(isCorrect, correctAnswer) {
@@ -842,22 +1004,80 @@ function showAnswer() {
   srsRecord(currentQ, false);
   document.getElementById('submitBtn').textContent = '下一題';
   updateStats();
+  showRatingBar(1);
 }
 
 function resetFeedback() {
   const fb = document.getElementById('feedback');
   fb.className = 'feedback';
   fb.innerHTML = '';
+  hideRatingBar();
+}
+
+function showRatingBar(suggested) {
+  if (!currentQ) return;
+  const key = srsGetKey(currentQ);
+  const entry = srsData && srsData.items[key];
+  const fsrs = (entry && entry.fsrs) || null;
+  const intervals = FSRS.previewIntervals(fsrs);
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('int' + (i + 1));
+    if (el) el.textContent = formatInterval(intervals[i]);
+  }
+  const bar = document.getElementById('ratingBar');
+  bar.classList.add('show');
+  bar.querySelectorAll('.rating-btn').forEach((btn, i) => {
+    btn.classList.toggle('suggested', (i + 1) === suggested);
+  });
+}
+
+function hideRatingBar() {
+  const bar = document.getElementById('ratingBar');
+  if (!bar) return;
+  bar.classList.remove('show');
+  bar.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('suggested'));
+}
+
+function rateCard(rating) {
+  if (!currentQ || !srsData) return;
+  const key = srsGetKey(currentQ);
+  if (!srsData.items[key]) srsData.items[key] = { c: 0, w: 0, s: 0, ts: 0 };
+  const entry = srsData.items[key];
+  const wasNew = !entry.fsrs;
+  entry.fsrs = FSRS.review(entry.fsrs, rating);
+  if (wasNew) srsData.session.newDone++;
+  if (!srsData.fsrs) srsData.fsrs = { totalRated: 0, goodRated: 0 };
+  srsData.fsrs.totalRated++;
+  if (rating >= 2) srsData.fsrs.goodRated++;
+  srsSave();
+  updateStats();
+  nextQuestion();
 }
 
 function updateStats() {
   document.getElementById('todayCount').textContent = stats.total;
-  document.getElementById('accuracy').textContent = stats.total > 0
-    ? Math.round(stats.correct / stats.total * 100) + '%' : '-';
   document.getElementById('streak').textContent = stats.streak;
   if (srsData) {
     const learned = Object.values(srsData.items).filter(e => e.c > 0).length;
     document.getElementById('learnedCount').textContent = learned;
+
+    // Due / new counts based on current mode's pool
+    let pool = [];
+    if (mode === 'qa') pool = getFilteredQA();
+    else if (mode === 'weak') pool = VOCAB_CLEAN.filter(v => {
+      const e = srsData.items[srsGetKey(v)];
+      return e && e.w > 0;
+    });
+    else pool = getFilteredVocab();
+    const { due, newLeft } = countDueAndNew(pool);
+    document.getElementById('dueCount').textContent = due;
+    document.getElementById('newCount').textContent = newLeft;
+
+    // Retention from FSRS ratings (Hard/Good/Easy vs Again)
+    const fs = srsData.fsrs || { totalRated: 0, goodRated: 0 };
+    document.getElementById('retention').textContent = fs.totalRated > 0
+      ? Math.round(fs.goodRated / fs.totalRated * 100) + '%' : '-';
+
     srsData.session.total = stats.total;
     srsData.session.correct = stats.correct;
     srsData.session.streak = stats.streak;
