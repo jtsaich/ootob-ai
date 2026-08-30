@@ -206,11 +206,25 @@
   <div class="contact-card">
     <strong>ootob.ai 軟體工作室</strong><br>
     聯絡人：蔡承勳 Jack Tsai<br>
-    電話：（請填）<br>
-    地址：（請填）<br>
-    Email：jack@ootob.ai<br>
+    電話：<span id="c-tel">（載入中）</span><br>
+    地址：台北市<br>
+    Email：<span id="c-mail">（載入中）</span><br>
     網站：https://ootob.ai
   </div>
+
+  <script>
+    // 聯絡方式用 JS 組字，擋掉不跑 JS 的爬蟲與掃號機器人；瀏覽者與列印不受影響。
+    // 電話：把「業務門號」拆三段填進 parts（例：["0912","345","678"]）。
+    (function () {
+      var parts = ["09xx", "xxx", "xxx"]; // ← Jack：填業務門號後刪掉這行註解
+      var tel = parts.join("-");
+      document.getElementById("c-tel").textContent = tel;
+      var u = "jack", d = "ootob.ai";
+      var m = u + "\u0040" + d;
+      var el = document.getElementById("c-mail");
+      el.textContent = m;
+    })();
+  </script>
 </main>
 
 <footer class="site-footer">
