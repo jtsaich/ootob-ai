@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#173f39">
+  <title>逸棲慢養 LINE 服務概念展示</title>
+  <meta name="description" content="依公開需求製作的 LINE 官方帳號、行程瀏覽、FAQ、報名與真人客服概念展示。">
+  <style>
+    :root {
+      --forest: #173f39;
+      --forest-soft: #265c52;
+      --sand: #f3ead9;
+      --paper: #fffdf8;
+      --terracotta: #b96346;
+      --ink: #202c29;
+      --muted: #6c7773;
+      --line: #ded8cb;
+      --line-green: #06c755;
+      --shadow: 0 24px 80px rgba(25, 40, 36, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; background: #e8e3d9; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 12%, rgba(255,255,255,.9), transparent 26rem),
+        linear-gradient(145deg, #efe9de 0%, #ddd8ce 100%);
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .concept-note {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 20;
+      padding: 9px 16px;
+      color: #fff;
+      background: var(--forest);
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: .02em;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(260px, 430px) 390px;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(40px, 8vw, 120px);
+      padding: 76px 32px 32px;
+    }
+
+    .intro { max-width: 430px; }
+    .eyebrow {
+      color: var(--terracotta);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .intro h1 {
+      margin: 14px 0 18px;
+      color: var(--forest);
+      font-family: "Songti TC", "Noto Serif TC", serif;
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 600;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+    .intro p { margin: 0; color: #4d5b57; font-size: 17px; line-height: 1.8; }
+    .intro-list {
+      display: grid;
+      gap: 10px;
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+      color: #35433f;
+      font-size: 14px;
+    }
+    .intro-list li { display: flex; align-items: center; gap: 10px; }
+    .intro-list li::before {
+      width: 18px;
+      height: 1px;
+      content: "";
+      background: var(--terracotta);
+    }
+
+    .phone {
+      position: relative;
+      width: 390px;
+      height: min(844px, calc(100vh - 104px));
+      min-height: 650px;
+      overflow: hidden;
+      border: 9px solid #19201e;
+      border-radius: 42px;
+      background: #dfe5e1;
+      box-shadow: var(--shadow);
+    }
+
+    .status {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      color: #fff;
+      background: var(--forest);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .status-icons { letter-spacing: .16em; }
+
+    .chat-header {
+      height: 58px;
+      display: grid;
+      grid-template-columns: 32px 1fr 48px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      color: #fff;
+      background: var(--forest);
+    }
+    .chat-header button {
+      border: 0;
+      padding: 8px;
+      color: inherit;
+      background: transparent;
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .account { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 50%;
+      background: var(--sand);
+      color: var(--forest);
+      font-family: serif;
+      font-weight: 700;
+    }
+    .account strong { display: block; font-size: 15px; }
+    .account span { display: block; margin-top: 1px; color: #c9d8d4; font-size: 10px; }
+
+    .chat {
+      height: calc(100% - 26px - 58px - 42px - 226px);
+      overflow-y: auto;
+      padding: 18px 14px 28px;
+      scroll-behavior: smooth;
+      background:
+        linear-gradient(rgba(223,229,225,.94), rgba(223,229,225,.94)),
+        radial-gradient(circle at 20% 20%, #fff 1px, transparent 1px);
+      background-size: auto, 18px 18px;
+    }
+    .date-chip {
+      width: fit-content;
+      margin: 0 auto 16px;
+      padding: 4px 10px;
+      border-radius: 99px;
+      color: #fff;
+      background: rgba(44,57,53,.38);
+      font-size: 10px;
+    }
+    .message-row { display: flex; align-items: flex-end; gap: 7px; margin: 0 0 12px; }
+    .message-row.user { justify-content: flex-end; }
+    .mini-avatar {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--sand);
+      color: var(--forest);
+      font-family: serif;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .bubble {
+      max-width: 276px;
+      padding: 11px 13px;
+      border-radius: 5px 16px 16px 16px;
+      background: #fff;
+      box-shadow: 0 2px 7px rgba(29,48,42,.08);
+      font-size: 13px;
+      line-height: 1.58;
+      white-space: pre-line;
+    }
+    .user .bubble { border-radius: 16px 5px 16px 16px; background: #b9f3a6; }
+    .bubble small { display: block; margin-top: 7px; color: var(--muted); font-size: 10px; }
+    .quick-actions { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px 35px; }
+    .quick-actions button {
+      border: 1px solid #a7bbb5;
+      border-radius: 99px;
+      padding: 7px 11px;
+      color: var(--forest);
+      background: rgba(255,255,255,.85);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .chat-bar {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      border-top: 1px solid #d2d6d3;
+      background: #f8f8f8;
+      color: #7b8581;
+      font-size: 12px;
+    }
+    .chat-bar button { border: 0; background: transparent; color: var(--forest); cursor: pointer; font-weight: 700; }
+
+    .rich-menu {
+      height: 226px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      background: var(--paper);
+    }
+    .menu-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      color: var(--forest);
+      background: var(--paper);
+      cursor: pointer;
+      transition: background .14s ease, transform .14s ease;
+    }
+    .menu-item:nth-child(3n) { border-right: 0; }
+    .menu-item:active { transform: scale(.98); background: #f3eee4; }
+    .menu-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--sand);
+      font-size: 17px;
+    }
+    .menu-item strong { font-size: 12px; letter-spacing: .02em; }
+    .menu-item span:last-child { color: var(--muted); font-size: 9px; }
+
+    .sheet-backdrop {
+      position: absolute;
+      inset: 84px 0 0;
+      z-index: 10;
+      display: none;
+      align-items: flex-end;
+      background: rgba(18, 32, 28, .38);
+    }
+    .sheet-backdrop.open { display: flex; }
+    .sheet {
+      width: 100%;
+      max-height: 82%;
+      overflow-y: auto;
+      border-radius: 24px 24px 0 0;
+      padding: 10px 18px 28px;
+      background: var(--paper);
+      animation: rise .2s ease-out;
+    }
+    @keyframes rise { from { transform: translateY(28px); opacity: .5; } }
+    .sheet-handle { width: 42px; height: 4px; margin: 0 auto 16px; border-radius: 99px; background: #d8d5cc; }
+    .sheet-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .sheet-kicker { color: var(--terracotta); font-size: 10px; font-weight: 700; letter-spacing: .12em; }
+    .sheet h2 { margin: 5px 0 8px; color: var(--forest); font-family: serif; font-size: 25px; }
+    .sheet p { margin: 0; color: #59645f; font-size: 13px; line-height: 1.7; }
+    .close {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      border: 0;
+      border-radius: 50%;
+      background: #ece8df;
+      color: var(--forest);
+      cursor: pointer;
+      font-size: 17px;
+    }
+    .hero-art {
+      position: relative;
+      height: 154px;
+      overflow: hidden;
+      margin: 18px 0;
+      border-radius: 18px;
+      background: linear-gradient(#d6e4dc 0 48%, #c5a67f 48% 100%);
+    }
+    .sun { position: absolute; top: 24px; right: 42px; width: 42px; height: 42px; border-radius: 50%; background: #e59b62; }
+    .mountain { position: absolute; bottom: 0; width: 0; height: 0; border-left: 110px solid transparent; border-right: 110px solid transparent; border-bottom: 105px solid #43665d; }
+    .mountain.one { left: -36px; }
+    .mountain.two { left: 94px; border-left-width: 135px; border-right-width: 135px; border-bottom-color: #21483f; }
+    .hero-label { position: absolute; inset: auto 16px 14px auto; color: #fff; text-align: right; }
+    .hero-label strong { display: block; font-family: serif; font-size: 22px; letter-spacing: .08em; }
+    .hero-label span { font-size: 10px; letter-spacing: .16em; }
+
+    .timeline { display: grid; gap: 10px; margin-top: 14px; }
+    .timeline-item { display: grid; grid-template-columns: 42px 1fr; gap: 10px; align-items: start; }
+    .day { padding: 5px 0; border-radius: 8px; color: #fff; background: var(--forest); text-align: center; font-size: 10px; font-weight: 700; }
+    .timeline-item strong { display: block; margin-bottom: 3px; color: #2e3b37; font-size: 13px; }
+    .timeline-item span { color: var(--muted); font-size: 11px; line-height: 1.5; }
+
+    .faq-list { display: grid; gap: 8px; margin-top: 18px; }
+    .faq-list button {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 13px;
+      color: var(--ink);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .faq-list button::after { content: "→"; color: var(--terracotta); }
+
+    form { display: grid; gap: 11px; margin-top: 18px; }
+    label { display: grid; gap: 5px; color: #48534f; font-size: 11px; font-weight: 600; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #d4d0c7;
+      border-radius: 10px;
+      padding: 11px 12px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      font-size: 13px;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--forest-soft); box-shadow: 0 0 0 3px rgba(38,92,82,.1); }
+    textarea { min-height: 72px; resize: vertical; }
+    .submit {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px;
+      color: #fff;
+      background: var(--forest);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .demo-disclaimer { margin-top: 10px !important; color: #8b756a !important; font-size: 10px !important; }
+
+    .toast {
+      position: absolute;
+      z-index: 30;
+      right: 16px;
+      bottom: 242px;
+      left: 16px;
+      transform: translateY(12px);
+      padding: 11px 13px;
+      border-radius: 12px;
+      color: #fff;
+      background: rgba(23,63,57,.95);
+      box-shadow: 0 8px 30px rgba(0,0,0,.18);
+      opacity: 0;
+      pointer-events: none;
+      transition: .18s ease;
+      font-size: 12px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 850px) {
+      body { background: #dfe5e1; }
+      .concept-note { position: static; }
+      .page { display: block; min-height: auto; padding: 0; }
+      .intro { display: none; }
+      .phone {
+        width: 100%;
+        height: calc(100vh - 34px);
+        min-height: 620px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .status { display: none; }
+      .chat { height: calc(100% - 58px - 42px - 226px); }
+      .sheet-backdrop { inset: 58px 0 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="concept-note">依公開需求製作的互動概念稿，非既有旅遊業客戶實績；內容與價格皆為示意</div>
+
+  <main class="page">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="eyebrow">LINE OA CONCEPT / 2026</div>
+      <h1 id="page-title">讓旅程從<br>一個選單開始</h1>
+      <p>把行程、FAQ、報名與真人諮詢收進同一個 LINE 入口。右側可實際點擊六格選單，體驗客人加入官方帳號後的完整路徑。</p>
+      <ul class="intro-list">
+        <li>六格 Rich Menu 與歡迎訊息</li>
+        <li>滇南 12 日行程內頁</li>
+        <li>FAQ、諮詢表單與真人轉接</li>
+      </ul>
+    </section>
+
+    <section class="phone" aria-label="LINE 官方帳號互動概念">
+      <div class="status"><span>9:41</span><span class="status-icons">● ◔ ▰</span></div>
+      <header class="chat-header">
+        <button type="button" aria-label="返回">‹</button>
+        <div class="account">
+          <div class="avatar" aria-hidden="true">逸</div>
+          <div><strong>逸棲慢養</strong><span>官方帳號・概念展示</span></div>
+        </div>
+        <button type="button" aria-label="更多選項">⋯</button>
+      </header>
+
+      <div class="chat" id="chat" aria-live="polite">
+        <div class="date-chip">今天</div>
+        <div class="message-row">
+          <div class="mini-avatar" aria-hidden="true">逸</div>
+          <div class="bubble">歡迎來到逸棲慢養。
+
+慢一點走，才看得見旅途真正留下來的東西。你可以從下方選單查看滇南 12 日、常見問題，或直接留下諮詢資料。<small>示意歡迎訊息</small></div>
+        </div>
+        <div class="quick-actions">
+          <button type="button" data-action="itinerary">看看行程</button>
+          <button type="button" data-action="faq">常見問題</button>
+          <button type="button" data-action="apply">我要諮詢</button>
+        </div>
+      </div>
+
+      <div class="chat-bar"><span>請由下方選單開始</span><button type="button" id="toggle-menu">關閉選單</button></div>
+
+      <nav class="rich-menu" id="rich-menu" aria-label="六格圖文選單">
+        <button class="menu-item" type="button" data-action="itinerary"><span class="menu-icon">山</span><strong>滇南 12 日</strong><span>完整行程</span></button>
+        <button class="menu-item" type="button" data-action="highlights"><span class="menu-icon">途</span><strong>慢養亮點</strong><span>旅行方式</span></button>
+        <button class="menu-item" type="button" data-action="apply"><span class="menu-icon">箋</span><strong>報名諮詢</strong><span>留下資料</span></button>
+        <button class="menu-item" type="button" data-action="faq"><span class="menu-icon">問</span><strong>行前 FAQ</strong><span>44 組問答</span></button>
+        <button class="menu-item" type="button" data-action="about"><span class="menu-icon">逸</span><strong>關於我們</strong><span>品牌故事</span></button>
+        <button class="menu-item" type="button" data-action="human"><span class="menu-icon">聊</span><strong>真人客服</strong><span>轉接顧問</span></button>
+      </nav>
+
+      <div class="sheet-backdrop" id="sheet-backdrop" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <div class="sheet" id="sheet"></div>
+      </div>
+      <div class="toast" id="toast"></div>
+    </section>
+  </main>
+
+  <template id="sheet-itinerary">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div><div class="sheet-kicker">YUNNAN / 12 DAYS</div><h2 id="sheet-title">滇南十二日</h2><p>完整行程內容將以案主提供的正式檔案置換。</p></div>
+      <button class="close" type="button" aria-label="關閉">×</button>
+    </div>
+    <div class="hero-art" aria-label="滇南山景抽象插畫"><div class="sun"></div><div class="mountain one"></div><div class="mountain two"></div><div class="hero-label"><strong>慢慢走，深深看</strong><span>逸棲慢養</span></div></div>
+    <div class="timeline">
+      <div class="timeline-item"><div class="day">D1–4</div><div><strong>抵達與適應</strong><span>保留移動彈性，讓身體跟上風景。</span></div></div>
+      <div class="timeline-item"><div class="day">D5–8</div><div><strong>聚落與日常</strong><span>示意段落；正式版依完整行程檔呈現。</span></div></div>
+      <div class="timeline-item"><div class="day">D9–12</div><div><strong>山野與返程</strong><span>交通、住宿與注意事項集中在同一頁。</span></div></div>
+    </div>
+  </template>
+
+  <template id="sheet-faq">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div><div class="sheet-kicker">QUICK ANSWERS</div><h2 id="sheet-title">行前常見問題</h2><p>點選後示範關鍵字自動回覆；正式答案使用案主提供的 44 組文案。</p></div>
+      <button class="close" type="button" aria-label="關閉">×</button>
+    </div>
+    <div class="faq-list">
+      <button type="button" data-faq="費用包含哪些項目？">費用包含哪些項目？</button>
+      <button type="button" data-faq="需要準備哪些證件？">需要準備哪些證件？</button>
+      <button type="button" data-faq="住宿與交通如何安排？">住宿與交通如何安排？</button>
+      <button type="button" data-faq="我有其他問題">以上都不是，我要找真人</button>
+    </div>
+  </template>
+
+  <template id="sheet-apply">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div><div class="sheet-kicker">TRAVEL WITH US</div><h2 id="sheet-title">報名／諮詢</h2><p>填寫後可自動建立名單、標籤客戶並通知旅遊顧問。</p></div>
+      <button class="close" type="button" aria-label="關閉">×</button>
+    </div>
+    <form id="inquiry-form">
+      <label>稱呼<input name="name" autocomplete="name" required placeholder="王小姐"></label>
+      <label>聯絡電話<input name="phone" autocomplete="tel" inputmode="tel" required placeholder="09xx xxx xxx"></label>
+      <label>同行人數<select name="party"><option>1 人</option><option>2 人</option><option>3–4 人</option><option>5 人以上</option></select></label>
+      <label>想先了解<textarea name="note" placeholder="例如：住宿、步行強度、單人房安排"></textarea></label>
+      <button class="submit" type="submit">送出諮詢</button>
+      <p class="demo-disclaimer">概念展示不會傳送或儲存任何資料。</p>
+    </form>
+  </template>
+
+  <template id="sheet-about">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div><div class="sheet-kicker">ABOUT YIQI</div><h2 id="sheet-title">逸棲慢養</h2><p>不趕景點，不把旅行塞滿。用較長的停留、較少的移動，讓旅人真正進入地方的節奏。</p></div>
+      <button class="close" type="button" aria-label="關閉">×</button>
+    </div>
+    <div class="hero-art" aria-label="慢養旅行抽象插畫"><div class="sun"></div><div class="mountain one"></div><div class="mountain two"></div><div class="hero-label"><strong>留白，也是行程</strong><span>SLOW TRAVEL</span></div></div>
+    <p class="demo-disclaimer">品牌描述為概念稿示意，正式版本以案主核准文案為準。</p>
+  </template>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const backdrop = document.getElementById('sheet-backdrop');
+    const sheet = document.getElementById('sheet');
+    const richMenu = document.getElementById('rich-menu');
+    const toggleMenu = document.getElementById('toggle-menu');
+    const toast = document.getElementById('toast');
+
+    const templates = {
+      itinerary: 'sheet-itinerary',
+      faq: 'sheet-faq',
+      apply: 'sheet-apply',
+      about: 'sheet-about'
+    };
+
+    function openSheet(name) {
+      const template = document.getElementById(templates[name]);
+      sheet.replaceChildren(template.content.cloneNode(true));
+      backdrop.classList.add('open');
+      sheet.querySelector('.close').addEventListener('click', closeSheet);
+      if (name === 'faq') {
+        sheet.querySelectorAll('[data-faq]').forEach(button => {
+          button.addEventListener('click', () => {
+            const text = button.dataset.faq;
+            closeSheet();
+            addUserMessage(text);
+            window.setTimeout(() => {
+              if (text === '我有其他問題') {
+                addBotMessage('已切換為真人服務。旅遊顧問會在營業時間內接手這段對話。', '真人轉接示意');
+              } else {
+                addBotMessage('這裡會顯示案主提供的正式 FAQ 回覆，並可附上行程頁或報名按鈕。', '關鍵字自動回覆示意');
+              }
+            }, 260);
+          });
+        });
+      }
+      if (name === 'apply') {
+        sheet.querySelector('#inquiry-form').addEventListener('submit', event => {
+          event.preventDefault();
+          closeSheet();
+          addUserMessage('我已送出諮詢資料');
+          window.setTimeout(() => addBotMessage('收到，我們已建立「滇南 12 日／待聯繫」標籤，旅遊顧問會接續與你確認。', '表單確認與自動標籤示意'), 260);
+        });
+      }
+    }
+
+    function closeSheet() { backdrop.classList.remove('open'); }
+
+    function addUserMessage(text) {
+      const row = document.createElement('div');
+      row.className = 'message-row user';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      row.appendChild(bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function addBotMessage(text, note) {
+      const row = document.createElement('div');
+      row.className = 'message-row';
+      const avatar = document.createElement('div');
+      avatar.className = 'mini-avatar';
+      avatar.textContent = '逸';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      if (note) {
+        const small = document.createElement('small');
+        small.textContent = note;
+        bubble.appendChild(small);
+      }
+      row.append(avatar, bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      window.setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    document.addEventListener('click', event => {
+      const target = event.target.closest('[data-action]');
+      if (!target) return;
+      const action = target.dataset.action;
+      if (templates[action]) openSheet(action);
+      if (action === 'highlights') {
+        addUserMessage('慢養旅行有什麼不同？');
+        window.setTimeout(() => addBotMessage('較少移動、較長停留，也為臨時改變保留空間。正式版會換成逸棲慢養核准的品牌說明。', '關鍵字自動回覆示意'), 260);
+      }
+      if (action === 'human') {
+        addUserMessage('我要找真人客服');
+        window.setTimeout(() => addBotMessage('已停止自動回覆並通知旅遊顧問。這段對話會保留，接手時不用重新說明。', '真人轉接示意'), 260);
+      }
+    });
+
+    backdrop.addEventListener('click', event => { if (event.target === backdrop) closeSheet(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeSheet(); });
+
+    toggleMenu.addEventListener('click', () => {
+      const hidden = richMenu.hidden;
+      richMenu.hidden = !hidden;
+      toggleMenu.textContent = hidden ? '關閉選單' : '開啟選單';
+      showToast(hidden ? '已開啟六格圖文選單' : '已收合圖文選單');
+    });
+  </script>
+</body>
+</html>
