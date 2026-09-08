@@ -332,6 +332,8 @@
       grid-template-rows: repeat(2, 1fr);
       background: var(--paper);
     }
+    .rich-menu[hidden] { display: none; }
+    .phone.menu-collapsed .chat { height: calc(100% - 26px - 58px - 42px); }
     .menu-item {
       position: relative;
       isolation: isolate;
@@ -577,7 +579,7 @@
         <a class="bot-launch" href="https://line.me/R/ti/p/@097uxxqu" target="_blank" rel="noopener"><span><strong>開啟實際 LINE Bot</strong><br>點選單或輸入「行前 FAQ」</span></a>
       </div>
 
-      <div class="chat-bar"><span>請由下方選單開始</span><button type="button" id="toggle-menu">關閉選單</button></div>
+      <div class="chat-bar"><span>請由下方選單開始</span><button type="button" id="toggle-menu" aria-controls="rich-menu" aria-expanded="true">關閉選單</button></div>
 
       <nav class="rich-menu" id="rich-menu" aria-label="六格圖文選單">
         <button class="menu-item photo" style="--menu-image:url('assets/yuan-yang-terraces.webp')" type="button" data-action="itinerary"><span class="menu-icon">01</span><strong>滇南 12 日</strong><span>完整行程</span></button>
@@ -754,10 +756,12 @@
     document.addEventListener('keydown', event => { if (event.key === 'Escape') closeSheet(); });
 
     toggleMenu.addEventListener('click', () => {
-      const hidden = richMenu.hidden;
-      richMenu.hidden = !hidden;
-      toggleMenu.textContent = hidden ? '關閉選單' : '開啟選單';
-      showToast(hidden ? '已開啟六格圖文選單' : '已收合圖文選單');
+      const shouldCollapse = !richMenu.hidden;
+      richMenu.hidden = shouldCollapse;
+      richMenu.closest('.phone').classList.toggle('menu-collapsed', shouldCollapse);
+      toggleMenu.textContent = shouldCollapse ? '開啟選單' : '關閉選單';
+      toggleMenu.setAttribute('aria-expanded', String(!shouldCollapse));
+      showToast(shouldCollapse ? '已收合圖文選單' : '已開啟六格圖文選單');
     });
   </script>
 </body>
