@@ -294,6 +294,23 @@
     .featured-copy small { font-size: 9px; letter-spacing: .16em; }
     .featured-copy strong { font-family: "Songti TC", serif; font-size: 19px; font-weight: 600; letter-spacing: .06em; }
     .featured-copy span { color: rgba(255,255,255,.8); font-size: 9px; }
+    .bot-launch {
+      width: calc(100% - 35px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 8px 35px;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #fff;
+      background: var(--forest);
+      box-shadow: 0 3px 12px rgba(29,48,42,.12);
+      text-decoration: none;
+    }
+    .bot-launch strong { font-size: 11px; }
+    .bot-launch span { color: rgba(255,255,255,.72); font-size: 9px; }
+    .bot-launch::after { content: "LINE"; color: #79e59f; font-size: 9px; font-weight: 800; letter-spacing: .08em; }
 
     .chat-bar {
       height: 42px;
@@ -557,6 +574,7 @@
           <img src="assets/yuan-yang-terraces.webp" alt="雲南元陽梯田映照天空" width="720" height="450" fetchpriority="high">
           <span class="featured-copy"><small>FEATURED JOURNEY</small><strong>滇南十二日</strong><span>慢行、在地、留白</span></span>
         </button>
+        <a class="bot-launch" href="https://line.me/R/ti/p/@746seamz" target="_blank" rel="noopener"><span><strong>開啟實際 LINE Bot</strong><br>加入後輸入「逸棲慢養」</span></a>
       </div>
 
       <div class="chat-bar"><span>請由下方選單開始</span><button type="button" id="toggle-menu">關閉選單</button></div>
