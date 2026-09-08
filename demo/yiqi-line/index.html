@@ -7,6 +7,8 @@
   <meta name="theme-color" content="#173f39">
   <title>逸棲慢養 LINE 服務概念展示</title>
   <meta name="description" content="依公開需求製作的 LINE 官方帳號、行程瀏覽、FAQ、報名與真人客服概念展示。">
+  <meta property="og:image" content="https://ootob.ai/demo/yiqi-line/assets/yuan-yang-terraces.webp">
+  <link rel="preload" as="image" href="assets/yuan-yang-terraces.webp" fetchpriority="high">
   <style>
     :root {
       --forest: #173f39;
@@ -60,40 +62,86 @@
       padding: 76px 32px 32px;
     }
 
-    .intro { max-width: 430px; }
+    .intro {
+      position: relative;
+      isolation: isolate;
+      min-height: min(680px, calc(100vh - 112px));
+      max-height: 760px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(34px, 5vw, 54px);
+      border-radius: 32px;
+      background:
+        linear-gradient(180deg, rgba(14,35,31,.06) 12%, rgba(14,35,31,.84) 88%),
+        url("assets/yuan-yang-terraces.webp") center / cover;
+      box-shadow: var(--shadow);
+    }
+    .intro::after {
+      position: absolute;
+      inset: 14px;
+      z-index: -1;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 23px;
+      content: "";
+      pointer-events: none;
+    }
+    .intro-meta {
+      position: absolute;
+      inset: 34px 34px auto auto;
+      display: grid;
+      color: #fff;
+      text-align: right;
+      text-shadow: 0 1px 10px rgba(0,0,0,.35);
+    }
+    .intro-meta span { font-size: 10px; letter-spacing: .16em; }
+    .intro-meta strong { font-family: Georgia, serif; font-size: 29px; font-weight: 400; letter-spacing: .04em; }
     .eyebrow {
-      color: var(--terracotta);
-      font-size: 12px;
+      color: #f1c7a8;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: .18em;
+      letter-spacing: .2em;
       text-transform: uppercase;
     }
     .intro h1 {
       margin: 14px 0 18px;
-      color: var(--forest);
+      color: #fff;
       font-family: "Songti TC", "Noto Serif TC", serif;
-      font-size: clamp(38px, 5vw, 64px);
-      font-weight: 600;
+      font-size: clamp(38px, 4.2vw, 52px);
+      font-weight: 500;
       line-height: 1.08;
       letter-spacing: -.03em;
+      text-shadow: 0 2px 18px rgba(0,0,0,.28);
+      word-break: keep-all;
     }
-    .intro p { margin: 0; color: #4d5b57; font-size: 17px; line-height: 1.8; }
+    .intro p { max-width: 390px; margin: 0; color: rgba(255,255,255,.88); font-size: 16px; line-height: 1.75; }
     .intro-list {
-      display: grid;
-      gap: 10px;
-      margin: 28px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 24px 0 0;
       padding: 0;
       list-style: none;
-      color: #35433f;
-      font-size: 14px;
+      color: #fff;
+      font-size: 11px;
     }
-    .intro-list li { display: flex; align-items: center; gap: 10px; }
-    .intro-list li::before {
-      width: 18px;
-      height: 1px;
-      content: "";
-      background: var(--terracotta);
+    .intro-list li {
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.38);
+      border-radius: 99px;
+      background: rgba(18,43,38,.28);
+      backdrop-filter: blur(8px);
     }
+    .photo-credit {
+      display: inline-block;
+      width: fit-content;
+      margin-top: 13px;
+      color: rgba(255,255,255,.63);
+      font-size: 9px;
+      text-decoration: none;
+    }
+    .photo-credit:hover { color: #fff; text-decoration: underline; }
 
     .phone {
       position: relative;
@@ -212,6 +260,40 @@
       font-size: 11px;
       font-weight: 600;
     }
+    .featured-trip {
+      position: relative;
+      width: calc(100% - 35px);
+      height: 112px;
+      overflow: hidden;
+      display: block;
+      margin: 0 0 8px 35px;
+      border: 0;
+      border-radius: 16px;
+      padding: 0;
+      color: #fff;
+      background: var(--forest);
+      box-shadow: 0 5px 18px rgba(29,48,42,.16);
+      text-align: left;
+      cursor: pointer;
+    }
+    .featured-trip::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: linear-gradient(90deg, rgba(13,38,33,.82), rgba(13,38,33,.06) 78%);
+    }
+    .featured-trip img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .featured-copy {
+      position: absolute;
+      inset: auto auto 13px 14px;
+      z-index: 1;
+      display: grid;
+      gap: 2px;
+      text-shadow: 0 1px 10px rgba(0,0,0,.3);
+    }
+    .featured-copy small { font-size: 9px; letter-spacing: .16em; }
+    .featured-copy strong { font-family: "Songti TC", serif; font-size: 19px; font-weight: 600; letter-spacing: .06em; }
+    .featured-copy span { color: rgba(255,255,255,.8); font-size: 9px; }
 
     .chat-bar {
       height: 42px;
@@ -235,32 +317,56 @@
     }
     .menu-item {
       position: relative;
+      isolation: isolate;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 4px;
       border: 0;
-      border-top: 1px solid var(--line);
-      border-right: 1px solid var(--line);
+      border-top: 1px solid rgba(255,255,255,.38);
+      border-right: 1px solid rgba(255,255,255,.38);
+      padding: 13px 11px;
       color: var(--forest);
-      background: var(--paper);
+      background: #f5efe4;
+      text-align: left;
       cursor: pointer;
-      transition: background .14s ease, transform .14s ease;
+      transition: filter .14s ease, transform .14s ease;
     }
     .menu-item:nth-child(3n) { border-right: 0; }
-    .menu-item:active { transform: scale(.98); background: #f3eee4; }
-    .menu-icon {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: var(--sand);
-      font-size: 17px;
+    .menu-item:active { transform: scale(.98); filter: brightness(.92); }
+    .menu-item::before {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      content: "";
+      background: var(--menu-image) center / cover;
     }
-    .menu-item strong { font-size: 12px; letter-spacing: .02em; }
-    .menu-item span:last-child { color: var(--muted); font-size: 9px; }
+    .menu-item.photo::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      background: linear-gradient(180deg, rgba(8,28,24,.02) 12%, rgba(8,28,24,.8) 100%);
+    }
+    .menu-item.photo { color: #fff; }
+    .menu-item.accent { color: #fff; background: var(--terracotta); }
+    .menu-item.dark { color: #fff; background: var(--forest); }
+    .menu-icon {
+      width: auto;
+      height: auto;
+      padding-bottom: 3px;
+      border-bottom: 1px solid currentColor;
+      border-radius: 0;
+      background: transparent;
+      font-family: Georgia, serif;
+      font-size: 10px;
+      letter-spacing: .12em;
+      opacity: .8;
+    }
+    .menu-item strong { font-family: "Songti TC", serif; font-size: 13px; letter-spacing: .04em; }
+    .menu-item span:last-child { color: inherit; font-size: 9px; opacity: .7; }
 
     .sheet-backdrop {
       position: absolute;
@@ -299,19 +405,23 @@
     }
     .hero-art {
       position: relative;
-      height: 154px;
+      height: 176px;
       overflow: hidden;
-      margin: 18px 0;
+      margin: 18px 0 8px;
       border-radius: 18px;
-      background: linear-gradient(#d6e4dc 0 48%, #c5a67f 48% 100%);
+      background: var(--forest);
     }
-    .sun { position: absolute; top: 24px; right: 42px; width: 42px; height: 42px; border-radius: 50%; background: #e59b62; }
-    .mountain { position: absolute; bottom: 0; width: 0; height: 0; border-left: 110px solid transparent; border-right: 110px solid transparent; border-bottom: 105px solid #43665d; }
-    .mountain.one { left: -36px; }
-    .mountain.two { left: 94px; border-left-width: 135px; border-right-width: 135px; border-bottom-color: #21483f; }
-    .hero-label { position: absolute; inset: auto 16px 14px auto; color: #fff; text-align: right; }
+    .hero-art::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: linear-gradient(180deg, rgba(9,30,26,.02) 25%, rgba(9,30,26,.72) 100%);
+    }
+    .hero-art img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .hero-label { position: absolute; inset: auto 16px 14px 16px; z-index: 1; color: #fff; text-align: left; }
     .hero-label strong { display: block; font-family: serif; font-size: 22px; letter-spacing: .08em; }
     .hero-label span { font-size: 10px; letter-spacing: .16em; }
+    .sheet .photo-credit { margin: 0 0 14px 4px; color: #8b756a; }
 
     .timeline { display: grid; gap: 10px; margin-top: 14px; }
     .timeline-item { display: grid; grid-template-columns: 42px 1fr; gap: 10px; align-items: start; }
@@ -407,14 +517,16 @@
 
   <main class="page">
     <section class="intro" aria-labelledby="page-title">
+      <div class="intro-meta"><span>滇南慢養提案</span><strong>12 DAYS</strong></div>
       <div class="eyebrow">LINE OA CONCEPT / 2026</div>
       <h1 id="page-title">讓旅程從<br>一個選單開始</h1>
       <p>把行程、FAQ、報名與真人諮詢收進同一個 LINE 入口。右側可實際點擊六格選單，體驗客人加入官方帳號後的完整路徑。</p>
       <ul class="intro-list">
-        <li>六格 Rich Menu 與歡迎訊息</li>
-        <li>滇南 12 日行程內頁</li>
-        <li>FAQ、諮詢表單與真人轉接</li>
+        <li>Rich Menu</li>
+        <li>12 日行程</li>
+        <li>真人諮詢</li>
       </ul>
+      <a class="photo-credit" href="https://unsplash.com/photos/v09ak64o7bs" target="_blank" rel="noopener">元陽梯田攝影：Sandra Mosconi / Unsplash</a>
     </section>
 
     <section class="phone" aria-label="LINE 官方帳號互動概念">
@@ -441,17 +553,21 @@
           <button type="button" data-action="faq">常見問題</button>
           <button type="button" data-action="apply">我要諮詢</button>
         </div>
+        <button class="featured-trip" type="button" data-action="itinerary">
+          <img src="assets/yuan-yang-terraces.webp" alt="雲南元陽梯田映照天空" width="720" height="450" fetchpriority="high">
+          <span class="featured-copy"><small>FEATURED JOURNEY</small><strong>滇南十二日</strong><span>慢行、在地、留白</span></span>
+        </button>
       </div>
 
       <div class="chat-bar"><span>請由下方選單開始</span><button type="button" id="toggle-menu">關閉選單</button></div>
 
       <nav class="rich-menu" id="rich-menu" aria-label="六格圖文選單">
-        <button class="menu-item" type="button" data-action="itinerary"><span class="menu-icon">山</span><strong>滇南 12 日</strong><span>完整行程</span></button>
-        <button class="menu-item" type="button" data-action="highlights"><span class="menu-icon">途</span><strong>慢養亮點</strong><span>旅行方式</span></button>
-        <button class="menu-item" type="button" data-action="apply"><span class="menu-icon">箋</span><strong>報名諮詢</strong><span>留下資料</span></button>
-        <button class="menu-item" type="button" data-action="faq"><span class="menu-icon">問</span><strong>行前 FAQ</strong><span>44 組問答</span></button>
-        <button class="menu-item" type="button" data-action="about"><span class="menu-icon">逸</span><strong>關於我們</strong><span>品牌故事</span></button>
-        <button class="menu-item" type="button" data-action="human"><span class="menu-icon">聊</span><strong>真人客服</strong><span>轉接顧問</span></button>
+        <button class="menu-item photo" style="--menu-image:url('assets/yuan-yang-terraces.webp')" type="button" data-action="itinerary"><span class="menu-icon">01</span><strong>滇南 12 日</strong><span>完整行程</span></button>
+        <button class="menu-item photo" style="--menu-image:url('assets/yubeng-village.webp')" type="button" data-action="highlights"><span class="menu-icon">02</span><strong>慢養亮點</strong><span>旅行方式</span></button>
+        <button class="menu-item accent" type="button" data-action="apply"><span class="menu-icon">03</span><strong>報名諮詢</strong><span>留下資料</span></button>
+        <button class="menu-item" type="button" data-action="faq"><span class="menu-icon">04</span><strong>行前 FAQ</strong><span>44 組問答</span></button>
+        <button class="menu-item photo" style="--menu-image:url('assets/lijiang-lake.webp')" type="button" data-action="about"><span class="menu-icon">05</span><strong>關於我們</strong><span>品牌故事</span></button>
+        <button class="menu-item dark" type="button" data-action="human"><span class="menu-icon">06</span><strong>真人客服</strong><span>轉接顧問</span></button>
       </nav>
 
       <div class="sheet-backdrop" id="sheet-backdrop" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
@@ -467,7 +583,8 @@
       <div><div class="sheet-kicker">YUNNAN / 12 DAYS</div><h2 id="sheet-title">滇南十二日</h2><p>完整行程內容將以案主提供的正式檔案置換。</p></div>
       <button class="close" type="button" aria-label="關閉">×</button>
     </div>
-    <div class="hero-art" aria-label="滇南山景抽象插畫"><div class="sun"></div><div class="mountain one"></div><div class="mountain two"></div><div class="hero-label"><strong>慢慢走，深深看</strong><span>逸棲慢養</span></div></div>
+    <div class="hero-art"><img src="assets/yuan-yang-terraces.webp" alt="雲南元陽梯田映照天空" width="720" height="450"><div class="hero-label"><strong>慢慢走，深深看</strong><span>逸棲慢養</span></div></div>
+    <a class="photo-credit" href="https://unsplash.com/photos/v09ak64o7bs" target="_blank" rel="noopener">Photo: Sandra Mosconi / Unsplash</a>
     <div class="timeline">
       <div class="timeline-item"><div class="day">D1–4</div><div><strong>抵達與適應</strong><span>保留移動彈性，讓身體跟上風景。</span></div></div>
       <div class="timeline-item"><div class="day">D5–8</div><div><strong>聚落與日常</strong><span>示意段落；正式版依完整行程檔呈現。</span></div></div>
@@ -511,7 +628,8 @@
       <div><div class="sheet-kicker">ABOUT YIQI</div><h2 id="sheet-title">逸棲慢養</h2><p>不趕景點，不把旅行塞滿。用較長的停留、較少的移動，讓旅人真正進入地方的節奏。</p></div>
       <button class="close" type="button" aria-label="關閉">×</button>
     </div>
-    <div class="hero-art" aria-label="慢養旅行抽象插畫"><div class="sun"></div><div class="mountain one"></div><div class="mountain two"></div><div class="hero-label"><strong>留白，也是行程</strong><span>SLOW TRAVEL</span></div></div>
+    <div class="hero-art"><img src="assets/yubeng-village.webp" alt="雲南山谷中的村落與雪山" width="720" height="450" loading="lazy"><div class="hero-label"><strong>留白，也是行程</strong><span>SLOW TRAVEL</span></div></div>
+    <a class="photo-credit" href="https://unsplash.com/photos/0QZFQh4udXE" target="_blank" rel="noopener">Photo: James Wheeler / Unsplash</a>
     <p class="demo-disclaimer">品牌描述為概念稿示意，正式版本以案主核准文案為準。</p>
   </template>
 
