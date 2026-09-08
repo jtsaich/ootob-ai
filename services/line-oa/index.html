@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#173f39">
+  <title>LINE 官方帳號建置與整合｜方案與報價｜ootob.ai</title>
+  <meta name="description" content="LINE 官方帳號 Profile、圖文選單、固定 FAQ、Messaging API、預約與系統串接。一次性建置、帳號由店家持有，依需求選擇合適方案。">
+  <meta property="og:title" content="LINE 官方帳號建置與整合｜ootob.ai">
+  <meta property="og:description" content="固定 FAQ 先用內建功能；需要即時資料、身分或流程時，再接 Messaging API。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai/services/line-oa/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: #17211d;
+      background: #f7f8f5;
+      font-family: "Noto Sans TC", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    :root {
+      --forest: #173f39;
+      --forest-light: #246157;
+      --line-green: #06c755;
+      --paper: #ffffff;
+      --sand: #f1eee6;
+      --text: #17211d;
+      --muted: #64716c;
+      --border: #dce2de;
+      --soft-green: #e7f5ed;
+      --max: 1120px;
+      --shadow: 0 24px 70px rgba(23, 63, 57, .10);
+    }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(220, 226, 222, .85);
+      background: rgba(247, 248, 245, .92);
+      backdrop-filter: blur(14px);
+    }
+    .nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      color: var(--forest);
+      font-family: "DM Sans", sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { color: var(--muted); font-size: 14px; font-weight: 500; text-decoration: none; }
+    .nav-links a:hover { color: var(--forest); }
+    .nav-links .nav-cta {
+      padding: 9px 15px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--forest);
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 92px 0 72px;
+    }
+    .hero::before {
+      position: absolute;
+      inset: -220px -140px auto auto;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6, 199, 85, .14), rgba(6, 199, 85, 0) 68%);
+      content: "";
+      pointer-events: none;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 72px; align-items: center; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      color: var(--forest-light);
+      font-family: "DM Sans", "Noto Sans TC", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 22px; height: 2px; background: var(--line-green); content: ""; }
+    h1 {
+      max-width: 720px;
+      margin: 0;
+      color: var(--forest);
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 700;
+      letter-spacing: -.045em;
+      line-height: 1.12;
+      text-wrap: balance;
+    }
+    .hero-copy > p {
+      max-width: 650px;
+      margin: 26px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.75;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--forest);
+      border-radius: 10px;
+      padding: 0 20px;
+      color: #fff;
+      background: var(--forest);
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .button:hover { background: #0f312c; }
+    .button.secondary { color: var(--forest); background: transparent; }
+    .button.secondary:hover { background: #edf1ee; }
+    .promise-card {
+      position: relative;
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .promise-card::before {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 24px;
+      border-radius: 13px;
+      color: #fff;
+      background: var(--line-green);
+      content: "LINE";
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .promise-card h2 { margin: 0 0 8px; color: var(--forest); font-size: 21px; line-height: 1.4; }
+    .promise-card p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+    .check-list { display: grid; gap: 13px; margin: 0; padding: 0; list-style: none; }
+    .check-list li { position: relative; padding-left: 27px; font-size: 14px; }
+    .check-list li::before {
+      position: absolute;
+      inset: 2px auto auto 0;
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--forest);
+      background: var(--soft-green);
+      content: "✓";
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .trust-strip {
+      border-block: 1px solid var(--border);
+      background: rgba(255, 255, 255, .62);
+    }
+    .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .trust-item { padding: 24px 32px; border-right: 1px solid var(--border); }
+    .trust-item:first-child { padding-left: 0; }
+    .trust-item:last-child { border-right: 0; }
+    .trust-item strong { display: block; margin-bottom: 4px; color: var(--forest); font-size: 15px; }
+    .trust-item span { color: var(--muted); font-size: 13px; }
+    section { padding: 88px 0; }
+    .section-head { max-width: 720px; margin-bottom: 40px; }
+    .section-kicker {
+      margin: 0 0 10px;
+      color: var(--forest-light);
+      font-family: "DM Sans", "Noto Sans TC", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h2.section-title { margin: 0; color: var(--forest); font-size: clamp(29px, 4vw, 42px); line-height: 1.25; letter-spacing: -.025em; }
+    .section-head > p:last-child { margin: 14px 0 0; color: var(--muted); font-size: 16px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+    .price-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--paper);
+    }
+    .price-card.featured { border: 2px solid var(--forest); box-shadow: var(--shadow); }
+    .badge {
+      position: absolute;
+      inset: -13px 20px auto auto;
+      padding: 5px 11px;
+      border-radius: 99px;
+      color: #fff;
+      background: var(--forest);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .plan-label { color: var(--forest-light); font-size: 13px; font-weight: 700; }
+    .price-card h3 { margin: 7px 0 4px; color: var(--forest); font-size: 24px; }
+    .fit { min-height: 48px; margin: 0; color: var(--muted); font-size: 13px; }
+    .price { margin: 24px 0 2px; color: var(--forest); font-family: "DM Sans", "Noto Sans TC", sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -.03em; }
+    .price small { margin-left: 4px; color: var(--muted); font-family: "Noto Sans TC", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0; }
+    .billing { margin-bottom: 24px; color: var(--muted); font-size: 12px; }
+    .plan-features { display: grid; gap: 12px; margin: 0 0 26px; padding: 22px 0 0; border-top: 1px solid var(--border); list-style: none; }
+    .plan-features li { position: relative; padding-left: 22px; font-size: 14px; }
+    .plan-features li::before { position: absolute; left: 0; color: var(--line-green); content: "✓"; font-weight: 700; }
+    .plan-exclusion { margin: auto 0 20px; color: var(--muted); font-size: 12px; }
+    .price-card .button { width: 100%; }
+    .pricing-note { margin: 20px 0 0; color: var(--muted); font-size: 13px; }
+    .comparison-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 16px; background: #fff; }
+    table { width: 100%; min-width: 720px; border-collapse: collapse; text-align: left; }
+    th, td { padding: 17px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    th { color: var(--forest); background: #f2f5f2; font-size: 13px; }
+    tr:last-child td { border-bottom: 0; }
+    td:first-child { font-weight: 600; }
+    .yes { color: #167746; font-weight: 700; }
+    .no { color: #8a5a4c; }
+    .soft { color: var(--muted); }
+    .principle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 34px;
+      border-radius: 20px;
+      color: #fff;
+      background: var(--forest);
+    }
+    .principle h2 { margin: 0; font-size: clamp(25px, 3.6vw, 38px); line-height: 1.3; }
+    .principle p { margin: 0; color: #cfe0db; font-size: 15px; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .step { padding: 24px 0; border-top: 2px solid var(--border); }
+    .step span { color: var(--line-green); font-family: "DM Sans", sans-serif; font-size: 13px; font-weight: 700; }
+    .step h3 { margin: 9px 0 7px; color: var(--forest); font-size: 17px; }
+    .step p { margin: 0; color: var(--muted); font-size: 13px; }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .proof-card { overflow: hidden; border: 1px solid var(--border); border-radius: 16px; background: #fff; }
+    .proof-top { height: 9px; background: var(--forest); }
+    .proof-card:nth-child(2) .proof-top { background: var(--line-green); }
+    .proof-card:nth-child(3) .proof-top { background: #b96346; }
+    .proof-body { padding: 24px; }
+    .proof-body small { color: var(--forest-light); font-weight: 700; }
+    .proof-body h3 { margin: 7px 0; color: var(--forest); font-size: 18px; }
+    .proof-body p { min-height: 44px; margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+    .proof-body a { color: var(--forest); font-size: 13px; font-weight: 700; text-underline-offset: 3px; }
+    .faq { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 42px; }
+    details { padding: 20px 0; border-top: 1px solid var(--border); }
+    summary { color: var(--forest); font-size: 15px; font-weight: 700; cursor: pointer; }
+    details p { margin: 12px 0 0; color: var(--muted); font-size: 14px; }
+    .cta-section { padding-top: 48px; }
+    .cta-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: center;
+      padding: 42px;
+      border-radius: 22px;
+      color: #fff;
+      background: var(--forest);
+    }
+    .cta-card h2 { margin: 0; font-size: clamp(25px, 4vw, 38px); line-height: 1.3; }
+    .cta-card p { margin: 10px 0 0; color: #cfe0db; font-size: 14px; }
+    .cta-card .button { border-color: var(--line-green); color: var(--forest); background: var(--line-green); }
+    footer { margin-top: 80px; border-top: 1px solid var(--border); }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; padding: 32px 0 46px; color: var(--muted); font-size: 12px; }
+    .footer-inner a { text-decoration: none; }
+    @media (max-width: 900px) {
+      .hero { padding-top: 70px; }
+      .hero-grid, .principle { grid-template-columns: 1fr; gap: 36px; }
+      .promise-card { max-width: 560px; }
+      .pricing-grid, .proof-grid { grid-template-columns: 1fr; }
+      .price-card { max-width: 680px; }
+      .fit, .proof-body p { min-height: 0; }
+      .steps { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 28px, var(--max)); }
+      .nav { min-height: 60px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .nav-links .nav-cta { padding: 8px 13px; font-size: 13px; }
+      .hero { padding: 58px 0 52px; }
+      h1 { font-size: 39px; }
+      .hero-copy > p { font-size: 16px; }
+      .hero-actions { display: grid; }
+      .button { width: 100%; }
+      .promise-card { padding: 24px; }
+      .trust-grid { grid-template-columns: 1fr; }
+      .trust-item, .trust-item:first-child { padding: 17px 0; border-right: 0; border-bottom: 1px solid var(--border); }
+      .trust-item:last-child { border-bottom: 0; }
+      section { padding: 66px 0; }
+      .pricing-grid { gap: 24px; }
+      .price-card { padding: 25px 22px; }
+      .principle { padding: 28px 24px; }
+      .steps, .faq { grid-template-columns: 1fr; gap: 0; }
+      .cta-card { grid-template-columns: 1fr; padding: 30px 24px; }
+      .footer-inner { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="wrap nav" aria-label="主要導覽">
+      <a class="brand" href="/">ootob.ai</a>
+      <div class="nav-links">
+        <a href="/services/">全部服務</a>
+        <a href="#plans">方案</a>
+        <a class="nav-cta" href="#contact">預約需求討論</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">LINE Official Account Service</span>
+          <h1>把 LINE 官方帳號變成能用的服務入口</h1>
+          <p>固定 FAQ 先用 LINE 內建功能；真的需要即時價格、預約狀態、會員身分或資料串接時，再導入 Messaging API。少一層沒必要的系統，也少一筆長期維護成本。</p>
+          <div class="hero-actions">
+            <a class="button" href="#plans">查看方案與價格</a>
+            <a class="button secondary" href="/demo/yiqi-line/">操作 LINE 服務概念展示</a>
+          </div>
+        </div>
+        <aside class="promise-card" aria-label="交付原則">
+          <h2>帳號與資料都留在你手上</h2>
+          <p>我們以受邀管理員身分建置，不把官方帳號綁在服務商名下。</p>
+          <ul class="check-list">
+            <li>LINE Business ID 與 Provider 由店家持有</li>
+            <li>需求、範圍與驗收條件先寫清楚</li>
+            <li>完整交接設定、素材與操作方式</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="wrap trust-grid">
+        <div class="trust-item"><strong>一次性建置</strong><span>不強制綁月費，維護另選</span></div>
+        <div class="trust-item"><strong>先看可操作版本</strong><span>用 demo 對齊方向再開始</span></div>
+        <div class="trust-item"><strong>可換廠商</strong><span>帳號、Provider 與資料由你控制</span></div>
+      </div>
+    </div>
+
+    <section id="plans">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="section-kicker">Plans</p>
+          <h2 class="section-title">按需要的深度付費</h2>
+          <p>不是每個 LINE 官方帳號都需要寫程式。先用最輕的方案解決問題，需要即時資料或自動流程時再往下接。</p>
+        </header>
+
+        <div class="pricing-grid">
+          <article class="price-card">
+            <span class="plan-label">STARTER</span>
+            <h3>基礎上線</h3>
+            <p class="fit">適合已有品牌素材、固定 FAQ 與既有網站／表單的店家。</p>
+            <div class="price">NT$5,000<small>起</small></div>
+            <div class="billing">一次性建置</div>
+            <ul class="plan-features">
+              <li>官方帳號 Profile 基本設定</li>
+              <li>1 組 Rich Menu，最多六格</li>
+              <li>歡迎訊息與固定關鍵字回覆</li>
+              <li>串接既有網站、表單或聯絡入口</li>
+              <li>手機測試、操作教學與素材交接</li>
+              <li>2 次集中修改、14 天設定保固</li>
+            </ul>
+            <p class="plan-exclusion">不含客製 API、資料庫、會員身分與即時資料。</p>
+            <a class="button secondary contact-link" href="/services/">詢問基礎方案</a>
+          </article>
+
+          <article class="price-card featured">
+            <span class="badge">需要自動化時</span>
+            <span class="plan-label">AUTOMATION</span>
+            <h3>流程整合</h3>
+            <p class="fit">適合需要 Google Sheets、預約資料、自動分類或真人接手流程。</p>
+            <div class="price">NT$15,000<small>起</small></div>
+            <div class="billing">一次性建置，主機另計</div>
+            <ul class="plan-features">
+              <li>包含基礎上線項目</li>
+              <li>Messaging API webhook 與部署</li>
+              <li>1 組指定資料來源或流程串接</li>
+              <li>自動分類規則與真人接手狀態</li>
+              <li>錯誤紀錄、主要流程測試</li>
+              <li>操作文件、30 天原範圍保固</li>
+            </ul>
+            <p class="plan-exclusion">外部系統複雜度、訊息量與第三方費用確認後書面報價。</p>
+            <a class="button contact-link" href="/services/">討論整合需求</a>
+          </article>
+
+          <article class="price-card">
+            <span class="plan-label">CUSTOM</span>
+            <h3>完整營運系統</h3>
+            <p class="fit">適合把 LINE 接到預約、會員、訂單、後台或多套既有系統。</p>
+            <div class="price">NT$30,000<small>起</small></div>
+            <div class="billing">分階段書面報價</div>
+            <ul class="plan-features">
+              <li>LINE Login／MINI App 身分流程</li>
+              <li>預約、會員、訂單或客服後台</li>
+              <li>資料庫、角色權限與稽核紀錄</li>
+              <li>多系統 API 與通知整合</li>
+              <li>分階段交付與逐項驗收</li>
+              <li>部署、文件與權限完整移交</li>
+            </ul>
+            <p class="plan-exclusion">先做 15 分鐘需求討論，24 小時內提供範圍與分期建議。</p>
+            <a class="button secondary contact-link" href="/services/">取得範圍建議</a>
+          </article>
+        </div>
+        <p class="pricing-note">價格為常見範圍起點。FAQ 數量、素材完整度、頁面設計、外部系統與驗收要求都會影響正式報價。LINE 官方方案與訊息費由帳號持有人依實際用量支付。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <header class="section-head">
+          <p class="section-kicker">Choose the right layer</p>
+          <h2 class="section-title">內建回應還是 Messaging API？</h2>
+          <p>關鍵不在「哪個比較進階」，而在答案是不是依賴即時資料、使用者身分或後續流程。</p>
+        </header>
+        <div class="comparison-wrap">
+          <table>
+            <thead><tr><th>需求</th><th>LINE 內建功能</th><th>Messaging API</th></tr></thead>
+            <tbody>
+              <tr><td>固定 FAQ、營業時間、靜態價目</td><td class="yes">適合</td><td class="soft">通常不需要</td></tr>
+              <tr><td>店家自行修改文案</td><td class="yes">直接在 OA Manager 修改</td><td class="soft">需改程式或另做後台</td></tr>
+              <tr><td>即時價格、庫存、預約與訂單狀態</td><td class="no">不支援</td><td class="yes">可串接</td></tr>
+              <tr><td>Google Sheets、CRM、ERP、資料庫</td><td class="no">不支援</td><td class="yes">可讀寫</td></tr>
+              <tr><td>會員身分、對話狀態、自動分類</td><td class="no">有限</td><td class="yes">可客製</td></tr>
+              <tr><td>技術維護</td><td class="yes">無主機維護</td><td class="soft">需要部署、監控與憑證管理</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap principle">
+        <h2>能用內建功能解決，就不先賣你一套系統。</h2>
+        <p>Messaging API 的價值是把 LINE 接進營運資料與流程，不是單純讓固定文案換一個地方放。範圍拆開後，第一階段可以更快上線，也保留未來擴充空間。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <header class="section-head">
+          <p class="section-kicker">Process</p>
+          <h2 class="section-title">從需求到交接</h2>
+        </header>
+        <div class="steps">
+          <article class="step"><span>01</span><h3>15 分鐘對需求</h3><p>確認固定內容、即時資料、串接系統與誰負責維護。</p></article>
+          <article class="step"><span>02</span><h3>書面範圍與驗收</h3><p>列清楚包含、不包含、時程、修改次數與第三方費用。</p></article>
+          <article class="step"><span>03</span><h3>建置與手機測試</h3><p>先看視覺與互動，再驗證選單、關鍵字、表單與資料流程。</p></article>
+          <article class="step"><span>04</span><h3>交接</h3><p>帳號、Provider、素材、程式與文件都留在客戶可控制的環境。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <header class="section-head">
+          <p class="section-kicker">Live examples</p>
+          <h2 class="section-title">先看可以操作的版本</h2>
+          <p>概念展示會清楚標示，不冒充客戶實績。</p>
+        </header>
+        <div class="proof-grid">
+          <article class="proof-card"><div class="proof-top"></div><div class="proof-body"><small>INTERACTION DEMO</small><h3>慢旅 LINE 服務概念</h3><p>可操作六格選單、行程、FAQ、諮詢表單與真人轉接路徑。</p><a href="/demo/yiqi-line/">開啟網頁 demo</a></div></article>
+          <article class="proof-card"><div class="proof-top"></div><div class="proof-body"><small>REAL LINE OA</small><h3>LINE Bot Flex Message</h3><p>加入獨立概念帳號，實際查看 Rich Menu 與 FAQ 回覆。</p><a href="https://line.me/R/ti/p/@097uxxqu" target="_blank" rel="noopener">加入概念 LINE OA</a></div></article>
+          <article class="proof-card"><div class="proof-top"></div><div class="proof-body"><small>LIVE INTEGRATION</small><h3>LINE 預約流程</h3><p>已部署的 LIFF／一般瀏覽器預約介面，展示身分與預約整合能力。</p><a href="https://smb-admin-production-990a.up.railway.app/book" target="_blank" rel="noopener">開啟預約流程</a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <header class="section-head">
+          <p class="section-kicker">FAQ</p>
+          <h2 class="section-title">常見問題</h2>
+        </header>
+        <div class="faq">
+          <div>
+            <details open><summary>一定要用 Messaging API 嗎？</summary><p>不用。固定 FAQ、營業時間與表單連結，優先用 LINE 內建功能。只有即時資料、身分、狀態或外部串接才需要 API。</p></details>
+            <details><summary>建置後一定有月費嗎？</summary><p>基礎方案不綁維護月費。Messaging API 若需要主機、資料庫或第三方服務，會在報價中分開列出。</p></details>
+            <details><summary>LINE 官方方案費包含在報價內嗎？</summary><p>不包含。LINE 官方帳號方案與訊息費由帳號持有人依官方價格及實際用量支付，不會混進開發費。</p></details>
+          </div>
+          <div>
+            <details open><summary>帳號會建在你們名下嗎？</summary><p>不會。正式 OA、LINE Business ID 與 Provider 都由客戶持有，我們只用受邀權限建置。</p></details>
+            <details><summary>可以先做基礎版，以後再串系統嗎？</summary><p>可以。先把 Profile、Rich Menu 與固定內容整理好，之後有明確資料流程再加 Messaging API，通常風險更低。</p></details>
+            <details><summary>開始前要準備什麼？</summary><p>品牌名稱、Logo、聯絡資料、Rich Menu 架構、FAQ 文案、要連出去的網址，以及一位能決定內容與驗收的人。</p></details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+      <div class="wrap cta-card">
+        <div><h2>先確認你需要哪一層</h2><p>15 分鐘電話對需求，通話後 24 小時內提供書面範圍與報價。</p></div>
+        <a class="button contact-link" href="/services/">預約需求討論</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© 2026 ootob.ai 軟體工作室</span>
+      <span><a href="/services/">全部服務</a> · <a href="/">首頁</a></span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var address = "jack" + "\u0040" + "ootob.ai";
+      var subject = encodeURIComponent("LINE 官方帳號需求討論");
+      document.querySelectorAll(".contact-link").forEach(function (link) {
+        link.href = "mailto:" + address + "?subject=" + subject;
+      });
+    })();
+  </script>
+</body>
+</html>
