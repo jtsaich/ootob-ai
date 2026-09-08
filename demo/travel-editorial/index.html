@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#eee9dc">
+  <title>山眠旅造｜編輯風格慢旅網站概念</title>
+  <meta name="description" content="以旅行刊物、留白與東方色彩構成的慢旅品牌網站設計概念。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/hero.webp">
+  <style>
+    :root {
+      --paper:#eee9dc;
+      --paper-light:#f8f5ec;
+      --ink:#201f1a;
+      --pine:#173b31;
+      --red:#a33a2c;
+      --gold:#aa8e5a;
+      --line:rgba(32,31,26,.24);
+      --serif:"Noto Serif TC","Songti TC",serif;
+      --sans:"Noto Sans TC","PingFang TC",sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--paper)}
+    body{margin:0;color:var(--ink);background:var(--paper);font-family:var(--sans);font-size:15px;line-height:1.75}
+    body::before{position:fixed;inset:0;z-index:99;pointer-events:none;content:"";opacity:.11;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E")}
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit}
+    img{display:block;width:100%;height:100%;object-fit:cover}
+    .concept-bar{height:34px;display:flex;align-items:center;justify-content:center;padding:0 20px;color:#f5f1e6;background:#211f1a;font:500 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+    .shell{width:min(1320px,calc(100% - 64px));margin:auto}
+    .nav{height:88px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:13px;font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:.15em}
+    .seal{width:35px;height:35px;display:grid;place-items:center;color:var(--paper-light);background:var(--red);font:500 13px/1 var(--serif);letter-spacing:0;writing-mode:vertical-rl}
+    .nav-links{display:flex;align-items:center;gap:32px;font-size:12px;letter-spacing:.12em}
+    .nav-links a{position:relative;padding:8px 0}
+    .nav-links a::after{position:absolute;inset:auto 0 3px;content:"";height:1px;background:var(--ink);transform:scaleX(0);transform-origin:right;transition:transform .3s}
+    .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+    .nav-cta{padding:11px 17px!important;border:1px solid var(--ink)}
+    .nav-cta::after{display:none}
+    .hero{min-height:calc(100vh - 122px);display:grid;grid-template-columns:minmax(320px,.86fr) minmax(480px,1.14fr);gap:clamp(36px,6vw,96px);align-items:center;padding:54px 0 68px}
+    .hero-copy{position:relative;padding:32px 0 50px}
+    .issue{position:absolute;top:0;right:10%;font:500 10px/1.5 var(--sans);letter-spacing:.2em;writing-mode:vertical-rl}
+    .kicker{display:flex;align-items:center;gap:13px;margin:0 0 36px;color:var(--red);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+    .kicker::before{width:42px;height:1px;content:"";background:currentColor}
+    h1{margin:0;font-family:var(--serif);font-size:clamp(64px,8.3vw,126px);font-weight:500;line-height:.9;letter-spacing:-.08em}
+    h1 span{display:block;margin-left:17%;color:var(--pine)}
+    .hero-intro{width:min(390px,82%);margin:44px 0 0 17%;font-family:var(--serif);font-size:16px;line-height:2}
+    .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:44px 0 0 17%;padding-top:20px;border-top:1px solid var(--line);font-size:11px;line-height:1.6;letter-spacing:.06em}
+    .hero-meta strong{display:block;margin-bottom:6px;color:var(--red);font-size:9px;letter-spacing:.18em}
+    .hero-visual{position:relative;height:min(690px,72vw);max-height:calc(100vh - 168px);min-height:530px;margin-right:3vw}
+    .hero-image{height:100%;overflow:hidden;background:#807b6e}
+    .hero-image img{filter:saturate(.72) contrast(1.04);transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+    .hero-image:hover img{transform:scale(1.025)}
+    .hero-caption{position:absolute;right:-42px;bottom:20px;display:flex;align-items:center;gap:15px;transform:rotate(90deg);transform-origin:right bottom;font:500 9px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
+    .hero-caption::before{width:58px;height:1px;content:"";background:currentColor}
+    .hero-stamp{position:absolute;left:-38px;bottom:58px;width:104px;height:104px;display:grid;place-items:center;border:1px solid var(--red);border-radius:50%;color:var(--red);background:rgba(238,233,220,.86);font:600 13px/1.6 var(--serif);text-align:center;transform:rotate(-11deg);backdrop-filter:blur(5px)}
+    .hero-stamp::after{position:absolute;inset:7px;border:1px dashed currentColor;border-radius:inherit;content:""}
+    .manifesto{padding:120px 0;background:var(--pine);color:#f3eee2}
+    .manifesto-grid{display:grid;grid-template-columns:150px 1fr;gap:clamp(44px,9vw,140px)}
+    .vertical-label{font-family:var(--serif);font-size:12px;letter-spacing:.24em;writing-mode:vertical-rl}
+    .manifesto blockquote{max-width:910px;margin:0;font-family:var(--serif);font-size:clamp(32px,4vw,60px);font-weight:400;line-height:1.55;letter-spacing:-.03em}
+    .manifesto blockquote em{color:#d5b777;font-style:normal}
+    .manifesto-note{max-width:490px;margin:46px 0 0 auto;color:rgba(243,238,226,.7);font-size:14px;line-height:2}
+    .section{padding:120px 0}
+    .section-head{display:grid;grid-template-columns:160px 1fr;gap:clamp(44px,9vw,140px);margin-bottom:70px}
+    .section-num{padding-top:11px;border-top:1px solid var(--ink);font-size:10px;letter-spacing:.2em}
+    .section-head h2{margin:0;font-family:var(--serif);font-size:clamp(42px,5.4vw,78px);font-weight:500;line-height:1.15;letter-spacing:-.06em}
+    .section-head h2 small{display:block;margin-bottom:12px;color:var(--red);font:600 10px/1 var(--sans);letter-spacing:.23em;text-transform:uppercase}
+    .chapters{display:grid;grid-template-columns:1fr 1.15fr;gap:10vw;align-items:start}
+    .chapter{position:relative}
+    .chapter:nth-child(2){margin-top:180px}
+    .chapter-image{height:560px;overflow:hidden}
+    .chapter:first-child .chapter-image{height:690px}
+    .chapter-image img{filter:saturate(.68);transition:filter .5s,transform .7s}
+    .chapter:hover img{filter:saturate(.95);transform:scale(1.018)}
+    .chapter-index{position:absolute;top:-24px;left:-18px;z-index:2;color:var(--red);font:500 64px/1 Georgia,serif;font-style:italic}
+    .chapter h3{margin:28px 0 12px;font-family:var(--serif);font-size:27px;font-weight:500;letter-spacing:.04em}
+    .chapter p{max-width:430px;margin:0;color:#59574f}
+    .chapter-tag{display:inline-block;margin-top:20px;padding:4px 10px;border:1px solid var(--line);font-size:9px;letter-spacing:.15em}
+    .journey{padding:120px 0;background:var(--paper-light)}
+    .journey-grid{display:grid;grid-template-columns:minmax(280px,.75fr) minmax(430px,1.25fr);gap:9vw}
+    .journey-copy{position:sticky;top:60px;align-self:start}
+    .journey-copy .kicker{margin-bottom:24px}
+    .journey-copy h2{margin:0;font-family:var(--serif);font-size:clamp(44px,5vw,72px);font-weight:500;line-height:1.16;letter-spacing:-.05em}
+    .journey-copy>p{margin:28px 0 36px;color:#646158;line-height:2}
+    .journey-facts{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--line)}
+    .journey-facts div{padding:18px 12px 18px 0}
+    .journey-facts strong{display:block;font-family:var(--serif);font-size:22px;font-weight:500}
+    .journey-facts span{font-size:9px;letter-spacing:.14em}
+    .route{border-top:1px solid var(--line)}
+    details{border-bottom:1px solid var(--line)}
+    summary{position:relative;display:grid;grid-template-columns:72px 1fr 22px;gap:18px;align-items:center;padding:26px 0;cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .day{color:var(--red);font:italic 19px/1 Georgia,serif}
+    summary h3{margin:0;font-family:var(--serif);font-size:21px;font-weight:500}
+    summary::after{content:"＋";font-size:18px;font-weight:300}
+    details[open] summary::after{content:"−"}
+    .route-body{display:grid;grid-template-columns:72px 1fr;gap:18px;padding:0 0 28px}
+    .route-body p{grid-column:2;margin:0;color:#69665d;line-height:1.9}
+    .route-body span{grid-column:2;color:var(--gold);font-size:10px;letter-spacing:.13em}
+    .closing{min-height:82vh;display:grid;place-items:center;padding:90px 24px;background:linear-gradient(rgba(22,24,20,.48),rgba(22,24,20,.75)),url("assets/hero.webp") center 58%/cover fixed;color:#fff;text-align:center}
+    .closing-inner{max-width:780px}
+    .closing .seal{margin:0 auto 28px;background:#fff;color:var(--red)}
+    .closing h2{margin:0;font-family:var(--serif);font-size:clamp(48px,7vw,96px);font-weight:400;line-height:1.2;letter-spacing:-.05em}
+    .closing p{max-width:450px;margin:28px auto 38px;color:rgba(255,255,255,.76)}
+    .button{display:inline-flex;align-items:center;gap:28px;padding:15px 22px;border:1px solid rgba(255,255,255,.75);font-size:11px;letter-spacing:.16em;transition:.3s}
+    .button::after{content:"→";font-size:16px}
+    .button:hover{color:var(--ink);background:#fff}
+    footer{display:flex;justify-content:space-between;gap:24px;padding:30px max(32px,calc((100vw - 1320px)/2));color:#ddd5c5;background:#201f1a;font-size:10px;letter-spacing:.1em}
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+    .reveal.visible{opacity:1;transform:none}
+    @media(max-width:900px){
+      .shell{width:min(100% - 36px,720px)}
+      .nav{height:72px}.nav-links a:not(.nav-cta){display:none}
+      .hero{grid-template-columns:1fr;gap:8px;padding:34px 0 56px}
+      .hero-copy{padding-bottom:26px}.issue{right:0}
+      h1{font-size:clamp(62px,18vw,96px)}
+      .hero-intro,.hero-meta{margin-left:10%}
+      .hero-visual{height:72vh;min-height:500px;margin:0 18px 0 0}
+      .hero-caption{right:-31px}.hero-stamp{left:-8px;width:88px;height:88px;font-size:11px}
+      .manifesto{padding:84px 0}.manifesto-grid,.section-head{grid-template-columns:1fr;gap:30px}.vertical-label{writing-mode:initial}
+      .section{padding:84px 0}.section-head{margin-bottom:48px}
+      .chapters{gap:32px}.chapter:first-child .chapter-image,.chapter-image{height:480px}.chapter:nth-child(2){margin-top:90px}
+      .journey{padding:84px 0}.journey-grid{grid-template-columns:1fr;gap:64px}.journey-copy{position:static}
+    }
+    @media(max-width:620px){
+      .concept-bar{justify-content:flex-start;overflow:hidden;white-space:nowrap;font-size:8px}
+      .brand{font-size:17px}.seal{width:30px;height:30px;font-size:11px}.nav-cta{padding:8px 11px!important;font-size:10px}
+      .hero{min-height:auto}.hero-copy{padding-top:24px}.kicker{margin-bottom:25px}
+      h1{font-size:21vw}.hero-intro{width:90%;margin-top:30px;font-size:14px}.hero-meta{width:90%;grid-template-columns:1fr;margin-top:30px}
+      .hero-visual{height:68vh;min-height:460px}.hero-image{clip-path:polygon(0 0,100% 4%,100% 100%,0 96%)}
+      .manifesto-grid{gap:22px}.manifesto blockquote{font-size:29px}.manifesto-note{margin-top:30px}
+      .chapters{grid-template-columns:1fr;gap:74px}.chapter:nth-child(2){margin-top:0}.chapter:first-child .chapter-image,.chapter-image{height:112vw;max-height:520px}
+      .section-head h2{font-size:43px}.journey-copy h2{font-size:46px}
+      summary{grid-template-columns:50px 1fr 18px;gap:10px}.route-body{grid-template-columns:50px 1fr;gap:10px}
+      .closing{background-attachment:scroll}.closing h2{font-size:50px}
+      footer{flex-direction:column}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none}.hero-image img{transition:none}}
+  </style>
+</head>
+<body>
+  <div class="concept-bar">Travel website design study 01 / Editorial slow travel / 非實際旅行社</div>
+  <header class="shell nav">
+    <a class="brand" href="#top" aria-label="山眠旅造首頁"><span class="seal">山眠</span>山眠旅造</a>
+    <nav class="nav-links" aria-label="主要導覽"><a href="#philosophy">旅行想法</a><a href="#chapters">慢旅三章</a><a href="#journey">本季旅程</a><a class="nav-cta" href="#contact">預約相談</a></nav>
+  </header>
+
+  <main id="top">
+    <section class="shell hero">
+      <div class="hero-copy">
+        <span class="issue">ISSUE 07・AUTUMN 2026</span>
+        <p class="kicker">A journey in its own time</p>
+        <h1>去得<span>慢一些</span></h1>
+        <p class="hero-intro">不蒐集景點。從一間老屋、一頓晚飯和一條沒有名字的小路，重新認識一座地方。</p>
+        <div class="hero-meta"><div><strong>THIS SEASON</strong>東北山形・八日七夜</div><div><strong>TRAVEL STYLE</strong>八人小團・在地共食</div></div>
+      </div>
+      <div class="hero-visual">
+        <figure class="hero-image"><img src="assets/hero.webp" alt="黃昏時分的日本古街與遠方五重塔"></figure>
+        <span class="hero-caption">Kyoto, Japan / visual reference</span>
+        <div class="hero-stamp">沿著日常<br>走進地方</div>
+      </div>
+    </section>
+
+    <section class="manifesto" id="philosophy">
+      <div class="shell manifesto-grid reveal">
+        <span class="vertical-label">旅行，不必把每天填滿。</span>
+        <div><blockquote>真正留下來的，往往是行程表之外的空白。<em>我們替偶遇留位置，替地方保留原來的速度。</em></blockquote><p class="manifesto-note">每一段旅程只選一個區域，減少移動，把時間交給風土、職人與餐桌。沒有早上六點的集合，也不靠購物站填補空檔。</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="chapters">
+      <div class="shell">
+        <header class="section-head reveal"><span class="section-num">01 / THREE CHAPTERS</span><h2><small>How we travel</small>慢旅的三個章節</h2></header>
+        <div class="chapters">
+          <article class="chapter reveal"><span class="chapter-index">壹</span><div class="chapter-image"><img src="assets/forest.webp" alt="山林間的日式建築與靜謐庭園" loading="lazy"></div><h3>住進地方的日常</h3><p>選擇能說出土地故事的住所。清晨跟著主人巡田，傍晚一起準備地方料理，旅館不只是睡一晚的地址。</p><span class="chapter-tag">STAY / LOCAL LIFE</span></article>
+          <article class="chapter reveal"><span class="chapter-index">貳</span><div class="chapter-image"><img src="assets/ryokan.webp" alt="日本傳統城郭與山景" loading="lazy"></div><h3>讀懂風景的來處</h3><p>由地方研究者帶路，從一座城、一條水路與一門手藝，理解今天看到的風景如何形成。</p><span class="chapter-tag">WALK / CONTEXT</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="journey" id="journey">
+      <div class="shell journey-grid">
+        <div class="journey-copy reveal"><p class="kicker">Selected journey</p><h2>雪融之前，<br>住進山形。</h2><p>以銀山溫泉為起點，沿最上川走進雪國聚落。每天只安排一件重要的事，其餘交給天氣。</p><div class="journey-facts"><div><strong>8</strong><span>DAYS</span></div><div><strong>8</strong><span>GUESTS</span></div><div><strong>3</strong><span>STAYS</span></div></div></div>
+        <div class="route reveal">
+          <details open><summary><span class="day">D1—2</span><h3>山形・城下町散步</h3></summary><div class="route-body"><p>從市場早餐開始，沿著堰水與藏座敷慢慢認識城下町。午後留給自由散步。</p><span>住｜百年藏屋改建宿</span></div></details>
+          <details><summary><span class="day">D3—4</span><h3>最上川・舟運與酒藏</h3></summary><div class="route-body"><p>跟著地方誌編輯走訪舊舟運聚落，傍晚在小酒藏試飲只在當地流通的季節酒。</p><span>食｜山菜料理與在地清酒</span></div></details>
+          <details><summary><span class="day">D5—6</span><h3>銀山・雪夜溫泉街</h3></summary><div class="route-body"><p>避開一日遊尖峰抵達，入住木造溫泉宿。隔天上午沒有行程，只保留一段雪地散步。</p><span>住｜銀山溫泉木造旅館</span></div></details>
+          <details><summary><span class="day">D7—8</span><h3>上山・果園與最後一餐</h3></summary><div class="route-body"><p>拜訪家族果園，以一場長桌晚餐結束旅程。隔日睡到自然醒後返回仙台。</p><span>體驗｜果園共食</span></div></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" id="contact"><div class="closing-inner reveal"><span class="seal">山眠</span><h2>下一段路，<br>留一點空白。</h2><p>告訴我們你想去的季節，以及不想再經歷的旅行方式。三個工作天內，由旅程設計師親自回覆。</p><a class="button" href="mailto:jack@ootob.ai?subject=%E6%97%85%E9%81%8A%E7%B6%B2%E7%AB%99%E8%A8%AD%E8%A8%88%E6%A6%82%E5%BF%B5%EF%BD%9C%E7%B7%A8%E8%BC%AF%E6%85%A2%E6%97%85%E9%A2%A8">預約一場旅行相談</a></div></section>
+  </main>
+
+  <footer><span>山眠旅造 SANMIN JOURNEYS — DESIGN CONCEPT</span><span>示意影像來源：Unsplash ・ © <span id="year"></span> ootob.ai</span></footer>
+  <script>
+    document.getElementById('year').textContent=new Date().getFullYear();
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.14});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  </script>
+</body>
+</html>

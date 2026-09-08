@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>旅遊網站設計研究 ×3｜ootob.ai</title>
+  <meta name="description" content="三款刻意拉開風格差異的旅遊網站設計概念：編輯刊物感、高端探險感、活潑海島感。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#17171a;--mute:#6b6b73;--line:#e2e1dc;--bg:#f7f6f2}
+    *{box-sizing:border-box}
+    body{margin:0;color:var(--ink);background:var(--bg);font-family:"Noto Sans TC","PingFang TC",sans-serif;font-size:15px;line-height:1.75}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1100px,calc(100% - 48px));margin:auto;padding:72px 0 96px}
+    .kicker{margin:0 0 14px;color:var(--mute);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(30px,4vw,44px);font-weight:700;line-height:1.2;letter-spacing:-.02em}
+    .lead{max-width:600px;margin:20px 0 56px;color:var(--mute)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .card{display:flex;flex-direction:column;border:1px solid var(--line);background:#fff;overflow:hidden;transition:transform .25s,box-shadow .25s}
+    .card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -24px rgba(0,0,0,.35)}
+    .thumb{aspect-ratio:4/3;display:grid;place-items:center;padding:28px;color:#fff;text-align:center}
+    .thumb strong{display:block;font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+    .thumb span{display:block;margin-top:10px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.75}
+    .t1{background:#173b31;font-family:"Noto Serif TC",serif}
+    .t2{background:#0b0d10;font-family:"Archivo",sans-serif}
+    .t3{background:#ff5c5c;color:#1b1a2e}
+    .body{padding:22px 24px 26px;display:flex;flex-direction:column;gap:10px;flex:1}
+    .body h2{margin:0;font-size:18px;font-weight:700}
+    .body p{margin:0;color:var(--mute);font-size:14px}
+    .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:12px}
+    .tags span{padding:3px 9px;border:1px solid var(--line);border-radius:999px;font-size:11px;color:var(--mute)}
+    .cta{margin-top:14px;font-size:13px;font-weight:500}
+    .cta::after{content:" →"}
+    .note{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}
+    @media(max-width:860px){.grid{grid-template-columns:1fr}.wrap{padding-top:48px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="kicker">Travel website design studies</p>
+    <h1>同一個產業，三種完全不同的長相。</h1>
+    <p class="lead">三款旅遊網站設計概念，刻意避開常見的「大圖＋卡片」版型。每一款都是完整可操作的頁面，桌面與手機皆可瀏覽。</p>
+    <div class="grid">
+      <a class="card" href="/demo/travel-editorial/">
+        <div class="thumb t1"><div><strong>山眠旅造</strong><span>Editorial slow travel</span></div></div>
+        <div class="body"><h2>01 · 東方旅行刊物感</h2><p>留白、宋體、紙張質地、不對稱編排。適合強調品味與慢節奏的品牌。</p>
+          <div class="tags"><span>Serif</span><span>紙張紋理</span><span>行程 accordion</span></div><span class="cta">打開</span></div>
+      </a>
+      <a class="card" href="/demo/travel-expedition/">
+        <div class="thumb t2"><div><strong>POLARIS 極北探路</strong><span>Premium expedition</span></div></div>
+        <div class="body"><h2>02 · 高端極地探險感</h2><p>深色電影畫面、座標與地形圖、遠征儀表板。適合高單價、重視專業與安全的路線。</p>
+          <div class="tags"><span>Dark UI</span><span>Monospace</span><span>資料儀表板</span></div><span class="cta">打開</span></div>
+      </a>
+      <a class="card" href="/demo/travel-island/">
+        <div class="thumb t3"><div><strong>跳島計畫</strong><span>Playful island holiday</span></div></div>
+        <div class="body"><h2>03 · 活潑海島度假感</h2><p>高彩度拼貼、票券元素、粗線條互動介面。適合年輕客群與短天數的輕旅行。</p>
+          <div class="tags"><span>Neo-brutalist</span><span>票券卡片</span><span>自組行程互動</span></div><span class="cta">打開</span></div>
+      </a>
+    </div>
+    <p class="note">三款皆為設計概念，非實際旅行社；品牌、行程與價格均為示意。示意影像來源：Unsplash。</p>
+  </main>
+</body>
+</html>
