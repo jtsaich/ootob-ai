@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#1b2b45">
+  <title>珠寶鑑定證書系統 概念展示｜ootob.ai</title>
+  <meta name="description" content="依公開需求製作的珠寶鑑定證書系統概念展示：三種證書範本、開立與預覽、鑑定師簽名與帳號、查詢驗證、統計匯出、NAS 部署。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1b2b45;
+      --navy-deep: #12203a;
+      --navy-soft: #2b4066;
+      --gold: #a8894f;
+      --gold-soft: #d9c9a4;
+      --paper: #f6f2ea;
+      --paper-2: #efe9dd;
+      --white: #fffdf9;
+      --ink: #1f2430;
+      --muted: #6b7280;
+      --line: #d8d2c4;
+      --line-strong: #b9b1a0;
+      --ok: #2f7a4f;
+      --ok-bg: #e4f1e8;
+      --warn: #a2641b;
+      --warn-bg: #f7ecd8;
+      --danger: #9b3b3b;
+      --danger-bg: #f5e3e3;
+      --radius: 6px;
+      --shadow: 0 12px 32px rgba(27, 43, 69, 0.14);
+      --font: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--paper-2); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: var(--paper-2);
+    }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    h1, h2, h3, h4 { margin: 0; font-weight: 600; }
+    p { margin: 0; }
+    table { border-collapse: collapse; width: 100%; }
+    a { color: var(--navy-soft); }
+
+    .concept-note {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 8px 16px;
+      color: #fff;
+      background: var(--navy-deep);
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: .02em;
+    }
+
+    /* ---------- layout ---------- */
+    .app {
+      display: grid;
+      grid-template-columns: 232px minmax(0, 1fr);
+      min-height: calc(100vh - 34px);
+    }
+    .side {
+      background: var(--navy);
+      color: #d5dbe8;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 34px;
+      height: calc(100vh - 34px);
+    }
+    .brand {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .brand .lab {
+      font-family: var(--serif);
+      font-size: 17px;
+      color: #fff;
+      letter-spacing: .06em;
+    }
+    .brand .sys {
+      margin-top: 2px;
+      font-size: 11px;
+      color: #9aa7c2;
+      letter-spacing: .08em;
+    }
+    .nav { padding: 10px 10px; display: flex; flex-direction: column; gap: 2px; }
+    .nav button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: #cfd6e5;
+      text-align: left;
+      font-size: 13.5px;
+    }
+    .nav button:hover { background: rgba(255,255,255,.06); color: #fff; }
+    .nav button.active { background: rgba(255,255,255,.12); color: #fff; font-weight: 500; }
+    .nav button .k {
+      font-size: 11px;
+      color: #7f8caa;
+      font-variant-numeric: tabular-nums;
+    }
+    .nav .badge {
+      min-width: 20px;
+      padding: 0 6px;
+      border-radius: 10px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 11px;
+      text-align: center;
+      line-height: 18px;
+    }
+    .side .user {
+      margin-top: auto;
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      font-size: 12px;
+      color: #9aa7c2;
+    }
+    .side .user strong { display: block; color: #fff; font-weight: 500; font-size: 13px; }
+
+    .main { min-width: 0; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 28px;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar h1 { font-size: 17px; font-weight: 600; }
+    .topbar .sub { color: var(--muted); font-size: 12px; margin-top: 1px; }
+    .topbar .env {
+      font-size: 11px;
+      padding: 3px 8px;
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .content { padding: 22px 28px 60px; }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ---------- primitives ---------- */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+    .card-h {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .card-h h2 { font-size: 14px; font-weight: 600; }
+    .card-h .hint { font-size: 12px; color: var(--muted); }
+    .card-b { padding: 16px; }
+    .grid { display: grid; gap: 16px; }
+    .g-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .g-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .g-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .g-dash { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+    .g-issue { grid-template-columns: minmax(0, 1fr) 340px; }
+    .g-tpl { grid-template-columns: 300px minmax(0, 1fr); }
+    .g-verify { grid-template-columns: minmax(0, 1fr) 360px; }
+    .mt { margin-top: 16px; }
+
+    .kpi { padding: 14px 16px; }
+    .kpi .l { font-size: 12px; color: var(--muted); }
+    .kpi .v {
+      margin-top: 4px;
+      font-size: 26px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.01em;
+    }
+    .kpi .d { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .kpi .d.up { color: var(--ok); }
+    .kpi .code {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 0 5px;
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      font-size: 10.5px;
+      color: var(--muted);
+      vertical-align: middle;
+    }
+
+    .tbl th, .tbl td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      font-size: 13px;
+    }
+    .tbl th {
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 12px;
+      background: var(--paper);
+      white-space: nowrap;
+    }
+    .tbl tr:last-child td { border-bottom: 0; }
+    .tbl .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .tbl .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; letter-spacing: .02em; }
+    .tbl .act { white-space: nowrap; text-align: right; }
+    .tbl-wrap { overflow-x: auto; }
+    .tbl tfoot td { font-weight: 600; background: var(--paper); }
+    .tbl.nw td { white-space: nowrap; }
+    .tbl.nw td.empty { white-space: normal; }
+    .empty { padding: 26px; text-align: center; color: var(--muted); font-size: 13px; }
+
+    .tag {
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 3px;
+      font-size: 11.5px;
+      line-height: 18px;
+      white-space: nowrap;
+    }
+    .tag.ok { background: var(--ok-bg); color: var(--ok); }
+    .tag.warn { background: var(--warn-bg); color: var(--warn); }
+    .tag.off { background: #e9e6df; color: var(--muted); }
+    .tag.danger { background: var(--danger-bg); color: var(--danger); }
+    .tag.t-metal { background: #ece7dc; color: #6f5a2c; }
+    .tag.t-diamond { background: #e3e9f2; color: #2b4066; }
+    .tag.t-gem { background: #e3efe7; color: #2f6a4a; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      background: var(--white);
+      font-size: 13px;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+    .btn:hover { border-color: var(--navy-soft); }
+    .btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .btn.primary:hover { background: var(--navy-soft); }
+    .btn.sm { padding: 4px 9px; font-size: 12px; }
+    .btn.ghost { border-color: transparent; background: transparent; color: var(--navy-soft); }
+    .btn.ghost:hover { background: var(--paper); }
+    .btn.danger { color: var(--danger); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .row.end { justify-content: flex-end; }
+
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: 12px; color: var(--muted); }
+    .field label .req { color: var(--danger); margin-left: 2px; }
+    .field label .unit { color: var(--muted); font-size: 11px; margin-left: 4px; }
+    .field input, .field select, .field textarea {
+      padding: 7px 9px;
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      background: #fff;
+      font-size: 13.5px;
+      min-width: 0;
+      width: 100%;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: 2px solid rgba(43, 64, 102, .25);
+      border-color: var(--navy-soft);
+    }
+    .field.invalid input, .field.invalid select { border-color: var(--danger); }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+    .form-grid .span { grid-column: 1 / -1; }
+    .subh {
+      margin: 18px 0 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .subh::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+    .type-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .type-pick label {
+      display: block;
+      padding: 10px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      cursor: pointer;
+      background: #fff;
+    }
+    .type-pick label:has(input:checked) {
+      border-color: var(--navy);
+      box-shadow: inset 0 0 0 1px var(--navy);
+      background: #f3f5fa;
+    }
+    .type-pick input { display: none; }
+    .type-pick .n { font-weight: 500; }
+    .type-pick .c { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+    .drop {
+      border: 1px dashed var(--line-strong);
+      border-radius: 4px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+    }
+    .drop .thumb {
+      width: 88px;
+      height: 88px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: var(--paper) center / cover no-repeat;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 11px;
+      flex: none;
+    }
+    .drop .meta { font-size: 12px; color: var(--muted); }
+    .drop .meta strong { display: block; color: var(--ink); font-weight: 500; }
+    .drop input[type=file] { display: none; }
+
+    .sig-box {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #fff;
+      height: 84px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+    }
+    .sig-box img { max-height: 76px; max-width: 100%; }
+    .sig-thumb {
+      width: 92px;
+      height: 32px;
+      border: 1px solid var(--line);
+      background: #fff;
+      object-fit: contain;
+      display: block;
+    }
+    .sig-thumb.none {
+      display: grid;
+      place-items: center;
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+
+    .chart {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      align-items: end;
+      height: 132px;
+      padding: 0 4px;
+    }
+    .chart .bar {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: flex-start;
+      padding-top: 16px;
+      height: 100%;
+      position: relative;
+    }
+    .chart .bar .stack {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: flex-start;
+      flex: 1;
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .chart .bar .seg { width: 100%; }
+    .chart .bar .seg.metal { background: #b7a274; }
+    .chart .bar .seg.diamond { background: var(--navy-soft); }
+    .chart .bar .seg.gem { background: #4f8b6a; }
+    .chart .bar .lbl { font-size: 11px; color: var(--muted); text-align: center; padding-top: 4px; }
+    .chart .bar .tot {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .legend { display: flex; gap: 14px; font-size: 11.5px; color: var(--muted); }
+    .legend i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; }
+
+    .tpl-card {
+      padding: 14px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--line);
+    }
+    .tpl-card:last-child { border-bottom: 0; }
+    .tpl-card:hover { background: var(--paper); }
+    .tpl-card.active { background: #f3f5fa; box-shadow: inset 3px 0 0 var(--navy); }
+    .tpl-card .n { font-weight: 500; }
+    .tpl-card .m { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .staff-add { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr auto; gap: 10px; align-items: end; }
+
+    .public-frame {
+      border: 1px solid var(--line-strong);
+      border-radius: 18px;
+      background: #fff;
+      padding: 10px;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .public-frame .url {
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--paper);
+      border-radius: 6px;
+      padding: 5px 10px;
+      margin-bottom: 10px;
+      font-family: ui-monospace, Menlo, monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .public-body { padding: 8px 6px 14px; }
+    .public-body .lab { font-family: var(--serif); font-size: 15px; letter-spacing: .08em; text-align: center; }
+    .public-body .ok {
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .public-body .ok.valid { background: var(--ok-bg); color: var(--ok); }
+    .public-body .ok.pending { background: var(--warn-bg); color: var(--warn); }
+    .public-body .ok.bad { background: var(--danger-bg); color: var(--danger); }
+    .public-body dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 13px; }
+    .public-body dt { color: var(--muted); }
+    .public-body dd { margin: 0; }
+    .public-body .foot { margin-top: 12px; font-size: 11px; color: var(--muted); text-align: center; }
+
+    .note {
+      padding: 10px 12px;
+      border-left: 3px solid var(--gold);
+      background: var(--paper);
+      font-size: 12.5px;
+      color: #4b5563;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--navy-deep);
+      color: #fff;
+      padding: 9px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s;
+      z-index: 60;
+      max-width: calc(100vw - 32px);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ---------- modal ---------- */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      background: rgba(18, 32, 58, .55);
+      padding: 20px;
+      overflow: auto;
+    }
+    .modal.open { display: block; }
+    .modal .box {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--paper-2);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .modal .box-h {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      border-radius: 8px 8px 0 0;
+    }
+    .modal .box-h h2 { font-size: 14px; }
+    .modal .box-b { padding: 20px; }
+    .sheet-scaler { position: relative; margin: 0 auto; overflow: hidden; }
+
+    /* ---------- certificate (A5 portrait, 148 x 210 mm) ---------- */
+    .cert-sheet {
+      width: 559px;
+      height: 794px;
+      background: #fbf8f1;
+      color: #1d2740;
+      font-family: var(--serif);
+      position: relative;
+      transform-origin: top left;
+      box-shadow: 0 2px 10px rgba(0,0,0,.15);
+      overflow: hidden;
+      padding: 30px 34px;
+      display: flex;
+      flex-direction: column;
+    }
+    .cert-sheet::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid var(--gold);
+      outline: 3px double #cdb98a;
+      outline-offset: 3px;
+      pointer-events: none;
+    }
+    .cert-sheet .wm {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='160'%3E%3Ctext x='20' y='90' transform='rotate(-24 110 80)' font-family='serif' font-size='18' fill='%231b2b45' fill-opacity='.055' letter-spacing='4'%3E%E6%99%B6%E7%92%9E%E9%91%91%E5%AE%9A%E6%89%80 GENUINE%3C/text%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .cert-sheet .wm::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 58%, rgba(168,137,79,.10), transparent 42%);
+    }
+    .cert-sheet > * { position: relative; }
+    .cert-head { text-align: center; padding-top: 6px; }
+    .cert-head .emblem {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 6px;
+      border: 1.5px solid var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      color: var(--gold);
+    }
+    .cert-head .lab { font-size: 19px; letter-spacing: .28em; font-weight: 700; }
+    .cert-head .lab-en { font-size: 9.5px; letter-spacing: .22em; color: #5f6b85; text-transform: uppercase; margin-top: 2px; }
+    .cert-head .title {
+      margin-top: 14px;
+      font-size: 15px;
+      letter-spacing: .3em;
+      font-weight: 700;
+      border-top: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+      display: inline-block;
+      padding: 4px 22px;
+    }
+    .cert-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 16px;
+      font-size: 11.5px;
+      gap: 12px;
+    }
+    .cert-meta .no { font-family: ui-monospace, Menlo, monospace; font-size: 13px; letter-spacing: .08em; }
+    .cert-meta .l { color: #5f6b85; font-size: 10px; letter-spacing: .1em; }
+    .cert-qr {
+      width: 62px;
+      height: 62px;
+      flex: none;
+      border: 1px solid #1d2740;
+      background:
+        linear-gradient(#1d2740, #1d2740) 4px 4px / 14px 14px no-repeat,
+        linear-gradient(#1d2740, #1d2740) 44px 4px / 14px 14px no-repeat,
+        linear-gradient(#1d2740, #1d2740) 4px 44px / 14px 14px no-repeat,
+        repeating-linear-gradient(90deg, #1d2740 0 3px, transparent 3px 6px) 22px 6px / 18px 12px no-repeat,
+        repeating-linear-gradient(0deg, #1d2740 0 3px, transparent 3px 6px) 6px 22px / 12px 18px no-repeat,
+        repeating-linear-gradient(45deg, #1d2740 0 2px, transparent 2px 5px) 24px 24px / 32px 32px no-repeat,
+        #fff;
+      background-clip: padding-box;
+    }
+    .cert-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 176px;
+      gap: 18px;
+      margin-top: 16px;
+      flex: 1;
+    }
+    .cert-tbl { width: 100%; border-top: 1px solid #1d2740; }
+    .cert-tbl th, .cert-tbl td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #d5cdb8;
+      font-size: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .cert-tbl th { width: 36%; color: #5f6b85; font-weight: 500; letter-spacing: .08em; }
+    .cert-tbl td { font-weight: 500; }
+    .cert-img {
+      width: 176px;
+      height: 176px;
+      border: 1px solid #cdb98a;
+      padding: 4px;
+      background: #fff;
+    }
+    .cert-img > div {
+      width: 100%;
+      height: 100%;
+      background: #f0ece2 center / cover no-repeat;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      color: #8a8f9c;
+      font-family: var(--font);
+    }
+    .cert-img-cap { font-size: 10px; color: #5f6b85; text-align: center; margin-top: 6px; letter-spacing: .08em; }
+    .cert-remark { margin-top: 12px; font-size: 10.5px; color: #4b5563; line-height: 1.6; }
+    .cert-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      padding-top: 10px;
+      margin-top: auto;
+    }
+    .cert-foot .sig { width: 190px; text-align: center; }
+    .cert-foot .sig .img { height: 58px; display: grid; place-items: end center; }
+    .cert-foot .sig img { max-height: 56px; max-width: 180px; }
+    .cert-foot .sig .line { border-top: 1px solid #1d2740; padding-top: 4px; font-size: 11px; letter-spacing: .1em; }
+    .cert-foot .sig .line small { display: block; color: #5f6b85; font-size: 9.5px; letter-spacing: .05em; }
+    .cert-foot .date { font-size: 11.5px; text-align: right; }
+    .cert-foot .date .l { color: #5f6b85; font-size: 10px; letter-spacing: .1em; }
+    .cert-legal { font-family: var(--font); font-size: 8.5px; color: #7b8296; line-height: 1.5; margin-top: 10px; border-top: 1px solid #d5cdb8; padding-top: 6px; }
+    .cert-stamp {
+      position: absolute;
+      right: 44px;
+      bottom: 92px;
+      width: 74px;
+      height: 74px;
+      border: 2px solid rgba(155, 59, 59, .55);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: rgba(155, 59, 59, .6);
+      font-size: 11px;
+      letter-spacing: .15em;
+      transform: rotate(-12deg);
+      text-align: center;
+      line-height: 1.3;
+      pointer-events: none;
+    }
+    .cert-stamp::after { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(155, 59, 59, .4); border-radius: 50%; }
+
+    /* ---------- deploy page ---------- */
+    .steps { counter-reset: s; }
+    .steps .st { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .steps .st:last-child { border-bottom: 0; }
+    .steps .st::before {
+      counter-increment: s;
+      content: counter(s);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+    }
+    .steps .st b { display: block; font-weight: 500; }
+    .steps .st span { font-size: 12.5px; color: var(--muted); }
+    .arch {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 12px;
+      background: var(--navy-deep);
+      color: #d5dbe8;
+      padding: 14px 16px;
+      border-radius: 4px;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    /* ---------- responsive ---------- */
+    @media (max-width: 1100px) {
+      .g-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .g-issue, .g-verify { grid-template-columns: minmax(0, 1fr); }
+      .g-tpl { grid-template-columns: minmax(0, 1fr); }
+      .staff-add { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 820px) {
+      .app { grid-template-columns: minmax(0, 1fr); }
+      .concept-note { position: static; }
+      .side {
+        position: sticky;
+        top: 0;
+        height: auto;
+        z-index: 25;
+        flex-direction: row;
+        align-items: center;
+        overflow: hidden;
+      }
+      .brand { padding: 10px 14px; border: 0; flex: none; }
+      .brand .sys { display: none; }
+      .brand .lab { font-size: 14px; }
+      .nav {
+        flex: 1;
+        min-width: 0;
+        flex-direction: row;
+        gap: 0;
+        padding: 0 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      .nav::-webkit-scrollbar { display: none; }
+      .nav button { flex: none; width: auto; padding: 12px 10px; border-radius: 0; font-size: 13px; gap: 6px; }
+      .nav button .k { display: none; }
+      .nav button.active { background: transparent; box-shadow: inset 0 -2px 0 var(--gold); }
+      .side .user { display: none; }
+      .topbar { padding: 12px 16px; }
+      .topbar .env { display: none; }
+      .content { padding: 14px 14px 48px; }
+      .g-3, .g-2, .g-dash { grid-template-columns: minmax(0, 1fr); }
+      .g-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .kpi .v { font-size: 22px; }
+      .legend { flex-wrap: wrap; gap: 8px 12px; }
+      .legend span { white-space: nowrap; }
+      .type-pick { grid-template-columns: minmax(0, 1fr); }
+      .form-grid { grid-template-columns: minmax(0, 1fr); }
+      .staff-add { grid-template-columns: minmax(0, 1fr); }
+      .modal { padding: 10px; }
+      .modal .box-b { padding: 10px; }
+      .chart { height: 110px; gap: 5px; }
+      .card-h { flex-wrap: wrap; }
+    }
+
+    /* ---------- print: certificate only ---------- */
+    @media print {
+      @page { size: A5 portrait; margin: 0; }
+      body { background: #fff; }
+      body > *:not(.modal) { display: none !important; }
+      .modal { position: static; display: block !important; padding: 0; background: none; overflow: visible; }
+      .modal .box { max-width: none; box-shadow: none; background: none; }
+      .modal .box-h { display: none; }
+      .modal .box-b { padding: 0; }
+      .sheet-scaler { width: auto !important; height: auto !important; overflow: visible; }
+      .cert-sheet { transform: none !important; box-shadow: none; width: 148mm; height: 210mm; }
+      .cert-sheet .wm { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="concept-note">依公開需求製作的概念展示，非實際客戶系統；鑑定所、人員、證書資料皆為虛構</div>
+
+  <div class="app">
+    <aside class="side">
+      <div class="brand">
+        <div class="lab">晶璞珠寶鑑定所</div>
+        <div class="sys">CERTIFICATE SYSTEM v2 概念版</div>
+      </div>
+      <nav class="nav" id="nav">
+        <button data-sec="dash" class="active">今日看板 <span class="k">F1</span></button>
+        <button data-sec="issue">開立證書 <span class="k">F2</span></button>
+        <button data-sec="tpl">證書範本 <span class="k">F3</span></button>
+        <button data-sec="staff">鑑定師與帳號 <span class="k">F4</span></button>
+        <button data-sec="verify">查詢／驗證 <span class="k">F5</span></button>
+        <button data-sec="stats">統計 <span class="k">F6</span></button>
+        <button data-sec="deploy">系統與部署 <span class="k">F7</span></button>
+      </nav>
+      <div class="user">
+        <strong>林昭蓉</strong>
+        主任鑑定師・管理員
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="topbar">
+        <div>
+          <h1 id="sec-title">今日看板</h1>
+          <div class="sub" id="sec-sub">開立概況與待處理事項</div>
+        </div>
+        <div class="row">
+          <span class="env">NAS：DS923+ ・ 資料庫正常 ・ 上次備份 03:00</span>
+          <span class="env" id="today-label"></span>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- ================= 1. 今日看板 ================= -->
+        <section class="section active" id="sec-dash">
+          <div class="grid g-4" id="kpis"></div>
+          <div class="grid g-dash mt">
+            <div class="card">
+              <div class="card-h">
+                <h2>本週開立趨勢</h2>
+                <div class="legend"><span><i style="background:#b7a274"></i>貴金屬</span><span><i style="background:#2b4066"></i>鑽石</span><span><i style="background:#4f8b6a"></i>彩色寶石</span></div>
+              </div>
+              <div class="card-b"><div class="chart" id="chart"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>待簽核</h2><span class="hint">主任鑑定師簽核後生效</span></div>
+              <div class="tbl-wrap"><table class="tbl nw" id="pending-tbl"></table></div>
+            </div>
+          </div>
+          <div class="card mt">
+            <div class="card-h"><h2>最近開立</h2><button class="btn sm ghost" data-go="issue">前往開立</button></div>
+            <div class="tbl-wrap"><table class="tbl nw" id="recent-tbl"></table></div>
+          </div>
+        </section>
+
+        <!-- ================= 2. 開立證書 ================= -->
+        <section class="section" id="sec-issue">
+          <div class="grid g-issue">
+            <div class="card">
+              <div class="card-h"><h2>新增證書</h2><span class="hint" id="issue-next-no"></span></div>
+              <div class="card-b">
+                <div class="subh">證書類型</div>
+                <div class="type-pick" id="type-pick"></div>
+
+                <div class="subh">鑑定欄位（依範本）</div>
+                <div class="form-grid" id="issue-fields"></div>
+
+                <div class="subh">內部資料（不顯示於公開驗證頁）</div>
+                <div class="form-grid">
+                  <div class="field"><label>客戶名稱</label><input id="f-client" placeholder="例：王小姐 / 承翰銀樓"></div>
+                  <div class="field"><label>送件單號</label><input id="f-intake" placeholder="例：RC-20260910-07"></div>
+                  <div class="field span"><label>證書備註（會印在證書上）</label><textarea id="f-remark" rows="2" placeholder="例：本鑑定依送件時之狀態為準。"></textarea></div>
+                </div>
+
+                <div class="subh">物件照片</div>
+                <label class="drop">
+                  <div class="thumb" id="img-thumb">尚無圖片</div>
+                  <div class="meta"><strong>選擇一張圖片</strong>JPG / PNG，建議正方形、白底；僅在瀏覽器讀取，不會上傳。<div style="margin-top:6px"><span class="btn sm">選擇檔案</span></div></div>
+                  <input type="file" id="f-image" accept="image/*">
+                </label>
+
+                <div class="subh">鑑定師</div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label>簽發鑑定師<span class="req">*</span></label>
+                    <select id="f-staff"></select>
+                  </div>
+                  <div class="field">
+                    <label>簽名檔預覽</label>
+                    <div class="sig-box" id="sig-preview">請先選擇鑑定師</div>
+                  </div>
+                </div>
+
+                <div class="row end mt">
+                  <button class="btn" id="btn-reset">清除</button>
+                  <button class="btn" id="btn-preview">預覽證書</button>
+                  <button class="btn primary" id="btn-issue">開立</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card">
+                <div class="card-h"><h2>流程</h2></div>
+                <div class="card-b steps">
+                  <div class="st"><div><b>選擇證書類型</b><span>欄位依「證書範本」設定自動帶出</span></div></div>
+                  <div class="st"><div><b>填寫鑑定欄位、附一張照片</b><span>必填欄位未填不可開立</span></div></div>
+                  <div class="st"><div><b>指定鑑定師</b><span>簽名檔自動帶入證書</span></div></div>
+                  <div class="st"><div><b>預覽、開立、簽核</b><span>系統自動編號；簽核後可列印與公開驗證</span></div></div>
+                </div>
+              </div>
+              <div class="note mt">編號規則：類型代碼-年份-六位流水號（例：DIA-2026-000123）。流水號由資料庫序列產生，不可手動修改，作廢亦不回收。</div>
+            </div>
+          </div>
+
+          <div class="card mt">
+            <div class="card-h"><h2>證書列表</h2><span class="hint" id="cert-count"></span></div>
+            <div class="tbl-wrap"><table class="tbl nw" id="cert-tbl"></table></div>
+          </div>
+        </section>
+
+        <!-- ================= 3. 證書範本 ================= -->
+        <section class="section" id="sec-tpl">
+          <div class="grid g-tpl">
+            <div class="card">
+              <div class="card-h"><h2>範本</h2><span class="hint">3 個</span></div>
+              <div id="tpl-list"></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2 id="tpl-title">欄位清單</h2><span class="hint">修改會即時反映到開立表單與證書</span></div>
+              <div class="tbl-wrap"><table class="tbl nw" id="tpl-tbl"></table></div>
+              <div class="card-b" style="border-top:1px solid var(--line)">
+                <div class="subh" style="margin-top:0">新增欄位</div>
+                <div class="staff-add">
+                  <div class="field"><label>欄名</label><input id="nf-label" placeholder="例：切磨形狀"></div>
+                  <div class="field"><label>型別</label>
+                    <select id="nf-type">
+                      <option value="text">文字</option>
+                      <option value="number">數值</option>
+                      <option value="select">選項</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>單位／選項</label><input id="nf-unit" placeholder="數值填單位；選項以「/」分隔"></div>
+                  <div class="row" style="gap:12px">
+                    <label class="row" style="gap:4px;font-size:12.5px"><input type="checkbox" id="nf-req">必填</label>
+                    <label class="row" style="gap:4px;font-size:12.5px"><input type="checkbox" id="nf-pub" checked>公開</label>
+                    <button class="btn primary" id="nf-add">新增</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 4. 鑑定師與帳號 ================= -->
+        <section class="section" id="sec-staff">
+          <div class="card">
+            <div class="card-h"><h2>人員與帳號</h2><span class="hint">簽名檔僅在瀏覽器讀取</span></div>
+            <div class="tbl-wrap"><table class="tbl nw" id="staff-tbl"></table></div>
+          </div>
+          <div class="card mt">
+            <div class="card-h"><h2>新增帳號</h2></div>
+            <div class="card-b">
+              <div class="staff-add">
+                <div class="field"><label>姓名</label><input id="ns-name" placeholder="姓名"></div>
+                <div class="field"><label>職稱</label><input id="ns-title" placeholder="例：鑑定師"></div>
+                <div class="field"><label>角色</label>
+                  <select id="ns-role"><option>鑑定師</option><option>櫃台</option><option>管理員</option></select>
+                </div>
+                <button class="btn primary" id="ns-add">建立帳號</button>
+              </div>
+              <div class="note mt">角色權限：管理員可管理範本、帳號與簽核；鑑定師可開立與修改自己的草稿；櫃台僅可查詢、列印與收件登錄。停用帳號後不再出現於開立頁，歷史證書仍保留其姓名與簽名。</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 5. 查詢／驗證 ================= -->
+        <section class="section" id="sec-verify">
+          <div class="grid g-verify">
+            <div>
+              <div class="card">
+                <div class="card-h"><h2>證書查詢</h2></div>
+                <div class="card-b">
+                  <div class="row">
+                    <div class="field" style="flex:1;min-width:200px"><label>證書編號</label><input id="q-no" placeholder="例：DIA-2026-000121" autocapitalize="characters"></div>
+                    <button class="btn primary" id="q-btn" style="align-self:flex-end">查詢</button>
+                  </div>
+                  <div class="row" style="margin-top:8px;font-size:12px;color:var(--muted)">試試：<span id="q-hints"></span></div>
+                </div>
+              </div>
+              <div class="card mt" id="q-result-card" style="display:none">
+                <div class="card-h"><h2>內部摘要</h2><div class="row"><button class="btn sm" id="q-open">開啟證書預覽</button></div></div>
+                <div class="tbl-wrap"><table class="tbl" id="q-result"></table></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>公開驗證頁預覽</h2><span class="hint">客人掃 QR 後看到的畫面</span></div>
+              <div class="card-b">
+                <div class="public-frame">
+                  <div class="url" id="pub-url">https://verify.example-lab.tw/c/…</div>
+                  <div class="public-body" id="pub-body"><div class="empty">輸入編號後顯示</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 6. 統計 ================= -->
+        <section class="section" id="sec-stats">
+          <div class="card">
+            <div class="card-h">
+              <div class="row">
+                <h2>開立統計</h2>
+                <select id="st-period" style="padding:4px 8px;border:1px solid var(--line-strong);border-radius:4px;background:#fff">
+                  <option value="month">本月</option>
+                  <option value="quarter">本季</option>
+                  <option value="year">今年</option>
+                  <option value="all">全部</option>
+                </select>
+              </div>
+              <div class="row">
+                <span class="hint" id="st-range"></span>
+                <button class="btn sm" id="st-csv">匯出 CSV</button>
+              </div>
+            </div>
+            <div class="tbl-wrap"><table class="tbl nw" id="st-tbl"></table></div>
+          </div>
+          <div class="grid g-2 mt">
+            <div class="card">
+              <div class="card-h"><h2>依狀態</h2></div>
+              <div class="tbl-wrap"><table class="tbl" id="st-status"></table></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>鑽石淨度分布（期間內）</h2></div>
+              <div class="tbl-wrap"><table class="tbl" id="st-clarity"></table></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 7. 系統與部署 ================= -->
+        <section class="section" id="sec-deploy">
+          <div class="grid g-2">
+            <div class="card">
+              <div class="card-h"><h2>舊版 Linux 證書系統資料匯入</h2></div>
+              <div class="tbl-wrap">
+                <table class="tbl">
+                  <thead><tr><th>階段</th><th>作業</th><th>產出</th></tr></thead>
+                  <tbody>
+                    <tr><td style="white-space:nowrap">1. 匯出</td><td>從舊系統匯出 CSV 或 SQL dump；附件圖片與簽名檔整包複製</td><td>原始資料包、校驗碼</td></tr>
+                    <tr><td style="white-space:nowrap">2. 欄位對應</td><td>舊欄位 → 新範本欄位對照表；缺少的欄位給預設值或標「舊資料」</td><td>對照表（客戶確認）</td></tr>
+                    <tr><td style="white-space:nowrap">3. 試匯入</td><td>在 NAS 測試環境匯入，舊編號原樣保留，新開證書從新序列起算</td><td>試匯入資料庫</td></tr>
+                    <tr><td style="white-space:nowrap">4. 差異報告</td><td>逐筆比對筆數、重複編號、缺圖、無法解析的日期與數值</td><td>差異清單（需人工決定）</td></tr>
+                    <tr><td style="white-space:nowrap">5. 正式切換</td><td>凍結舊系統 → 正式匯入 → 舊系統改唯讀保留三個月</td><td>切換紀錄、回滾點</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-b" style="border-top:1px solid var(--line)">
+                <div class="note">舊證書匯入後可直接被「查詢／驗證」找到；公開驗證頁會標示「歷史資料，於 2026 年整併」。</div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>NAS 部署</h2><span class="hint">Synology Container Manager / QNAP Container Station</span></div>
+              <div class="card-b">
+<div class="arch">NAS（Synology / QNAP）
+├─ Docker: cert-app        瀏覽器介面 + API（連接埠 8443）
+├─ Docker: postgres        證書、範本、帳號、稽核紀錄
+├─ Volume: /volume1/cert
+│   ├─ uploads/            物件照片、簽名檔
+│   └─ backups/            每日 pg_dump（保留 30 份）
+└─ NAS 快照 + Hyper Backup → 外接碟 / 異地 NAS
+
+員工電腦、平板 ──(區網 HTTPS)──▶ NAS
+客人手機掃 QR ──(對外驗證頁)──▶ 反向代理 → cert-app（唯讀 API）</div>
+                <table class="tbl mt">
+                  <tbody>
+                    <tr><th>硬體</th><td>不綁定特定電腦；NAS 更換時將 Volume 與容器搬到新機即可</td></tr>
+                    <tr><th>存取</th><td>瀏覽器操作，不需安裝；平板可直接開立與拍照</td></tr>
+                    <tr><th>備份</th><td>資料庫每日轉存 + NAS 快照；還原演練納入驗收</td></tr>
+                    <tr><th>公開驗證</th><td>僅開放唯讀驗證 API 對外，後台限區網或 VPN</td></tr>
+                    <tr><th>更新</th><td>拉新版映像檔重啟即完成；資料庫遷移腳本隨版本附帶</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 證書預覽 modal ================= -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <div class="box-h">
+        <h2 id="modal-title">證書預覽</h2>
+        <div class="row">
+          <button class="btn sm" id="modal-print">列印</button>
+          <button class="btn sm primary" id="modal-issue">開立</button>
+          <button class="btn sm" id="modal-close">關閉</button>
+        </div>
+      </div>
+      <div class="box-b">
+        <div class="sheet-scaler" id="sheet-scaler">
+          <div class="cert-sheet" id="cert-sheet"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ---------- helpers ----------
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const pad = (n, w) => String(n).padStart(w, '0');
+  const fmtDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1,2)}-${pad(d.getDate(),2)}`;
+  const daysAgo = n => { const d = new Date(TODAY); d.setDate(d.getDate() - n); return d; };
+  const TODAY = new Date(); TODAY.setHours(12,0,0,0);
+  let toastT;
+  const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200); };
+
+  const sigSvg = name => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80"><text x="18" y="50" font-family="'Noto Serif TC','Songti TC',serif" font-style="italic" font-weight="500" font-size="34" fill="#1d2740" letter-spacing="3">${name}</text><path d="M16 61 C 70 72, 150 48, 226 62" stroke="#1d2740" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M140 20 c 6 -8, 14 -8, 22 0" stroke="#1d2740" stroke-width="1" fill="none"/></svg>`);
+
+  // ---------- state ----------
+  const TYPES = { metal: '貴金屬證書', diamond: '鑽石證書', gem: '彩色寶石證書' };
+  const TYPE_EN = { metal: 'PRECIOUS METAL CERTIFICATE', diamond: 'DIAMOND GRADING REPORT', gem: 'COLORED STONE REPORT' };
+  const PREFIX = { metal: 'PM', diamond: 'DIA', gem: 'GEM' };
+
+  const state = {
+    templates: {
+      metal: { name: '貴金屬證書', desc: '金、鉑、銀製品之材質與成色', fields: [
+        { id: 'material', label: '材質', type: 'select', opts: ['黃金', '鉑金', 'K金 (18K)', 'K金 (14K)', '白銀'], req: true, unit: '', pub: true },
+        { id: 'fineness', label: '成色', type: 'text', req: true, unit: '‰', pub: true },
+        { id: 'weight', label: '重量', type: 'number', req: true, unit: 'g', pub: true },
+        { id: 'size', label: '尺寸', type: 'text', req: false, unit: 'mm', pub: false },
+        { id: 'method', label: '檢測方法', type: 'select', opts: ['XRF 螢光分析', '比重法', 'XRF + 比重法'], req: true, unit: '', pub: false },
+      ]},
+      diamond: { name: '鑽石證書', desc: '4C 分級與螢光反應', fields: [
+        { id: 'carat', label: '克拉', type: 'number', req: true, unit: 'ct', pub: true },
+        { id: 'color', label: '顏色', type: 'select', opts: ['D','E','F','G','H','I','J','K'], req: true, unit: '', pub: true },
+        { id: 'clarity', label: '淨度', type: 'select', opts: ['FL','IF','VVS1','VVS2','VS1','VS2','SI1','SI2'], req: true, unit: '', pub: true },
+        { id: 'cut', label: '車工', type: 'select', opts: ['Excellent','Very Good','Good','Fair'], req: true, unit: '', pub: true },
+        { id: 'fluor', label: '螢光', type: 'select', opts: ['None','Faint','Medium','Strong'], req: true, unit: '', pub: true },
+        { id: 'shape', label: '形狀', type: 'select', opts: ['圓形明亮式','公主方','祖母綠','橢圓','梨形','枕形'], req: false, unit: '', pub: true },
+        { id: 'measure', label: '量測', type: 'text', req: false, unit: 'mm', pub: false },
+      ]},
+      gem: { name: '彩色寶石證書', desc: '寶石種類、產地與處理判定', fields: [
+        { id: 'species', label: '寶石種類', type: 'text', req: true, unit: '', pub: true },
+        { id: 'carat', label: '克拉', type: 'number', req: true, unit: 'ct', pub: true },
+        { id: 'color', label: '顏色', type: 'text', req: true, unit: '', pub: true },
+        { id: 'origin', label: '產地', type: 'text', req: false, unit: '', pub: true },
+        { id: 'treatment', label: '處理', type: 'select', opts: ['無 (No indication)','加熱','加熱 + 殘留物','充填','浸油','染色'], req: true, unit: '', pub: true },
+        { id: 'measure', label: '量測', type: 'text', req: false, unit: 'mm', pub: false },
+      ]},
+    },
+    staff: [
+      { id: 1, name: '林昭蓉', title: '主任鑑定師', role: '管理員', active: true, sig: sigSvg('林昭蓉'), login: 'chlin' },
+      { id: 2, name: '陳俊瑋', title: '鑑定師（鑽石）', role: '鑑定師', active: true, sig: sigSvg('陳俊瑋'), login: 'jwchen' },
+      { id: 3, name: '黃雅琪', title: '鑑定師（彩寶）', role: '鑑定師', active: true, sig: sigSvg('黃雅琪'), login: 'ychuang' },
+      { id: 4, name: '張立群', title: '櫃台', role: '櫃台', active: true, sig: null, login: 'lqchang' },
+      { id: 5, name: '吳承翰', title: '前鑑定師', role: '鑑定師', active: false, sig: sigSvg('吳承翰'), login: 'chwu' },
+    ],
+    certs: [],
+    seq: { metal: 0, diamond: 0, gem: 0 },
+    activeTpl: 'diamond',
+    image: null,
+    lastQuery: null,
+    previewing: null,
+  };
+
+  // ---------- seed ----------
+  (function seed() {
+    const pick = (a, i) => a[i % a.length];
+    const rows = [];
+    const plan = [
+      // [daysAgo, type, staffId, status]
+      [62,'metal',1,'issued'],[61,'diamond',2,'issued'],[58,'gem',3,'issued'],[55,'diamond',2,'issued'],[54,'diamond',5,'issued'],
+      [50,'metal',1,'issued'],[49,'gem',3,'issued'],[47,'diamond',2,'issued'],[45,'metal',1,'issued'],[44,'diamond',5,'issued'],
+      [41,'gem',3,'issued'],[40,'diamond',2,'issued'],[38,'metal',1,'issued'],[36,'diamond',2,'issued'],[35,'gem',3,'issued'],
+      [33,'diamond',2,'issued'],[31,'metal',1,'issued'],[30,'diamond',2,'issued'],[28,'gem',3,'issued'],[27,'diamond',2,'issued'],
+      [25,'metal',1,'issued'],[24,'diamond',2,'issued'],[22,'gem',3,'issued'],[21,'diamond',2,'issued'],[20,'metal',1,'issued'],
+      [18,'diamond',2,'issued'],[17,'gem',3,'issued'],[16,'diamond',2,'issued'],[15,'metal',1,'issued'],[14,'diamond',2,'issued'],
+      [12,'gem',3,'issued'],[11,'diamond',2,'issued'],[10,'metal',1,'issued'],[9,'diamond',2,'issued'],[9,'gem',3,'issued'],
+      [8,'metal',1,'issued'],[7,'diamond',2,'issued'],[6,'diamond',2,'issued'],[6,'gem',3,'issued'],[5,'metal',1,'issued'],
+      [4,'diamond',2,'issued'],[4,'gem',3,'issued'],[3,'diamond',2,'issued'],[3,'metal',1,'issued'],[2,'diamond',2,'issued'],
+      [2,'gem',3,'issued'],[3,'gem',3,'issued'],[1,'diamond',2,'issued'],[1,'metal',1,'void'],[1,'gem',3,'pending'],[0,'diamond',2,'pending'],[0,'metal',1,'pending'],[0,'gem',3,'issued'],[5,'diamond',2,'issued'],
+    ];
+    const clients = ['王小姐','承翰銀樓','李先生','金鼎珠寶','林太太','拍賣行送件','陳先生','典當行送件'];
+    const seqYear = { metal: 118, diamond: 96, gem: 41 };
+    const diamonds = [
+      { carat: '1.02', color: 'F', clarity: 'VS1', cut: 'Excellent', fluor: 'None', shape: '圓形明亮式', measure: '6.45 - 6.48 × 3.98' },
+      { carat: '0.52', color: 'G', clarity: 'VVS2', cut: 'Very Good', fluor: 'Faint', shape: '圓形明亮式', measure: '5.12 - 5.15 × 3.20' },
+      { carat: '1.51', color: 'E', clarity: 'VS2', cut: 'Excellent', fluor: 'None', shape: '枕形', measure: '6.90 × 6.55 × 4.42' },
+      { carat: '0.31', color: 'H', clarity: 'SI1', cut: 'Good', fluor: 'Medium', shape: '公主方', measure: '3.95 × 3.90 × 2.85' },
+      { carat: '2.03', color: 'D', clarity: 'IF', cut: 'Excellent', fluor: 'None', shape: '橢圓', measure: '9.80 × 7.10 × 4.51' },
+    ];
+    const metals = [
+      { material: '黃金', fineness: '999.9', weight: '37.50', size: '—', method: 'XRF + 比重法' },
+      { material: '鉑金', fineness: '950', weight: '8.21', size: '內徑 17.2', method: 'XRF 螢光分析' },
+      { material: 'K金 (18K)', fineness: '750', weight: '12.06', size: '長 450', method: 'XRF 螢光分析' },
+      { material: '黃金', fineness: '999', weight: '3.75', size: '—', method: 'XRF 螢光分析' },
+    ];
+    const gems = [
+      { species: '紅寶石 (Ruby)', carat: '1.85', color: '紅 (Pigeon blood)', origin: '緬甸', treatment: '無 (No indication)', measure: '7.60 × 6.10 × 3.90' },
+      { species: '藍寶石 (Sapphire)', carat: '3.12', color: '藍 (Royal blue)', origin: '斯里蘭卡', treatment: '加熱', measure: '9.20 × 7.30 × 4.80' },
+      { species: '祖母綠 (Emerald)', carat: '2.40', color: '綠', origin: '哥倫比亞', treatment: '浸油', measure: '9.05 × 6.80 × 4.20' },
+      { species: '帕拉伊巴碧璽', carat: '0.96', color: '霓虹藍綠', origin: '莫三比克', treatment: '加熱', measure: '6.20 × 5.10 × 3.60' },
+    ];
+    plan.forEach(([d, type, sid, status], i) => {
+      const year = daysAgo(d).getFullYear();
+      seqYear[type] += 1;
+      const fields = type === 'diamond' ? pick(diamonds, i) : type === 'metal' ? pick(metals, i) : pick(gems, i);
+      const st = state.staff.find(s => s.id === sid);
+      rows.push({
+        no: `${PREFIX[type]}-${year}-${pad(seqYear[type], 6)}`,
+        type, fields: { ...fields }, staffId: sid, staffName: st.name, staffSig: st.sig,
+        date: daysAgo(d), status, client: pick(clients, i * 3 + 1), intake: `RC-${fmtDate(daysAgo(d + 2)).replace(/-/g, '')}-${pad((i * 7) % 23 + 1, 2)}`,
+        remark: '本鑑定僅就送件物件於檢測當時之狀態出具意見。', image: null,
+      });
+    });
+    state.certs = rows;
+    state.seq = seqYear;
+  })();
+
+  const staffById = id => state.staff.find(s => s.id === Number(id));
+  const certByNo = no => state.certs.find(c => c.no.toUpperCase() === String(no).trim().toUpperCase());
+  const STATUS = { issued: ['已發證', 'ok'], pending: ['待簽核', 'warn'], void: ['已作廢', 'danger'] };
+  const statusTag = s => `<span class="tag ${STATUS[s][1]}">${STATUS[s][0]}</span>`;
+  const typeTag = t => `<span class="tag t-${t}">${TYPES[t]}</span>`;
+  const fieldsOf = t => state.templates[t].fields;
+  const fmtVal = (f, v) => (v === undefined || v === '' ? '—' : esc(v) + (f && f.unit && f.type === 'number' ? ` ${f.unit}` : ''));
+  const fieldKey = (t, id) => fieldsOf(t).find(f => f.id === id);
+
+  // ---------- router ----------
+  const SUBS = {
+    dash: ['今日看板', '開立概況與待處理事項'],
+    issue: ['開立證書', '依範本填寫、預覽、開立與簽核'],
+    tpl: ['證書範本', '三種證書的欄位定義'],
+    staff: ['鑑定師與帳號', '人員、簽名檔、角色與停用'],
+    verify: ['查詢／驗證', '內部查詢與客人的公開驗證頁'],
+    stats: ['統計', '依類型與鑑定師的開立數'],
+    deploy: ['系統與部署', '舊系統資料整併與 NAS 部署方式'],
+  };
+  function go(sec) {
+    $$('.section').forEach(s => s.classList.toggle('active', s.id === 'sec-' + sec));
+    $$('#nav button').forEach(b => b.classList.toggle('active', b.dataset.sec === sec));
+    $('#sec-title').textContent = SUBS[sec][0];
+    $('#sec-sub').textContent = SUBS[sec][1];
+    const nb = $(`#nav button[data-sec="${sec}"]`);
+    if (nb && nb.scrollIntoView) nb.scrollIntoView({ block: 'nearest', inline: 'center' });
+    window.scrollTo({ top: 0 });
+    render[sec]();
+  }
+  $('#nav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) go(b.dataset.sec); });
+  document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) go(b.dataset.go); });
+  document.addEventListener('keydown', e => {
+    const m = /^F([1-7])$/.exec(e.key);
+    if (m) { e.preventDefault(); go(Object.keys(SUBS)[m[1] - 1]); }
+  });
+
+  // ---------- render: dashboard ----------
+  const render = {};
+  render.dash = () => {
+    const y = TODAY.getFullYear(), m = TODAY.getMonth();
+    const inMonth = c => c.date.getFullYear() === y && c.date.getMonth() === m && c.status !== 'void';
+    const lastMonth = c => { const d = new Date(y, m - 1, 1); return c.date.getFullYear() === d.getFullYear() && c.date.getMonth() === d.getMonth() && c.status !== 'void'; };
+    const cnt = (t, fn) => state.certs.filter(c => c.type === t && fn(c)).length;
+    const pending = state.certs.filter(c => c.status === 'pending');
+    const kpi = (l, v, d, code) => `<div class="card kpi"><div class="l">${l}${code ? `<span class="code">${code}</span>` : ''}</div><div class="v">${v}</div><div class="d ${d.startsWith('+') ? 'up' : ''}">${d}</div></div>`;
+    const diff = t => { const a = cnt(t, inMonth), b = cnt(t, lastMonth); return `${a - b >= 0 ? '+' : ''}${a - b} vs 上月 ${b}`; };
+    $('#kpis').innerHTML =
+      kpi('本月 貴金屬證書', cnt('metal', inMonth), diff('metal'), 'PM') +
+      kpi('本月 鑽石證書', cnt('diamond', inMonth), diff('diamond'), 'DIA') +
+      kpi('本月 彩色寶石證書', cnt('gem', inMonth), diff('gem'), 'GEM') +
+      kpi('待簽核', pending.length, pending.length ? '需主任鑑定師簽核' : '無待辦', '');
+    $('#nav-badge')?.remove();
+    const nb = $('#nav button[data-sec="dash"]');
+    if (pending.length) nb.insertAdjacentHTML('beforeend', `<span class="badge" id="nav-badge">${pending.length}</span>`);
+
+    // chart: last 7 days
+    const days = []; for (let i = 6; i >= 0; i--) days.push(daysAgo(i));
+    const wk = ['日','一','二','三','四','五','六'];
+    const counts = days.map(d => { const k = fmtDate(d); const r = { metal: 0, diamond: 0, gem: 0 }; state.certs.forEach(c => { if (fmtDate(c.date) === k && c.status !== 'void') r[c.type]++; }); return r; });
+    const max = Math.max(1, ...counts.map(r => r.metal + r.diamond + r.gem));
+    $('#chart').innerHTML = days.map((d, i) => {
+      const r = counts[i]; const tot = r.metal + r.diamond + r.gem;
+      const seg = t => r[t] ? `<div class="seg ${t}" style="height:${(r[t] / max) * 100}%"></div>` : '';
+      return `<div class="bar"><div class="lbl">${wk[d.getDay()]}<br><span style="font-size:10px">${d.getMonth()+1}/${d.getDate()}</span></div><div class="stack">${seg('metal')}${seg('diamond')}${seg('gem')}</div><div class="tot">${tot || ''}</div></div>`;
+    }).join('');
+
+    $('#pending-tbl').innerHTML = pending.length
+      ? `<thead><tr><th>編號</th><th>類型</th><th>鑑定師</th><th class="act"></th></tr></thead><tbody>` +
+        pending.map(c => `<tr><td class="mono">${c.no}</td><td>${typeTag(c.type)}</td><td>${esc(c.staffName)}</td><td class="act"><button class="btn sm" data-preview="${c.no}">檢視</button> <button class="btn sm primary" data-approve="${c.no}">簽核</button></td></tr>`).join('') + '</tbody>'
+      : '<tbody><tr><td class="empty">目前沒有待簽核證書</td></tr></tbody>';
+
+    const recent = [...state.certs].sort((a, b) => b.date - a.date || b.no.localeCompare(a.no)).slice(0, 8);
+    $('#recent-tbl').innerHTML = `<thead><tr><th>日期</th><th>編號</th><th>類型</th><th>主要內容</th><th>鑑定師</th><th>狀態</th></tr></thead><tbody>` +
+      recent.map(c => `<tr><td>${fmtDate(c.date)}</td><td class="mono">${c.no}</td><td>${typeTag(c.type)}</td><td>${summary(c)}</td><td>${esc(c.staffName)}</td><td>${statusTag(c.status)}</td></tr>`).join('') + '</tbody>';
+  };
+  function summary(c) {
+    const f = c.fields;
+    if (c.type === 'diamond') return esc(`${f.carat || '—'} ct / ${f.color || '—'} / ${f.clarity || '—'}`);
+    if (c.type === 'metal') return esc(`${f.material || '—'} ${f.fineness || ''} / ${f.weight || '—'} g`);
+    return esc(`${f.species || '—'} ${f.carat || '—'} ct`);
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-approve]');
+    if (a) { const c = certByNo(a.dataset.approve); c.status = 'issued'; toast(`${c.no} 已簽核發證`); render.dash(); return; }
+    const p = e.target.closest('[data-preview]');
+    if (p) openPreview(certByNo(p.dataset.preview), false);
+    const v = e.target.closest('[data-void]');
+    if (v) { const c = certByNo(v.dataset.void); if (confirm(`作廢 ${c.no}？作廢後編號不回收。`)) { c.status = 'void'; toast(`${c.no} 已作廢`); render.issue(); } }
+  });
+
+  // ---------- render: issue ----------
+  render.issue = () => {
+    $('#type-pick').innerHTML = Object.keys(TYPES).map(t =>
+      `<label><input type="radio" name="ctype" value="${t}" ${t === state.activeTpl ? 'checked' : ''}><div class="n">${TYPES[t]}</div><div class="c">${PREFIX[t]}-${TODAY.getFullYear()}-… ・ ${fieldsOf(t).length} 個欄位</div></label>`).join('');
+    renderIssueFields();
+    renderStaffSelect();
+    renderCertTable();
+  };
+  function renderIssueFields() {
+    const t = state.activeTpl;
+    const prev = collectFields();
+    $('#issue-fields').innerHTML = fieldsOf(t).map(f => {
+      const lab = `<label>${esc(f.label)}${f.req ? '<span class="req">*</span>' : ''}${f.unit ? `<span class="unit">${esc(f.unit)}</span>` : ''}</label>`;
+      let ctl;
+      if (f.type === 'select') ctl = `<select data-f="${f.id}"><option value="">請選擇</option>${(f.opts || []).map(o => `<option ${prev[f.id] === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+      else ctl = `<input data-f="${f.id}" type="${f.type === 'number' ? 'number' : 'text'}" ${f.type === 'number' ? 'step="0.01"' : ''} value="${esc(prev[f.id] || '')}" placeholder="${f.type === 'number' ? '0.00' : ''}">`;
+      return `<div class="field">${lab}${ctl}</div>`;
+    }).join('');
+    $('#issue-next-no').textContent = `下一號：${PREFIX[t]}-${TODAY.getFullYear()}-${pad(state.seq[t] + 1, 6)}`;
+  }
+  function collectFields() {
+    const o = {};
+    $$('#issue-fields [data-f]').forEach(el => { o[el.dataset.f] = el.value; });
+    return o;
+  }
+  function renderStaffSelect() {
+    const sel = $('#f-staff'); const cur = sel.value;
+    const list = state.staff.filter(s => s.active && s.role !== '櫃台');
+    sel.innerHTML = '<option value="">請選擇</option>' + list.map(s => `<option value="${s.id}">${esc(s.name)}　${esc(s.title)}</option>`).join('');
+    if (list.some(s => String(s.id) === cur)) sel.value = cur;
+    renderSigPreview();
+  }
+  function renderSigPreview() {
+    const s = staffById($('#f-staff').value);
+    $('#sig-preview').innerHTML = !s ? '請先選擇鑑定師' : s.sig ? `<img src="${s.sig}" alt="${esc(s.name)} 簽名">` : `${esc(s.name)} 尚未上傳簽名檔`;
+  }
+  $('#type-pick').addEventListener('change', e => { if (e.target.name === 'ctype') { state.activeTpl = e.target.value; renderIssueFields(); } });
+  $('#f-staff').addEventListener('change', renderSigPreview);
+  $('#f-image').addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const r = new FileReader();
+    r.onload = () => { state.image = r.result; $('#img-thumb').style.backgroundImage = `url("${state.image}")`; $('#img-thumb').textContent = ''; };
+    r.readAsDataURL(file);
+  });
+  function buildDraft() {
+    const t = state.activeTpl;
+    const st = staffById($('#f-staff').value);
+    return {
+      no: `${PREFIX[t]}-${TODAY.getFullYear()}-${pad(state.seq[t] + 1, 6)}`,
+      type: t, fields: collectFields(), staffId: st ? st.id : null, staffName: st ? st.name : '', staffSig: st ? st.sig : null,
+      date: new Date(TODAY), status: 'pending', client: $('#f-client').value, intake: $('#f-intake').value,
+      remark: $('#f-remark').value, image: state.image, draft: true,
+    };
+  }
+  function validate() {
+    let ok = true;
+    $$('#issue-fields .field').forEach(el => el.classList.remove('invalid'));
+    fieldsOf(state.activeTpl).forEach(f => {
+      const el = $(`#issue-fields [data-f="${f.id}"]`);
+      if (f.req && !el.value) { ok = false; el.closest('.field').classList.add('invalid'); }
+    });
+    if (!$('#f-staff').value) { ok = false; $('#f-staff').closest('.field').classList.add('invalid'); } else $('#f-staff').closest('.field').classList.remove('invalid');
+    if (!ok) toast('請填寫標示 * 的必填欄位並選擇鑑定師');
+    return ok;
+  }
+  function issueDraft(d) {
+    state.seq[d.type] += 1;
+    delete d.draft;
+    state.certs.push(d);
+    resetForm();
+    renderIssueFields();
+    renderCertTable();
+    toast(`已開立 ${d.no}，等待簽核`);
+  }
+  function resetForm() {
+    $$('#issue-fields [data-f]').forEach(el => el.value = '');
+    ['#f-client', '#f-intake', '#f-remark'].forEach(s => $(s).value = '');
+    $('#f-image').value = ''; state.image = null;
+    $('#img-thumb').style.backgroundImage = ''; $('#img-thumb').textContent = '尚無圖片';
+  }
+  $('#btn-reset').addEventListener('click', () => { resetForm(); $$('#issue-fields .field').forEach(el => el.classList.remove('invalid')); });
+  $('#btn-preview').addEventListener('click', () => { if (validate()) openPreview(buildDraft(), true); });
+  $('#btn-issue').addEventListener('click', () => { if (validate()) issueDraft(buildDraft()); });
+
+  function renderCertTable() {
+    const list = [...state.certs].sort((a, b) => b.date - a.date || b.no.localeCompare(a.no));
+    $('#cert-count').textContent = `${list.length} 筆`;
+    $('#cert-tbl').innerHTML = `<thead><tr><th>編號</th><th>類型</th><th>日期</th><th>主要內容</th><th>客戶</th><th>鑑定師</th><th>狀態</th><th class="act"></th></tr></thead><tbody>` +
+      list.slice(0, 20).map(c => `<tr><td class="mono">${c.no}</td><td>${typeTag(c.type)}</td><td>${fmtDate(c.date)}</td><td>${summary(c)}</td><td>${esc(c.client)}</td><td>${esc(c.staffName)}${staffById(c.staffId)?.active === false ? ' <span class="tag off">已停用</span>' : ''}</td><td>${statusTag(c.status)}</td><td class="act"><button class="btn sm" data-preview="${c.no}">檢視</button>${c.status === 'pending' ? ` <button class="btn sm primary" data-approve="${c.no}">簽核</button>` : ''}${c.status !== 'void' ? ` <button class="btn sm ghost danger" data-void="${c.no}">作廢</button>` : ''}</td></tr>`).join('') +
+      (list.length > 20 ? `<tr><td colspan="8" class="empty">僅顯示最近 20 筆，共 ${list.length} 筆</td></tr>` : '') + '</tbody>';
+  }
+
+  // ---------- certificate preview ----------
+  function certHTML(c) {
+    const tpl = fieldsOf(c.type);
+    const rows = tpl.map(f => `<tr><th>${esc(f.label)}</th><td>${fmtVal(f, c.fields[f.id])}</td></tr>`).join('');
+    return `
+      <div class="wm"></div>
+      <div class="cert-head">
+        <div class="emblem">璞</div>
+        <div class="lab">晶璞珠寶鑑定所</div>
+        <div class="lab-en">Jingpu Gemological Laboratory ・ Taipei</div>
+        <div class="title">${TYPES[c.type]}</div>
+        <div class="lab-en" style="margin-top:4px">${TYPE_EN[c.type]}</div>
+      </div>
+      <div class="cert-meta">
+        <div><div class="l">CERTIFICATE NO. 證書編號</div><div class="no">${c.no}</div><div class="l" style="margin-top:6px">REPORT DATE 發證日期</div><div>${fmtDate(c.date)}</div></div>
+        <div style="text-align:center"><div class="cert-qr" aria-label="QR 碼佔位"></div><div class="l" style="margin-top:3px">線上驗證</div></div>
+      </div>
+      <div class="cert-body">
+        <div>
+          <table class="cert-tbl">${rows}</table>
+          ${c.remark ? `<div class="cert-remark">${esc(c.remark)}</div>` : ''}
+        </div>
+        <div>
+          <div class="cert-img"><div style="${c.image ? `background-image:url('${c.image}')` : ''}">${c.image ? '' : '物件照片'}</div></div>
+          <div class="cert-img-cap">實物照片・非比例</div>
+        </div>
+      </div>
+      <div class="cert-foot">
+        <div class="sig">
+          <div class="img">${c.staffSig ? `<img src="${c.staffSig}" alt="">` : ''}</div>
+          <div class="line">${esc(c.staffName || '')}<small>GEMOLOGIST 鑑定師</small></div>
+        </div>
+        <div class="date"><div class="l">ISSUED 開立日</div>${fmtDate(c.date)}<div class="l" style="margin-top:6px">STATUS</div>${STATUS[c.status][0]}</div>
+      </div>
+      <div class="cert-legal">本證書係依送件當時之物件狀態及本所檢測設備所得結果出具，不構成價值評估或買賣保證。證書內容以本所資料庫紀錄為準，可掃描 QR 碼或至本所驗證頁核對。任何塗改、複製均使本證書失效。</div>
+      ${c.status === 'issued' ? '<div class="cert-stamp">晶璞<br>鑑定所</div>' : ''}
+    `;
+  }
+  function openPreview(c, isDraft) {
+    state.previewing = c;
+    $('#cert-sheet').innerHTML = certHTML(c);
+    $('#modal-title').textContent = isDraft ? `證書預覽（草稿 ${c.no}）` : `證書 ${c.no}`;
+    $('#modal-issue').style.display = isDraft ? '' : 'none';
+    $('#modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    fitSheet();
+  }
+  function closePreview() { $('#modal').classList.remove('open'); document.body.style.overflow = ''; }
+  function fitSheet() {
+    const sc = $('#sheet-scaler'); const p = sc.parentElement; const cs = getComputedStyle(p);
+    const avail = p.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const s = Math.min(1, avail / 559);
+    sc.style.width = `${559 * s}px`; sc.style.height = `${794 * s}px`;
+    $('#cert-sheet').style.transform = `scale(${s})`;
+  }
+  window.addEventListener('resize', () => { if ($('#modal').classList.contains('open')) fitSheet(); });
+  $('#modal-close').addEventListener('click', closePreview);
+  $('#modal').addEventListener('click', e => { if (e.target === $('#modal')) closePreview(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePreview(); });
+  $('#modal-print').addEventListener('click', () => window.print());
+  $('#modal-issue').addEventListener('click', () => { issueDraft(state.previewing); closePreview(); });
+
+  // ---------- render: templates ----------
+  render.tpl = () => {
+    $('#tpl-list').innerHTML = Object.keys(TYPES).map(t => {
+      const tp = state.templates[t]; const used = state.certs.filter(c => c.type === t).length;
+      return `<div class="tpl-card ${t === state.activeTpl ? 'active' : ''}" data-tpl="${t}"><div class="n">${tp.name} <span class="tag t-${t}" style="margin-left:4px">${PREFIX[t]}</span></div><div class="m">${tp.desc}・${tp.fields.length} 個欄位・已用於 ${used} 張</div></div>`;
+    }).join('');
+    const t = state.activeTpl; const tp = state.templates[t];
+    $('#tpl-title').textContent = `${tp.name} 欄位清單`;
+    const TN = { text: '文字', number: '數值', select: '選項' };
+    $('#tpl-tbl').innerHTML = `<thead><tr><th>#</th><th>欄名</th><th>型別</th><th>必填</th><th>單位／選項</th><th>公開驗證</th><th class="act"></th></tr></thead><tbody>` +
+      tp.fields.map((f, i) => `<tr><td class="num">${i + 1}</td><td>${esc(f.label)}</td><td>${TN[f.type]}</td><td>${f.req ? '<span class="tag warn">必填</span>' : '<span class="tag off">選填</span>'}</td><td style="font-size:12px;color:var(--muted)">${f.type === 'select' ? esc((f.opts || []).join(' / ')) : esc(f.unit || '—')}</td><td>${f.pub ? '<span class="tag ok">顯示</span>' : '<span class="tag off">內部</span>'}</td><td class="act"><button class="btn sm ghost" data-fmove="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>上移</button> <button class="btn sm ghost danger" data-fdel="${i}">刪除</button></td></tr>`).join('') + '</tbody>';
+  };
+  $('#tpl-list').addEventListener('click', e => { const c = e.target.closest('[data-tpl]'); if (c) { state.activeTpl = c.dataset.tpl; render.tpl(); } });
+  $('#tpl-tbl').addEventListener('click', e => {
+    const d = e.target.closest('[data-fdel]');
+    const f = fieldsOf(state.activeTpl);
+    if (d) { const [x] = f.splice(Number(d.dataset.fdel), 1); toast(`已刪除欄位「${x.label}」，開立表單已同步`); render.tpl(); renderIssueFields(); return; }
+    const m = e.target.closest('[data-fmove]');
+    if (m) { const i = Number(m.dataset.fmove); [f[i - 1], f[i]] = [f[i], f[i - 1]]; render.tpl(); renderIssueFields(); }
+  });
+  $('#nf-add').addEventListener('click', () => {
+    const label = $('#nf-label').value.trim(); if (!label) { toast('請輸入欄名'); return; }
+    const type = $('#nf-type').value; const ux = $('#nf-unit').value.trim();
+    const f = { id: 'f' + Date.now().toString(36), label, type, req: $('#nf-req').checked, pub: $('#nf-pub').checked, unit: type === 'select' ? '' : ux };
+    if (type === 'select') f.opts = ux ? ux.split('/').map(s => s.trim()).filter(Boolean) : ['選項一', '選項二'];
+    fieldsOf(state.activeTpl).push(f);
+    $('#nf-label').value = ''; $('#nf-unit').value = ''; $('#nf-req').checked = false; $('#nf-pub').checked = true;
+    toast(`已新增欄位「${label}」到${TYPES[state.activeTpl]}`);
+    render.tpl(); renderIssueFields();
+  });
+
+  // ---------- render: staff ----------
+  render.staff = () => {
+    $('#staff-tbl').innerHTML = `<thead><tr><th>姓名</th><th>職稱</th><th>帳號</th><th>角色</th><th>簽名檔</th><th>開立數</th><th>狀態</th><th class="act"></th></tr></thead><tbody>` +
+      state.staff.map(s => {
+        const n = state.certs.filter(c => c.staffId === s.id).length;
+        const sig = s.sig ? `<img class="sig-thumb" src="${s.sig}" alt="">` : `<div class="sig-thumb none">${s.role === '櫃台' ? '不適用' : '未上傳'}</div>`;
+        return `<tr style="${s.active ? '' : 'color:var(--muted)'}"><td>${esc(s.name)}</td><td>${esc(s.title)}</td><td class="mono">${esc(s.login)}</td><td>${esc(s.role)}</td><td>${sig}</td><td class="num">${n}</td><td>${s.active ? '<span class="tag ok">啟用</span>' : '<span class="tag off">已停用</span>'}</td><td class="act">${s.role !== '櫃台' ? `<label class="btn sm">上傳簽名<input type="file" accept="image/*" data-sig="${s.id}" style="display:none"></label> ` : ''}<button class="btn sm ${s.active ? 'ghost danger' : ''}" data-toggle="${s.id}" ${s.id === 1 ? 'disabled title="不可停用自己"' : ''}>${s.active ? '停用' : '啟用'}</button></td></tr>`;
+      }).join('') + '</tbody>';
+  };
+  $('#staff-tbl').addEventListener('click', e => {
+    const b = e.target.closest('[data-toggle]'); if (!b) return;
+    const s = staffById(b.dataset.toggle); s.active = !s.active;
+    toast(s.active ? `${s.name} 已啟用` : `${s.name} 已停用，開立頁不再列出；歷史證書保留其姓名`);
+    render.staff(); renderStaffSelect();
+  });
+  $('#staff-tbl').addEventListener('change', e => {
+    const inp = e.target.closest('[data-sig]'); if (!inp || !inp.files[0]) return;
+    const s = staffById(inp.dataset.sig); const r = new FileReader();
+    r.onload = () => { s.sig = r.result; toast(`${s.name} 簽名檔已更新`); render.staff(); renderSigPreview(); };
+    r.readAsDataURL(inp.files[0]);
+  });
+  $('#ns-add').addEventListener('click', () => {
+    const name = $('#ns-name').value.trim(); if (!name) { toast('請輸入姓名'); return; }
+    const role = $('#ns-role').value;
+    state.staff.push({ id: Date.now(), name, title: $('#ns-title').value.trim() || role, role, active: true, sig: null, login: 'user' + (state.staff.length + 1) });
+    $('#ns-name').value = ''; $('#ns-title').value = '';
+    toast(`已建立 ${name} 的帳號（初始密碼以信件寄送）`);
+    render.staff(); renderStaffSelect();
+  });
+
+  // ---------- render: verify ----------
+  render.verify = () => {
+    const hints = state.certs.filter(c => c.status === 'issued').slice(-3).map(c => `<a href="#" data-q="${c.no}" class="mono" style="margin-right:8px">${c.no}</a>`);
+    hints.push(`<a href="#" data-q="DIA-2026-999999" class="mono" style="margin-right:8px">DIA-2026-999999</a>`);
+    $('#q-hints').innerHTML = hints.join('');
+  };
+  function doQuery(no) {
+    const c = certByNo(no); state.lastQuery = c || null;
+    $('#pub-url').textContent = `https://verify.example-lab.tw/c/${esc(String(no).trim().toUpperCase())}`;
+    const card = $('#q-result-card');
+    if (!c) {
+      card.style.display = 'none';
+      $('#pub-body').innerHTML = `<div class="lab">晶璞珠寶鑑定所</div><div class="ok bad">查無此證書</div><p style="font-size:12.5px;color:var(--muted);text-align:center">請確認編號是否正確；若持有此證書，請與本所聯繫。</p>`;
+      return;
+    }
+    card.style.display = '';
+    const st = staffById(c.staffId);
+    $('#q-result').innerHTML = `<tbody>
+      <tr><th>編號</th><td class="mono">${c.no}</td></tr>
+      <tr><th>類型</th><td>${typeTag(c.type)}</td></tr>
+      <tr><th>狀態</th><td>${statusTag(c.status)}</td></tr>
+      <tr><th>發證日</th><td>${fmtDate(c.date)}</td></tr>
+      <tr><th>鑑定師</th><td>${esc(c.staffName)}${st && !st.active ? ' <span class="tag off">帳號已停用</span>' : ''}</td></tr>
+      <tr><th>客戶（內部）</th><td>${esc(c.client || '—')}</td></tr>
+      <tr><th>送件單號（內部）</th><td class="mono">${esc(c.intake || '—')}</td></tr>
+      ${fieldsOf(c.type).map(f => `<tr><th>${esc(f.label)}${f.pub ? '' : ' <span class="tag off">內部</span>'}</th><td>${fmtVal(f, c.fields[f.id])}</td></tr>`).join('')}
+    </tbody>`;
+    const pubRows = fieldsOf(c.type).filter(f => f.pub).map(f => `<dt>${esc(f.label)}</dt><dd>${fmtVal(f, c.fields[f.id])}</dd>`).join('');
+    const banner = c.status === 'issued' ? '<div class="ok valid">證書有效・資料與本所紀錄相符</div>'
+      : c.status === 'pending' ? '<div class="ok pending">證書尚未生效（待簽核）</div>'
+      : '<div class="ok bad">此證書已作廢</div>';
+    $('#pub-body').innerHTML = `<div class="lab">晶璞珠寶鑑定所</div>${banner}<dl><dt>編號</dt><dd class="mono">${c.no}</dd><dt>類型</dt><dd>${TYPES[c.type]}</dd>${pubRows}<dt>發證日</dt><dd>${fmtDate(c.date)}</dd></dl><div class="foot">僅顯示公開欄位；鑑定師、客戶與內部資料不對外顯示。<br>查詢時間 ${fmtDate(TODAY)}</div>`;
+  }
+  $('#q-btn').addEventListener('click', () => doQuery($('#q-no').value));
+  $('#q-no').addEventListener('keydown', e => { if (e.key === 'Enter') doQuery(e.target.value); });
+  $('#q-hints').addEventListener('click', e => { const a = e.target.closest('[data-q]'); if (a) { e.preventDefault(); $('#q-no').value = a.dataset.q; doQuery(a.dataset.q); } });
+  $('#q-open').addEventListener('click', () => { if (state.lastQuery) openPreview(state.lastQuery, false); });
+
+  // ---------- render: stats ----------
+  function periodRange(p) {
+    const y = TODAY.getFullYear(), m = TODAY.getMonth();
+    if (p === 'month') return [new Date(y, m, 1), new Date(y, m + 1, 0)];
+    if (p === 'quarter') { const q = Math.floor(m / 3) * 3; return [new Date(y, q, 1), new Date(y, q + 3, 0)]; }
+    if (p === 'year') return [new Date(y, 0, 1), new Date(y, 11, 31)];
+    return [new Date(2000, 0, 1), new Date(y, 11, 31)];
+  }
+  let statsRows = [];
+  render.stats = () => {
+    const p = $('#st-period').value; const [a, b] = periodRange(p);
+    const inR = c => c.date >= a && c.date <= new Date(b.getFullYear(), b.getMonth(), b.getDate(), 23, 59, 59);
+    const list = state.certs.filter(inR);
+    $('#st-range').textContent = `${fmtDate(a)} ～ ${fmtDate(b)}・${list.length} 筆`;
+    const staff = state.staff.filter(s => list.some(c => c.staffId === s.id));
+    const cnt = (sid, t) => list.filter(c => c.staffId === sid && c.type === t && c.status !== 'void').length;
+    const tot = t => list.filter(c => c.type === t && c.status !== 'void').length;
+    statsRows = staff.map(s => ({ name: s.name, active: s.active, metal: cnt(s.id, 'metal'), diamond: cnt(s.id, 'diamond'), gem: cnt(s.id, 'gem'), voided: list.filter(c => c.staffId === s.id && c.status === 'void').length }));
+    $('#st-tbl').innerHTML = `<thead><tr><th>鑑定師</th><th class="num">貴金屬</th><th class="num">鑽石</th><th class="num">彩色寶石</th><th class="num">小計</th><th class="num">作廢</th></tr></thead><tbody>` +
+      statsRows.map(r => `<tr><td>${esc(r.name)}${r.active ? '' : ' <span class="tag off">已停用</span>'}</td><td class="num">${r.metal}</td><td class="num">${r.diamond}</td><td class="num">${r.gem}</td><td class="num">${r.metal + r.diamond + r.gem}</td><td class="num">${r.voided}</td></tr>`).join('') +
+      `</tbody><tfoot><tr><td>合計</td><td class="num">${tot('metal')}</td><td class="num">${tot('diamond')}</td><td class="num">${tot('gem')}</td><td class="num">${tot('metal') + tot('diamond') + tot('gem')}</td><td class="num">${list.filter(c => c.status === 'void').length}</td></tr></tfoot>`;
+    const sc = s => list.filter(c => c.status === s).length;
+    $('#st-status').innerHTML = `<tbody>${Object.keys(STATUS).map(s => `<tr><td>${statusTag(s)}</td><td class="num">${sc(s)}</td></tr>`).join('')}</tbody>`;
+    const cl = {}; list.filter(c => c.type === 'diamond' && c.status !== 'void').forEach(c => { const k = c.fields.clarity || '未填'; cl[k] = (cl[k] || 0) + 1; });
+    const keys = Object.keys(cl);
+    $('#st-clarity').innerHTML = keys.length ? `<tbody>${keys.sort().map(k => `<tr><td>${esc(k)}</td><td class="num">${cl[k]}</td></tr>`).join('')}</tbody>` : '<tbody><tr><td class="empty">期間內無鑽石證書</td></tr></tbody>';
+  };
+  $('#st-period').addEventListener('change', render.stats);
+  $('#st-csv').addEventListener('click', () => {
+    const p = $('#st-period').value; const [a, b] = periodRange(p);
+    const lines = [['鑑定師', '貴金屬', '鑽石', '彩色寶石', '小計', '作廢'], ...statsRows.map(r => [r.name, r.metal, r.diamond, r.gem, r.metal + r.diamond + r.gem, r.voided])];
+    const csv = '\ufeff' + lines.map(l => l.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const el = document.createElement('a'); el.href = url; el.download = `cert-stats_${fmtDate(a)}_${fmtDate(b)}.csv`; document.body.appendChild(el); el.click(); el.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast('已產生 CSV 下載');
+  });
+
+  render.deploy = () => {};
+
+  // ---------- init ----------
+  $('#today-label').textContent = fmtDate(TODAY);
+  render.issue();
+  render.dash();
+})();
+</script>
+</body>
+</html>

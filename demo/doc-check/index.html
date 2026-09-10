@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#1f2933">
+  <title>跨單據勾稽審核結果 概念展示</title>
+  <meta name="description" content="依公開需求製作的 OCR 與 LLM 跨單據勾稽概念展示：製令、報關單、COA 對照與差異報告。">
+  <style>
+    :root {
+      --bg: #eef0f2;
+      --paper: #ffffff;
+      --ink: #1f2933;
+      --muted: #616e7c;
+      --line: #d3d9df;
+      --line-strong: #9aa5b1;
+      --head: #f5f7f9;
+      --accent: #1d4f91;
+      --error: #b42318;
+      --error-bg: #fdecea;
+      --warn: #b25e09;
+      --warn-bg: #fff1e0;
+      --review: #8a6d00;
+      --review-bg: #fff8d6;
+      --ok: #1d7a3e;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--bg); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      overflow-x: hidden;
+    }
+    a { color: var(--accent); }
+    button { font: inherit; }
+    .concept-note {
+      padding: 8px 16px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+      text-align: center;
+      letter-spacing: .02em;
+    }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 20px clamp(12px, 2vw, 28px) 56px; }
+
+    header.top {
+      display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+      gap: 12px 24px; padding: 8px 0 16px; border-bottom: 2px solid var(--ink);
+    }
+    header.top h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: .01em; }
+    header.top .case { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    header.top .case code { font-family: var(--mono); color: var(--ink); }
+    .meta { font-size: 12px; color: var(--muted); text-align: right; }
+    .meta code { font-family: var(--mono); color: var(--ink); }
+
+    .summary {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      gap: 1px; margin: 16px 0 24px; background: var(--line); border: 1px solid var(--line);
+    }
+    .summary .cell { background: var(--paper); padding: 10px 12px; min-width: 0; }
+    .summary .k { font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+    .summary .v { font-size: 22px; font-weight: 600; font-family: var(--mono); line-height: 1.2; margin-top: 2px; }
+    .summary .v small { font-size: 12px; font-weight: 400; color: var(--muted); font-family: inherit; margin-left: 4px; }
+    .summary .cell.error .v { color: var(--error); }
+    .summary .cell.warn .v { color: var(--warn); }
+    .summary .cell.review .v { color: var(--review); }
+
+    h2 { font-size: 15px; font-weight: 600; margin: 28px 0 10px; }
+    h2 .hint { font-size: 12px; font-weight: 400; color: var(--muted); margin-left: 12px; }
+
+    .doc {
+      display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 0;
+      background: var(--paper); border: 1px solid var(--line); margin-bottom: 14px;
+    }
+    .doc.has-hit { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(29,79,145,.18); }
+    .doc .img { padding: 12px; border-right: 1px solid var(--line); background: var(--head); }
+    .doc .img button {
+      display: block; width: 100%; padding: 0; border: 1px solid var(--line-strong);
+      background: #fff; cursor: zoom-in;
+    }
+    .doc .img img { display: block; width: 100%; height: auto; }
+    .doc .img .cap { font-size: 11px; color: var(--muted); margin-top: 6px; display: flex; justify-content: space-between; gap: 8px; }
+    .doc .img .cap code { font-family: var(--mono); }
+    .doc .fields { min-width: 0; overflow-x: auto; }
+    .doc .fields h3 {
+      margin: 0; padding: 10px 14px; font-size: 14px; font-weight: 600;
+      border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+    }
+    .doc .fields h3 .model { font-size: 11px; font-weight: 400; color: var(--muted); font-family: var(--mono); }
+    .doc .fields h4 { margin: 0; padding: 8px 14px 4px; font-size: 12px; color: var(--muted); font-weight: 600; }
+    .doc .fields table.kv th:nth-child(1) { width: 20%; }
+    .doc .fields table.kv th:nth-child(3), .doc .fields table.kv th:nth-child(4) { width: 64px; }
+    .doc .fields table.kv th:nth-child(5) { width: 30%; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 6px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { background: var(--head); font-weight: 600; font-size: 12px; color: var(--muted); white-space: nowrap; }
+    td.val { font-family: var(--mono); font-size: 13px; overflow-wrap: anywhere; }
+    td.num, th.num { text-align: right; font-family: var(--mono); white-space: nowrap; }
+    tr.field { border-left: 3px solid transparent; }
+    tr.field.low td { background: var(--review-bg); }
+    tr.field.sev-error { border-left-color: var(--error); }
+    tr.field.sev-warn { border-left-color: var(--warn); }
+    tr.field.sev-review { border-left-color: var(--review); }
+    tr.field.hit td { background: #dfe9f7; }
+    tr.field.hit td.val { font-weight: 600; }
+    .tag {
+      display: inline-block; font-size: 10.5px; line-height: 1; padding: 3px 5px; border-radius: 2px;
+      border: 1px solid var(--line-strong); color: var(--muted); vertical-align: middle; white-space: nowrap;
+    }
+    .tag.hand { border-color: #7b5ea7; color: #5b3f8c; background: #f3eefb; }
+    .conf { font-family: var(--mono); white-space: nowrap; }
+    .conf.low { color: var(--review); font-weight: 600; }
+    .note { color: var(--muted); font-size: 12px; }
+
+    .findings { background: var(--paper); border: 1px solid var(--line); overflow-x: auto; }
+    .findings table { min-width: 720px; }
+    .findings tr.f { cursor: pointer; }
+    .findings tr.f:hover td { background: #f7f9fb; }
+    .findings tr.f.active td { background: #dfe9f7; }
+    .sev {
+      display: inline-block; min-width: 56px; text-align: center; font-size: 11px; font-weight: 600;
+      padding: 3px 6px; border-radius: 2px; letter-spacing: .04em;
+    }
+    .sev.error { background: var(--error-bg); color: var(--error); border: 1px solid #f0b9b3; }
+    .sev.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid #f3cf9e; }
+    .sev.review { background: var(--review-bg); color: var(--review); border: 1px solid #e8d98a; }
+    .findings .flds { font-size: 12px; color: var(--muted); }
+    .findings .flds div { white-space: nowrap; }
+    .findings .flds code { font-family: var(--mono); color: var(--ink); }
+    .findings .msg { max-width: 460px; }
+    .findings .tip { padding: 8px 12px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); background: var(--head); }
+
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .panel { background: var(--paper); border: 1px solid var(--line); padding: 14px 16px; }
+    .panel h3 { margin: 0 0 8px; font-size: 14px; }
+    .panel ul { margin: 0; padding-left: 18px; }
+    .panel li { margin: 4px 0; }
+    .panel li code { font-family: var(--mono); }
+    .planted .ok { color: var(--ok); font-weight: 600; }
+    .planted .miss { color: var(--error); font-weight: 600; }
+    .downloads a { display: inline-block; margin: 4px 12px 4px 0; padding: 6px 12px; border: 1px solid var(--line-strong); text-decoration: none; color: var(--ink); background: #fff; }
+    .downloads a:hover { border-color: var(--accent); color: var(--accent); }
+    .impl { margin-top: 14px; }
+    .impl p { margin: 6px 0; }
+    .acc td.num { font-size: 13px; }
+
+    dialog { border: none; padding: 0; background: transparent; max-width: 96vw; max-height: 96vh; }
+    dialog::backdrop { background: rgba(20,25,30,.86); }
+    dialog img { display: block; max-width: 96vw; max-height: 92vh; width: auto; height: auto; background: #fff; }
+    dialog .close { position: fixed; top: 12px; right: 16px; background: #fff; border: 1px solid var(--line-strong); padding: 6px 12px; cursor: pointer; }
+
+    @media (max-width: 900px) {
+      .doc { grid-template-columns: 1fr; }
+      .doc .img { border-right: none; border-bottom: 1px solid var(--line); }
+      .doc .img button { max-width: 360px; margin: 0 auto; }
+      h2 .hint { display: block; margin: 4px 0 0; }
+      .doc .fields table.kv th:nth-child(1) { width: auto; }
+      .doc .fields table.kv th:nth-child(5) { width: auto; }
+      .two { grid-template-columns: 1fr; }
+      .meta { text-align: left; }
+      table { font-size: 12.5px; }
+      th, td { padding: 6px 8px; }
+      .findings .msg { max-width: none; min-width: 220px; }
+    }
+    @media (max-width: 480px) {
+      .summary { grid-template-columns: repeat(2, 1fr); }
+      header.top h1 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="concept-note">依公開需求製作的概念展示，非實際客戶資料；三份單據皆為程式合成，公司、品名、批號均屬虛構</div>
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1>跨單據勾稽審核結果</h1>
+        <div class="case" id="case"></div>
+      </div>
+      <div class="meta" id="meta"></div>
+    </header>
+
+    <section class="summary" id="summary" aria-label="摘要"></section>
+
+    <h2>單據對照 <span class="hint">左：原始影像（點圖放大）　右：擷取欄位。手寫欄位以紫色標籤標示；黃底＝信心不足或模型自陳模糊；左側色條＝該欄位涉及的差異等級。</span></h2>
+    <div id="docs"></div>
+
+    <h2>差異報告 <span class="hint">點任一列，上方對照區會標出涉及的欄位。</span></h2>
+    <div class="findings">
+      <table id="findings">
+        <thead><tr><th>等級</th><th>項目</th><th>涉及欄位</th><th>說明</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="tip">error＝單據之間或與規格互相矛盾　warn＝可疑但無法直接判定錯誤　review＝辨識本身不可信（信心低、模糊、缺漏），必須回看原圖</div>
+    </div>
+
+    <h2>準確率與埋入測試</h2>
+    <div class="two">
+      <div class="panel acc">
+        <h3>擷取值 vs 標準答案</h3>
+        <table id="acc"><thead><tr><th>來源</th><th class="num">命中</th><th class="num">欄位數</th><th class="num">命中率</th></tr></thead><tbody></tbody></table>
+        <div id="mismatch" class="note" style="margin-top:8px"></div>
+      </div>
+      <div class="panel planted">
+        <h3>刻意埋入的問題</h3>
+        <ul id="planted"></ul>
+      </div>
+    </div>
+
+    <h2>輸出</h2>
+    <div class="panel downloads">
+      <a href="report.xlsx" download>report.xlsx（擷取值＋差異報告）</a>
+      <a href="report.json" download>report.json</a>
+      <a href="assets/work_order.png" target="_blank" rel="noopener">製令原圖</a>
+      <a href="assets/customs.png" target="_blank" rel="noopener">報關單原圖</a>
+      <a href="assets/coa.png" target="_blank" rel="noopener">COA 原圖</a>
+    </div>
+
+    <h2>實作方式</h2>
+    <div class="panel impl" id="impl"></div>
+  </div>
+
+  <dialog id="zoom"><button class="close" type="button">關閉</button><img alt=""></dialog>
+
+  <script id="data" type="application/json">{"generated_at":"2026-09-10T20:01:43+08:00","models":["qwen/qwen2.5-vl-72b-instruct"],"usage":{"prompt_tokens":10049,"completion_tokens":1986,"cost_usd":0.009718},"per_document":{"work_order":{"model":"qwen/qwen2.5-vl-72b-instruct","usage":{"prompt_tokens":3335,"completion_tokens":390,"cost_usd":0.0029556},"seconds":15.9},"customs":{"model":"qwen/qwen2.5-vl-72b-instruct","usage":{"prompt_tokens":3338,"completion_tokens":419,"cost_usd":0.002987},"seconds":10.7},"coa":{"model":"qwen/qwen2.5-vl-72b-instruct","usage":{"prompt_tokens":3376,"completion_tokens":1177,"cost_usd":0.0037754},"seconds":24.9}},"field_count":50,"summary":{"error":3,"warn":1,"review":1},"findings":[{"severity":"error","rule":"lot_consistency","title":"批號不一致","fields":["work_order.lot_no","customs.lot_no"],"values":{"work_order.lot_no":"LT-2603-0472","customs.lot_no":"LT-2603-0478"},"message":"生產製令 Work Order為「LT-2603-0472」，進口報關單為「LT-2603-0478」，兩者不一致。"},{"severity":"error","rule":"quantity_match","title":"製令實際產量與報關數量不符","fields":["work_order.actual_qty","customs.quantity"],"values":{"work_order.actual_qty":"4850","customs.quantity":"5000"},"message":"製令實際產量 4850 kg，報關單申報數量 5000，差 +150。"},{"severity":"error","rule":"coa_spec","title":"COA 燒失量 實測值超出規格","fields":["coa.items[3].spec","coa.items[3].measured","coa.items[3].judgement"],"values":{"coa.items[3].spec":"≤ 1.0","coa.items[3].measured":"1.24","coa.items[3].judgement":"PASS"},"message":"實測 1.24 超出規格 ≤ 1.0，但判定欄寫 PASS，判定欄與實測值矛盾。"},{"severity":"warn","rule":"coa_overall","title":"COA 總判定與檢驗項目矛盾","fields":["coa.overall"],"values":{"coa.overall":"合格"},"message":"至少一項檢驗超出規格，但總判定為「合格」。"},{"severity":"review","rule":"low_confidence","title":"生產製令 Work Order / 工時 (h) 需人工確認","fields":["work_order.work_hours"],"values":{"work_order.work_hours":"7.5"},"message":"手寫欄位辨識為「7.5」，辨識備註提到字跡模糊或不確定。 模型備註：手寫數字略顯模糊，但可辨認為7.5"}],"accuracy":{"printed":{"correct":48,"total":48,"rate":1.0},"handwritten":{"correct":2,"total":2,"rate":1.0},"overall":{"correct":50,"total":50,"rate":1.0},"mismatches":[]},"planted":{"planted":[{"id":"qty_mismatch","description":"製令實際產量 4850 kg 與報關單數量 5000 KGM 不符","caught":true,"findings":["製令實際產量與報關數量不符"]},{"id":"coa_out_of_spec","description":"COA 燒失量實測 1.24 % 超出規格 ≤ 1.0 %，判定欄卻寫 PASS","caught":true,"findings":["COA 燒失量 實測值超出規格"]},{"id":"lot_mismatch","description":"報關單批號 LT-2603-0478 與製令／COA 的 LT-2603-0472 差一字","caught":true,"findings":["批號不一致"]}],"blurry":{"id":"blurry_hours","description":"製令工時欄手寫筆跡淡且筆畫重疊，應標記需人工確認","caught":true,"findings":["生產製令 Work Order / 工時 (h) 需人工確認"]}},"documents":{"work_order":{"file":"/Users/crow/ootobai/code/doc-check-poc/samples/work_order.png","model":"qwen/qwen2.5-vl-72b-instruct","structured_output":true,"seconds":15.9,"usage":{"prompt_tokens":3335,"completion_tokens":390,"cost_usd":0.0029556},"attempts":[],"fields":{"wo_no":{"value":"WO-260305-017","confidence":1.0,"source":"printed","note":""},"issue_date":{"value":"2026-03-05","confidence":1.0,"source":"printed","note":""},"line":{"value":"B2","confidence":1.0,"source":"printed","note":""},"product_name":{"value":"二氧化矽微粉 SF-800","confidence":1.0,"source":"printed","note":""},"lot_no":{"value":"LT-2603-0472","confidence":1.0,"source":"printed","note":""},"spec":{"value":"25 kg/袋","confidence":1.0,"source":"printed","note":""},"planned_qty":{"value":"5000","confidence":1.0,"source":"printed","note":""},"actual_qty":{"value":"4850","confidence":0.9,"source":"handwritten","note":""},"work_hours":{"value":"7.5","confidence":0.8,"source":"handwritten","note":"手寫數字略顯模糊，但可辨認為7.5"}}},"customs":{"file":"/Users/crow/ootobai/code/doc-check-poc/samples/customs.png","model":"qwen/qwen2.5-vl-72b-instruct","structured_output":true,"seconds":10.7,"usage":{"prompt_tokens":3338,"completion_tokens":419,"cost_usd":0.002987},"attempts":[],"fields":{"decl_no":{"value":"AW/26/0305/1187","confidence":1.0,"source":"printed","note":""},"decl_date":{"value":"2026-03-12","confidence":1.0,"source":"printed","note":""},"importer":{"value":"宏鼎化工股份有限公司","confidence":1.0,"source":"printed","note":""},"product_name":{"value":"二氧化矽微粉 SF-800","confidence":1.0,"source":"printed","note":""},"lot_no":{"value":"LT-2603-0478","confidence":1.0,"source":"printed","note":""},"hs_code":{"value":"2811.22.00","confidence":1.0,"source":"printed","note":""},"quantity":{"value":"5000","confidence":1.0,"source":"printed","note":""},"unit_price":{"value":"2.35","confidence":1.0,"source":"printed","note":""},"amount":{"value":"11750.00","confidence":1.0,"source":"printed","note":""},"port_of_loading":{"value":"NINGBO, CN","confidence":1.0,"source":"printed","note":""}}},"coa":{"file":"/Users/crow/ootobai/code/doc-check-poc/samples/coa.png","model":"qwen/qwen2.5-vl-72b-instruct","structured_output":true,"seconds":24.9,"usage":{"prompt_tokens":3376,"completion_tokens":1177,"cost_usd":0.0037754},"attempts":[],"fields":{"supplier":{"value":"東晟材料股份有限公司","confidence":1.0,"source":"printed","note":""},"product_name":{"value":"二氧化矽微粉 SF-800","confidence":1.0,"source":"printed","note":""},"lot_no":{"value":"LT-2603-0472","confidence":1.0,"source":"printed","note":""},"mfg_date":{"value":"2026-03-05","confidence":1.0,"source":"printed","note":""},"test_date":{"value":"2026-03-06","confidence":1.0,"source":"printed","note":""},"overall":{"value":"合格","confidence":1.0,"source":"printed","note":""}},"items":[{"item":{"value":"SiO2 含量","confidence":1.0,"source":"printed","note":""},"unit":{"value":"%","confidence":1.0,"source":"printed","note":""},"spec":{"value":"≥ 99.5","confidence":1.0,"source":"printed","note":""},"measured":{"value":"99.7","confidence":1.0,"source":"printed","note":""},"judgement":{"value":"PASS","confidence":1.0,"source":"printed","note":""}},{"item":{"value":"水分","confidence":1.0,"source":"printed","note":""},"unit":{"value":"%","confidence":1.0,"source":"printed","note":""},"spec":{"value":"≤ 0.5","confidence":1.0,"source":"printed","note":""},"measured":{"value":"0.32","confidence":1.0,"source":"printed","note":""},"judgement":{"value":"PASS","confidence":1.0,"source":"printed","note":""}},{"item":{"value":"粒徑 D50","confidence":1.0,"source":"printed","note":""},"unit":{"value":"μm","confidence":1.0,"source":"printed","note":""},"spec":{"value":"0.8 ~ 1.2","confidence":1.0,"source":"printed","note":""},"measured":{"value":"1.05","confidence":1.0,"source":"printed","note":""},"judgement":{"value":"PASS","confidence":1.0,"source":"printed","note":""}},{"item":{"value":"燒失量","confidence":1.0,"source":"printed","note":""},"unit":{"value":"%","confidence":1.0,"source":"printed","note":""},"spec":{"value":"≤ 1.0","confidence":1.0,"source":"printed","note":""},"measured":{"value":"1.24","confidence":1.0,"source":"printed","note":""},"judgement":{"value":"PASS","confidence":1.0,"source":"printed","note":""}},{"item":{"value":"pH 值 (10% 水溶液)","confidence":1.0,"source":"printed","note":""},"unit":{"value":"-","confidence":1.0,"source":"printed","note":""},"spec":{"value":"6.0 ~ 8.0","confidence":1.0,"source":"printed","note":""},"measured":{"value":"7.1","confidence":1.0,"source":"printed","note":""},"judgement":{"value":"PASS","confidence":1.0,"source":"printed","note":""}}]}},"doc_labels":{"work_order":"生產製令 Work Order","customs":"進口報關單","coa":"檢驗報告 COA"},"labels":{"work_order":{"wo_no":"製令號","issue_date":"製令日期","line":"生產線","product_name":"品名","lot_no":"批號","spec":"包裝規格","planned_qty":"計畫數量 (kg)","actual_qty":"實際產量 (kg)","work_hours":"工時 (h)"},"customs":{"decl_no":"報單號碼","decl_date":"報關日期","importer":"納稅義務人","product_name":"品名","lot_no":"批號","hs_code":"稅則號別","quantity":"數量 (KGM)","unit_price":"單價 (USD)","amount":"金額 (USD)","port_of_loading":"起運口岸"},"coa":{"supplier":"供應商","product_name":"品名","lot_no":"批號","mfg_date":"製造日期","test_date":"檢驗日期","overall":"總判定"}},"item_labels":{"item":"檢驗項目","unit":"單位","spec":"規格","measured":"實測值","judgement":"判定"},"field_labels":{"work_order.wo_no":"生產製令 Work Order / 製令號","work_order.issue_date":"生產製令 Work Order / 製令日期","work_order.line":"生產製令 Work Order / 生產線","work_order.product_name":"生產製令 Work Order / 品名","work_order.lot_no":"生產製令 Work Order / 批號","work_order.spec":"生產製令 Work Order / 包裝規格","work_order.planned_qty":"生產製令 Work Order / 計畫數量 (kg)","work_order.actual_qty":"生產製令 Work Order / 實際產量 (kg)","work_order.work_hours":"生產製令 Work Order / 工時 (h)","customs.decl_no":"進口報關單 / 報單號碼","customs.decl_date":"進口報關單 / 報關日期","customs.importer":"進口報關單 / 納稅義務人","customs.product_name":"進口報關單 / 品名","customs.lot_no":"進口報關單 / 批號","customs.hs_code":"進口報關單 / 稅則號別","customs.quantity":"進口報關單 / 數量 (KGM)","customs.unit_price":"進口報關單 / 單價 (USD)","customs.amount":"進口報關單 / 金額 (USD)","customs.port_of_loading":"進口報關單 / 起運口岸","coa.supplier":"檢驗報告 COA / 供應商","coa.product_name":"檢驗報告 COA / 品名","coa.lot_no":"檢驗報告 COA / 批號","coa.mfg_date":"檢驗報告 COA / 製造日期","coa.test_date":"檢驗報告 COA / 檢驗日期","coa.overall":"檢驗報告 COA / 總判定","coa.items[0].item":"檢驗報告 COA / 第 1 項 檢驗項目","coa.items[0].unit":"檢驗報告 COA / 第 1 項 單位","coa.items[0].spec":"檢驗報告 COA / 第 1 項 規格","coa.items[0].measured":"檢驗報告 COA / 第 1 項 實測值","coa.items[0].judgement":"檢驗報告 COA / 第 1 項 判定","coa.items[1].item":"檢驗報告 COA / 第 2 項 檢驗項目","coa.items[1].unit":"檢驗報告 COA / 第 2 項 單位","coa.items[1].spec":"檢驗報告 COA / 第 2 項 規格","coa.items[1].measured":"檢驗報告 COA / 第 2 項 實測值","coa.items[1].judgement":"檢驗報告 COA / 第 2 項 判定","coa.items[2].item":"檢驗報告 COA / 第 3 項 檢驗項目","coa.items[2].unit":"檢驗報告 COA / 第 3 項 單位","coa.items[2].spec":"檢驗報告 COA / 第 3 項 規格","coa.items[2].measured":"檢驗報告 COA / 第 3 項 實測值","coa.items[2].judgement":"檢驗報告 COA / 第 3 項 判定","coa.items[3].item":"檢驗報告 COA / 第 4 項 檢驗項目","coa.items[3].unit":"檢驗報告 COA / 第 4 項 單位","coa.items[3].spec":"檢驗報告 COA / 第 4 項 規格","coa.items[3].measured":"檢驗報告 COA / 第 4 項 實測值","coa.items[3].judgement":"檢驗報告 COA / 第 4 項 判定","coa.items[4].item":"檢驗報告 COA / 第 5 項 檢驗項目","coa.items[4].unit":"檢驗報告 COA / 第 5 項 單位","coa.items[4].spec":"檢驗報告 COA / 第 5 項 規格","coa.items[4].measured":"檢驗報告 COA / 第 5 項 實測值","coa.items[4].judgement":"檢驗報告 COA / 第 5 項 判定"},"implementation_notes":["<strong>辨識<\/strong>：每份單據一次視覺語言模型呼叫（OpenRouter，模型 <code>qwen/qwen2.5-vl-72b-instruct<\/code>），以嚴格 JSON schema 回傳每個欄位的值、信心 0–1、印刷／手寫來源與備註。本頁三份文件共 12035 tokens、US$0.0097，平均每份 US$0.0032；換成 PaddleOCR 等本地 OCR 做第一層、只把低信心欄位送模型，成本可再降。","<strong>勾稽<\/strong>：規則引擎是純函式，不靠模型：批號與品名跨單一致、製令實際產量對報關數量、COA 實測值對規格上下限並與判定欄交叉比對、報關金額＝數量×單價、任一欄位信心低於 0.7 或模型自陳模糊即列為需人工確認。規則可依客戶表單增刪，每條規則都有單元測試。","<strong>準確率評估<\/strong>：合成單據附有標準答案，印刷體與手寫體分開統計命中率；正式導入時以客戶提供的歷史單據＋人工標註建立同樣的對照集，持續量測。低信心欄位一律送人工，校對介面即本頁的原圖對照，人工修正後回寫，作為後續調整 prompt 與規則的樣本。","<strong>輸出<\/strong>：report.json（API 回傳格式）、report.xlsx（擷取值＋差異報告兩個工作表）、本靜態頁。正式版本可改成每批上傳後自動產生 PDF 差異報告並經 API 推回 ERP。"]}</script>
+  <script>
+    const R = JSON.parse(document.getElementById('data').textContent);
+    const DOC_ORDER = ['work_order', 'customs', 'coa'];
+    const CONF_FLOOR = 0.7;
+    const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const fmtVal = v => v == null || v === '' ? '<span class="note">（未擷取）</span>' : esc(v);
+    const pct = r => r == null ? '–' : (r * 100).toFixed(1) + '%';
+    const usd = c => '$' + Number(c).toFixed(4);
+
+    // field key → strongest severity touching it
+    const rank = { error: 0, warn: 1, review: 2 };
+    const fieldSev = {};
+    for (const f of R.findings) for (const k of f.fields) {
+      if (!(k in fieldSev) || rank[f.severity] < rank[fieldSev[k]]) fieldSev[k] = f.severity;
+    }
+
+    const s = R.summary, acc = R.accuracy;
+    document.getElementById('case').innerHTML =
+      `批次 <code>${esc(R.documents.work_order.fields.lot_no.value)}</code>　${esc(R.documents.work_order.fields.product_name.value)}　三份單據：生產製令、進口報關單、檢驗報告 COA`;
+    document.getElementById('meta').innerHTML =
+      `產生時間 <code>${esc(R.generated_at)}</code><br>模型 <code>${R.models.map(esc).join(', ')}</code>　tokens ${R.usage.prompt_tokens + R.usage.completion_tokens}　費用 ${usd(R.usage.cost_usd)}`;
+
+    document.getElementById('summary').innerHTML = [
+      ['文件', DOC_ORDER.length, '份'],
+      ['擷取欄位', R.field_count, '個'],
+      ['錯誤 error', s.error, '', 'error'],
+      ['警告 warn', s.warn, '', 'warn'],
+      ['需人工確認 review', s.review, '', 'review'],
+      ['印刷體命中率', pct(acc.printed.rate), `${acc.printed.correct}/${acc.printed.total}`],
+      ['手寫體命中率', pct(acc.handwritten.rate), `${acc.handwritten.correct}/${acc.handwritten.total}`],
+      ['每份文件成本', usd(R.usage.cost_usd / DOC_ORDER.length), 'USD'],
+    ].map(([k, v, small, cls]) => `<div class="cell ${cls || ''}"><div class="k">${k}</div><div class="v">${v}<small>${small}</small></div></div>`).join('');
+
+    function fieldRow(key, label, f) {
+      const low = f.confidence < CONF_FLOOR || (fieldSev[key] === 'review');
+      const cls = ['field', low ? 'low' : '', fieldSev[key] ? 'sev-' + fieldSev[key] : ''].join(' ');
+      const src = f.source === 'handwritten' ? '<span class="tag hand">手寫</span>' : '<span class="tag">印刷</span>';
+      return `<tr class="${cls}" data-key="${esc(key)}"><td>${esc(label)}</td><td class="val">${fmtVal(f.value)}</td><td>${src}</td><td class="conf ${f.confidence < CONF_FLOOR ? 'low' : ''}">${Number(f.confidence).toFixed(2)}</td><td class="note">${esc(f.note)}</td></tr>`;
+    }
+
+    document.getElementById('docs').innerHTML = DOC_ORDER.map(doc => {
+      const d = R.documents[doc];
+      const labels = R.labels[doc];
+      const rows = Object.entries(labels).map(([k, label]) => fieldRow(`${doc}.${k}`, label, d.fields[k])).join('');
+      let items = '';
+      if (d.items) {
+        const il = R.item_labels;
+        items = `<h4>檢驗結果表（逐列擷取）</h4><table><thead><tr>${Object.values(il).map(l => `<th>${esc(l)}</th>`).join('')}<th>信心</th></tr></thead><tbody>` +
+          d.items.map((row, i) => {
+            const keys = Object.keys(il).map(k => `${doc}.items[${i}].${k}`);
+            const sev = keys.map(k => fieldSev[k]).filter(Boolean).sort((a, b) => rank[a] - rank[b])[0];
+            const minConf = Math.min(...Object.values(row).map(f => f.confidence));
+            const cls = ['field', minConf < CONF_FLOOR ? 'low' : '', sev ? 'sev-' + sev : ''].join(' ');
+            return `<tr class="${cls}" data-key="${keys.join(' ')}">${Object.keys(il).map(k => `<td class="val">${fmtVal(row[k].value)}</td>`).join('')}<td class="conf ${minConf < CONF_FLOOR ? 'low' : ''}">${minConf.toFixed(2)}</td></tr>`;
+          }).join('') + '</tbody></table>';
+      }
+      return `<article class="doc" id="doc-${doc}">
+        <div class="img"><button type="button" data-src="assets/${doc}.png" aria-label="放大 ${esc(R.doc_labels[doc])}"><img src="assets/${doc}.png" alt="${esc(R.doc_labels[doc])} 原始影像" loading="lazy"></button>
+          <div class="cap"><span>${esc(R.doc_labels[doc])}</span><code>${d.seconds}s · ${usd(d.usage.cost_usd)}</code></div></div>
+        <div class="fields"><h3><span>${esc(R.doc_labels[doc])}</span><span class="model">${esc(d.model)}${d.structured_output ? ' · strict JSON schema' : ''}</span></h3>
+          <table class="kv"><thead><tr><th>欄位</th><th>辨識值</th><th>來源</th><th>信心</th><th>模型備註</th></tr></thead><tbody>${rows}</tbody></table>${items}</div>
+      </article>`;
+    }).join('');
+
+    const tbody = document.querySelector('#findings tbody');
+    tbody.innerHTML = R.findings.map((f, i) => `<tr class="f" data-i="${i}">
+      <td><span class="sev ${f.severity}">${f.severity}</span></td>
+      <td>${esc(f.title)}</td>
+      <td class="flds">${f.fields.map(k => `<div>${esc(R.field_labels[k] || k)}：<code>${fmtVal(f.values[k])}</code></div>`).join('')}</td>
+      <td class="msg">${esc(f.message)}</td></tr>`).join('');
+
+    let active = null;
+    function clearHits() {
+      document.querySelectorAll('tr.field.hit').forEach(el => el.classList.remove('hit'));
+      document.querySelectorAll('.doc.has-hit').forEach(el => el.classList.remove('has-hit'));
+      document.querySelectorAll('tr.f.active').forEach(el => el.classList.remove('active'));
+    }
+    tbody.addEventListener('click', e => {
+      const tr = e.target.closest('tr.f');
+      if (!tr) return;
+      const i = Number(tr.dataset.i);
+      clearHits();
+      if (active === i) { active = null; return; }
+      active = i;
+      tr.classList.add('active');
+      let first = null;
+      for (const key of R.findings[i].fields) {
+        document.querySelectorAll('tr.field').forEach(row => {
+          if (row.dataset.key.split(' ').includes(key)) {
+            row.classList.add('hit');
+            row.closest('.doc').classList.add('has-hit');
+            first = first || row;
+          }
+        });
+      }
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    document.querySelector('#acc tbody').innerHTML = ['printed', 'handwritten', 'overall'].map(k => {
+      const b = acc[k], name = { printed: '印刷體', handwritten: '手寫體', overall: '合計' }[k];
+      return `<tr><td>${name}</td><td class="num">${b.correct}</td><td class="num">${b.total}</td><td class="num">${pct(b.rate)}</td></tr>`;
+    }).join('');
+    document.getElementById('mismatch').innerHTML = acc.mismatches.length
+      ? '未命中：' + acc.mismatches.map(m => `${esc(R.field_labels[m.field] || m.field)} 標準答案 <code>${esc(m.expected)}</code> 擷取 <code>${fmtVal(m.got)}</code>${m.blurry ? '（刻意模糊欄位）' : ''}`).join('；')
+      : '所有欄位與標準答案一致。';
+
+    const P = R.planted;
+    document.getElementById('planted').innerHTML = P.planted.map(h =>
+      `<li><span class="${h.caught ? 'ok' : 'miss'}">${h.caught ? '已抓到' : '未抓到'}</span>　${esc(h.description)}${h.findings.length ? `<div class="note">→ ${h.findings.map(esc).join('、')}</div>` : ''}</li>`
+    ).join('') + `<li><span class="${P.blurry.caught ? 'ok' : 'miss'}">${P.blurry.caught ? '已標記' : '未標記'}</span>　${esc(P.blurry.description)}${P.blurry.findings.length ? `<div class="note">→ ${P.blurry.findings.map(esc).join('、')}</div>` : ''}</li>`;
+
+    document.getElementById('impl').innerHTML = R.implementation_notes.map(p => `<p>${p}</p>`).join('');
+
+    const dlg = document.getElementById('zoom');
+    document.querySelectorAll('.doc .img button').forEach(b => b.addEventListener('click', () => {
+      dlg.querySelector('img').src = b.dataset.src; dlg.showModal();
+    }));
+    dlg.querySelector('.close').addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  </script>
+</body>
+</html>
