@@ -29,7 +29,8 @@
     .card { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 8px; background: #fff; overflow: hidden; text-decoration: none; transition: transform .2s, box-shadow .2s; }
     .card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px -24px rgba(0,0,0,.35); }
     .thumb { aspect-ratio: 3 / 2; background: #eeece7; border-bottom: 1px solid var(--border); overflow: hidden; }
-    .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .thumb img, .thumb video { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .thumb video { background: #111; }
     .body { padding: 1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .25rem; flex: 1; }
     .name { font-weight: 700; }
     .desc { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
@@ -60,40 +61,39 @@
 
   <p class="section-label">LINE 整合</p>
   <ul class="grid">
-    <li><a class="card" href="https://smb-admin-production-990a.up.railway.app/book" target="_blank" rel="noopener">
-      <div class="thumb"><img src="assets/line-booking.webp" alt="LINE 預約頁面截圖" loading="lazy"></div>
+    <li><article class="card">
+      <div class="thumb"><video controls preload="metadata" poster="/work/video/line-booking.webp" aria-label="LINE 預約系統與店家後台導覽"><source src="/work/video/line-booking.mp4" type="video/mp4"></video></div>
       <div class="body"><div class="name">LINE 官方帳號預約系統</div>
-        <div class="desc">客人在 LINE 上選服務、選時段、送出預約；自動確認與前一天提醒。店家後台看今天、客戶、報表、人員權限。</div>
-        <div class="meta"><span class="tag live">上線中</span><span class="tag">LINE Messaging API</span><span class="tag">LIFF</span><span class="tag">後台</span></div>
-        <span class="cta">開啟預約頁</span></div></a></li>
-    <li><a class="card" href="/demo/slow-travel-line/">
-      <div class="thumb"><img src="assets/slow-travel-line.webp" alt="慢旅品牌 LINE 官方帳號概念展示截圖" loading="lazy"></div>
+        <div class="desc">客人在 LINE 上選服務、選時段、送出預約；自動確認與前一天提醒。店家後台看今天、客戶、報表、人員權限。影片示範完整前後台流程，不公開後台帳密。</div>
+        <div class="meta"><span class="tag live">上線中</span><span class="tag">導覽影片</span><span class="tag">LINE Messaging API</span><span class="tag">LIFF</span></div>
+        <a class="cta" href="https://smb-admin-production-990a.up.railway.app/book" target="_blank" rel="noopener">開啟預約頁</a></div></article></li>
+    <li><article class="card">
+      <div class="thumb"><video controls preload="metadata" poster="/work/video/slow-travel-line.webp" aria-label="旅遊品牌 LINE 官方帳號導覽"><source src="/work/video/slow-travel-line.mp4" type="video/mp4"></video></div>
       <div class="body"><div class="name">旅遊品牌 LINE 官方帳號</div>
         <div class="desc">六格圖文選單、行程瀏覽、44 組 FAQ 自動回覆、報名表單、真人客服路徑。先用 LINE 內建功能，需要即時資料再接 API。</div>
-        <div class="meta"><span class="tag">概念展示</span><span class="tag">Rich Menu</span><span class="tag">Flex Message</span></div>
-        <span class="cta">操作看看</span></div></a></li>
+        <div class="meta"><span class="tag">概念展示</span><span class="tag">導覽影片</span><span class="tag">Rich Menu</span><span class="tag">Flex Message</span></div>
+        <a class="cta" href="/demo/slow-travel-line/">操作看看</a></div></article></li>
   </ul>
 
   <p class="section-label">電商與後台系統</p>
   <ul class="grid">
-    <li><a class="card" href="https://jewelry-demo.ootob.ai/" target="_blank" rel="noopener">
-      <div class="thumb"><img src="assets/ecommerce.webp" alt="珠寶電商網站首頁截圖" loading="lazy"></div>
+    <li><article class="card">
+      <div class="thumb"><video controls preload="metadata" poster="/work/video/ecommerce.webp" aria-label="電商網站功能導覽"><source src="/work/video/ecommerce.mp4" type="video/mp4"></video></div>
       <div class="body"><div class="name">電商網站（含綠界金流、直播模式）</div>
-        <div class="desc">WordPress＋WooCommerce，信用卡／ATM／超商代碼，老闆自己上架商品（三張圖＋影片）、改首頁活動、一鍵切換直播模式。後台看客戶來源與商品瀏覽排名。</div>
-        <div class="meta"><span class="tag live">上線中</span><span class="tag">WooCommerce</span><span class="tag">綠界</span></div>
-        <span class="cta">逛逛前台</span></div></a></li>
-    <li><a class="card" href="https://smb-admin-production-990a.up.railway.app/login" target="_blank" rel="noopener">
+        <div class="desc">WordPress＋WooCommerce，信用卡／ATM／超商代碼，老闆自己管理商品、首頁活動、直播模式與訂單。影片只導覽功能，不公開後台帳密。</div>
+        <div class="meta"><span class="tag live">上線中</span><span class="tag">導覽影片</span><span class="tag">WooCommerce</span><span class="tag">綠界</span></div>
+        <a class="cta" href="https://jewelry-demo.ootob.ai/" target="_blank" rel="noopener">逛逛前台</a></div></article></li>
+    <li><article class="card">
       <div class="thumb"><img src="assets/smb-admin.webp" alt="中小企業後台今日看板截圖" loading="lazy"></div>
       <div class="body"><div class="name">中小企業後台</div>
-        <div class="desc">今日看板、客戶紀錄、收款對帳、報表匯出、人員權限與操作紀錄。老闆帳號不可刪、離職一鍵停用並轉移工作、所有設定可匯出成交接文件。後台需登入，示範帳號來信索取。</div>
-        <div class="meta"><span class="tag live">上線中</span><span class="tag">Next.js</span><span class="tag">PostgreSQL</span></div>
-        <span class="cta">後台登入頁</span></div></a></li>
-    <li><a class="card" href="/demo/cert/">
-      <div class="thumb"><img src="assets/cert.webp" alt="珠寶鑑定證書系統概念展示截圖" loading="lazy"></div>
+        <div class="desc">今日看板、客戶紀錄、收款對帳、報表匯出、人員權限與操作紀錄。老闆帳號不可刪、離職一鍵停用並轉移工作、所有設定可匯出成交接文件。完整操作見上方 LINE 預約系統導覽影片。</div>
+        <div class="meta"><span class="tag live">上線中</span><span class="tag">Next.js</span><span class="tag">PostgreSQL</span></div></div></article></li>
+    <li><article class="card">
+      <div class="thumb"><video controls preload="metadata" poster="/work/video/cert.webp" aria-label="鑑定證書系統導覽"><source src="/work/video/cert.mp4" type="video/mp4"></video></div>
       <div class="body"><div class="name">鑑定證書系統</div>
         <div class="desc">三種證書範本可自訂欄位、開立與列印、鑑定師簽名檔與帳號、公開驗證頁、統計匯出。含舊系統資料整併流程與 NAS 部署說明。</div>
-        <div class="meta"><span class="tag">概念展示</span><span class="tag">範本引擎</span><span class="tag">NAS Docker</span></div>
-        <span class="cta">操作看看</span></div></a></li>
+        <div class="meta"><span class="tag">概念展示</span><span class="tag">導覽影片</span><span class="tag">範本引擎</span><span class="tag">NAS Docker</span></div>
+        <a class="cta" href="/demo/cert/">操作看看</a></div></article></li>
   </ul>
 
   <p class="section-label">AI 文件處理</p>
