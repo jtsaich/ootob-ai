@@ -1,0 +1,182 @@
+{
+  "summary": {
+    "files": 7,
+    "pages": 8,
+    "review": 1,
+    "cost_usd": 0.0099,
+    "index": "out/archive/index.xlsx",
+    "by_category": {
+      "合約": 1,
+      "發票": 2,
+      "報價單": 1,
+      "公文": 1,
+      "人事": 1,
+      "銀行": 0,
+      "其他": 1
+    }
+  },
+  "files": [
+    {
+      "source": "IMG_4821.jpg",
+      "dest": "發票/2026/20260722_發票_全家便利商店_001.pdf",
+      "pages": 1,
+      "text_chars": 164,
+      "category": "發票",
+      "doc_date": "2026-07-22",
+      "counterparty": "全家便利商店",
+      "title": "全家電子發票",
+      "keywords": [
+        "全家",
+        "電子發票",
+        "新北中和店"
+      ],
+      "quality": "clear",
+      "confidence": 1.0,
+      "summary": "這是一張全家便利商店新北中和店於2026年7月22日開立的電子發票，總計金額為210元。",
+      "model": "qwen/qwen2.5-vl-72b-instruct",
+      "cost_usd": 0.002454,
+      "seconds": 4.9,
+      "review_reasons": []
+    },
+    {
+      "source": "IMG_4822.jpg",
+      "dest": "其他/年度不明/nodate_其他_Mr.Lin_001.pdf",
+      "pages": 1,
+      "text_chars": 76,
+      "category": "其他",
+      "doc_date": "",
+      "counterparty": "Mr. Lin",
+      "title": "SF-800樣品詢問",
+      "keywords": [
+        "SF-800",
+        "sample",
+        "7/25",
+        "20 bags"
+      ],
+      "quality": "handwritten",
+      "confidence": 0.8,
+      "summary": "手寫便條，提醒在7月25日前聯繫林先生關於SF-800樣品的事宜，並詢問是否需要20袋。",
+      "model": "qwen/qwen2.5-vl-72b-instruct",
+      "cost_usd": 0.0017804,
+      "seconds": 6.9,
+      "review_reasons": [
+        "手寫為主",
+        "無法判讀日期",
+        "類別未判定"
+      ]
+    },
+    {
+      "source": "doc_final_v2.pdf",
+      "dest": "報價單/2026/20260603_報價單_禾昇實業_001.pdf",
+      "pages": 1,
+      "text_chars": 489,
+      "category": "報價單",
+      "doc_date": "2026-06-03",
+      "counterparty": "禾昇實業",
+      "title": "二氧化矽報價單",
+      "keywords": [
+        "報價單",
+        "二氧化矽微粉",
+        "SF-800",
+        "SF-500"
+      ],
+      "quality": "clear",
+      "confidence": 0.9,
+      "summary": "禾昇實業股份有限公司向宏鼎化工股份有限公司發出的報價單，報價日期為2026年6月3日，有效期限30天。報價內容包括二氧化矽微粉SF-800 25kg/袋200份，單價1,150元，金額230,000元；二氧化矽微粉SF-500 25kg/袋100份，單價980元，金額98,000元。合計未稅金額為328,000元。備註交期下單後14天，付款月結30天。",
+      "model": "google/gemini-2.5-flash",
+      "cost_usd": 0.0013103,
+      "seconds": 3.1,
+      "review_reasons": []
+    },
+    {
+      "source": "scan001.pdf",
+      "dest": "發票/2026/20260418_發票_禾昇實業_002.pdf",
+      "pages": 1,
+      "text_chars": 507,
+      "category": "發票",
+      "doc_date": "2026-04-18",
+      "counterparty": "禾昇實業",
+      "title": "發票",
+      "keywords": [
+        "發票",
+        "二氧化矽",
+        "運費"
+      ],
+      "quality": "clear",
+      "confidence": 0.9,
+      "summary": "這是一張禾昇實業開立給宏鼎化工的統一發票，日期為2026年4月18日，內容包含工業級二氧化矽25kg和運費，總計金額為78,960元。",
+      "model": "google/gemini-2.5-flash",
+      "cost_usd": 0.0010353,
+      "seconds": 2.5,
+      "review_reasons": []
+    },
+    {
+      "source": "scan002.pdf",
+      "dest": "合約/2026/20260115_合約_禾昇實業_001.pdf",
+      "pages": 2,
+      "text_chars": 804,
+      "category": "合約",
+      "doc_date": "2026-01-15",
+      "counterparty": "禾昇實業",
+      "title": "採購合約",
+      "keywords": [
+        "採購",
+        "合約",
+        "二氧化矽微粉"
+      ],
+      "quality": "clear",
+      "confidence": 0.9,
+      "summary": "宏鼎化工與禾昇實業簽訂採購合約，採購二氧化矽微粉，合約期間為2026年1月15日至2026年12月31日。",
+      "model": "google/gemini-2.5-flash",
+      "cost_usd": 0.0006133,
+      "seconds": 2.2,
+      "review_reasons": []
+    },
+    {
+      "source": "scan003.pdf",
+      "dest": "公文/2026/20260506_公文_新北市政府經濟發展局_001.pdf",
+      "pages": 1,
+      "text_chars": 239,
+      "category": "公文",
+      "doc_date": "2026-05-06",
+      "counterparty": "新北市政府經濟發展局",
+      "title": "工廠變更登記補正",
+      "keywords": [
+        "工廠管理輔導法",
+        "建物使用執照影本",
+        "廠區平面配置圖"
+      ],
+      "quality": "clear",
+      "confidence": 1.0,
+      "summary": "新北市政府經濟發展局要求宏鼎化工股份有限公司於收到公文後30日內補正工廠變更登記相關文件，包括建物使用執照影本及廠區平面配置圖，逾期未補正將依法駁回申請。",
+      "model": "qwen/qwen2.5-vl-72b-instruct",
+      "cost_usd": 0.0016088,
+      "seconds": 8.2,
+      "review_reasons": []
+    },
+    {
+      "source": "scan004.pdf",
+      "dest": "人事/2026/20260301_人事_王小明_001.pdf",
+      "pages": 1,
+      "text_chars": 113,
+      "category": "人事",
+      "doc_date": "2026-03-01",
+      "counterparty": "王小明",
+      "title": "到職通知書",
+      "keywords": [
+        "到職",
+        "通知",
+        "王小明",
+        "品保部",
+        "品管工程師"
+      ],
+      "quality": "clear",
+      "confidence": 0.9,
+      "summary": "宏鼎化工股份有限公司發給王小明的到職通知書，通知其於2026年3月1日到職，擔任品保部品管工程師，試用期三個月，薪資依聘僱契約約定，並列出報到時需攜帶的文件。",
+      "model": "google/gemini-2.5-flash",
+      "cost_usd": 0.0010903,
+      "seconds": 2.5,
+      "review_reasons": []
+    }
+  ]
+}

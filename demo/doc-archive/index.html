@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>文件自動歸檔 結果展示｜ootob.ai</title>
+<meta name="description" content="雜亂掃描檔自動分類、命名、加文字層、歸入資料夾並產生索引的概念展示（合成文件）。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"><style>
+:root{--ink:#1d1f24;--mute:#5b6069;--line:#d9dbe0;--bg:#f5f5f2;--panel:#fff;--ok:#1f7a4d;--warn:#b26a00;--warn-bg:#fff3c4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 "Noto Sans TC","PingFang TC",sans-serif}
+.note{background:#1d1f24;color:#f1f1ee;font-size:12px;letter-spacing:.06em;text-align:center;padding:8px 16px}
+.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto;padding:40px 0 72px}
+h1{font-size:28px;margin:0 0 6px}.sub{color:var(--mute);margin:0 0 28px}
+h2{font-size:18px;margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);padding:14px 16px}.stat b{display:block;font-size:26px;line-height:1.1}.stat span{color:var(--mute);font-size:12px}
+table{width:100%;border-collapse:collapse;background:var(--panel);font-size:13.5px}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#eceef1;font-weight:600}
+td.mono{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;white-space:nowrap}tr.review td{background:var(--warn-bg)}
+.arrow{color:var(--mute);text-align:center}.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;background:#e8f3ec;color:var(--ok)}.tag.warn{background:var(--warn-bg);color:var(--warn)}
+pre.tree{background:var(--panel);border:1px solid var(--line);padding:16px 18px;font:13px/1.6 ui-monospace,Menlo,monospace;overflow:auto;margin:0}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.flow div{background:var(--panel);border:1px solid var(--line);padding:12px 14px;font-size:13.5px}.flow b{display:block;font-size:12px;color:var(--mute);letter-spacing:.08em;margin-bottom:4px}
+.tw{overflow-x:auto}.dl a{display:inline-block;margin:6px 12px 0 0;padding:8px 14px;border:1px solid var(--ink);color:var(--ink);text-decoration:none;font-size:13px}
+p.small{color:var(--mute);font-size:13px}
+@media(max-width:640px){.wrap{padding-top:24px}h1{font-size:22px}}
+</style></head><body>
+<div class="note">概念展示 · 文件全部為合成，非實際客戶資料</div>
+<main class="wrap">
+<h1>文件自動歸檔：從一個雜亂資料夾到可搜尋的檔案庫</h1>
+<p class="sub">輸入是一個裝滿 scan001.pdf、IMG_4821.jpg 這類檔名的資料夾。輸出是分好類、命好名、每頁可全文搜尋、附 Excel 索引的檔案庫；判斷不了的檔案獨立列出給人看。</p>
+
+<div class="stats">
+<div class="stat"><b>7</b><span>檔案</span></div><div class="stat"><b>8</b><span>頁</span></div>
+<div class="stat"><b>6</b><span>自動歸檔</span></div><div class="stat"><b>1</b><span>需人工確認</span></div>
+<div class="stat"><b>6</b><span>類別</span></div>
+</div>
+
+<h2>流程</h2>
+<div class="flow">
+<div><b>01 讀取</b>PDF／照片前兩頁，判斷類別、文件日期、對方單位、主旨、品質</div>
+<div><b>02 文字層</b>OCR（繁中＋英文）加進 PDF，原圖不動，之後可全文搜尋</div>
+<div><b>03 命名</b>日期_類別_對象_序號，民國年自動換算</div>
+<div><b>04 歸檔</b>類別／年度 兩層資料夾</div>
+<div><b>05 索引</b>Excel：索引、需人工確認、統計三張表</div>
+<div><b>06 把關</b>模糊、手寫、無日期、信心不足 → 不硬猜，列入人工確認</div>
+</div>
+
+<h2>重新命名與歸檔</h2>
+<div class="tw"><table><thead><tr><th>原檔名</th><th></th><th>新路徑</th><th>類別</th><th>文件日期</th><th>對象</th><th>頁</th><th>狀態</th></tr></thead><tbody><tr class=''><td class='mono'>IMG_4821.jpg</td><td class='arrow'>→</td><td class='mono'>發票/2026/20260722_發票_全家便利商店_001.pdf</td><td>發票</td><td>2026-07-22</td><td>全家便利商店</td><td>1</td><td><span class=tag>自動歸檔</span></td></tr><tr class='review'><td class='mono'>IMG_4822.jpg</td><td class='arrow'>→</td><td class='mono'>其他/年度不明/nodate_其他_Mr.Lin_001.pdf</td><td>其他</td><td>—</td><td>Mr. Lin</td><td>1</td><td><span class=tag warn>需人工確認</span></td></tr><tr class=''><td class='mono'>doc_final_v2.pdf</td><td class='arrow'>→</td><td class='mono'>報價單/2026/20260603_報價單_禾昇實業_001.pdf</td><td>報價單</td><td>2026-06-03</td><td>禾昇實業</td><td>1</td><td><span class=tag>自動歸檔</span></td></tr><tr class=''><td class='mono'>scan001.pdf</td><td class='arrow'>→</td><td class='mono'>發票/2026/20260418_發票_禾昇實業_002.pdf</td><td>發票</td><td>2026-04-18</td><td>禾昇實業</td><td>1</td><td><span class=tag>自動歸檔</span></td></tr><tr class=''><td class='mono'>scan002.pdf</td><td class='arrow'>→</td><td class='mono'>合約/2026/20260115_合約_禾昇實業_001.pdf</td><td>合約</td><td>2026-01-15</td><td>禾昇實業</td><td>2</td><td><span class=tag>自動歸檔</span></td></tr><tr class=''><td class='mono'>scan003.pdf</td><td class='arrow'>→</td><td class='mono'>公文/2026/20260506_公文_新北市政府經濟發展局_001.pdf</td><td>公文</td><td>2026-05-06</td><td>新北市政府經濟發展局</td><td>1</td><td><span class=tag>自動歸檔</span></td></tr><tr class=''><td class='mono'>scan004.pdf</td><td class='arrow'>→</td><td class='mono'>人事/2026/20260301_人事_王小明_001.pdf</td><td>人事</td><td>2026-03-01</td><td>王小明</td><td>1</td><td><span class=tag>自動歸檔</span></td></tr></tbody></table></div>
+
+<h2>資料夾結構</h2>
+<pre class="tree">├── 人事/
+│   └── 2026/
+│       └── 20260301_人事_王小明_001.pdf
+├── 公文/
+│   └── 2026/
+│       └── 20260506_公文_新北市政府經濟發展局_001.pdf
+├── 其他/
+│   └── 年度不明/
+│       └── nodate_其他_Mr.Lin_001.pdf
+├── 合約/
+│   └── 2026/
+│       └── 20260115_合約_禾昇實業_001.pdf
+├── 報價單/
+│   └── 2026/
+│       └── 20260603_報價單_禾昇實業_001.pdf
+└── 發票/
+    └── 2026/
+        ├── 20260418_發票_禾昇實業_002.pdf
+        └── 20260722_發票_全家便利商店_001.pdf</pre>
+
+<h2>需人工確認</h2>
+<div class="tw"><table><thead><tr><th>檔案</th><th>原因</th><th>系統摘要</th></tr></thead><tbody><tr><td class='mono'>nodate_其他_Mr.Lin_001.pdf</td><td>手寫為主；無法判讀日期；類別未判定</td><td>手寫便條，提醒在7月25日前聯繫林先生關於SF-800樣品的事宜，並詢問是否需要20袋。</td></tr></tbody></table></div>
+<p class="small">這一欄的存在是刻意的：手寫、模糊、看不出日期的文件不讓系統猜，由人決定。交付時這張表會跟索引一起給。</p>
+
+<h2>統計</h2>
+<div class="tw"><table><thead><tr><th>類別</th><th>檔數</th></tr></thead><tbody><tr><td>合約</td><td>1</td></tr><tr><td>發票</td><td>2</td></tr><tr><td>報價單</td><td>1</td></tr><tr><td>公文</td><td>1</td></tr><tr><td>人事</td><td>1</td></tr><tr><td>其他</td><td>1</td></tr></tbody></table></div>
+
+<h2>下載</h2>
+<div class="dl"><a href="index.xlsx">index.xlsx（索引／需人工確認／統計）</a><a href="archive_run.json">archive_run.json（完整結果）</a></div>
+
+<h2>實作方式</h2>
+<p class="small">分類與命名用視覺語言模型讀前兩頁，回傳結構化欄位與信心分數；文字層用 tesseract（chi_tra＋eng）經 ocrmypdf 寫回 PDF，保留原始影像；規則（信心門檻、命名格式、資料夾層級）是設定不是程式，可依客戶命名規則調整。文字層的 OCR 有錯字率，全文檢索夠用，逐字正確需人工抽檢。</p>
+</main></body></html>

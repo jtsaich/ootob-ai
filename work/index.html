@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品與 Demo｜ootob.ai</title>
+  <meta name="description" content="歐兜拜 ootobai 的可操作 demo：LINE 預約系統、電商網站、後台系統、AI 文件處理、網站設計。每一個都能點開來用。">
+  <meta property="og:title" content="作品與 Demo｜ootob.ai">
+  <meta property="og:description" content="LINE 預約、電商、後台、AI 文件處理、網站設計。每一個都能點開來用。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai/work/">
+  <meta property="og:image" content="https://ootob.ai/work/assets/line-booking.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --text: #1a1a1a; --text-secondary: #555; --bg: #fafaf8; --border: #e0ddd8; --max-w: 880px; }
+    body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); background: var(--bg); line-height: 1.9; font-size: 17px; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    .site-header { max-width: var(--max-w); margin: 0 auto; padding: 2.5rem 1.5rem 0; display: flex; justify-content: space-between; align-items: baseline; }
+    .site-header .logo, .site-header .nav { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; letter-spacing: 0.08em; text-decoration: none; color: var(--text-secondary); text-transform: uppercase; }
+    .site-header .nav { text-transform: none; letter-spacing: 0; font-size: 13px; }
+    main { max-width: var(--max-w); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    h1 { font-size: 1.6rem; font-weight: 700; line-height: 1.35; margin-bottom: 0.5rem; text-wrap: balance; }
+    .subtitle { color: var(--text-secondary); font-size: 15px; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border); max-width: 640px; }
+    .section-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); margin: 3rem 0 1.2rem; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.6rem 1.8rem; list-style: none; }
+    .card { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 8px; background: #fff; overflow: hidden; text-decoration: none; transition: transform .2s, box-shadow .2s; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px -24px rgba(0,0,0,.35); }
+    .thumb { aspect-ratio: 3 / 2; background: #eeece7; border-bottom: 1px solid var(--border); overflow: hidden; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .body { padding: 1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .25rem; flex: 1; }
+    .name { font-weight: 700; }
+    .desc { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+    .meta { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; padding-top: .7rem; }
+    .tag { font-family: 'Inter', 'Noto Sans TC', sans-serif; font-size: 11px; letter-spacing: .04em; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .tag.live { border-color: #1f7a4d; color: #1f7a4d; }
+    .cta { font-size: 13px; margin-top: .5rem; }
+    .cta::after { content: " →"; }
+    .text-list { list-style: none; border-top: 1px solid var(--border); }
+    .text-list li { padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+    .text-list .name { font-weight: 700; }
+    .text-list .desc { margin-top: .2rem; }
+    .note { color: var(--text-secondary); font-size: 14px; margin-top: 2.5rem; line-height: 1.8; max-width: 640px; }
+    .site-footer { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem 3rem; color: var(--text-secondary); font-size: 13px; }
+    @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .section-label { margin-top: 2.4rem; } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo" href="/">ootob.ai</a>
+  <a class="nav" href="/services/">服務項目與報價 →</a>
+</header>
+
+<main>
+  <h1>作品與 Demo</h1>
+  <p class="subtitle">每一個都能點開來用。標「上線中」的是真的在跑的系統，可以登入操作；標「概念展示」的是依真實需求做的可互動版本，品牌與資料為虛構。沒做過的東西這裡不會出現。</p>
+
+  <p class="section-label">LINE 整合</p>
+  <ul class="grid">
+    <li><a class="card" href="https://smb-admin-production-990a.up.railway.app/book" target="_blank" rel="noopener">
+      <div class="thumb"><img src="assets/line-booking.webp" alt="LINE 預約頁面截圖" loading="lazy"></div>
+      <div class="body"><div class="name">LINE 官方帳號預約系統</div>
+        <div class="desc">客人在 LINE 上選服務、選時段、送出預約；自動確認與前一天提醒。店家後台看今天、客戶、報表、人員權限。</div>
+        <div class="meta"><span class="tag live">上線中</span><span class="tag">LINE Messaging API</span><span class="tag">LIFF</span><span class="tag">後台</span></div>
+        <span class="cta">開啟預約頁</span></div></a></li>
+    <li><a class="card" href="/demo/slow-travel-line/">
+      <div class="thumb"><img src="assets/slow-travel-line.webp" alt="慢旅品牌 LINE 官方帳號概念展示截圖" loading="lazy"></div>
+      <div class="body"><div class="name">旅遊品牌 LINE 官方帳號</div>
+        <div class="desc">六格圖文選單、行程瀏覽、44 組 FAQ 自動回覆、報名表單、真人客服路徑。先用 LINE 內建功能，需要即時資料再接 API。</div>
+        <div class="meta"><span class="tag">概念展示</span><span class="tag">Rich Menu</span><span class="tag">Flex Message</span></div>
+        <span class="cta">操作看看</span></div></a></li>
+  </ul>
+
+  <p class="section-label">電商與後台系統</p>
+  <ul class="grid">
+    <li><a class="card" href="https://jewelry-demo.ootob.ai/" target="_blank" rel="noopener">
+      <div class="thumb"><img src="assets/ecommerce.webp" alt="珠寶電商網站首頁截圖" loading="lazy"></div>
+      <div class="body"><div class="name">電商網站（含綠界金流、直播模式）</div>
+        <div class="desc">WordPress＋WooCommerce，信用卡／ATM／超商代碼，老闆自己上架商品（三張圖＋影片）、改首頁活動、一鍵切換直播模式。後台看客戶來源與商品瀏覽排名。</div>
+        <div class="meta"><span class="tag live">上線中</span><span class="tag">WooCommerce</span><span class="tag">綠界</span></div>
+        <span class="cta">逛逛前台</span></div></a></li>
+    <li><a class="card" href="https://smb-admin-production-990a.up.railway.app/login" target="_blank" rel="noopener">
+      <div class="thumb"><img src="assets/smb-admin.webp" alt="中小企業後台今日看板截圖" loading="lazy"></div>
+      <div class="body"><div class="name">中小企業後台</div>
+        <div class="desc">今日看板、客戶紀錄、收款對帳、報表匯出、人員權限與操作紀錄。老闆帳號不可刪、離職一鍵停用並轉移工作、所有設定可匯出成交接文件。後台需登入，示範帳號來信索取。</div>
+        <div class="meta"><span class="tag live">上線中</span><span class="tag">Next.js</span><span class="tag">PostgreSQL</span></div>
+        <span class="cta">後台登入頁</span></div></a></li>
+    <li><a class="card" href="/demo/cert/">
+      <div class="thumb"><img src="assets/cert.webp" alt="珠寶鑑定證書系統概念展示截圖" loading="lazy"></div>
+      <div class="body"><div class="name">鑑定證書系統</div>
+        <div class="desc">三種證書範本可自訂欄位、開立與列印、鑑定師簽名檔與帳號、公開驗證頁、統計匯出。含舊系統資料整併流程與 NAS 部署說明。</div>
+        <div class="meta"><span class="tag">概念展示</span><span class="tag">範本引擎</span><span class="tag">NAS Docker</span></div>
+        <span class="cta">操作看看</span></div></a></li>
+  </ul>
+
+  <p class="section-label">AI 文件處理</p>
+  <ul class="grid">
+    <li><a class="card" href="/demo/doc-check/">
+      <div class="thumb"><img src="assets/doc-check.webp" alt="跨單據勾稽審核結果截圖" loading="lazy"></div>
+      <div class="body"><div class="name">跨單據 AI 勾稽</div>
+        <div class="desc">製令、報關單、檢驗報告掃描件（含手寫欄位）自動擷取，跨文件比對數量、批號、規格、金額；不一致與模糊處標出，輸出差異報告 Excel。埋入的三處錯誤全部抓到。</div>
+        <div class="meta"><span class="tag">實跑結果</span><span class="tag">VLM 擷取</span><span class="tag">規則引擎</span></div>
+        <span class="cta">看報告</span></div></a></li>
+    <li><a class="card" href="/demo/doc-archive/">
+      <div class="thumb"><img src="assets/doc-archive.webp" alt="文件自動歸檔結果截圖" loading="lazy"></div>
+      <div class="body"><div class="name">文件自動歸檔</div>
+        <div class="desc">雜亂掃描檔自動分類、命名、加可搜尋文字層、歸入類別／年度資料夾，附 Excel 索引。手寫、模糊、看不出日期的不硬猜，列給人確認。</div>
+        <div class="meta"><span class="tag">實跑結果</span><span class="tag">OCR</span><span class="tag">分類命名</span></div>
+        <span class="cta">看結果</span></div></a></li>
+  </ul>
+
+  <p class="section-label">網站設計</p>
+  <ul class="grid">
+    <li><a class="card" href="/demo/travel/">
+      <div class="thumb"><img src="assets/travel.webp" alt="三款旅遊網站設計研究截圖" loading="lazy"></div>
+      <div class="body"><div class="name">旅遊網站設計研究 ×3</div>
+        <div class="desc">同一個產業三種方向：旅行刊物感、高端探險感、活潑海島感。桌面與手機皆完整可瀏覽。</div>
+        <div class="meta"><span class="tag">設計</span><span class="tag">響應式</span></div>
+        <span class="cta">看三款</span></div></a></li>
+  </ul>
+
+  <p class="section-label">已交付的 AI 專案（去識別）</p>
+  <ul class="text-list">
+    <li><div class="name">人資問答機器人</div><div class="desc">一間上市化工製造商的 HR FAQ，掛在通訊軟體上。小規模知識庫不上向量資料庫，輸出端做來源驗證；四週交付，附回歸測試逐題驗收。</div></li>
+    <li><div class="name">GMP 品質紀錄審核</div><div class="desc">一間生物製藥廠的結構化品質紀錄，AI 做四軸嚴格相等比對，標出偏差。停在客戶驗收關卡，未取得上線後數據。</div></li>
+    <li><div class="name">法規與實驗數據問答</div><div class="desc">製藥領域研發與品保單位：上傳文件向量檢索＋資料庫寫死查詢模板，單一入口路由。已上線運行。</div></li>
+    <li><div class="name">WhatsApp Cloud API 收發環境</div><div class="desc">Business Manager、WABA、Webhook 簽章驗證、永久 token、收發與狀態回報全程跑通，含案主可照做的設定手冊。</div></li>
+  </ul>
+
+  <p class="note">概念展示的品牌、人員、行程與價格全為虛構。已交付專案依保密約定不具名；要引用細節請先聯絡我們。想看哪一個的細節或約 15 分鐘電話，到 <a href="/services/">服務項目</a> 頁面找聯絡方式。</p>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 ootob.ai · 歐兜拜 ootobai AI 軟體應用整合工作室</p>
+</footer>
+
+</body>
+</html>
