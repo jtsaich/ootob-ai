@@ -1,7 +1,7 @@
 // ootob.ai（工作室站）— GA4 only. 舊 GTM 容器 GTM-MCWCMS2L 是空的，已移除。
 // 個人站 me.ootob.ai 用另一個 measurement ID，兩站報表分開。
 (function () {
-  var ID = "";  // ootob.ai 工作室站的 GA4 measurement ID（Jack 建 stream 後填入）
+  var ID = "G-CPYE6XY574";  // ootob.ai 工作室站（GA4 資源「ootob.ai」，2026-09-16 建）
   if (!ID) return;
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") return;
   var s = document.createElement("script");
