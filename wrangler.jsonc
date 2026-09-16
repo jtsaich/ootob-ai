@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ootob-ai",
+  "compatibility_date": "2026-09-15",
+  "observability": { "enabled": true },
+  "workers_dev": false,
+  "assets": {
+    "directory": ".",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "routes": [
+    { "pattern": "ootob.ai", "custom_domain": true },
+    { "pattern": "www.ootob.ai", "custom_domain": true }
+  ]
+}

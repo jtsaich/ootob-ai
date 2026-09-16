@@ -1,2 +1,4 @@
 .DS_Store
 .private/
+.wrangler/
+node_modules/

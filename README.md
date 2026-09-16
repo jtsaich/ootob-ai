@@ -4,7 +4,7 @@
 
 ## Deploy
 
-Cloudflare Pages 專案（git 連動），push `main` 即部署。自訂網域 `ootob.ai`、`www.ootob.ai`。
+Cloudflare Worker `ootob-ai`（static assets，Workers Builds 連 GitHub，push `main` 即部署）。自訂網域 `ootob.ai`、`www.ootob.ai` 在 `wrangler.jsonc` 的 routes。
 
 ## 結構
 
