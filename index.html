@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ootob.ai</title>
-  <meta name="description" content="Jack Tsai 的小專案們。什麼都裝一點，沒有固定車道。">
-  <meta property="og:title" content="ootob.ai">
-  <meta property="og:description" content="Jack Tsai 的小專案們。">
+  <title>歐兜拜 ootobai｜AI 軟體應用整合工作室</title>
+  <meta name="description" content="替台灣中小企業把現在用的系統接起來：LINE 預約與機器人、電商與後台、AI 客服與文件處理。先做出能點的版本，看了再談。全遠端、可開發票、原始碼與文件完整交接。">
+  <meta property="og:title" content="歐兜拜 ootobai｜AI 軟體應用整合工作室">
+  <meta property="og:description" content="把您現在用的系統接起來，讓流程自己跑。先做出能點的版本，看了再談。">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ootob.ai">
+  <meta property="og:url" content="https://ootob.ai/">
+  <meta property="og:image" content="https://ootob.ai/work/assets/line-booking.webp">
+  <link rel="canonical" href="https://ootob.ai/">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -16,7 +18,6 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-MCWCMS2L');</script>
   <!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGYGTGF0SW"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -29,306 +30,137 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --text: #1a1a1a;
-      --text-secondary: #555;
-      --bg: #fafaf8;
-      --border: #e0ddd8;
-      --max-w: 640px;
-    }
-
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.9;
-      font-size: 17px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .site-header {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 0;
-    }
-
-    .site-header .logo {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 14px;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-    }
-
-    .site-origin {
-      margin-top: 0.6rem;
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    main {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 5rem;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      line-height: 1.35;
-      margin-bottom: 0.5rem;
-      text-wrap: balance;
-    }
-
-    .subtitle {
-      color: var(--text-secondary);
-      font-size: 15px;
-      margin-bottom: 2.5rem;
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-label {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 1.2rem;
-    }
-
-    .project-list {
-      list-style: none;
-    }
-
-    .project-list li {
-      padding: 1.2rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .project-list li:first-child {
-      border-top: 1px solid var(--border);
-    }
-
-    .project-list a {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-    .project-name {
-      font-weight: 700;
-      font-size: 1.05rem;
-      margin-bottom: 0.2rem;
-      transition: color 0.15s ease;
-    }
-
-    .project-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    .project-coming-soon .project-name {
-      color: #aaa;
-      font-weight: 400;
-    }
-
-    .project-coming-soon .project-desc {
-      color: #bbb;
-    }
-
-    .project-tag {
-      display: inline-block;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      color: var(--text-secondary);
-      background: rgba(0,0,0,0.04);
-      padding: 0.15rem 0.5rem;
-      border-radius: 3px;
-      margin-top: 0.4rem;
-    }
-
-    .section-writing {
-      margin-top: 3rem;
-    }
-
-    .site-footer {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 0 1.5rem 3rem;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-
-    /* Page load animation */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .site-header { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
-    main { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.08s both; }
-    .site-footer { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.16s both; }
-
-    /* Hover only on pointer devices */
-    @media (hover: hover) and (pointer: fine) {
-      .project-list a:hover .project-name {
-        color: var(--text-secondary);
-      }
-    }
-
-    /* Accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      .site-header, main, .site-footer {
-        animation: none;
-      }
-      .project-name {
-        transition: none;
-      }
-    }
-
-    .coffee-chat {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 3rem;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.12s both;
-    }
-
-    .coffee-chat .coffee-label {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 1rem;
-    }
-
-    .coffee-chat p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      margin-bottom: 0.6rem;
-    }
-
-    .coffee-btn {
-      display: inline-block;
-      margin-top: 1.2rem;
-      padding: 0.7rem 1.8rem;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-      border: 1px solid var(--text);
-      border-radius: 4px;
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .coffee-btn:hover {
-      background: var(--text);
-      color: var(--bg);
-    }
-
-    @media (max-width: 480px) {
-      body { font-size: 16px; }
-      h1 { font-size: 1.4rem; }
-      main { padding: 2rem 1.2rem 4rem; }
-      .site-header { padding: 2rem 1.2rem 0; }
-    }
+    :root { --text: #1a1a1a; --text-secondary: #555; --bg: #fafaf8; --border: #e0ddd8; --accent: #1f7a4d; --max-w: 720px; }
+    body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); background: var(--bg); line-height: 1.9; font-size: 17px; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    .site-header { max-width: var(--max-w); margin: 0 auto; padding: 2.5rem 1.5rem 0; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+    .site-header .logo { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; letter-spacing: 0.08em; text-decoration: none; color: var(--text-secondary); text-transform: uppercase; }
+    .site-header nav { display: flex; gap: 1.2rem; font-family: 'Inter', 'Noto Sans TC', sans-serif; font-size: 13px; color: var(--text-secondary); }
+    .site-header nav a { text-decoration: none; }
+    main { max-width: var(--max-w); margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+    h1 { font-size: 1.85rem; font-weight: 700; line-height: 1.35; margin-bottom: 0.8rem; text-wrap: balance; }
+    .lede { color: var(--text-secondary); font-size: 16px; max-width: 600px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: .8rem; margin: 1.8rem 0 0; }
+    .btn { display: inline-block; padding: .55rem 1.1rem; border-radius: 6px; font-size: 14px; text-decoration: none; border: 1px solid var(--text); }
+    .btn.primary { background: var(--text); color: #fff; }
+    .section { margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .section-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1.2rem; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
+    .lines { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .lines li { border: 1px solid var(--border); border-radius: 8px; background: #fff; padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
+    .lines .name { font-weight: 700; }
+    .lines .desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+    .lines a { font-size: 13px; margin-top: auto; padding-top: .6rem; }
+    .lines a::after { content: " →"; }
+    .steps { list-style: none; counter-reset: s; }
+    .steps li { counter-increment: s; padding: .9rem 0 .9rem 2.6rem; position: relative; border-bottom: 1px solid var(--border); }
+    .steps li::before { content: counter(s); position: absolute; left: 0; top: 1rem; width: 1.7rem; height: 1.7rem; border-radius: 50%; border: 1px solid var(--text); font-family: 'Inter', sans-serif; font-size: 12px; display: grid; place-items: center; }
+    .steps b { display: block; }
+    .steps span { font-size: 14px; color: var(--text-secondary); }
+    .promises { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1.6rem; }
+    .promises li { padding-left: 1.1rem; position: relative; font-size: 15px; line-height: 1.7; }
+    .promises li::before { content: ""; position: absolute; left: 0; top: .75rem; width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); }
+    .promises b { display: block; }
+    .promises span { color: var(--text-secondary); font-size: 14px; }
+    .cases { list-style: none; border-top: 1px solid var(--border); }
+    .cases li { padding: .9rem 0; border-bottom: 1px solid var(--border); }
+    .cases b { display: block; }
+    .cases span { font-size: 14px; color: var(--text-secondary); }
+    .contact { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem 1.5rem; font-size: 15px; line-height: 1.9; }
+    .contact b { display: block; margin-bottom: .3rem; }
+    .note { color: var(--text-secondary); font-size: 14px; margin-top: 1.2rem; line-height: 1.8; }
+    .site-footer { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem 3rem; font-family: 'Inter', 'Noto Sans TC', sans-serif; font-size: 13px; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .site-footer a { text-decoration: none; }
+    @media (max-width: 720px) { .lines, .promises { grid-template-columns: 1fr; } h1 { font-size: 1.55rem; } }
   </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","@id":"https://ootob.ai/#organization","name":"歐兜拜 ootobai","alternateName":"ootobai","url":"https://ootob.ai","email":"jack@ootob.ai","description":"AI 軟體應用整合工作室。替台灣中小企業把現在用的系統接起來：LINE 預約與機器人、電商與後台、AI 客服與文件處理。","areaServed":{"@type":"Country","name":"Taiwan"},"knowsAbout":["LINE 官方帳號整合","LINE 預約系統","WhatsApp Business API","電商網站建置","綠界金流","中小企業後台系統","AI 客服","知識庫問答","AI 文件處理","流程自動化"],"sameAs":["https://www.tasker.com.tw/workroom/y0MPnY"]}
+  </script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MCWCMS2L"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MCWCMS2L" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-<header class="site-header" style="display:flex;justify-content:space-between;align-items:baseline;">
-  <span class="logo">ootob.ai</span>
-  <span style="display:flex;gap:1.2rem;font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);"><a href="/work/">作品與 Demo →</a><a href="/services/">服務項目 →</a></span>
+<header class="site-header">
+  <a class="logo" href="/">ootob.ai</a>
+  <nav><a href="/work/">作品與 Demo</a><a href="/services/">服務項目與報價</a><a href="#contact">聯絡</a></nav>
 </header>
-<div class="site-header">
-  <p class="site-origin">歐兜邁 / オートバイ / autobike — 台語的機車，日語的外來語，一台兩輪的東西跑出了三種語言。這個網站也是，什麼都裝一點，沒有固定車道。</p>
-</div>
 
 <main>
-  <h1>小專案</h1>
-  <p class="subtitle">做著玩的東西，有的有用，有的純粹好玩。</p>
-
-  <p class="section-label">Tools</p>
-  <ul class="project-list">
-    <li>
-      <a href="/japanese/quiz.html">
-        <div class="project-name">Dojo 道場</div>
-        <div class="project-desc">日文 N5/N4 每日練習，FSRS 間隔複習 + Markdown 題庫。</div>
-        <span class="project-tag">learning</span>
-      </a>
-    </li>
-    <li class="project-coming-soon">
-      <div class="project-name">Threads to Markdown</div>
-      <div class="project-desc">把 Threads 貼文轉成 Markdown 格式保存。</div>
-      <span class="project-tag">coming soon</span>
-    </li>
-    <li class="project-coming-soon">
-      <div class="project-name">X Thread to Markdown</div>
-      <div class="project-desc">把 X (Twitter) thread 轉成 Markdown 格式保存。</div>
-      <span class="project-tag">coming soon</span>
-    </li>
-  </ul>
-
-  <div class="section-writing">
-    <p class="section-label">For Fun</p>
-    <ul class="project-list">
-      <li>
-        <a href="/try-awesome-design/">
-          <div class="project-name">Design System Experiments</div>
-          <div class="project-desc">同一個網站，二十種設計語言。用 awesome-design-md 把 ootob.ai 重新穿衣服。</div>
-          <span class="project-tag">20 designs</span>
-        </a>
-      </li>
-    </ul>
+  <h1>把您現在用的系統接起來，讓流程自己跑。</h1>
+  <p class="lede">歐兜拜 ootobai 是一間 AI 軟體應用整合工作室，替台灣中小企業做 LINE 預約與機器人、電商與後台、AI 客服與文件處理。不要求換工具，在您現有的 LINE、Excel、網站、金流上做。</p>
+  <div class="cta-row">
+    <a class="btn primary" href="/work/">看能點開的作品</a>
+    <a class="btn" href="#contact">約 15 分鐘電話</a>
   </div>
 
-  <div class="section-writing">
-    <p class="section-label">Writing</p>
-    <ul class="project-list">
-      <li>
-        <a href="https://open.substack.com/pub/ootobai/p/about-taste?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
-          <div class="project-name">品味不可說</div>
-          <div class="project-desc">品味一旦被定義，就已經不是它了。關於品味、AI、與經驗不可取代的思考。</div>
-        </a>
-      </li>
-      <li>
-        <a href="https://open.substack.com/pub/ootobai/p/mastery?utm_campaign=ootobai&utm_medium=web" target="_blank" rel="noopener">
-          <div class="project-name">當知識變成免費的，Mastery 還剩下什麼？</div>
-          <div class="project-desc">探討AI時代中，當知識取得成本降低後，真正的專業精通還需要親身實踐與判斷力的發展。</div>
-        </a>
-      </li>
+  <section class="section">
+    <p class="section-label">三條線</p>
+    <ul class="lines">
+      <li><div class="name">LINE 整合</div><div class="desc">官方帳號自動回覆、圖文選單、預約系統、群組機器人。固定內容用內建功能，要即時資料才接 API。也做 WhatsApp 商務 API。</div><a href="/services/line-oa/">方案與報價</a></li>
+      <li><div class="name">電商與後台</div><div class="desc">WooCommerce 電商含綠界金流，老闆自己上架；中小企業後台：權限、報表、客戶、收款對帳、每筆異動可追溯。</div><a href="/work/">看 demo</a></li>
+      <li><div class="name">AI 客服與文件</div><div class="desc">只在核准內容範圍內回答的問答機器人；掃描件與 Excel／PDF 自動擷取、比對、歸檔，AI 產出一律人確認才寫入。</div><a href="/services/">看服務</a></li>
     </ul>
-  </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">怎麼合作</p>
+    <ol class="steps">
+      <li><b>15 分鐘電話</b><span>聽您現在怎麼做、卡在哪。不用先準備文件，也不用打字回問題。</span></li>
+      <li><b>先做出能點的版本</b><span>多數案子我們會先做一個可操作的示範站給您看，看了再決定要不要往下談。這一步不收費。</span></li>
+      <li><b>24 小時內書面範圍與價格區間</b><span>做什麼、分幾期、每期多久、大概多少錢。拿去比價也可以。</span></li>
+      <li><b>建置、上線、交接</b><span>上線後一個月免費調整。程式碼、部署說明、操作文件完整交給您。</span></li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <p class="section-label">我們怎麼做事</p>
+    <ul class="promises">
+      <li><b>不用換系統</b><span>在您現有的 LINE、Excel、網站、金流上接，資料不用搬。</span></li>
+      <li><b>先看再談</b><span>能做示範就不用文字解釋。看得到、點得動，再談價。</span></li>
+      <li><b>AI 不碰錢、不直接寫資料</b><span>金流、資料庫寫入由程式規則與人工確認把關，AI 只做擷取與草稿。</span></li>
+      <li><b>原始碼與文件完整交接</b><span>之後換誰維護都看得懂，不綁我們。</span></li>
+      <li><b>價格先講區間</b><span>不會讓您問半天問不到價。範圍確認後才報正式價，支援分期。</span></li>
+      <li><b>沒做過的直說</b><span>不會先承諾再研究。做過的都在作品頁，沒做過的不會出現。</span></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <p class="section-label">已交付與已驗證</p>
+    <ul class="cases">
+      <li><b>招募問答機器人（人力資源媒體集團，上線運行中）</b><span>FAQ 從 10 題整理到 29 題上線，只在核准內容範圍內回答；交付附 33 題回歸測試逐題驗證，4 週交付。</span></li>
+      <li><b>製藥領域文件與實驗數據問答</b><span>上傳文件向量檢索＋資料庫查詢模板，單一入口路由。已上線運行。</span></li>
+      <li><b>WhatsApp 商務 API 收發環境</b><span>手機傳訊 → 接收 → 自動回覆 → 已送達／已讀回報，真機驗證；含 11 步設定手冊，標明哪些步驟只能由貴公司帳號操作。</span></li>
+      <li><b>LINE 預約系統與店家後台、電商網站、AI 營運助理</b><span>三個可以直接登入操作的示範站，在<a href="/work/">作品頁</a>。</span></li>
+    </ul>
+    <p class="note">已交付專案依保密約定不具名，能寫的數字都是實際量到的；沒有的就不寫。</p>
+  </section>
+
+  <section class="section" id="contact">
+    <p class="section-label">聯絡</p>
+    <div class="contact">
+      <b>歐兜拜 ootobai　AI 軟體應用整合工作室</b>
+      聯絡人：蔡承勳 Jack Tsai<br>
+      Email：<a id="c-mail" href="#">（載入中）</a><br>
+      LINE ID：tsai0606（請註明來意）<br>
+      出任務 Tasker：<a href="https://www.tasker.com.tw/workroom/y0MPnY" target="_blank" rel="noopener">專家檔案</a><br>
+      全遠端、可開發票、接受急件與長期合作。
+    </div>
+    <p class="note">來信寫「現在這件事誰在做、一天花多久」就夠了，其他電話上對。</p>
+  </section>
 </main>
 
-<section class="coffee-chat">
-  <p class="coffee-label">Coffee Chat</p>
-  <p>如果你想聊聊，不管是品味、AI、創業、或任何你正在想的事，歡迎約一杯咖啡。</p>
-  <p>Let me know how I can help you.</p>
-  <a class="coffee-btn" href="https://calendly.com/jack-ch-tsai/coffee-chat" target="_blank" rel="noopener">預約 Coffee Chat ☕</a>
-</section>
-
 <footer class="site-footer">
-  <p>&copy; 2026 ootob.ai</p>
+  <span>&copy; 2026 歐兜拜 ootobai</span>
+  <span><a href="/work/">作品</a> · <a href="/services/">服務</a> · <a href="https://me.ootob.ai/">Jack 的個人頁</a></span>
 </footer>
 
+<script>
+  (function () {
+    var m = "jack" + "\u0040" + "ootob.ai";
+    var a = document.getElementById("c-mail");
+    a.textContent = m; a.href = "mailto:" + m + "?subject=" + encodeURIComponent("系統整合需求討論");
+  })();
+</script>
 </body>
 </html>

@@ -1,2 +1,9 @@
-# Redirects go here
-# /old-path /new-path 301
+# 個人內容搬到 me.ootob.ai（2026-09-16）
+/taste/* https://me.ootob.ai/taste/:splat 301
+/taste https://me.ootob.ai/taste/ 301
+/japanese/* https://me.ootob.ai/japanese/:splat 301
+/japanese https://me.ootob.ai/japanese/ 301
+/try-awesome-design/* https://me.ootob.ai/try-awesome-design/:splat 301
+/try-awesome-design https://me.ootob.ai/try-awesome-design/ 301
+/non-dev-guide-to-ai-agents/* https://me.ootob.ai/non-dev-guide-to-ai-agents/:splat 301
+/non-dev-guide-to-ai-agents https://me.ootob.ai/non-dev-guide-to-ai-agents/ 301
