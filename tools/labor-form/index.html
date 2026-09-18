@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>勞務報酬單產生器（115 年度）｜ootob.ai</title>
+  <meta name="description" content="免費線上勞報單產生器，適用 115 年度扣繳規定：9A 執行業務、9B 稿費、50 薪資、92 其他所得自動試算代扣所得稅與 2.11% 二代健保補充保費，直接輸出 A4 PDF。資料只留在你的瀏覽器，不上傳。">
+  <meta property="og:title" content="勞務報酬單產生器（115 年度）｜ootob.ai">
+  <meta property="og:description" content="填表即時試算扣繳與補充保費，輸出可列印的 A4 勞報單 PDF。資料不離開瀏覽器。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai/tools/labor-form/">
+  <link rel="canonical" href="https://ootob.ai/tools/labor-form/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tools/assets/doc-kit.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"勞務報酬單產生器（115 年度）","url":"https://ootob.ai/tools/labor-form/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"zh-Hant","offers":{"@type":"Offer","price":"0","priceCurrency":"TWD"},"description":"線上填寫勞報單並自動試算 115 年度代扣所得稅與二代健保補充保費，輸出 A4 PDF。所有計算在瀏覽器完成，資料不上傳。","publisher":{"@type":"Organization","name":"歐兜拜 ootobai","url":"https://ootob.ai"}}
+  </script>
+  <script src="/tools/assets/tw-tax.js"></script>
+  <script src="/tools/assets/doc-kit.js"></script>
+  <script src="/assets/analytics.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/">ootob.ai</a>
+  <nav><a href="/work/">作品與 Demo</a><a href="/services/">服務項目與報價</a><a href="/tools/">免費工具</a><a href="/#contact">聯絡</a></nav>
+</header>
+
+<main>
+  <h1>勞務報酬單產生器</h1>
+  <p class="lede">適用 115 年度（2026）扣繳規定。填完即時算出代扣所得稅與二代健保補充保費，並產生可直接列印或存成 PDF 的 A4 勞報單。</p>
+
+  <p class="privacy"><b>資料不會離開你的瀏覽器。</b>姓名、身分證字號、銀行帳號、簽名與證件照片全部只在本機記憶體裡計算與排版，本頁沒有任何上傳。只有你自己按「記住我的資料」或在其他工具按「帶到下一張單」時，資料才會寫進這台瀏覽器的 localStorage，按「清除本機資料」即可刪除。關掉頁面未儲存的內容就消失，請先下載 PDF 自行保管。</p>
+
+  <form id="form" autocomplete="off">
+    <section class="section">
+      <p class="section-label">1. 所得人基本資料</p>
+      <div class="grid">
+        <div class="field">
+          <label for="vName">姓名</label>
+          <input id="vName" type="text" placeholder="王小明">
+        </div>
+        <div class="field">
+          <label for="residency">身分別</label>
+          <select id="residency">
+            <option value="local">本國籍</option>
+            <option value="foreign183">外國籍・在台居留滿 183 天</option>
+            <option value="foreignUnder183">外國籍・在台居留未滿 183 天</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="vTaxId"><span id="idNumberLabel">身分證字號</span></label>
+          <input id="vTaxId" type="text" placeholder="A123456789" style="text-transform: uppercase">
+          <span class="err" id="idNumberErr" hidden>格式或檢查碼不符，請確認。仍可繼續產生表單。</span>
+        </div>
+        <div class="field">
+          <label for="vPhone">聯絡電話</label>
+          <input id="vPhone" type="tel" placeholder="0912-345-678">
+        </div>
+        <div class="field wide">
+          <label for="vAddress">戶籍地址</label>
+          <input id="vAddress" type="text" placeholder="台北市中正區…">
+        </div>
+        <div class="field">
+          <label for="vEmail">Email（選填，只印在表單上）</label>
+          <input id="vEmail" type="email" placeholder="name@example.com">
+        </div>
+        <div class="field">
+          <label>健保與補充保費身分</label>
+          <div class="radio-row">
+            <label><input type="radio" name="nhi" value="normal" checked> 一般被保險人</label>
+            <label><input type="radio" name="nhi" value="union"> 已加職業工會（附加保證明）</label>
+            <label><input type="radio" name="nhi" value="none"> 非健保被保險人</label>
+          </div>
+          <span class="hint">後兩者不扣 <span data-p="suppRate"></span> 補充保費：工會會員以該所得計算投保金額、非被保險人無補充保費義務。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">2. 勞報資料</p>
+      <div class="grid">
+        <div class="field">
+          <label for="category">申報類別</label>
+          <select id="category">
+            <option value="9B">9B 稿費（含演講費、顧問費、出席費）</option>
+            <option value="9A">9A 執行業務所得</option>
+            <option value="50">50 薪資所得（兼職、臨時人員）</option>
+            <option value="92">92 其他所得</option>
+          </select>
+        </div>
+        <div class="field" id="practiceWrap">
+          <label for="practice">業別代號與費用率</label>
+          <select id="practice"><option value="">請選擇</option></select>
+          <span class="hint">費用率只影響所得人年度結算申報時可減除的費用，不影響本次扣繳金額。</span>
+        </div>
+        <div class="field">
+          <label for="amount">支領金額（給付總額，未扣繳前）</label>
+          <input id="amount" type="number" min="0" step="1" inputmode="numeric" placeholder="30000">
+        </div>
+        <div class="field">
+          <label for="formDate">填表日期</label>
+          <input id="formDate" type="date">
+        </div>
+        <div class="field wide">
+          <label for="pTitle">勞務內容</label>
+          <input id="pTitle" type="text" placeholder="例：撰寫產品部落格文章 3 篇">
+        </div>
+        <div class="field">
+          <label for="startDate">勞務開始日期</label>
+          <input id="startDate" type="date">
+        </div>
+        <div class="field">
+          <label for="endDate">勞務結束日期</label>
+          <input id="endDate" type="date">
+        </div>
+        <div class="field wide">
+          <label for="cName">給付單位（公司名稱）</label>
+          <input id="cName" type="text" placeholder="歐兜拜有限公司">
+        </div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <dl>
+          <div><dt>支領金額</dt><dd id="r-gross">0</dd></div>
+          <div><dt>代扣所得稅 <small id="r-tax-rate"></small></dt><dd id="r-tax">0</dd></div>
+          <div><dt>二代健保補充保費 <small data-p="suppRate"></small></dt><dd id="r-supp">0</dd></div>
+          <div><dt>實付淨額</dt><dd id="r-net">0</dd></div>
+        </dl>
+        <p class="basis" id="r-basis"></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">3. 付款與匯款資料（選填）</p>
+      <div class="grid">
+        <div class="field">
+          <label for="payMethod">付款方式</label>
+          <select id="payMethod">
+            <option value="bank">匯款</option>
+            <option value="cash">現金</option>
+            <option value="check">支票</option>
+            <option value="gift">禮券</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="vBankName">所得人銀行（代號＋名稱）</label>
+          <input id="vBankName" type="text" list="bank-list" placeholder="輸入代號或名稱，例：808 玉山銀行">
+          <datalist id="bank-list"></datalist>
+        </div>
+        <div class="field">
+          <label for="vBankBranch">分行</label>
+          <input id="vBankBranch" type="text" placeholder="例：城中分行">
+        </div>
+        <div class="field">
+          <label for="vBankAccount">帳號</label>
+          <input id="vBankAccount" type="text" inputmode="numeric" placeholder="僅數字">
+        </div>
+        <div class="field">
+          <label for="vBankHolder">戶名</label>
+          <input id="vBankHolder" type="text" placeholder="與所得人姓名相同時可留空">
+        </div>
+        <div class="field">
+          <label for="handler">會計／經辦人</label>
+          <input id="handler" type="text" placeholder="經辦人姓名">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">4. 附件圖片（選填）</p>
+      <div class="grid">
+        <div class="field">
+          <label for="imgSign">領款人簽名圖檔</label>
+          <input id="imgSign" type="file" accept="image/*">
+        </div>
+        <div class="field">
+          <label for="imgIdFront">身分證／居留證正面</label>
+          <input id="imgIdFront" type="file" accept="image/*">
+        </div>
+        <div class="field">
+          <label for="imgIdBack">身分證／居留證反面</label>
+          <input id="imgIdBack" type="file" accept="image/*">
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button type="button" class="btn" id="clearImages">清除所有圖片</button>
+        </div>
+      </div>
+      <p class="privacy" style="margin-top:1rem">上傳的圖片會在瀏覽器內縮到最長邊 1000px 再嵌入版面，同樣不會上傳。有放任一張證件影本時，PDF 會多一頁「證件影本黏貼頁」；沒放就只有一頁。</p>
+    </section>
+  </form>
+
+  <section class="section" id="preview-section">
+    <p class="section-label">5. 勞報單預覽</p>
+    <h2>A4 版面，可直接列印或存成 PDF</h2>
+    <div class="actions">
+      <button type="button" class="btn primary" id="btnPrint">下載 PDF（列印）</button>
+      <button type="button" class="btn" id="btnPull">帶入上一張單</button>
+      <button type="button" class="btn" id="btnProfile">記住我的資料</button>
+      <button type="button" class="btn" id="btnClear">清除本機資料</button>
+      <button type="button" class="btn" id="btnReset">清空重填</button>
+      <span class="status" id="opStatus"></span>
+    </div>
+    <p class="note">在列印對話框選「目的地／印表機 → 另存為 PDF」，紙張 A4、邊界預設即可。</p>
+    <div id="print-area">
+      <div class="sheet-wrap">
+        <div id="sheet">
+          <div class="doc-title"><span id="s-company">＿＿＿＿＿＿</span>　勞務報酬單</div>
+          <div class="doc-meta">
+            <span>所得類別：<span id="s-category-code"></span></span>
+            <span>填表日期：<span id="s-form-date"></span></span>
+          </div>
+          <table>
+            <colgroup>
+              <col style="width:17mm"><col style="width:52mm"><col style="width:58mm"><col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td class="rowhead" rowspan="3">所得人</td>
+                <td>姓名：<span class="val" id="s-name"></span></td>
+                <td><span id="s-id-label">身分證字號</span>：<span class="val" id="s-id"></span></td>
+                <td>身分別：<span id="s-residency"></span></td>
+              </tr>
+              <tr>
+                <td colspan="2">戶籍地址：<span class="val" id="s-address"></span></td>
+                <td>聯絡電話：<span class="val" id="s-phone"></span></td>
+              </tr>
+              <tr>
+                <td colspan="2">Email：<span class="val" id="s-email"></span></td>
+                <td>補充保費身分：<span id="s-nhi"></span></td>
+              </tr>
+              <tr>
+                <td class="rowhead" rowspan="2">勞務</td>
+                <td colspan="3">勞務內容：<span class="val" style="min-width:120mm" id="s-service"></span></td>
+              </tr>
+              <tr>
+                <td colspan="2">期間：自 <span class="val" id="s-start"></span> 至 <span class="val" id="s-end"></span></td>
+                <td>業別代號：<span class="val" id="s-practice"></span></td>
+              </tr>
+              <tr>
+                <td class="rowhead" rowspan="2">所得<br>類別</td>
+                <td colspan="3"><b id="s-category-name"></b>　<span id="s-practice-detail" class="rule"></span></td>
+              </tr>
+              <tr>
+                <td colspan="3" class="rule" id="s-rule"></td>
+              </tr>
+              <tr>
+                <td class="rowhead">金額</td>
+                <td colspan="3">
+                  <div class="amount-grid">
+                    <div>支領金額：新台幣 <b class="money" id="s-gross">0</b> 元</div>
+                    <div>代扣所得稅（<span id="s-tax-rate">0%</span>）：新台幣 <b class="money" id="s-tax">0</b> 元</div>
+                    <div>二代健保補充保費（<span data-p="suppRate"></span>）：新台幣 <b class="money" id="s-supp">0</b> 元</div>
+                    <div>實付淨額：新台幣 <b class="money" id="s-net">0</b> 元</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="rowhead" rowspan="2">付款</td>
+                <td colspan="3">付款方式：<span id="s-pay-method"></span></td>
+              </tr>
+              <tr>
+                <td>銀行：<span class="val" id="s-bank"></span></td>
+                <td>分行：<span class="val" id="s-bank-branch"></span></td>
+                <td>帳號：<span class="val" id="s-bank-account"></span>　戶名：<span class="val" id="s-account-name"></span></td>
+              </tr>
+              <tr>
+                <td class="rowhead">備註</td>
+                <td colspan="3"><div class="remark-box"></div></td>
+              </tr>
+              <tr>
+                <td class="rowhead">簽收</td>
+                <td colspan="2">
+                  領款人簽名或蓋章：
+                  <div class="sign-box"><img id="s-img-sign" alt="" hidden></div>
+                </td>
+                <td>
+                  會計／經辦人：<span class="val" id="s-handler"></span>
+                  <div class="sign-box"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="foot">本單金額以新台幣計算，未滿 1 元之所得稅捨去、補充保費四捨五入。所得人應於年度結算申報時將本筆所得併入申報；給付單位應依所得稅法第 89、92 條期限辦理扣繳與申報。</p>
+
+          <div class="page2" id="s-page2" hidden>
+            <div class="p2-title"><span id="s-company-2"></span>　勞務報酬單－證件影本黏貼頁</div>
+            <table>
+              <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+              <tbody>
+                <tr>
+                  <td>所得人：<span class="val" id="s-name-2"></span></td>
+                  <td><span id="s-id-label-2">身分證字號</span>：<span class="val" id="s-id-2"></span></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center">正面<div class="id-box"><img id="s-img-id-front" alt="" hidden></div></td>
+                  <td style="text-align:center">反面<div class="id-box"><img id="s-img-id-back" alt="" hidden></div></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="foot">影本僅供本次勞務報酬給付之扣繳申報使用，請依個人資料保護法妥善保管並於目的消失後銷毀。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label"><span data-p="year"></span> 年度規則</p>
+    <h2>這張表單照什麼算</h2>
+    <div class="notes">
+      <h3>居住者（本國籍、外國籍在台滿 183 天）</h3>
+      <table class="ref">
+        <thead><tr><th>類別</th><th>代扣所得稅</th><th>二代健保補充保費 <span data-p="suppRate"></span></th></tr></thead>
+        <tbody>
+          <tr><td>9B 稿費</td><td>單次給付達 <span data-p="profThreshold"></span> 元扣 <span data-p="profRate"></span>（未達免扣繳）</td><td>單次給付達 <span data-p="suppProfMin"></span> 元</td></tr>
+          <tr><td>9A 執行業務</td><td>單次給付達 <span data-p="profThreshold"></span> 元扣 <span data-p="profRate"></span></td><td>單次給付達 <span data-p="suppProfMin"></span> 元</td></tr>
+          <tr><td>50 薪資</td><td>單次給付達 <span data-p="salaryThreshold"></span> 元扣 <span data-p="salaryRate"></span>（或依薪資所得扣繳稅額表）</td><td>單次給付達 <span data-p="minWage"></span> 元（<span data-p="year"></span> 年基本工資）</td></tr>
+          <tr><td>92 其他所得</td><td>免扣繳，仍須列單申報</td><td>不扣</td></tr>
+        </tbody>
+      </table>
+      <h3>非居住者（外國籍在台未滿 183 天）</h3>
+      <table class="ref">
+        <thead><tr><th>類別</th><th>代扣所得稅</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>9B 稿費</td><td>每次給付 <span data-p="nrExemptRoyalty"></span> 元以下免扣繳，超過扣 <span data-p="nrRate"></span></td><td rowspan="4">給付日起 10 日內申報扣繳，不適用居住者的起扣標準</td></tr>
+          <tr><td>9A 執行業務</td><td>全額扣 <span data-p="nrRate"></span></td></tr>
+          <tr><td>50 薪資</td><td><span data-p="nrSalaryBreak"></span> 元以下扣 <span data-p="nrSalaryLow"></span>，超過扣 <span data-p="nrSalaryHigh"></span>（基本工資 1.5 倍）</td></tr>
+          <tr><td>92 其他所得</td><td>全額扣 <span data-p="nrRate"></span></td></tr>
+        </tbody>
+      </table>
+      <ul style="margin-top:1.2rem">
+        <li>9B 稿費的 18 萬元免稅額是<b>年度結算申報</b>時的定額免稅，不影響單次扣繳，所以本表不把它算進代扣稅額。</li>
+        <li>費用率（如 9A 程式設計師 20%、9B 非自行出版 30%）也是結算申報時減除費用用的，扣繳一律按給付總額計算。</li>
+        <li>50 薪資達起扣標準時，法令允許就源扣繳 <span data-p="salaryRate"></span> 或按扣繳稅額表計算；本表採 <span data-p="salaryRate"></span>，實際請依貴公司作法調整。</li>
+        <li>二代健保補充保費由給付單位在給付時扣取。所得人已加職業工會並提供加保證明、或非健保被保險人時不扣。</li>
+        <li>試算結果僅供作業參考，個案（如兼具僱傭關係、跨年度給付、租稅協定減免）請洽會計師或稅務代理人確認。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">同一份專案資料接下去</p>
+    <div class="cta">
+      <b>報價 → 合約 → 請款 → 勞報單，四張單共用同一份資料。</b>
+      在<a href="/tools/payment/">請款單</a>按「帶到下一張單」，回到本頁按「帶入上一張單」，所得人、公司與金額就會帶過來。<br>
+      <a href="/tools/quotation/">報價單產生器</a> · <a href="/tools/contract/">合約產生器</a> · <a href="/tools/">全部工具</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">每個月都要發一疊？</p>
+    <div class="cta">
+      <b>要把勞報單接進你現有的流程，可以找我們。</b>
+      承攬制、分潤、外稿量大的公司，通常不是缺一張表，而是缺「從名單到扣繳申報」這段自動化：Google Sheet／ERP 名單匯入、批次產生 PDF、e-mail 或 LINE 發給所得人、扣繳彙總表一次匯出。<br>
+      這類工具我們照件做，原始碼與文件完整交接。<a href="/#contact">聯絡方式在首頁</a>，或看<a href="/services/">服務項目與報價</a>。
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>&copy; 2026 歐兜拜 ootobai</span>
+  <span><a href="/work/">作品</a> · <a href="/services/">服務</a> · <a href="/tools/">免費工具</a> · <a href="https://me.ootob.ai/">Jack 的個人頁</a></span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var K = window.DocKit, T = window.TWTax;
+  var form = K.$("form");
+  var PROFILE_KEYS = ["vName", "vTaxId", "vPhone", "vEmail", "vAddress", "vBankName", "vBankBranch", "vBankAccount", "vBankHolder"];
+
+  var PRACTICE = {
+    "9B": [
+      ["98", "非自行出版之稿費、版稅、樂譜、作曲、編劇、漫畫及演講鐘點費", 30],
+      ["99", "自行出版之稿費、版稅、作曲、編劇、漫畫", 75]
+    ],
+    "9A": [
+      ["10", "律師", 30], ["11", "會計師", 35], ["12", "精算師", 20], ["13", "地政士", 30],
+      ["14", "記帳士", 35], ["15", "仲裁人", 15], ["16", "民間公證人", 30], ["17", "不動產估價師", 35],
+      ["18", "受委託代辦國有非公用不動產承租、續租、過戶及繼承申請", 30], ["19", "記帳及報稅代理人", 35],
+      ["20", "技師", 35], ["21", "建築師", 35], ["22", "公共安檢人員", 35],
+      ["23", "未具會計師資格，辦理工商登記等業務", 35], ["24", "工匠（工資收入）", 20], ["25", "工匠（工料收入）", 62],
+      ["26", "引水人", 25], ["27", "律師配合政府政策辦理法律扶助案件", 50],
+      ["28", "美術工藝家（工資收入）", 20], ["29", "美術工藝家（工料收入）", 62],
+      ["30", "內科醫師", 40], ["31", "外科醫師", 45], ["32", "小兒科醫師", 40], ["33", "婦產科醫師", 45],
+      ["34", "眼科醫師", 40], ["35", "耳鼻喉科醫師", 40], ["36", "牙科醫師", 40], ["37", "精神科醫師", 46],
+      ["38", "骨科醫師", 45], ["39", "其他科別醫師", 43], ["40", "助產師（士）", 31], ["41", "藥師", 20],
+      ["42", "醫事檢驗師（生）", 43], ["45", "營養師", 20],
+      ["46", "醫師經核准至他醫療機構服務且不具僱傭關係", 10], ["47", "獸醫師", 32],
+      ["48", "皮膚科醫師", 40], ["49", "家庭醫學科醫師", 40], ["50", "中醫師", 20], ["51", "語言治療師", 20],
+      ["52", "人壽保險醫療檢查", 35], ["53", "物理治療師", 43], ["54", "職能治療師", 43], ["55", "心理師", 20],
+      ["56", "牙體技術師（生）", 40],
+      ["57", "配合政府政策辦理老人、兒童、中低收入者、身心障礙者及其他特定對象補助", 78],
+      ["58", "自費疫苗注射收入", 78],
+      ["61", "書畫家、版畫家", 30], ["62", "命理卜卦", 20], ["70", "表演人", 45], ["71", "保險經紀人", 26],
+      ["72", "節目製作人", 45], ["73", "公益彩券甲類經銷商", 60], ["76", "一般經紀人", 20], ["90", "其他", 0],
+      ["91", "商標代理人", 30], ["92", "程式設計師", 20], ["93", "專利師及專利代理人", 30],
+      ["94", "未具律師資格，辦理訴訟代理人業務", 23],
+      ["95", "未具建築師資格，辦理建築規劃設計及監造業務", 35],
+      ["96", "未具地政士資格，辦理土地登記業務", 30],
+      ["97", "受大陸地區人民委託辦理繼承、公法給付或其他事務", 23]
+    ]
+  };
+
+  var BANKS = ["004 臺灣銀行","005 土地銀行","006 合庫商銀","007 第一銀行","008 華南銀行","009 彰化銀行","011 上海銀行","012 台北富邦","013 國泰世華","016 高雄銀行","017 兆豐銀行","018 農業金庫","021 花旗(台灣)銀行","039 澳商澳盛銀","048 王道銀行","050 臺灣企銀","052 渣打商銀","053 台中銀行","054 京城商銀","081 匯豐(台灣)銀行","101 瑞興銀行","102 華泰銀行","103 臺灣新光商銀","108 陽信銀行","118 板信銀行","147 三信銀行","700 中華郵政","803 聯邦銀行","805 遠東銀行","806 元大銀行","807 永豐銀行","808 玉山銀行","809 凱基銀行","810 星展(台灣)銀行","812 台新銀行","815 日盛銀行","816 安泰銀行","822 中國信託","823 將來商業銀行","824 連線商業銀行 LINE Bank","826 樂天國際商業銀行"];
+
+  var NHI_LABEL = { normal: "一般被保險人", union: "職業工會加保（附證明）", none: "非健保被保險人" };
+
+  function fillPractice() {
+    var cat = K.$("category").value;
+    var list = PRACTICE[cat];
+    var sel = K.$("practice");
+    var keep = sel.value;
+    sel.innerHTML = '<option value="">請選擇</option>';
+    K.$("practiceWrap").hidden = !list;
+    if (!list) { sel.value = ""; return; }
+    list.forEach(function (row) {
+      var o = document.createElement("option");
+      o.value = row[0];
+      o.textContent = "[" + row[0] + "] " + row[1] + "（費用率 " + row[2] + "%）";
+      sel.appendChild(o);
+    });
+    sel.value = list.some(function (r) { return r[0] === keep; }) ? keep : list[0][0];
+  }
+  function practiceRow() {
+    var list = PRACTICE[K.$("category").value];
+    if (!list) return null;
+    var code = K.$("practice").value;
+    for (var i = 0; i < list.length; i++) { if (list[i][0] === code) return list[i]; }
+    return null;
+  }
+
+  var TEXT_MAP = [
+    ["vName", ["s-name", "s-name-2"]],
+    ["vAddress", ["s-address"]],
+    ["vPhone", ["s-phone"]],
+    ["vEmail", ["s-email"]],
+    ["pTitle", ["s-service"]],
+    ["vBankName", ["s-bank"]],
+    ["vBankBranch", ["s-bank-branch"]],
+    ["vBankAccount", ["s-bank-account"]],
+    ["handler", ["s-handler"]]
+  ];
+
+  function togglePage2() {
+    var has = !K.$("s-img-id-front").hidden || !K.$("s-img-id-back").hidden;
+    K.$("s-page2").hidden = !has;
+  }
+
+  function render() {
+    var residency = K.$("residency").value;
+    var category = K.$("category").value;
+    var nhi = form.querySelector('input[name="nhi"]:checked').value;
+    var isForeign = residency !== "local";
+
+    var idLabel = isForeign ? "居留證／護照號碼" : "身分證字號";
+    K.$("idNumberLabel").textContent = idLabel;
+    K.$("vTaxId").placeholder = isForeign ? "AB12345678 或護照號碼" : "A123456789";
+    K.$("s-id-label").textContent = idLabel;
+    K.$("s-id-label-2").textContent = idLabel;
+
+    var idVal = K.$("vTaxId").value.trim().toUpperCase();
+    K.$("idNumberErr").hidden = !idVal || K.validTwId(idVal) || (isForeign && K.plausiblePassport(idVal));
+
+    TEXT_MAP.forEach(function (pair) {
+      var v = K.$(pair[0]).value.trim();
+      pair[1].forEach(function (t) { if (K.$(t)) K.$(t).textContent = v; });
+    });
+    K.$("s-id").textContent = idVal;
+    K.$("s-id-2").textContent = idVal;
+
+    var company = K.$("cName").value.trim();
+    K.$("s-company").textContent = company || "＿＿＿＿＿＿";
+    K.$("s-company-2").textContent = company;
+    K.$("s-account-name").textContent = K.$("vBankHolder").value.trim() || K.$("vName").value.trim();
+
+    K.$("s-form-date").textContent = K.roc(K.$("formDate").value);
+    K.$("s-start").textContent = K.roc(K.$("startDate").value);
+    K.$("s-end").textContent = K.roc(K.$("endDate").value);
+
+    K.$("s-residency").textContent = K.boxes([
+      ["local", "本國籍"], ["foreign183", "外籍滿 183 天"], ["foreignUnder183", "外籍未滿 183 天"]
+    ], residency);
+    K.$("s-nhi").textContent = NHI_LABEL[nhi];
+    K.$("s-pay-method").textContent = K.boxes([
+      ["bank", "匯款"], ["cash", "現金"], ["check", "支票"], ["gift", "禮券"]
+    ], K.$("payMethod").value);
+
+    K.$("s-category-code").textContent = category + "　" + T.CATEGORY_NAME[category].replace(/^\S+\s/, "");
+    K.$("s-category-name").textContent = K.boxes([
+      ["50", "50 薪資所得"], ["9A", "9A 執行業務所得"], ["9B", "9B 稿費"], ["92", "92 其他所得"]
+    ], category);
+
+    var row = practiceRow();
+    var gross = Number(K.$("amount").value) || 0;
+    K.$("s-practice").textContent = row ? row[0] : "";
+    K.$("s-practice-detail").textContent = row
+      ? "（" + row[1] + "，費用率 " + row[2] + "%，結算申報可減除費用約 " + T.fmt(gross * row[2] / 100) + " 元）"
+      : "";
+
+    var r = T.withhold(gross, category, residency, nhi);
+    K.$("r-gross").textContent = T.fmt(r.gross);
+    K.$("r-tax").textContent = T.fmt(r.tax);
+    K.$("r-supp").textContent = T.fmt(r.supp);
+    K.$("r-net").textContent = T.fmt(r.net);
+    K.$("r-tax-rate").textContent = r.taxRate ? T.pct(r.taxRate) : "（免扣繳）";
+    K.$("r-basis").textContent = r.taxNote + " " + r.suppNote;
+
+    K.$("s-gross").textContent = T.fmt(r.gross);
+    K.$("s-tax").textContent = T.fmt(r.tax);
+    K.$("s-supp").textContent = T.fmt(r.supp);
+    K.$("s-net").textContent = T.fmt(r.net);
+    K.$("s-tax-rate").textContent = r.taxRate ? T.pct(r.taxRate) : "免扣繳";
+    K.$("s-rule").textContent = r.taxNote + r.suppNote;
+  }
+
+  function say(msg) {
+    K.$("opStatus").textContent = msg;
+    setTimeout(function () { if (K.$("opStatus").textContent === msg) K.$("opStatus").textContent = ""; }, 6000);
+  }
+
+  BANKS.forEach(function (b) {
+    var o = document.createElement("option");
+    o.value = b;
+    K.$("bank-list").appendChild(o);
+  });
+
+  K.bind(form, render);
+  K.$("category").addEventListener("change", function () { fillPractice(); render(); });
+
+  K.bindImage("imgSign", ["s-img-sign"], 1000, togglePage2);
+  K.bindImage("imgIdFront", ["s-img-id-front"], 1000, togglePage2);
+  K.bindImage("imgIdBack", ["s-img-id-back"], 1000, togglePage2);
+
+  K.$("clearImages").addEventListener("click", function () {
+    ["imgSign", "imgIdFront", "imgIdBack"].forEach(function (id) { K.$(id).value = ""; });
+    K.setImages(["s-img-sign", "s-img-id-front", "s-img-id-back"], "", togglePage2);
+  });
+
+  K.$("btnPrint").addEventListener("click", function () { K.print("labor_form_print"); });
+
+  K.$("btnPull").addEventListener("click", function () {
+    var shared = K.handoff.shared();
+    if (!shared || !Object.keys(shared).length) { say("這台瀏覽器還沒有上一張單的資料"); return; }
+    K.setFormState(form, shared);
+    fillPractice();
+    render();
+    say("已帶入上一張單的資料，請確認金額與所得類別");
+  });
+
+  K.$("btnProfile").addEventListener("click", function () {
+    say(K.profile.save(form, PROFILE_KEYS) ? "已記住姓名、身分證字號與匯款資料，下次自動帶入" : "存不進 localStorage");
+  });
+
+  K.$("btnClear").addEventListener("click", function () {
+    K.profile.clear();
+    K.handoff.clear();
+    say("已清除這台瀏覽器上的固定資料與單據暫存");
+  });
+
+  K.$("btnReset").addEventListener("click", function () {
+    form.reset();
+    ["imgSign", "imgIdFront", "imgIdBack"].forEach(function (id) { K.$(id).value = ""; });
+    K.setImages(["s-img-sign", "s-img-id-front", "s-img-id-back"], "", togglePage2);
+    K.$("formDate").value = K.today();
+    fillPractice();
+    render();
+  });
+
+  // 說明文字裡的門檻與費率一律取自 TWTax.PARAMS，年度更新只改 tw-tax.js
+  var RATE_KEYS = { suppRate: 1, profRate: 1, salaryRate: 1, nrRate: 1, nrSalaryLow: 1, nrSalaryHigh: 1 };
+  K.$$("[data-p]").forEach(function (el) {
+    var key = el.getAttribute("data-p");
+    var v = T.PARAMS[key];
+    if (v === undefined) return;
+    el.textContent = key === "year" ? String(v) : (RATE_KEYS[key] ? T.pct(v) : T.fmt(v));
+  });
+
+  K.$("formDate").value = K.today();
+  fillPractice();
+  K.profile.apply(form);
+  render();
+
+  window.__laborForm = { calc: T.withhold, params: T.PARAMS };
+})();
+</script>
+</body>
+</html>

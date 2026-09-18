@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>請款單產生器｜個人接案請款、扣繳實拿試算｜ootob.ai</title>
+  <meta name="description" content="免費線上請款單產生器：分期請款（訂金／期中／尾款／月費）、明細小計、營業稅 5% 外加或內含、代扣所得稅與二代健保補充保費實拿試算，直接輸出 A4 PDF。資料只在你的瀏覽器裡處理，不上傳。">
+  <meta property="og:title" content="請款單產生器｜個人接案請款、扣繳實拿試算｜ootob.ai">
+  <meta property="og:description" content="填表即時算出本期請款金額、營業稅與扣繳後實際入帳，輸出可列印的 A4 請款單。資料不離開瀏覽器。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai/tools/payment/">
+  <link rel="canonical" href="https://ootob.ai/tools/payment/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tools/assets/doc-kit.css">
+  <style>
+    /* 頁面專屬：明細編輯器在窄螢幕可橫向捲動 */
+    .items-scroll { overflow-x: auto; }
+    .items-scroll table.items { min-width: 640px; }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"請款單產生器","url":"https://ootob.ai/tools/payment/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"zh-Hant","offers":{"@type":"Offer","price":"0","priceCurrency":"TWD"},"description":"線上填寫請款單，自動計算明細小計、營業稅與代扣所得稅、二代健保補充保費後的實際入帳金額，輸出 A4 PDF。所有計算在瀏覽器完成，資料不上傳。","publisher":{"@type":"Organization","name":"歐兜拜 ootobai","url":"https://ootob.ai"}}
+  </script>
+  <script src="/tools/assets/tw-tax.js"></script>
+  <script src="/tools/assets/doc-kit.js"></script>
+  <script src="/assets/analytics.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/">ootob.ai</a>
+  <nav><a href="/work/">作品與 Demo</a><a href="/services/">服務項目與報價</a><a href="/tools/">免費工具</a><a href="/#contact">聯絡</a></nav>
+</header>
+
+<main>
+  <h1>請款單產生器</h1>
+  <p class="lede">個人接案與小型工作室用的請款單。填完即時算出本期請款金額、營業稅，以及公司戶代扣所得稅與二代健保補充保費後的實際入帳金額，輸出可直接列印或存成 PDF 的 A4 單據。</p>
+
+  <p class="privacy"><b>資料只在你的瀏覽器裡處理，沒有任何上傳。</b>所有計算與排版都在本機完成，本頁不送伺服器、不呼叫外部 API。只有在你主動按「記住我的資料」或「帶到下一張單」時，才會把資料寫進這台瀏覽器的 localStorage；按「清除本機資料」即可刪掉。</p>
+
+  <form id="form" autocomplete="off">
+    <section class="section">
+      <p class="section-label">1. 案件匯入與單據資訊</p>
+      <div class="grid">
+        <div class="field wide">
+          <label for="caseText">從 case-radar 或 Tasker 匯入（選填）</label>
+          <textarea id="caseText" placeholder="貼上 `case-radar show <TK-id>` 輸出的 JSON，或直接貼 Tasker 案件網址／TK-id"></textarea>
+          <span class="hint">吃三種輸入：<code>case-radar show &lt;TK-id&gt;</code> 的 JSON、Tasker 案件網址、純 TK-id。JSON 會帶入案件名稱、編號、網址、預算與案件說明。</span>
+        </div>
+        <div class="field wide">
+          <div class="actions" style="margin-top:0">
+            <button type="button" class="btn small" id="btnCase">匯入案件</button>
+            <span class="status" id="caseStatus"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="docNo">請款單號</label>
+          <input id="docNo" type="text" placeholder="INV-20260918-01">
+        </div>
+        <div class="field">
+          <label for="docDate">開立日期</label>
+          <input id="docDate" type="date">
+        </div>
+        <div class="field">
+          <label for="refQuoteNo">對應報價單號（選填）</label>
+          <input id="refQuoteNo" type="text" placeholder="QT-20260901-01">
+          <span class="hint">填了才會印在單上，方便對方對帳到已簽回的報價單。</span>
+        </div>
+        <div class="field">
+          <label for="tPayDays">付款期限（開立日起算天數）</label>
+          <input id="tPayDays" type="number" min="0" step="1" inputmode="numeric" placeholder="30">
+          <span class="hint" id="dueHint"></span>
+          <span class="hint">公司常見的「月結 30 天」是從當月結帳日起算，不是從開立日；遇到月結請改填實際天數（月結 30 天約 45 至 60 天）。</span>
+        </div>
+        <div class="field">
+          <label for="pCaseId">案件編號（選填）</label>
+          <input id="pCaseId" type="text" placeholder="TK…">
+        </div>
+        <div class="field">
+          <label for="pCaseUrl">案件網址（選填，只作內部對照，不印在單上）</label>
+          <input id="pCaseUrl" type="url" placeholder="https://www.tasker.com.tw/case/…">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">2. 雙方與匯款資料</p>
+      <h3>乙方（請款方，你）</h3>
+      <div class="grid">
+        <div class="field">
+          <label for="vName">名稱／姓名</label>
+          <input id="vName" type="text" placeholder="歐兜拜 ootobai／王小明">
+        </div>
+        <div class="field">
+          <label for="vTaxId">統一編號或身分證字號</label>
+          <input id="vTaxId" type="text" placeholder="12345675 或 A123456789" style="text-transform:uppercase">
+          <span class="err" id="vTaxIdErr" hidden>格式或檢查碼不符，請確認。仍可繼續產生單據。</span>
+        </div>
+        <div class="field">
+          <label for="vPhone">聯絡電話</label>
+          <input id="vPhone" type="tel" placeholder="0912-345-678">
+        </div>
+        <div class="field">
+          <label for="vEmail">Email</label>
+          <input id="vEmail" type="email" placeholder="name@example.com">
+        </div>
+        <div class="field wide">
+          <label for="vAddress">地址</label>
+          <input id="vAddress" type="text" placeholder="台北市中正區…">
+        </div>
+        <div class="field">
+          <label for="vBankName">銀行（代號＋名稱）</label>
+          <input id="vBankName" type="text" placeholder="808 玉山銀行">
+        </div>
+        <div class="field">
+          <label for="vBankBranch">分行</label>
+          <input id="vBankBranch" type="text" placeholder="城中分行">
+        </div>
+        <div class="field">
+          <label for="vBankAccount">帳號</label>
+          <input id="vBankAccount" type="text" inputmode="numeric" placeholder="僅數字">
+        </div>
+        <div class="field">
+          <label for="vBankHolder">戶名</label>
+          <input id="vBankHolder" type="text" placeholder="與名稱相同時也請填寫，銀行以戶名核對">
+        </div>
+      </div>
+
+      <h3>甲方（付款方，客戶）</h3>
+      <div class="grid">
+        <div class="field wide">
+          <label>甲方型態</label>
+          <div class="radio-row">
+            <label><input type="radio" name="cType" value="company" checked> 公司／行號（有統編）</label>
+            <label><input type="radio" name="cType" value="individual"> 個人</label>
+          </div>
+          <span class="hint">選公司／行號時會自動打開扣繳試算，因為公司戶給付個人勞務報酬時通常要代扣所得稅與補充保費。</span>
+        </div>
+        <div class="field">
+          <label for="cName">名稱</label>
+          <input id="cName" type="text" placeholder="某某有限公司">
+        </div>
+        <div class="field">
+          <label for="cTaxId"><span id="cTaxIdLabel">統一編號</span></label>
+          <input id="cTaxId" type="text" placeholder="12345675" style="text-transform:uppercase">
+          <span class="err" id="cTaxIdErr" hidden>格式或檢查碼不符，請確認。仍可繼續產生單據。</span>
+        </div>
+        <div class="field">
+          <label for="cContact">聯絡人</label>
+          <input id="cContact" type="text" placeholder="陳小姐（會計）">
+        </div>
+        <div class="field">
+          <label for="cPhone">電話</label>
+          <input id="cPhone" type="tel" placeholder="02-1234-5678">
+        </div>
+        <div class="field">
+          <label for="cEmail">Email</label>
+          <input id="cEmail" type="email" placeholder="ap@example.com">
+        </div>
+        <div class="field">
+          <label for="cAddress">地址（選填）</label>
+          <input id="cAddress" type="text" placeholder="發票或單據寄送地址">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">3. 請款內容</p>
+      <div class="grid">
+        <div class="field wide">
+          <label for="pTitle">專案名稱</label>
+          <input id="pTitle" type="text" placeholder="官網改版與 CMS 建置">
+        </div>
+        <div class="field">
+          <label for="stage">請款期別</label>
+          <select id="stage">
+            <option value="deposit">訂金／預付款</option>
+            <option value="milestone">期中款</option>
+            <option value="final">尾款</option>
+            <option value="full" selected>全額請款</option>
+            <option value="monthly">月費／維護費</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="stageNote">期別說明（選填，會取代預設說明）</label>
+          <input id="stageNote" type="text" placeholder="例：第二階段（後台完成）驗收通過款">
+        </div>
+        <div class="field wide">
+          <label for="pScope">工作範圍／本期交付內容</label>
+          <textarea id="pScope" placeholder="本期已交付：首頁與內頁改版設計、CMS 後台建置、上線部署。"></textarea>
+        </div>
+      </div>
+
+      <h3>請款明細</h3>
+      <div class="items-scroll">
+        <table class="items">
+          <colgroup><col style="width:22%"><col><col style="width:9%"><col style="width:9%"><col style="width:14%"><col style="width:14%"><col style="width:2.6rem"></colgroup>
+          <thead>
+            <tr><th>品項</th><th>規格／說明</th><th class="num">數量</th><th>單位</th><th class="num">單價</th><th class="num">小計</th><th></th></tr>
+          </thead>
+          <tbody id="itemRows"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn small" id="btnAddRow">新增一列</button>
+        <span class="note">小計＝數量 × 單價。本期請款金額由明細合計，再依下一區的發票模式計算營業稅。</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">4. 金額與稅</p>
+      <div class="grid three">
+        <div class="field">
+          <label for="pTaxMode">發票與營業稅</label>
+          <select id="pTaxMode">
+            <option value="exclusive">未稅，外加營業稅</option>
+            <option value="inclusive">明細金額已含營業稅</option>
+            <option value="none" selected>個人接案，無發票</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="projectTotal">專案總額（選填）</label>
+          <input id="projectTotal" type="number" min="0" step="1" inputmode="numeric" placeholder="120000">
+          <span class="hint">分期請款時填，單上會印本期／累計／尚未請款。</span>
+        </div>
+        <div class="field">
+          <label for="paidToDate">本期之前已請款累計（選填）</label>
+          <input id="paidToDate" type="number" min="0" step="1" inputmode="numeric" placeholder="36000">
+        </div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <dl>
+          <div><dt>明細小計 <small id="r4-sub-note"></small></dt><dd id="r4-sub">0</dd></div>
+          <div><dt>營業稅 <small id="r4-tax-note"></small></dt><dd id="r4-tax">0</dd></div>
+          <div><dt>本期請款金額</dt><dd id="r4-total">0</dd></div>
+          <div><dt>尚未請款</dt><dd id="r4-left">－</dd></div>
+        </dl>
+        <p class="basis" id="r4-basis"></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">5. 扣繳與實拿（個人接案）</p>
+      <div class="switches">
+        <label>
+          <input type="checkbox" id="withholdOn">
+          <span>本期由甲方代扣所得稅與二代健保補充保費</span>
+          <span class="desc">甲方型態選「公司／行號」時自動啟用。個人對個人付款沒有扣繳義務，通常不用開。</span>
+        </label>
+      </div>
+      <div id="withWrap" hidden>
+        <div class="grid three" style="margin-top:1rem">
+          <div class="field">
+            <label for="withCategory">所得類別</label>
+            <select id="withCategory">
+              <option value="9A" selected>9A 執行業務所得</option>
+              <option value="9B">9B 稿費（含演講費、顧問費）</option>
+              <option value="50">50 薪資所得（兼職、臨時人員）</option>
+              <option value="92">92 其他所得</option>
+            </select>
+            <span class="hint">公司戶憑發票全額付款、不辦扣繳時，把類別選 92，稅與補充保費都會歸零。</span>
+          </div>
+          <div class="field">
+            <label for="withResidency">身分別</label>
+            <select id="withResidency">
+              <option value="local" selected>本國籍</option>
+              <option value="foreign183">外國籍・在台居留滿 183 天</option>
+              <option value="foreignUnder183">外國籍・在台居留未滿 183 天</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>健保與補充保費身分</label>
+            <div class="radio-row">
+              <label><input type="radio" name="nhi" value="normal" checked> 一般被保險人</label>
+              <label><input type="radio" name="nhi" value="union"> 職業工會加保</label>
+              <label><input type="radio" name="nhi" value="none"> 非健保被保險人</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="result" aria-live="polite">
+          <dl>
+            <div><dt>本期請款金額</dt><dd id="r5-gross">0</dd></div>
+            <div><dt>代扣所得稅 <small id="r5-rate"></small></dt><dd id="r5-tax">0</dd></div>
+            <div><dt>二代健保補充保費 <small id="r5-supp-rate"></small></dt><dd id="r5-supp">0</dd></div>
+            <div><dt>預計實際入帳</dt><dd id="r5-net">0</dd></div>
+          </dl>
+          <p class="basis" id="r5-basis"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">6. 發票與附件</p>
+      <div class="grid">
+        <div class="field">
+          <label for="invoiceNo">發票號碼（選填）</label>
+          <input id="invoiceNo" type="text" placeholder="AB-12345678" style="text-transform:uppercase">
+          <span class="hint">個人接案沒有統編、開不出發票時留空：本單與勞務報酬單就是甲方入帳與列單申報的憑證。</span>
+        </div>
+        <div class="field">
+          <label for="imgSign">簽章圖檔（選填）</label>
+          <input id="imgSign" type="file" accept="image/*">
+          <span class="hint">在瀏覽器內縮到最長邊 1000px 再嵌進單據簽章欄，不會上傳。未上傳就留白給你手簽。</span>
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button type="button" class="btn" id="btnClearImg">清除簽章圖</button>
+        </div>
+      </div>
+    </section>
+  </form>
+
+  <section class="section" id="preview-section">
+    <p class="section-label">7. 單據預覽</p>
+    <h2>A4 一頁，可直接列印或存成 PDF</h2>
+    <div class="actions">
+      <button type="button" class="btn primary" id="btnPrint">下載 PDF（列印）</button>
+      <button type="button" class="btn" id="btnHandoff">帶到下一張單</button>
+      <button type="button" class="btn" id="btnLoadHandoff">帶入上一張單</button>
+      <button type="button" class="btn small" id="btnSaveProfile">記住我的資料</button>
+      <button type="button" class="btn small" id="btnClearLocal">清除本機資料</button>
+      <button type="button" class="btn small" id="btnExport">匯出 JSON</button>
+      <label class="btn small" for="importJson">匯入 JSON</label>
+      <input id="importJson" type="file" accept="application/json,.json" hidden>
+    </div>
+    <div class="actions" style="margin-top:.6rem">
+      <span class="status" id="status"></span>
+      <span class="note">列印對話框選「目的地／印表機 → 另存為 PDF」，紙張 A4、邊界預設即可。只有單據本體會印出來。</span>
+    </div>
+    <div id="print-area">
+      <div class="sheet-wrap">
+        <div id="sheet">
+          <div class="sheet-page">
+            <div class="doc-title">請 款 單</div>
+            <div class="doc-sub">INVOICE / STATEMENT OF ACCOUNT</div>
+            <div class="doc-meta">
+              <span>請款單號：<span class="money" id="s-doc-no"></span></span>
+              <span>開立日期：<span id="s-doc-date"></span></span>
+            </div>
+
+            <table>
+              <colgroup><col style="width:17mm"><col style="width:58mm"><col style="width:58mm"><col></colgroup>
+              <tbody>
+                <tr>
+                  <td class="rowhead">單據</td>
+                  <td colspan="3" class="rule" id="s-refs"></td>
+                </tr>
+                <tr>
+                  <td class="rowhead" rowspan="2">甲　方</td>
+                  <td>名稱：<span class="val" id="s-c-name"></span></td>
+                  <td><span id="s-c-id-label">統一編號</span>：<span class="val" id="s-c-taxid"></span></td>
+                  <td>聯絡人：<span class="val" id="s-c-contact"></span></td>
+                </tr>
+                <tr>
+                  <td>電話：<span class="val" id="s-c-phone"></span></td>
+                  <td colspan="2">Email：<span class="val" id="s-c-email"></span>　地址：<span class="val" id="s-c-address"></span></td>
+                </tr>
+                <tr>
+                  <td class="rowhead" rowspan="2">乙　方</td>
+                  <td>名稱：<span class="val" id="s-v-name"></span></td>
+                  <td><span id="s-v-id-label">統一編號／身分證字號</span>：<span class="val" id="s-v-taxid"></span></td>
+                  <td>電話：<span class="val" id="s-v-phone"></span></td>
+                </tr>
+                <tr>
+                  <td>Email：<span class="val" id="s-v-email"></span></td>
+                  <td colspan="2">地址：<span class="val" id="s-v-address"></span></td>
+                </tr>
+                <tr>
+                  <td class="rowhead">專案</td>
+                  <td colspan="3">名稱：<span class="val" style="min-width:110mm" id="s-p-title"></span></td>
+                </tr>
+                <tr>
+                  <td class="rowhead">期別</td>
+                  <td colspan="3"><b id="s-stage"></b>　<span class="rule" id="s-stage-note"></span></td>
+                </tr>
+                <tr id="s-scope-row">
+                  <td class="rowhead">本期<br>範圍</td>
+                  <td colspan="3" class="rule" id="s-scope" style="white-space:pre-line"></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table style="margin-top:2mm">
+              <colgroup><col style="width:34mm"><col><col style="width:16mm"><col style="width:14mm"><col style="width:26mm"><col style="width:28mm"></colgroup>
+              <thead>
+                <tr><th>品項</th><th>說明</th><th class="num">數量</th><th>單位</th><th class="num">單價</th><th class="num">小計</th></tr>
+              </thead>
+              <tbody id="s-items"></tbody>
+            </table>
+
+            <table style="margin-top:2mm">
+              <colgroup><col style="width:17mm"><col><col style="width:34mm"></colgroup>
+              <tbody id="s-amounts"></tbody>
+            </table>
+
+            <table style="margin-top:2mm" id="s-wh" hidden>
+              <colgroup><col style="width:17mm"><col><col style="width:34mm"></colgroup>
+              <tbody id="s-wh-body"></tbody>
+            </table>
+
+            <table style="margin-top:2mm">
+              <colgroup><col style="width:17mm"><col style="width:58mm"><col style="width:42mm"><col></colgroup>
+              <tbody>
+                <tr>
+                  <td class="rowhead" rowspan="2">匯款</td>
+                  <td>銀行：<span class="val" id="s-bank"></span></td>
+                  <td>分行：<span class="val" id="s-bank-branch"></span></td>
+                  <td>戶名：<span class="val" id="s-bank-holder"></span></td>
+                </tr>
+                <tr>
+                  <td colspan="3">帳號：<span class="val" style="min-width:50mm" id="s-bank-account"></span>　<span class="rule">匯款手續費由甲方負擔；匯款後請告知日期與後五碼，以便對帳。</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table style="margin-top:2mm">
+              <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+              <tbody>
+                <tr><th>乙方（請款方）簽章</th><th>甲方（付款方）確認</th></tr>
+                <tr>
+                  <td><div class="sign-box"><img id="s-img-sign" alt="" hidden></div></td>
+                  <td><div class="sign-box"></div></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p class="foot">本單金額與已簽回報價單一致；請於付款期限內完成付款，逾期得依約定計息。單據內容如有疑義，請於收到後 7 日內提出，逾期視為確認。本單僅供請款對帳使用，稅務申報仍以雙方實際憑證為準。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">請款單怎麼寫</p>
+    <h2>一張能讓會計直接入帳的請款單</h2>
+    <div class="notes">
+      <table class="ref">
+        <thead><tr><th>欄位</th><th>為什麼需要</th><th>常見寫法</th></tr></thead>
+        <tbody>
+          <tr><td>請款單號</td><td>對方傳票與你自己的帳務都靠這個編號對應</td><td>INV-20260918-01，日期加流水號</td></tr>
+          <tr><td>開立日期與付款期限</td><td>逾期利息、催款節奏都從這兩個日期算</td><td>開立日起 30 天，單上直接印到期日</td></tr>
+          <tr><td>對應報價單號</td><td>證明金額來自已確認的報價，減少殺價空間</td><td>QT-20260901-01</td></tr>
+          <tr><td>雙方名稱與統編／身分證字號</td><td>公司入帳與列單申報需要，寫錯會被退單</td><td>公司填統編，個人填身分證字號</td></tr>
+          <tr><td>請款期別</td><td>分期收款時說明這筆是訂金、期中款還是尾款</td><td>訂金 30%／第二階段驗收款／尾款</td></tr>
+          <tr><td>明細與小計</td><td>讓對方看得懂錢花在哪，驗收爭議時有依據</td><td>品項、說明、數量、單位、單價、小計</td></tr>
+          <tr><td>營業稅</td><td>有發票才有稅額；沒發票要講清楚</td><td>未稅外加 <span id="x-btax"></span>、金額已含稅、或無發票</td></tr>
+          <tr><td>本期請款金額與國字大寫</td><td>大寫防止數字被改，銀行與會計都認</td><td>新台幣貳萬貳仟零伍拾元整</td></tr>
+          <tr><td>匯款資訊</td><td>少了這一段，會計就得再寫信問一次</td><td>銀行代號、分行、帳號、戶名四項都要</td></tr>
+          <tr><td>簽章</td><td>個人接案時是最基本的形式要件</td><td>簽名檔或印章圖，或列印後手簽</td></tr>
+        </tbody>
+      </table>
+
+      <h3>請款單、發票、勞務報酬單的關係</h3>
+      <ul>
+        <li><b>請款單不是發票。</b>請款單是你向客戶請求付款的通知，發票是稅法上的憑證。有統編的工作室開發票，營業稅按 <span id="x-btax-2"></span> 外加；沒有統編的個人開不出發票。</li>
+        <li><b>個人接案沒有發票怎麼請款。</b>用這張請款單請款，甲方以「勞務報酬」入帳並列單申報。9A 執行業務所得單次給付達 <span id="x-prof-th"></span> 元，甲方要代扣 <span id="x-prof-rate"></span> 所得稅；單次給付達 <span id="x-supp-min"></span> 元另扣 <span id="x-supp-rate"></span> 二代健保補充保費。</li>
+        <li><b>公司戶入帳需要什麼。</b>多數公司會要請款單、勞務報酬單（含身分證字號、地址、匯款帳戶），部分會要身分證影本。50 薪資所得的門檻不同：所得稅要單次給付達 <span id="x-salary-th"></span> 元才扣 <span id="x-salary-rate"></span>，但補充保費只要達 <span id="x-min-wage"></span> 元（<span id="x-year"></span> 年度基本工資）就要扣。</li>
+        <li><b>外國籍未滿 183 天</b>另按非居住者規定辦理，一般扣繳率 <span id="x-nr-rate"></span>，且須於給付日起 10 日內申報。</li>
+        <li>要一併產出勞務報酬單，到<a href="/tools/labor-form/">勞報單產生器</a>，在那邊按「帶入上一張單」就會接上這張單的雙方資料。</li>
+      </ul>
+
+      <h3>分期請款的實務寫法</h3>
+      <ul>
+        <li><b>訂金：</b>合約簽訂後請款，款項到帳才排入製作排程，金額通常是總額的 30% 至 50%。</li>
+        <li><b>期中款：</b>綁定可驗收的里程碑（例如後台功能完成、設計定稿），單上寫清楚是哪一個階段。</li>
+        <li><b>尾款：</b>交付並驗收完成後請款，付款後再移交原始檔與著作權利，這一句要跟合約一致。</li>
+        <li><b>月費：</b>維護與支援按月請款，單上寫明服務期間（例如 2026/09/01 至 09/30）與包含的工時或次數。</li>
+      </ul>
+
+      <h3>催款節奏</h3>
+      <ul>
+        <li>到期前 3 天，寄一封簡短提醒信，附上這張請款單與匯款資訊。</li>
+        <li>到期日當天沒入帳，直接問對方「是卡在流程哪一段」，並確認需不需要補件。</li>
+        <li>逾期 7 天起改用電話聯絡經辦與主管，同時依合約提出遲延利息，後續工作暫停。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">接下來</p>
+    <ul class="tool-list">
+      <li>
+        <span class="name">勞報單產生器</span>
+        <span class="desc">公司戶要勞務報酬單時用這張，按「帶入上一張單」可帶入雙方資料與金額。</span>
+        <a href="/tools/labor-form/">產生勞報單</a>
+      </li>
+      <li>
+        <span class="name">報價單產生器</span>
+        <span class="desc">先報價再請款。報價單號填回本頁的「對應報價單號」，對帳就接起來了。</span>
+        <a href="/tools/quotation/">產生報價單</a>
+      </li>
+      <li>
+        <span class="name">合約產生器</span>
+        <span class="desc">分期付款、驗收與智慧財產權條款寫進合約，請款才有依據。</span>
+        <a href="/tools/contract/">產生合約</a>
+      </li>
+    </ul>
+    <div class="cta" style="margin-top:1.4rem">
+      <b>接案行政想再省一點時間，可以找我們。</b>
+      案件、報價、請款、扣繳這一串通常不缺表單，缺的是把資料接起來：案源整理、單據批次產生、到期提醒與對帳。這類工具我們照件做，原始碼與文件完整交接。<a href="/#contact">聯絡方式在首頁</a>，或看<a href="/services/">服務項目與報價</a>。
+    </div>
+    <p class="note" style="margin-top:1.2rem">本頁內容與試算結果僅供參考，不構成法律或稅務意見。個案請洽會計師、記帳士或稅務代理人確認。</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>&copy; 2026 歐兜拜 ootobai</span>
+  <span><a href="/work/">作品</a> · <a href="/services/">服務</a> · <a href="/tools/">免費工具</a> · <a href="https://me.ootob.ai/">Jack 的個人頁</a></span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  if (!window.DocKit || !window.TWTax) {
+    console.error("payment: /tools/assets/doc-kit.js 或 tw-tax.js 未載入");
+    return;
+  }
+  var D = window.DocKit, T = window.TWTax, P = T.PARAMS;
+  var $ = D.$, $$ = D.$$;
+  var form = $("form");
+
+  var PROFILE_KEYS = ["vName", "vTaxId", "vPhone", "vEmail", "vAddress",
+    "vBankName", "vBankBranch", "vBankAccount", "vBankHolder"];
+
+  var STAGE = {
+    deposit: ["訂金／預付款", "合約簽訂後收取，款項到帳後排入製作排程。"],
+    milestone: ["期中款", "約定里程碑交付並驗收通過後收取。"],
+    final: ["尾款", "全部交付並驗收完成後收取，付款後移交原始檔與著作權利。"],
+    full: ["全額請款", "本案一次請款，不分期。"],
+    monthly: ["月費／維護費", "當期維護、支援與小幅修改費用，按月計收。"]
+  };
+
+  /* ---------- 小工具 ---------- */
+  var ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
+  function esc(s) {
+    return String(s === null || s === undefined ? "" : s).replace(/[&<>"]/g, function (c) { return ESC[c]; });
+  }
+  function num(v) { var n = Number(v); return isFinite(n) ? n : 0; }
+  function val(id) { var el = $(id); return el ? el.value.trim() : ""; }
+  function set(id, text) { var el = $(id); if (el) el.textContent = text; }
+  function radio(name) {
+    var el = form.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+  }
+  function toggleErr(id, show) { var el = $(id); if (el) el.hidden = !show; }
+
+  /* ---------- 明細列 ---------- */
+  var ROW_HTML =
+    '<td><input class="i-name" type="text" placeholder="品項名稱"></td>' +
+    '<td><textarea class="i-spec" rows="1" placeholder="規格／說明"></textarea></td>' +
+    '<td><input class="i-qty num" type="number" min="0" step="1" inputmode="numeric"></td>' +
+    '<td><input class="i-unit" type="text"></td>' +
+    '<td><input class="i-price num" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>' +
+    '<td class="num" data-sub>0</td>' +
+    '<td><button type="button" class="row-del" aria-label="刪除這一列" title="刪除這一列">&times;</button></td>';
+
+  function addRow(item) {
+    var it = item || {};
+    var tr = document.createElement("tr");
+    tr.innerHTML = ROW_HTML;
+    tr.querySelector(".i-name").value = it.name || "";
+    tr.querySelector(".i-spec").value = it.spec || "";
+    tr.querySelector(".i-qty").value = it.qty === undefined || it.qty === "" ? 1 : it.qty;
+    tr.querySelector(".i-unit").value = it.unit || "式";
+    tr.querySelector(".i-price").value = it.price === undefined || it.price === "" ? "" : it.price;
+    tr.querySelector(".row-del").addEventListener("click", function () {
+      tr.remove();
+      if (!$$("#itemRows tr").length) { addRow(); }
+      render();
+    });
+    $("itemRows").appendChild(tr);
+    return tr;
+  }
+
+  function setItems(items) {
+    $("itemRows").innerHTML = "";
+    (items || []).forEach(addRow);
+    while ($$("#itemRows tr").length < 1) { addRow(); }
+  }
+
+  function readItems() {
+    return $$("#itemRows tr").map(function (tr) {
+      return {
+        name: tr.querySelector(".i-name").value.trim(),
+        spec: tr.querySelector(".i-spec").value.trim(),
+        qty: num(tr.querySelector(".i-qty").value),
+        unit: tr.querySelector(".i-unit").value.trim(),
+        price: num(tr.querySelector(".i-price").value)
+      };
+    });
+  }
+
+  /* ---------- 渲染 ---------- */
+  function render() {
+    var items = readItems();
+    var rows = $$("#itemRows tr");
+    var subtotal = 0;
+    items.forEach(function (it, i) {
+      var sub = Math.round(it.qty * it.price);
+      subtotal += sub;
+      rows[i].querySelector("[data-sub]").textContent = T.fmt(sub);
+    });
+
+    var mode = val("pTaxMode");
+    var bt = T.businessTax(subtotal, mode);
+    var total = bt.total;
+
+    var docDate = val("docDate");
+    var payDays = $("tPayDays").value === "" ? 0 : Math.max(0, Math.round(num($("tPayDays").value)));
+    var due = docDate ? D.addDays(docDate, payDays) : "";
+    $("dueHint").textContent = due ? "付款到期日：" + D.ad(due) + "（開立日起 " + payDays + " 天）" : "填開立日期後顯示到期日。";
+
+    /* 甲乙方標籤與軟驗證 */
+    var cType = radio("cType") || "company";
+    var cIdLabel = cType === "company" ? "統一編號" : "身分證字號";
+    set("cTaxIdLabel", cIdLabel);
+    set("s-c-id-label", cIdLabel);
+    var cId = val("cTaxId").toUpperCase();
+    toggleErr("cTaxIdErr", !!cId && !(cType === "company" ? D.validTaxId(cId) : D.validTwId(cId)));
+    var vId = val("vTaxId").toUpperCase();
+    toggleErr("vTaxIdErr", !!vId && !(/^[0-9]{8}$/.test(vId) ? D.validTaxId(vId) : D.validTwId(vId)));
+    set("s-v-id-label", /^[0-9]{8}$/.test(vId) ? "統一編號" : "身分證字號");
+
+    /* 第 4 區試算 */
+    var projectTotal = num(val("projectTotal"));
+    var paid = num(val("paidToDate"));
+    var cumulative = paid + total;
+    var left = projectTotal ? projectTotal - cumulative : 0;
+    set("r4-sub", T.fmt(bt.base));
+    set("r4-sub-note", mode === "inclusive" ? "（自含稅金額還原）" : "（未稅）");
+    set("r4-tax", T.fmt(bt.tax));
+    set("r4-tax-note", mode === "none" ? "（無發票）" : T.pct(P.businessTaxRate) + (mode === "inclusive" ? " 內含" : " 外加"));
+    set("r4-total", T.fmt(total));
+    set("r4-left", projectTotal ? T.fmt(left) : "－");
+    set("r4-basis", projectTotal
+      ? "專案總額 " + T.fmt(projectTotal) + " 元；本期之前已請款 " + T.fmt(paid) + " 元，含本期累計 " + T.fmt(cumulative) + " 元，尚未請款 " + T.fmt(left) + " 元。"
+      : "填了「專案總額」就會顯示累計與剩餘，並印在單據上。營業稅率與扣繳門檻皆取自 " + P.year + " 年度參數。");
+
+    /* 第 5 區扣繳：扣繳以未稅報酬計算（營業稅不是所得），實際入帳＝本期請款金額減扣繳 */
+    var whOn = $("withholdOn").checked || cType === "company";
+    $("withWrap").hidden = !whOn;
+    var wh = null, netIn = total;
+    if (whOn) {
+      wh = T.withhold(bt.base, val("withCategory"), val("withResidency"), radio("nhi") || "normal");
+      netIn = total - wh.tax - wh.supp;
+      set("r5-gross", T.fmt(total));
+      set("r5-tax", T.fmt(wh.tax));
+      set("r5-rate", T.pct(wh.taxRate));
+      set("r5-supp", T.fmt(wh.supp));
+      set("r5-supp-rate", T.pct(P.suppRate));
+      set("r5-net", T.fmt(netIn));
+      set("r5-basis", (mode === "none" ? "" : "扣繳以未稅報酬 " + T.fmt(bt.base) + " 元計算，營業稅不列入所得。") +
+        wh.taxNote + " " + wh.suppNote);
+    }
+
+    /* ---------- 單據 ---------- */
+    set("s-doc-no", val("docNo") || "＿＿＿＿＿＿");
+    set("s-doc-date", D.ad(docDate));
+
+    var refs = [];
+    if (val("refQuoteNo")) { refs.push("對應報價單號：" + val("refQuoteNo")); }
+    if (val("pCaseId")) { refs.push("案件編號：" + val("pCaseId")); }
+    if (val("invoiceNo")) { refs.push("發票號碼：" + val("invoiceNo").toUpperCase()); }
+    refs.push("付款期限：開立日起 " + payDays + " 天，到期日 " + D.ad(due, "＿＿＿＿ 年 ＿＿ 月 ＿＿ 日"));
+    set("s-refs", refs.join("　｜　"));
+
+    set("s-c-name", val("cName"));
+    set("s-c-taxid", cId);
+    set("s-c-contact", val("cContact"));
+    set("s-c-phone", val("cPhone"));
+    set("s-c-email", val("cEmail"));
+    set("s-c-address", val("cAddress"));
+    set("s-v-name", val("vName"));
+    set("s-v-taxid", vId);
+    set("s-v-phone", val("vPhone"));
+    set("s-v-email", val("vEmail"));
+    set("s-v-address", val("vAddress"));
+
+    set("s-p-title", val("pTitle"));
+    var stage = STAGE[val("stage")] || STAGE.full;
+    set("s-stage", stage[0]);
+    set("s-stage-note", val("stageNote") || stage[1]);
+    var scope = val("pScope");
+    $("s-scope-row").hidden = !scope;
+    set("s-scope", scope);
+
+    /* 明細 */
+    var body = items.filter(function (it) { return it.name || it.spec || it.price; });
+    if (!body.length) { body = [{ name: "", spec: "", qty: 0, unit: "", price: 0 }]; }
+    $("s-items").innerHTML = body.map(function (it) {
+      var sub = Math.round(it.qty * it.price);
+      return "<tr><td>" + esc(it.name) + "</td><td class=\"rule\">" + esc(it.spec) +
+        "</td><td class=\"num\">" + (it.qty ? esc(it.qty) : "") +
+        "</td><td>" + esc(it.unit) +
+        "</td><td class=\"num money\">" + (it.price ? T.fmt(it.price) : "") +
+        "</td><td class=\"num money\">" + (sub ? T.fmt(sub) : "") + "</td></tr>";
+    }).join("");
+
+    /* 金額區 */
+    var amt = [];
+    if (mode === "inclusive") {
+      amt.push(["明細合計（含稅）", T.fmt(subtotal)]);
+      amt.push(["內含營業稅 " + T.pct(P.businessTaxRate) + "（未稅 " + T.fmt(bt.base) + " 元）", T.fmt(bt.tax)]);
+    } else if (mode === "exclusive") {
+      amt.push(["明細小計（未稅）", T.fmt(bt.base)]);
+      amt.push(["營業稅 " + T.pct(P.businessTaxRate) + "（外加）", T.fmt(bt.tax)]);
+    } else {
+      amt.push(["明細小計", T.fmt(subtotal)]);
+      amt.push(["個人接案，未開立發票，本單為請款憑證", "－"]);
+    }
+    amt.push(["<b>本期請款金額</b>　新台幣 <b>" + esc(D.chineseAmount(total)) + "</b> 元整", "<b>" + T.fmt(total) + "</b>"]);
+    if (projectTotal) {
+      amt.push(["專案總額", T.fmt(projectTotal)]);
+      amt.push(["含本期累計已請款", T.fmt(cumulative)]);
+      amt.push(["尚未請款", T.fmt(left)]);
+    }
+    $("s-amounts").innerHTML = amt.map(function (r, i) {
+      return "<tr>" + (i === 0 ? '<td class="rowhead" rowspan="' + amt.length + '">金額</td>' : "") +
+        "<td>" + r[0] + "</td><td class=\"num money\">" + r[1] + "</td></tr>";
+    }).join("");
+
+    /* 扣繳區 */
+    $("s-wh").hidden = !whOn;
+    if (whOn && wh) {
+      var whRows = [
+        ["代扣所得稅（" + (T.CATEGORY_NAME[val("withCategory")] || "") + "，" + T.pct(wh.taxRate) +
+          (mode === "none" ? "" : "，以未稅報酬 " + T.fmt(bt.base) + " 元計算") + "）", T.fmt(wh.tax)],
+        ["二代健保補充保費（" + T.pct(P.suppRate) + "）", T.fmt(wh.supp)],
+        ["<b>預計實際入帳</b>", "<b>" + T.fmt(netIn) + "</b>"],
+        ["<span class=\"rule\">代扣稅費由甲方依規定辦理，實際入帳金額以扣繳後為準。</span>", ""]
+      ];
+      $("s-wh-body").innerHTML = whRows.map(function (r, i) {
+        return "<tr>" + (i === 0 ? '<td class="rowhead" rowspan="' + whRows.length + '">扣繳</td>' : "") +
+          "<td>" + r[0] + "</td><td class=\"num money\">" + r[1] + "</td></tr>";
+      }).join("");
+    }
+
+    set("s-bank", val("vBankName"));
+    set("s-bank-branch", val("vBankBranch"));
+    set("s-bank-account", val("vBankAccount"));
+    set("s-bank-holder", val("vBankHolder") || val("vName"));
+  }
+
+  /* ---------- 說明區的稅務數字（一律取自 TWTax.PARAMS） ---------- */
+  function fillRefs() {
+    set("x-year", P.year);
+    var modeOpts = $("pTaxMode").options;
+    modeOpts[0].textContent = "未稅，外加 " + T.pct(P.businessTaxRate) + " 營業稅";
+    modeOpts[1].textContent = "明細金額已含 " + T.pct(P.businessTaxRate) + " 營業稅";
+    set("x-btax", T.pct(P.businessTaxRate));
+    set("x-btax-2", T.pct(P.businessTaxRate));
+    set("x-prof-th", T.fmt(P.profThreshold));
+    set("x-prof-rate", T.pct(P.profRate));
+    set("x-supp-min", T.fmt(P.suppProfMin));
+    set("x-supp-rate", T.pct(P.suppRate));
+    set("x-salary-th", T.fmt(P.salaryThreshold));
+    set("x-salary-rate", T.pct(P.salaryRate));
+    set("x-min-wage", T.fmt(P.minWage));
+    set("x-nr-rate", T.pct(P.nrRate));
+  }
+
+  /* ---------- 狀態訊息 ---------- */
+  var statusTimer = 0;
+  function status(msg) {
+    set("status", msg);
+    if (statusTimer) { clearTimeout(statusTimer); }
+    statusTimer = setTimeout(function () { set("status", ""); }, 8000);
+  }
+
+  /* ---------- 按鈕 ---------- */
+  function signSrc() {
+    var img = $("s-img-sign");
+    return img && !img.hidden ? img.src : "";
+  }
+
+  function meta() {
+    var items = readItems();
+    var subtotal = items.reduce(function (a, it) { return a + Math.round(it.qty * it.price); }, 0);
+    var bt = T.businessTax(subtotal, val("pTaxMode"));
+    return {
+      docNo: val("docNo"), docDate: val("docDate"), refQuoteNo: val("refQuoteNo"),
+      stage: val("stage"), stageNote: val("stageNote"), invoiceNo: val("invoiceNo"),
+      subtotal: bt.base, tax: bt.tax, total: bt.total, taxMode: val("pTaxMode")
+    };
+  }
+
+  $("btnCase").addEventListener("click", function () {
+    var c = D.parseCase($("caseText").value);
+    if (!c) { set("caseStatus", "讀不到案件資料，請確認貼上的是 case-radar 的 JSON、Tasker 網址或 TK-id。"); return; }
+    if (c.title) { $("pTitle").value = c.title; }
+    if (c.caseId) { $("pCaseId").value = c.caseId; }
+    if (c.url) { $("pCaseUrl").value = c.url; }
+    if (c.description) { $("pScope").value = c.description.slice(0, 300); }
+    var filled = [];
+    if (c.budget) {
+      var first = $$("#itemRows tr")[0] || addRow();
+      first.querySelector(".i-name").value = c.title || "專案費用";
+      first.querySelector(".i-qty").value = 1;
+      first.querySelector(".i-unit").value = "式";
+      first.querySelector(".i-price").value = c.budget;
+      filled.push("預算 " + T.fmt(c.budget) + " 元已填入第一列明細單價");
+    } else if (c.budgetRaw) {
+      filled.push("預算原文「" + c.budgetRaw + "」無法轉成數字，請自行填明細");
+    }
+    render();
+    set("caseStatus", "已匯入 " + (c.caseId || "案件") + (filled.length ? "，" + filled.join("；") : "") + "。");
+  });
+
+  $("btnAddRow").addEventListener("click", function () { addRow(); render(); });
+
+  $("btnPrint").addEventListener("click", function () { D.print("payment_print"); });
+
+  $("btnHandoff").addEventListener("click", function () {
+    var ok = D.handoff.save({
+      kind: "payment",
+      shared: D.formState(form),
+      items: readItems(),
+      meta: meta()
+    });
+    status(ok
+      ? "已存到這台瀏覽器，可在勞報單／合約／報價單按「帶入上一張單」。"
+      : "寫入本機失敗，可能是瀏覽器隱私模式或空間不足，請改用「匯出 JSON」。");
+  });
+
+  $("btnLoadHandoff").addEventListener("click", function () {
+    var shared = D.handoff.shared();
+    if (!shared || !Object.keys(shared).length) { status("本機沒有上一張單的資料。請先在報價單或其他工具按「帶到下一張單」。"); return; }
+    // shared 含對方的 docNo／docDate，請款單要保留自己的單號與開立日期。
+    var myDocNo = val("docNo"), myDocDate = val("docDate");
+    D.setFormState(form, shared);
+    $("docNo").value = myDocNo || D.docNo("INV");
+    $("docDate").value = myDocDate || D.today();
+    var doc = D.handoff.doc("quotation") || D.handoff.doc("payment");
+    var n = 0;
+    if (doc && doc.items && doc.items.length) { setItems(doc.items); n = doc.items.length; }
+    if (doc && doc.kind === "quotation" && doc.meta && doc.meta.docNo && !val("refQuoteNo")) {
+      $("refQuoteNo").value = doc.meta.docNo;
+    }
+    render();
+    status("已帶入雙方與專案資料" + (n ? "，含 " + n + " 列明細" : "") + "。單號與開立日期保留本頁原值。");
+  });
+
+  $("btnSaveProfile").addEventListener("click", function () {
+    var ok = D.profile.save(form, PROFILE_KEYS);
+    status(ok ? "已記住乙方固定資料（名稱、統編、聯絡方式、匯款帳戶），下次開這頁自動帶入。" : "寫入本機失敗，請改用「匯出 JSON」。");
+  });
+
+  $("btnClearLocal").addEventListener("click", function () {
+    D.profile.clear();
+    D.handoff.clear();
+    status("已清除本機的固定資料與跨單據帶入資料。表單目前的內容不受影響。");
+  });
+
+  $("btnExport").addEventListener("click", function () {
+    D.downloadJson({
+      kind: "payment", v: 1, saved: new Date().toISOString(),
+      state: D.formState(form), items: readItems(), meta: meta(), sign: signSrc()
+    }, (val("docNo") || "payment") + ".json");
+    status("已下載 JSON。這個檔案可以用「匯入 JSON」還原，也方便存進案件資料夾。");
+  });
+
+  $("importJson").addEventListener("change", function (e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) { return; }
+    D.readJsonFile(file).then(function (data) {
+      if (!data || !data.state) { status("JSON 格式不符，找不到 state 欄位。"); return; }
+      D.setFormState(form, data.state);
+      if (data.items) { setItems(data.items); }
+      D.setImages(["s-img-sign"], data.sign || "");
+      render();
+      status("已匯入 JSON。");
+    }).catch(function () { status("JSON 讀取失敗，請確認檔案內容。"); });
+    e.target.value = "";
+  });
+
+  $("btnClearImg").addEventListener("click", function () {
+    $("imgSign").value = "";
+    D.setImages(["s-img-sign"], "");
+  });
+
+  D.bindImage("imgSign", ["s-img-sign"], 1000, function () { render(); });
+
+  /* ---------- 初始化 ---------- */
+  $("docDate").value = D.today();
+  $("docNo").value = D.docNo("INV");
+  $("tPayDays").value = 30;
+  setItems([{ unit: "式", qty: 1 }, { unit: "式", qty: 1 }]);
+  D.profile.apply(form);
+  fillRefs();
+  D.bind(form, render);
+  render();
+})();
+</script>
+</body>
+</html>

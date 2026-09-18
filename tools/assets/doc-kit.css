@@ -1,0 +1,162 @@
+/*
+ * doc-kit.css — /tools/ 單據產生器共用樣式
+ * 螢幕：與 ootob.ai 其他頁一致的排版。列印：A4 只輸出 #print-area。
+ * 版面約定：main > section#preview-section > div#print-area > .sheet-wrap > #sheet
+ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --text: #1a1a1a;
+  --text-secondary: #555;
+  --bg: #fafaf8;
+  --border: #e0ddd8;
+  --accent: #1f7a4d;
+  --warn: #9a3412;
+  --max-w: 860px;
+}
+
+body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); background: var(--bg); line-height: 1.9; font-size: 17px; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+
+.site-header { max-width: var(--max-w); margin: 0 auto; padding: 2.5rem 1.5rem 0; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.site-header .logo { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; letter-spacing: .08em; text-decoration: none; color: var(--text-secondary); text-transform: uppercase; }
+.site-header nav { display: flex; gap: 1.2rem; font-family: 'Inter', 'Noto Sans TC', sans-serif; font-size: 13px; color: var(--text-secondary); }
+.site-header nav a { text-decoration: none; }
+
+main { max-width: var(--max-w); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+h1 { font-size: 1.7rem; font-weight: 700; line-height: 1.35; margin-bottom: .5rem; text-wrap: balance; }
+.lede { color: var(--text-secondary); font-size: 16px; }
+
+.privacy { margin-top: 1.2rem; border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: .9rem 1.1rem; font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+.privacy b { color: var(--text); }
+
+.section { margin-top: 2.8rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.section-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1.1rem; }
+h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: .8rem; }
+h3 { font-size: 1rem; font-weight: 700; margin: 1.6rem 0 .4rem; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; }
+.grid.three { grid-template-columns: repeat(3, 1fr); }
+.field { display: flex; flex-direction: column; gap: .2rem; }
+.field.wide { grid-column: 1 / -1; }
+.field label { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.field input, .field select, .field textarea { font-family: inherit; font-size: 15px; color: var(--text); background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: .5rem .6rem; line-height: 1.5; width: 100%; }
+.field textarea { min-height: 5rem; resize: vertical; line-height: 1.7; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.field .hint { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.field .err { font-size: 12px; color: var(--warn); line-height: 1.6; }
+
+.radio-row { display: flex; flex-wrap: wrap; gap: .4rem .9rem; padding-top: .2rem; }
+.radio-row label { display: inline-flex; align-items: center; gap: .3rem; font-size: 14px; color: var(--text); }
+.radio-row input { width: auto; }
+
+.switches { display: grid; gap: .5rem; }
+.switches label { display: grid; grid-template-columns: auto 1fr; gap: .1rem .6rem; align-items: start; font-size: 15px; padding: .5rem .7rem; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; }
+.switches label input { margin-top: .45rem; }
+.switches label span.desc { grid-column: 2; font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+.result { margin-top: 1.4rem; border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 1rem 1.2rem; }
+.result dl { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem 1rem; }
+.result dt { font-size: 13px; color: var(--text-secondary); }
+.result dd { font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 500; line-height: 1.4; }
+.result dd small { font-family: 'Noto Sans TC', sans-serif; font-size: 12px; color: var(--text-secondary); font-weight: 400; }
+.result .basis { margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-secondary); line-height: 1.8; }
+
+.actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; align-items: center; }
+.btn { display: inline-block; padding: .55rem 1.1rem; border-radius: 6px; font-size: 14px; font-family: inherit; text-decoration: none; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; }
+.btn.primary { background: var(--text); color: #fff; }
+.btn.small { padding: .35rem .8rem; font-size: 13px; }
+.actions .note, .note { font-size: 13px; color: var(--text-secondary); }
+.status { font-size: 13px; color: var(--accent); }
+
+/* 明細列編輯（報價／請款） */
+table.items { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.items th { text-align: left; font-size: 12px; color: var(--text-secondary); font-weight: 500; padding: 0 .3rem .3rem; }
+table.items td { padding: .2rem .3rem; vertical-align: top; }
+table.items input, table.items textarea, table.items select { font-family: inherit; font-size: 14px; width: 100%; border: 1px solid var(--border); border-radius: 5px; padding: .4rem .5rem; background: #fff; color: var(--text); }
+table.items textarea { min-height: 2.4rem; resize: vertical; }
+table.items .num { text-align: right; }
+table.items .row-del { border: 1px solid var(--border); background: #fff; border-radius: 5px; width: 1.9rem; height: 1.9rem; cursor: pointer; color: var(--text-secondary); font-size: 14px; }
+
+.notes { font-size: 15px; line-height: 1.9; color: var(--text-secondary); }
+.notes ul { list-style: none; }
+.notes li { padding-left: 1.1rem; position: relative; }
+.notes li::before { content: ""; position: absolute; left: 0; top: .85rem; width: .4rem; height: .4rem; border-radius: 50%; background: var(--accent); }
+.notes b, .notes strong { color: var(--text); }
+
+table.ref { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+table.ref th, table.ref td { border: 1px solid var(--border); padding: .45rem .6rem; text-align: left; line-height: 1.6; vertical-align: top; }
+table.ref th { background: #f5f4f1; font-weight: 700; }
+
+.cta { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 1.3rem 1.5rem; font-size: 15px; line-height: 1.9; }
+.cta b { display: block; margin-bottom: .3rem; }
+
+.tool-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.tool-list li { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
+.tool-list .name { font-weight: 700; }
+.tool-list .desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+.tool-list a { font-size: 13px; margin-top: auto; padding-top: .6rem; }
+.tool-list a::after { content: " →"; }
+
+.site-footer { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem 3rem; font-family: 'Inter', 'Noto Sans TC', sans-serif; font-size: 13px; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.site-footer a { text-decoration: none; }
+
+/* ---------- A4 單據 ---------- */
+.sheet-wrap { margin-top: 1.2rem; overflow-x: auto; background: #f0efec; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+#sheet { width: 186mm; margin: 0 auto; background: #fff; color: #000; font-size: 10.5pt; line-height: 1.7; font-family: 'Noto Sans TC', sans-serif; }
+#sheet .sheet-page + .sheet-page { margin-top: 6mm; padding-top: 6mm; border-top: 1px dashed #999; }
+#sheet .doc-title { text-align: center; font-size: 16pt; font-weight: 700; letter-spacing: .05em; padding-bottom: 1.5mm; }
+#sheet .doc-sub { text-align: center; font-size: 9.5pt; color: #333; padding-bottom: 1.5mm; }
+#sheet .doc-meta { display: flex; justify-content: space-between; gap: 4mm; font-size: 9pt; padding-bottom: 1.5mm; }
+#sheet table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+#sheet td, #sheet th { border: .4pt solid #000; padding: 2mm 2.2mm; vertical-align: top; word-break: break-word; }
+#sheet th { background: #f2f2f2; font-weight: 700; text-align: left; }
+#sheet td.rowhead, #sheet th.rowhead { width: 17mm; text-align: center; vertical-align: middle; font-weight: 700; background: #f2f2f2; letter-spacing: .25em; }
+#sheet .val { display: inline-block; min-width: 18mm; border-bottom: .4pt dotted #666; padding: 0 1mm; }
+#sheet .val:empty::after { content: "\00a0"; }
+#sheet .money { font-family: 'Inter', sans-serif; }
+#sheet .num { text-align: right; font-family: 'Inter', sans-serif; }
+#sheet .rule { font-size: 9pt; line-height: 1.6; color: #222; }
+#sheet .amount-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5mm 4mm; }
+#sheet .sign-box { height: 26mm; display: flex; align-items: center; justify-content: center; }
+#sheet .sign-box img { max-height: 25mm; max-width: 100%; object-fit: contain; }
+#sheet .id-box { height: 88mm; display: flex; align-items: center; justify-content: center; }
+#sheet .id-box img { max-height: 87mm; max-width: 100%; object-fit: contain; }
+#sheet .remark-box { height: 16mm; }
+#sheet .foot { font-size: 8.5pt; color: #333; padding-top: 1.5mm; line-height: 1.6; }
+#sheet .page2 { margin-top: 4mm; }
+#sheet .page2 .p2-title { font-size: 11pt; font-weight: 700; text-align: center; padding-bottom: 1.5mm; }
+
+/* 合約條文排版 */
+#sheet .contract-body { font-size: 10.5pt; line-height: 2.05; }
+#sheet .contract-parties { margin: 3mm 0 4mm; }
+#sheet .contract-parties p { margin-bottom: 1.4mm; }
+#sheet .clause { margin-top: 4mm; break-inside: avoid; }
+#sheet .clause h4 { font-size: 11pt; font-weight: 700; margin-bottom: 1mm; }
+#sheet .clause p { margin-bottom: 1mm; }
+#sheet .clause ol { margin: 0 0 0 7mm; }
+#sheet .clause ol li { margin-bottom: 1mm; }
+#sheet .sign-area { margin-top: 8mm; break-inside: avoid; }
+#sheet .sign-area table td { height: 34mm; }
+#sheet .sign-area .sig-label { font-weight: 700; padding-bottom: 1mm; }
+
+@media (max-width: 860px) {
+  .grid, .grid.three, .result dl, .tool-list { grid-template-columns: 1fr; }
+  h1 { font-size: 1.45rem; }
+  .sheet-wrap { padding: .5rem; }
+  .sheet-wrap #sheet { zoom: .46; }
+}
+
+@media print {
+  @page { size: A4 portrait; margin: 12mm 10mm; }
+  body { background: #fff; font-size: 10pt; }
+  body > *:not(main) { display: none !important; }
+  main > *:not(#preview-section) { display: none !important; }
+  #preview-section > *:not(#print-area) { display: none !important; }
+  main, #preview-section { max-width: none; margin: 0; padding: 0; border: 0; }
+  .sheet-wrap { margin: 0; padding: 0; border: 0; background: #fff; overflow: visible; }
+  #sheet { width: 100%; zoom: 1; }
+  #sheet .sheet-page + .sheet-page { break-before: page; margin-top: 0; padding-top: 0; border-top: 0; }
+  #sheet .page2 { break-before: page; margin-top: 0; }
+}

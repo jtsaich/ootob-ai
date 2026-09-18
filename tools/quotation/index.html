@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>報價單產生器｜接案報價、三方案比較、實拿試算｜ootob.ai</title>
+  <meta name="description" content="免費線上報價單產生器：單項計價、三方案比較、專案總價三種格式，自動算營業稅、訂金尾款與對公司戶的扣繳實拿金額，直接輸出 A4 PDF。資料只在你的瀏覽器裡處理。">
+  <meta property="og:title" content="報價單產生器｜接案報價、三方案比較、實拿試算｜ootob.ai">
+  <meta property="og:description" content="三種報價格式、稅額與訂金自動計算、扣繳實拿試算，填完直接印成 A4 PDF。資料不上傳。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai/tools/quotation/">
+  <link rel="canonical" href="https://ootob.ai/tools/quotation/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tools/assets/doc-kit.css">
+  <style>
+    /* 只有報價單需要的微調 */
+    .plan-card { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: .9rem 1rem; display: grid; gap: .5rem; }
+    .plan-card .plan-head { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; font-size: 13px; color: var(--text-secondary); }
+    #sheet .blk { margin-top: 2mm; }
+    #sheet .pre { white-space: pre-line; }
+    #sheet .reco { background: #f2f2f2; }
+    #sheet .tier-list { font-size: 9pt; line-height: 1.6; white-space: pre-line; }
+    #sheet .cn-amount { letter-spacing: .08em; }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"報價單產生器","url":"https://ootob.ai/tools/quotation/","applicationCategory":"BusinessApplication","operatingSystem":"Web","inLanguage":"zh-Hant","offers":{"@type":"Offer","price":"0","priceCurrency":"TWD"},"description":"線上填寫接案報價單，支援單項計價、三方案比較與專案總價，自動計算營業稅、訂金尾款與對公司戶扣繳後的實拿金額，輸出 A4 PDF。所有計算在瀏覽器完成，資料不上傳。","publisher":{"@type":"Organization","name":"歐兜拜 ootobai","url":"https://ootob.ai"}}
+  </script>
+  <script src="/tools/assets/tw-tax.js"></script>
+  <script src="/tools/assets/doc-kit.js"></script>
+  <script src="/assets/analytics.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/">ootob.ai</a>
+  <nav><a href="/work/">作品與 Demo</a><a href="/services/">服務項目與報價</a><a href="/tools/">免費工具</a><a href="/#contact">聯絡</a></nav>
+</header>
+
+<main>
+  <h1>報價單產生器</h1>
+  <p class="lede">接案用的報價單：單項計價、三方案比較、專案總價三種格式，營業稅、訂金尾款與對公司戶的扣繳實拿都自動算，填完直接印成 A4 PDF。</p>
+
+  <p class="privacy"><b>資料只在你的瀏覽器裡處理，沒有任何上傳。</b>報價金額、客戶資料、匯款帳號全部在本機記憶體裡計算與排版，本頁不送伺服器、不寫 cookie。只有在你自己按「記住我的資料」或「帶到下一張單」時，才會把資料寫進這台瀏覽器的 localStorage；按「清除本機資料」即可刪掉。其他情況重新整理頁面資料就消失，請先下載 PDF 自行保管。</p>
+
+  <form id="form" autocomplete="off">
+    <section class="section">
+      <p class="section-label">1. 案件匯入與單據資訊</p>
+      <div class="grid">
+        <div class="field wide">
+          <label for="caseInput">從 case-radar 或 Tasker 匯入（選填）</label>
+          <textarea id="caseInput" placeholder='貼上 `case-radar show TK...` 的 JSON 輸出，或 Tasker 案件網址、TK 案件編號'></textarea>
+          <span class="hint">吃三種輸入：<code>case-radar show &lt;TK-id&gt;</code> 印出的 JSON、案件網址、純 TK 編號。JSON 會一次帶入案件名稱、編號、網址、預算與案件說明。</span>
+        </div>
+        <div class="field wide">
+          <div class="actions" style="margin-top:0">
+            <button type="button" class="btn small" id="btnCase">匯入案件</button>
+            <span class="status" id="caseStatus"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="docNo">報價單號</label>
+          <input id="docNo" type="text" placeholder="Q-20260918-01">
+        </div>
+        <div class="field">
+          <label for="docDate">報價日期</label>
+          <input id="docDate" type="date">
+        </div>
+        <div class="field">
+          <label for="tValidDays">報價有效天數</label>
+          <input id="tValidDays" type="number" min="1" step="1" value="14">
+          <span class="hint">常見 7 到 30 天。材料或外部服務報價波動大時抓短一點。</span>
+        </div>
+        <div class="field">
+          <label>有效期限（自動算）</label>
+          <p class="hint" style="font-size:15px;color:var(--text)"><b id="dueDateOut">—</b></p>
+          <span class="hint">報價日 + 有效天數，會印在報價單上。</span>
+        </div>
+        <div class="field">
+          <label for="pCaseId">案件編號（選填）</label>
+          <input id="pCaseId" type="text" placeholder="TK...">
+        </div>
+        <div class="field">
+          <label for="pCaseUrl">案件網址（選填）</label>
+          <input id="pCaseUrl" type="url" placeholder="https://www.tasker.com.tw/case/...">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">2. 雙方資料</p>
+      <h3>乙方（你／接案方）</h3>
+      <div class="grid">
+        <div class="field">
+          <label for="vName">名稱</label>
+          <input id="vName" type="text" placeholder="歐兜拜工作室 或 王小明">
+        </div>
+        <div class="field">
+          <label for="vTaxId">統一編號或身分證字號</label>
+          <input id="vTaxId" type="text" placeholder="12345675 或 A123456789" style="text-transform:uppercase">
+          <span class="err" id="vTaxIdErr" hidden>格式或檢查碼不符，請確認。仍可繼續產生報價單。</span>
+        </div>
+        <div class="field">
+          <label for="vPhone">電話</label>
+          <input id="vPhone" type="tel" placeholder="0912-345-678">
+        </div>
+        <div class="field">
+          <label for="vEmail">Email</label>
+          <input id="vEmail" type="email" placeholder="name@example.com">
+        </div>
+        <div class="field wide">
+          <label for="vAddress">地址</label>
+          <input id="vAddress" type="text" placeholder="台北市中正區…">
+        </div>
+        <div class="field">
+          <label for="vBankName">收款銀行（選填）</label>
+          <input id="vBankName" type="text" placeholder="808 玉山銀行">
+        </div>
+        <div class="field">
+          <label for="vBankBranch">分行（選填）</label>
+          <input id="vBankBranch" type="text" placeholder="城中分行">
+        </div>
+        <div class="field">
+          <label for="vBankAccount">帳號（選填）</label>
+          <input id="vBankAccount" type="text" inputmode="numeric" placeholder="僅數字">
+        </div>
+        <div class="field">
+          <label for="vBankHolder">戶名（選填）</label>
+          <input id="vBankHolder" type="text" placeholder="與名稱相同時可留空">
+        </div>
+        <div class="field wide">
+          <span class="hint">填了收款資訊，報價單會多印一行匯款帳戶，客戶收到就能直接付訂金。按「記住我的資料」可以把乙方這一整組欄位存在這台瀏覽器，下次開就自動帶入。</span>
+        </div>
+      </div>
+
+      <h3>甲方（客戶）</h3>
+      <div class="grid">
+        <div class="field">
+          <label for="cName">名稱</label>
+          <input id="cName" type="text" placeholder="某某有限公司">
+        </div>
+        <div class="field">
+          <label for="cTaxId">統一編號或身分證字號</label>
+          <input id="cTaxId" type="text" placeholder="公司填 8 碼統編" style="text-transform:uppercase">
+          <span class="err" id="cTaxIdErr" hidden>格式或檢查碼不符，請確認。仍可繼續產生報價單。</span>
+        </div>
+        <div class="field">
+          <label>客戶型態</label>
+          <div class="radio-row">
+            <label><input type="radio" name="cType" value="company" checked> 公司／行號</label>
+            <label><input type="radio" name="cType" value="individual"> 個人</label>
+          </div>
+          <span class="hint">公司戶付款給個人時會代扣所得稅與補充保費，第 5 段可以試算實際入帳。</span>
+        </div>
+        <div class="field">
+          <label for="cContact">聯絡人</label>
+          <input id="cContact" type="text" placeholder="陳經理">
+        </div>
+        <div class="field">
+          <label for="cPhone">電話</label>
+          <input id="cPhone" type="tel" placeholder="02-1234-5678">
+        </div>
+        <div class="field">
+          <label for="cEmail">Email</label>
+          <input id="cEmail" type="email" placeholder="contact@example.com">
+        </div>
+        <div class="field wide">
+          <label for="cAddress">地址（選填，開發票用）</label>
+          <input id="cAddress" type="text" placeholder="台北市信義區…">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">3. 報價內容</p>
+      <div class="grid">
+        <div class="field">
+          <label for="pTitle">專案名稱</label>
+          <input id="pTitle" type="text" placeholder="例：品牌形象官網改版">
+        </div>
+        <div class="field">
+          <label for="quoteMode">報價格式</label>
+          <select id="quoteMode">
+            <option value="itemized">單項計價（列出每個品項）</option>
+            <option value="tiered">三方案比較（基本／推薦／完整）</option>
+            <option value="lumpsum">專案總價（一個數字加範圍清單）</option>
+          </select>
+        </div>
+        <div class="field wide">
+          <label for="pScope">工作範圍與交付內容</label>
+          <textarea id="pScope" placeholder="一行一項，寫清楚交付什麼、格式是什麼、驗收標準是什麼"></textarea>
+          <span class="hint">這段會原樣印在報價單上，也是後面爭議時的第一道防線。含糊的「網站設計一式」建議寫成頁數、功能、交付檔案格式。</span>
+        </div>
+      </div>
+
+      <div id="ed-itemized">
+        <h3>明細</h3>
+        <table class="items">
+          <colgroup>
+            <col style="width:24%"><col style="width:30%"><col style="width:9%"><col style="width:9%"><col style="width:13%"><col style="width:13%"><col style="width:2rem">
+          </colgroup>
+          <thead>
+            <tr><th>品項</th><th>規格／說明</th><th class="num">數量</th><th>單位</th><th class="num">單價</th><th class="num">小計</th><th></th></tr>
+          </thead>
+          <tbody id="itemRows"></tbody>
+        </table>
+        <div class="actions">
+          <button type="button" class="btn small" id="btnAddRow">新增一列</button>
+          <span class="note">小計＝數量 × 單價，改數字即時更新。</span>
+        </div>
+      </div>
+
+      <div id="ed-tiered" hidden>
+        <h3>三個方案</h3>
+        <div class="grid three">
+          <div class="plan-card">
+            <div class="plan-head"><span>方案一</span><label><input type="radio" name="tierReco" value="1"> 設為推薦</label></div>
+            <div class="field"><label for="t1Name">方案名稱</label><input id="t1Name" type="text" value="基本"></div>
+            <div class="field"><label for="t1Items">包含項目（一行一項）</label><textarea id="t1Items" placeholder="首頁＋3 個內頁&#10;RWD 手機版&#10;改版 1 次"></textarea></div>
+            <div class="field"><label for="t1Price">價格</label><input id="t1Price" type="number" min="0" step="1" placeholder="0"></div>
+          </div>
+          <div class="plan-card">
+            <div class="plan-head"><span>方案二</span><label><input type="radio" name="tierReco" value="2" checked> 設為推薦</label></div>
+            <div class="field"><label for="t2Name">方案名稱</label><input id="t2Name" type="text" value="推薦"></div>
+            <div class="field"><label for="t2Items">包含項目（一行一項）</label><textarea id="t2Items" placeholder="方案一全部&#10;文案撰寫&#10;GA4 與轉換追蹤&#10;改版 2 次"></textarea></div>
+            <div class="field"><label for="t2Price">價格</label><input id="t2Price" type="number" min="0" step="1" placeholder="0"></div>
+          </div>
+          <div class="plan-card">
+            <div class="plan-head"><span>方案三</span><label><input type="radio" name="tierReco" value="3"> 設為推薦</label></div>
+            <div class="field"><label for="t3Name">方案名稱</label><input id="t3Name" type="text" value="完整"></div>
+            <div class="field"><label for="t3Items">包含項目（一行一項）</label><textarea id="t3Items" placeholder="方案二全部&#10;CMS 後台&#10;上線後 3 個月維運"></textarea></div>
+            <div class="field"><label for="t3Price">價格</label><input id="t3Price" type="number" min="0" step="1" placeholder="0"></div>
+          </div>
+        </div>
+        <p class="note" style="margin-top:.8rem">單據上會印三欄比較表並標示推薦方案。稅額、訂金與實拿試算一律以推薦方案的價格計算。</p>
+      </div>
+
+      <div id="ed-lumpsum" hidden>
+        <h3>專案總價</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="lumpPrice">總價</label>
+            <input id="lumpPrice" type="number" min="0" step="1" placeholder="0">
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <span class="hint">總價制適合範圍明確、按成果收費的案子；範圍清單要寫得比單項計價更細。</span>
+          </div>
+          <div class="field wide">
+            <label for="lumpScope">總價包含的範圍（一行一項）</label>
+            <textarea id="lumpScope" placeholder="需求訪談與資訊架構&#10;視覺設計 5 頁&#10;前端切版與部署&#10;上線後 14 天保固"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">4. 稅與付款條件</p>
+      <div class="grid">
+        <div class="field">
+          <label for="pTaxMode">稅務處理</label>
+          <select id="pTaxMode">
+            <option value="exclusive">未稅，另外加 5% 營業稅（開發票）</option>
+            <option value="inclusive">已含 5% 營業稅（開發票）</option>
+            <option value="none">個人接案，不開發票</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tDepositPct">訂金比例 %</label>
+          <input id="tDepositPct" type="number" min="0" max="100" step="1" value="50">
+          <span class="hint">個人接案常見 30% 到 50%。訂金到位才排工期，寫在單上比口頭講有用。</span>
+        </div>
+        <div class="field">
+          <label for="tPayDays">尾款付款天數</label>
+          <input id="tPayDays" type="number" min="0" step="1" value="7">
+          <span class="hint">驗收後幾個日曆天內付清。公司戶常有月結，談清楚再寫。</span>
+        </div>
+        <div class="field">
+          <label for="tDeliverDays">工期（工作天）</label>
+          <input id="tDeliverDays" type="number" min="0" step="1" placeholder="20">
+        </div>
+        <div class="field">
+          <label for="tRevisions">修改次數</label>
+          <input id="tRevisions" type="number" min="0" step="1" placeholder="2">
+          <span class="hint">超出次數怎麼算，寫在備註裡。</span>
+        </div>
+        <div class="field wide">
+          <label for="excludes">不包含項目（一行一項）</label>
+          <textarea id="excludes" placeholder="主機與網域費用&#10;第三方字體與圖庫授權&#10;文案撰寫&#10;上線後的內容更新"></textarea>
+        </div>
+        <div class="field wide">
+          <label for="remark">備註</label>
+          <textarea id="remark" placeholder="例：超出修改次數以每次 2,000 元計；甲方延遲提供素材造成的工期順延不計入工作天。"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">5. 實拿試算（對公司戶）</p>
+      <div class="grid three">
+        <div class="field">
+          <label for="withCategory">申報類別</label>
+          <select id="withCategory">
+            <option value="9A">9A 執行業務所得</option>
+            <option value="9B">9B 稿費（含演講費、顧問費）</option>
+            <option value="50">50 薪資所得</option>
+            <option value="92">92 其他所得</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="withResidency">身分別</label>
+          <select id="withResidency">
+            <option value="local">本國籍</option>
+            <option value="foreign183">外國籍・在台居留滿 183 天</option>
+            <option value="foreignUnder183">外國籍・在台居留未滿 183 天</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="targetNet">想實拿多少（選填）</label>
+          <input id="targetNet" type="number" min="0" step="1" placeholder="留空則以目前總額推算">
+        </div>
+        <div class="field wide">
+          <label>補充保費身分</label>
+          <div class="radio-row">
+            <label><input type="radio" name="nhi" value="normal" checked> 一般被保險人</label>
+            <label><input type="radio" name="nhi" value="union"> 已加職業工會（附加保證明）</label>
+            <label><input type="radio" name="nhi" value="none"> 非健保被保險人</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <dl>
+          <div><dt>報價總額</dt><dd id="w-gross">0</dd></div>
+          <div><dt>代扣所得稅 <small id="w-tax-rate"></small></dt><dd id="w-tax">0</dd></div>
+          <div><dt>補充保費 <small id="w-supp-rate"></small></dt><dd id="w-supp">0</dd></div>
+          <div><dt>實際入帳</dt><dd id="w-net">0</dd></div>
+        </dl>
+        <p class="basis" id="w-basis"></p>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <dl>
+          <div><dt>目標實拿</dt><dd id="g-target">0</dd></div>
+          <div><dt>要報多少</dt><dd id="g-gross">0</dd></div>
+          <div><dt>會被扣掉</dt><dd id="g-deduct">0</dd></div>
+          <div><dt>實際入帳</dt><dd id="g-net">0 <small>不低於目標</small></dd></div>
+        </dl>
+        <p class="basis" id="g-basis"></p>
+      </div>
+    </section>
+  </form>
+
+  <section class="section" id="preview-section">
+    <p class="section-label">6. 單據預覽</p>
+    <h2>A4 版面，可直接列印或存成 PDF</h2>
+    <div class="actions">
+      <button type="button" class="btn primary" id="btnPrint">下載 PDF（列印）</button>
+      <button type="button" class="btn" id="btnHandoff">帶到下一張單</button>
+      <button type="button" class="btn" id="btnPull">帶入上一張單</button>
+      <button type="button" class="btn" id="btnProfile">記住我的資料</button>
+      <button type="button" class="btn" id="btnProfileClear">清除本機資料</button>
+      <button type="button" class="btn" id="btnExport">匯出 JSON</button>
+      <label class="btn" for="importFile" style="cursor:pointer">匯入 JSON<input id="importFile" type="file" accept="application/json,.json" hidden></label>
+      <button type="button" class="btn" id="btnReset">清空重填</button>
+    </div>
+    <div class="actions" style="margin-top:.6rem">
+      <span class="status" id="docStatus"></span>
+      <span class="note">列印對話框選「目的地 → 另存為 PDF」，紙張 A4、邊界預設。列印只會輸出下面這張單，表單與說明不會印出來。</span>
+    </div>
+    <div id="print-area">
+      <div class="sheet-wrap">
+        <div id="sheet">
+          <div class="sheet-page">
+            <div class="doc-title">報價單</div>
+            <div class="doc-sub">QUOTATION</div>
+            <div class="doc-meta">
+              <span>報價單號：<span id="s-doc-no"></span></span>
+              <span>報價日期：<span id="s-doc-date"></span></span>
+            </div>
+
+            <table>
+              <colgroup><col style="width:17mm"><col style="width:56mm"><col style="width:56mm"><col></colgroup>
+              <tbody>
+                <tr>
+                  <td class="rowhead">效期</td>
+                  <td colspan="3">本報價有效期限至 <b id="s-valid"></b>（自報價日起 <span id="s-valid-days"></span> 個日曆天）</td>
+                </tr>
+                <tr id="s-case-row" hidden>
+                  <td class="rowhead">案件</td>
+                  <td colspan="3">案件編號：<span class="val" id="s-case-id"></span>　<span class="rule" id="s-case-url"></span></td>
+                </tr>
+                <tr>
+                  <td class="rowhead" rowspan="3">甲方</td>
+                  <td>名稱：<span class="val" id="s-c-name"></span></td>
+                  <td>統編／身分證字號：<span class="val" id="s-c-taxid"></span></td>
+                  <td>型態：<span id="s-c-type"></span></td>
+                </tr>
+                <tr>
+                  <td>聯絡人：<span class="val" id="s-c-contact"></span></td>
+                  <td>電話：<span class="val" id="s-c-phone"></span></td>
+                  <td>Email：<span class="val" id="s-c-email"></span></td>
+                </tr>
+                <tr>
+                  <td colspan="3">地址：<span class="val" id="s-c-address"></span></td>
+                </tr>
+                <tr>
+                  <td class="rowhead" rowspan="2">乙方</td>
+                  <td>名稱：<span class="val" id="s-v-name"></span></td>
+                  <td>統編／身分證字號：<span class="val" id="s-v-taxid"></span></td>
+                  <td>電話：<span class="val" id="s-v-phone"></span></td>
+                </tr>
+                <tr>
+                  <td>Email：<span class="val" id="s-v-email"></span></td>
+                  <td colspan="2">地址：<span class="val" id="s-v-address"></span></td>
+                </tr>
+                <tr>
+                  <td class="rowhead" rowspan="2">專案</td>
+                  <td colspan="3">專案名稱：<b id="s-p-title"></b></td>
+                </tr>
+                <tr>
+                  <td colspan="3">工作範圍與交付內容：<span class="pre" id="s-p-scope"></span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="blk" id="s-items-block">
+              <table>
+                <colgroup><col style="width:34mm"><col><col style="width:16mm"><col style="width:14mm"><col style="width:26mm"><col style="width:28mm"></colgroup>
+                <thead>
+                  <tr><th>品項</th><th>規格／說明</th><th class="num">數量</th><th>單位</th><th class="num">單價</th><th class="num">小計</th></tr>
+                </thead>
+                <tbody id="s-item-rows"></tbody>
+              </table>
+            </div>
+
+            <div class="blk" id="s-tier-block" hidden>
+              <table>
+                <colgroup><col style="width:21mm"><col><col><col></colgroup>
+                <thead>
+                  <tr><th class="rowhead">方案</th><th id="s-t1-name"></th><th id="s-t2-name"></th><th id="s-t3-name"></th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rowhead">包含</td>
+                    <td class="tier-list" id="s-t1-items"></td>
+                    <td class="tier-list" id="s-t2-items"></td>
+                    <td class="tier-list" id="s-t3-items"></td>
+                  </tr>
+                  <tr>
+                    <td class="rowhead">價格</td>
+                    <td class="num money" id="s-t1-price"></td>
+                    <td class="num money" id="s-t2-price"></td>
+                    <td class="num money" id="s-t3-price"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="foot">標示「建議」者為本次建議方案，下方金額與付款條件以該方案計算。甲方可指定其他方案，價格依該欄金額重新計算。</p>
+            </div>
+
+            <div class="blk" id="s-lump-block" hidden>
+              <table>
+                <colgroup><col style="width:17mm"><col><col style="width:36mm"></colgroup>
+                <tbody>
+                  <tr>
+                    <td class="rowhead">總價</td>
+                    <td>專案總價（一式）：<b id="s-lump-title"></b></td>
+                    <td class="num money" id="s-lump-price"></td>
+                  </tr>
+                  <tr>
+                    <td class="rowhead">範圍</td>
+                    <td colspan="2"><span class="pre" id="s-lump-scope"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="blk">
+              <table>
+                <colgroup><col style="width:17mm"><col><col style="width:36mm"></colgroup>
+                <tbody>
+                  <tr>
+                    <td class="rowhead" rowspan="3">金額</td>
+                    <td>小計（未稅）</td>
+                    <td class="num money" id="s-subtotal">0</td>
+                  </tr>
+                  <tr>
+                    <td id="s-tax-label">營業稅 5%</td>
+                    <td class="num money" id="s-tax">0</td>
+                  </tr>
+                  <tr>
+                    <td><b>合計</b>　<span class="rule">新台幣（大寫）<span class="cn-amount" id="s-total-cn"></span>元整</span></td>
+                    <td class="num money"><b id="s-total">0</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="blk">
+              <table>
+                <colgroup><col style="width:17mm"><col></colgroup>
+                <tbody>
+                  <tr>
+                    <td class="rowhead">付款</td>
+                    <td class="rule" id="s-pay-terms"></td>
+                  </tr>
+                  <tr id="s-bank-row" hidden>
+                    <td class="rowhead">匯款</td>
+                    <td class="rule" id="s-bank-info"></td>
+                  </tr>
+                  <tr>
+                    <td class="rowhead">工期</td>
+                    <td class="rule" id="s-schedule"></td>
+                  </tr>
+                  <tr id="s-excludes-row">
+                    <td class="rowhead">不含</td>
+                    <td class="rule pre" id="s-excludes"></td>
+                  </tr>
+                  <tr id="s-remark-row">
+                    <td class="rowhead">備註</td>
+                    <td class="rule pre" id="s-remark"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sign-area">
+              <table>
+                <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="sig-label">甲方簽章</div>
+                      <div class="rule">名稱：<span class="val" id="s-sign-c-name"></span></div>
+                      <div class="rule">日期：＿＿＿＿ 年 ＿＿ 月 ＿＿ 日</div>
+                    </td>
+                    <td>
+                      <div class="sig-label">乙方簽章</div>
+                      <div class="rule">名稱：<span class="val" id="s-sign-v-name"></span></div>
+                      <div class="rule">日期：＿＿＿＿ 年 ＿＿ 月 ＿＿ 日</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="foot">本報價單有效期限內經甲方簽回即為雙方合意之依據；逾期失效，價格與條件得重新議定。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">怎麼寫</p>
+    <h2>報價單該有哪些欄位</h2>
+    <table class="ref">
+      <thead><tr><th>欄位</th><th>怎麼寫</th></tr></thead>
+      <tbody>
+        <tr><td>單號與日期</td><td>單號自己編就好，建議「Q-日期-流水號」，客戶回信引用單號比引用檔名清楚。日期決定有效期限的起算點。</td></tr>
+        <tr><td>有效期限</td><td>寫明確日期而不是「一個月內」。過期代表價格可以重談，這是你唯一的漲價窗口。</td></tr>
+        <tr><td>雙方資訊</td><td>甲方名稱要用發票上的正式名稱與統編；乙方留電話與 Email，客戶財會找得到你才付得出款。</td></tr>
+        <tr><td>品項與規格</td><td>一列一件可獨立驗收的事。規格欄寫頁數、張數、字數、交付格式，這格寫得細，日後追加才有依據。</td></tr>
+        <tr><td>單價、數量、小計</td><td>能拆單價就拆，客戶砍價時可以砍掉品項而不是砍你的單價。</td></tr>
+        <tr><td>稅金</td><td>開發票就註明「未稅另加 5%」或「已含稅」；個人接案不開發票要寫清楚，避免客戶以為可以再扣 5%。</td></tr>
+        <tr><td>付款條件</td><td>訂金比例、尾款天數、驗收定義。沒有付款條件的報價單等於無息借錢給客戶。</td></tr>
+        <tr><td>備註與不包含</td><td>把修改次數、素材提供責任、主機與授權費用歸屬寫進去。爭議幾乎都發生在沒寫的那幾行。</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:2rem">三種報價格式怎麼選</h2>
+    <table class="ref">
+      <thead><tr><th>格式</th><th>適合</th><th>風險</th></tr></thead>
+      <tbody>
+        <tr><td>單項計價</td><td>需求已經談清楚、客戶要比價或要走內部核銷流程。</td><td>客戶可能逐項砍，記得標註哪些品項是綁在一起的。</td></tr>
+        <tr><td>三方案比較</td><td>客戶還在抓預算，或你想把對話從「多少錢」轉成「要哪個版本」。</td><td>三個方案差距要明顯，否則客戶永遠只看最便宜那個。建議方案放中間。</td></tr>
+        <tr><td>專案總價</td><td>範圍明確、按成果收費，你有把握用更少工時做完。</td><td>範圍清單要寫到能拒絕追加，否則超時全吃在自己身上。</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:2rem">報價單、估價單、請款單差在哪</h2>
+    <div class="notes">
+      <ul>
+        <li><b>報價單</b>：簽約前給的價格承諾，有有效期限，簽回就成為合意內容。</li>
+        <li><b>估價單</b>：範圍還沒定時給的金額區間，性質上只是參考，不該拿來當請款依據。</li>
+        <li><b>請款單</b>：工作完成或分期條件達成後才發，重點是金額、付款期限與匯款帳號。</li>
+      </ul>
+    </div>
+
+    <h2 style="margin-top:2rem">對公司戶報價，實際入帳會比報價金額少</h2>
+    <div class="notes">
+      <ul>
+        <li>公司付款給個人時要就源扣繳。<b>9A 執行業務所得與 9B 稿費</b>單次給付達 <b id="ref-prof-threshold"></b> 元時按 <b id="ref-prof-rate"></b> 扣繳所得稅。</li>
+        <li><b>50 薪資所得</b>單次給付達 <b id="ref-salary-threshold"></b> 元時按 <b id="ref-salary-rate"></b> 扣繳；未達門檻免扣繳。<b>92 其他所得</b>免扣繳但仍要列單申報。</li>
+        <li>二代健保補充保費費率 <b id="ref-supp-rate"></b>：執行業務所得與稿費單次給付達 <b id="ref-supp-min"></b> 元、兼職薪資達 <b id="ref-min-wage"></b> 元（<span id="ref-year"></span> 年度基本工資）時扣取。</li>
+        <li>非居住者（在台居留未滿 183 天）一般按 <b id="ref-nr-rate"></b> 扣繳，薪資在 <b id="ref-nr-break"></b> 元以下扣 6%、超過扣 18%，且不適用居住者的起扣標準。</li>
+        <li><b>扣繳稅是預繳</b>，年度結算申報時可以抵繳應納稅額，多繳的會退。所以扣繳不是成本，只是現金流先被押著。</li>
+        <li><b>補充保費不能抵、不能退</b>，扣掉就是真的少拿。報價時把它當成實質成本估進去比較準。</li>
+        <li>開發票的營業稅 <b id="ref-biz-rate"></b> 是外加在客戶身上的，跟上面的扣繳是兩件不同的事，不要混在一起算。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">下一步</p>
+    <div class="cta">
+      <b>報價通過之後的三張單，資料不用重打。</b>
+      在上面按「帶到下一張單」，這台瀏覽器就會記住雙方資料與專案資訊；到下面任一個工具按「帶入上一張單」，欄位會自動填好，你只需要改金額與日期。
+    </div>
+    <ul class="tool-list" style="margin-top:1.4rem">
+      <li>
+        <span class="name">承攬合約產生器</span>
+        <span class="desc">報價簽回後把範圍、工期、付款條件變成一份能用的合約。</span>
+        <a href="/tools/contract/">產生合約</a>
+      </li>
+      <li>
+        <span class="name">請款單產生器</span>
+        <span class="desc">結案或分期條件達成時發給客戶財會，含匯款帳號與付款期限。</span>
+        <a href="/tools/payment/">產生請款單</a>
+      </li>
+      <li>
+        <span class="name">勞務報酬單產生器</span>
+        <span class="desc">公司戶要你填的那張表，自動算代扣所得稅與補充保費。</span>
+        <a href="/tools/labor-form/">產生勞報單</a>
+      </li>
+      <li>
+        <span class="name">全部工具</span>
+        <span class="desc">接案行政文件流程的其他工具。</span>
+        <a href="/tools/">看全部</a>
+      </li>
+    </ul>
+    <p class="note" style="margin-top:1.4rem">本頁內容與試算結果僅供參考，不構成法律或稅務意見。個案請洽會計師、記帳士或律師確認。</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>&copy; 2026 歐兜拜 ootobai</span>
+  <span><a href="/work/">作品</a> · <a href="/services/">服務</a> · <a href="/tools/">免費工具</a> · <a href="https://me.ootob.ai/">Jack 的個人頁</a></span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var D = window.DocKit, T = window.TWTax;
+  if (!D || !T) { console.error("quotation: doc-kit.js 或 tw-tax.js 未載入"); return; }
+
+  var $ = D.$, $$ = D.$$, fmt = T.fmt, pct = T.pct;
+  var form = $("form");
+  var KIND = "quotation";
+  var PROFILE_KEYS = [
+    "vName", "vTaxId", "vPhone", "vEmail", "vAddress",
+    "vBankName", "vBankBranch", "vBankAccount", "vBankHolder"
+  ];
+  var MODE_EDITORS = { itemized: "ed-itemized", tiered: "ed-tiered", lumpsum: "ed-lumpsum" };
+  var MODE_BLOCKS = { itemized: "s-items-block", tiered: "s-tier-block", lumpsum: "s-lump-block" };
+
+  function val(id) { var el = $(id); return el ? el.value.trim() : ""; }
+  function num(id) { return Number($(id).value) || 0; }
+  function lines(text) {
+    return (text || "").split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function radio(name) {
+    var el = form.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+  }
+  function status(msg) { $("docStatus").textContent = msg || ""; }
+
+  /* ---------- 明細列 ---------- */
+  function addRow(data) {
+    var d = data || {};
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><input class="i-name" type="text" placeholder="例：視覺設計"></td>' +
+      '<td><textarea class="i-spec" rows="1" placeholder="頁數、規格、交付格式"></textarea></td>' +
+      '<td><input class="i-qty num" type="number" min="0" step="1" value="1"></td>' +
+      '<td><input class="i-unit" type="text" value="式"></td>' +
+      '<td><input class="i-price num" type="number" min="0" step="1" placeholder="0"></td>' +
+      '<td class="num" data-amount>0</td>' +
+      '<td><button type="button" class="row-del" title="刪除這一列" aria-label="刪除這一列">&times;</button></td>';
+    if (d.name !== undefined) tr.querySelector(".i-name").value = d.name;
+    if (d.spec !== undefined) tr.querySelector(".i-spec").value = d.spec;
+    if (d.qty !== undefined) tr.querySelector(".i-qty").value = d.qty;
+    if (d.unit !== undefined && d.unit !== "") tr.querySelector(".i-unit").value = d.unit;
+    if (d.price !== undefined) tr.querySelector(".i-price").value = d.price;
+    tr.querySelector(".row-del").addEventListener("click", function () {
+      tr.parentNode.removeChild(tr);
+      if (!$("itemRows").children.length) addRow();
+      render();
+    });
+    $("itemRows").appendChild(tr);
+    return tr;
+  }
+  function setRows(list) {
+    $("itemRows").innerHTML = "";
+    (list && list.length ? list : [{}, {}, {}]).forEach(addRow);
+  }
+  function readItems() {
+    return $$("#itemRows tr").map(function (tr) {
+      var qty = Number(tr.querySelector(".i-qty").value) || 0;
+      var price = Number(tr.querySelector(".i-price").value) || 0;
+      return {
+        name: tr.querySelector(".i-name").value.trim(),
+        spec: tr.querySelector(".i-spec").value.trim(),
+        qty: qty,
+        unit: tr.querySelector(".i-unit").value.trim() || "式",
+        price: price,
+        amount: Math.round(qty * price)
+      };
+    });
+  }
+  function tiers() {
+    var reco = radio("tierReco");
+    return [1, 2, 3].map(function (i) {
+      return {
+        name: val("t" + i + "Name") || ("方案 " + i),
+        items: val("t" + i + "Items"),
+        price: num("t" + i + "Price"),
+        reco: reco === String(i)
+      };
+    });
+  }
+  /* 交給下一張單的明細：三方案與總價制都折成一列 */
+  function handoffItems() {
+    var mode = $("quoteMode").value;
+    if (mode === "tiered") {
+      var pick = tiers().filter(function (t) { return t.reco; })[0] || tiers()[1];
+      return [{ name: (val("pTitle") || "專案") + "（" + pick.name + "）", spec: pick.items, qty: 1, unit: "式", price: pick.price }];
+    }
+    if (mode === "lumpsum") {
+      return [{ name: val("pTitle") || "專案總價", spec: lines(val("lumpScope")).join("、"), qty: 1, unit: "式", price: num("lumpPrice") }];
+    }
+    return readItems().map(function (it) {
+      return { name: it.name, spec: it.spec, qty: it.qty, unit: it.unit, price: it.price };
+    });
+  }
+
+  /* ---------- 計算 ---------- */
+  function subtotalOf(mode) {
+    if (mode === "tiered") {
+      var pick = tiers().filter(function (t) { return t.reco; })[0];
+      return pick ? pick.price : 0;
+    }
+    if (mode === "lumpsum") return num("lumpPrice");
+    return readItems().reduce(function (a, it) { return a + it.amount; }, 0);
+  }
+
+  /* ---------- 渲染 ---------- */
+  function render() {
+    var mode = $("quoteMode").value;
+    Object.keys(MODE_EDITORS).forEach(function (m) {
+      $(MODE_EDITORS[m]).hidden = m !== mode;
+      $(MODE_BLOCKS[m]).hidden = m !== mode;
+    });
+
+    // 單據資訊
+    var docDate = val("docDate");
+    var validDays = num("tValidDays");
+    var due = docDate ? D.addDays(docDate, validDays) : "";
+    $("dueDateOut").textContent = due ? D.ad(due, "") : "填入報價日期後自動計算";
+    $("s-doc-no").textContent = val("docNo");
+    $("s-doc-date").textContent = D.ad(docDate);
+    $("s-valid").textContent = due ? D.ad(due) : D.ad("");
+    $("s-valid-days").textContent = validDays;
+
+    var caseId = val("pCaseId"), caseUrl = val("pCaseUrl");
+    $("s-case-row").hidden = !caseId && !caseUrl;
+    $("s-case-id").textContent = caseId;
+    $("s-case-url").textContent = caseUrl ? "來源：" + caseUrl : "";
+
+    // 統編／身分證軟驗證
+    [["vTaxId", "vTaxIdErr"], ["cTaxId", "cTaxIdErr"]].forEach(function (p) {
+      var v = val(p[0]).toUpperCase();
+      $(p[1]).hidden = !v || D.validTaxId(v) || D.validTwId(v);
+    });
+
+    // 雙方
+    $("s-c-name").textContent = val("cName");
+    $("s-c-taxid").textContent = val("cTaxId").toUpperCase();
+    $("s-c-contact").textContent = val("cContact");
+    $("s-c-phone").textContent = val("cPhone");
+    $("s-c-email").textContent = val("cEmail");
+    $("s-c-address").textContent = val("cAddress");
+    $("s-c-type").textContent = D.boxes([["company", "公司／行號"], ["individual", "個人"]], radio("cType"));
+    $("s-v-name").textContent = val("vName");
+    $("s-v-taxid").textContent = val("vTaxId").toUpperCase();
+    $("s-v-phone").textContent = val("vPhone");
+    $("s-v-email").textContent = val("vEmail");
+    $("s-v-address").textContent = val("vAddress");
+    $("s-sign-c-name").textContent = val("cName");
+    $("s-sign-v-name").textContent = val("vName");
+
+    // 專案
+    $("s-p-title").textContent = val("pTitle");
+    $("s-p-scope").textContent = val("pScope");
+
+    // 明細
+    if (mode === "itemized") {
+      var tbody = $("s-item-rows");
+      tbody.innerHTML = "";
+      var editorRows = $$("#itemRows tr");
+      readItems().forEach(function (it, idx) {
+        editorRows[idx].querySelector("[data-amount]").textContent = fmt(it.amount);
+        // 空白列（沒品項也沒金額）不印出來，留著只是給人繼續填
+        if (!it.name && !it.spec && !it.amount) return;
+        var tr = document.createElement("tr");
+        [it.name, it.spec, String(it.qty || ""), it.unit, fmt(it.price), fmt(it.amount)].forEach(function (text, i) {
+          var td = document.createElement("td");
+          td.textContent = text;
+          if (i >= 2 && i !== 3) td.className = i === 2 ? "num" : "num money";
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    } else if (mode === "tiered") {
+      tiers().forEach(function (t, i) {
+        var n = i + 1;
+        $("s-t" + n + "-name").textContent = t.name + (t.reco ? "（建議）" : "");
+        $("s-t" + n + "-items").textContent = lines(t.items).join("\n");
+        $("s-t" + n + "-price").textContent = fmt(t.price);
+        ["s-t" + n + "-name", "s-t" + n + "-items", "s-t" + n + "-price"].forEach(function (id) {
+          $(id).classList.toggle("reco", t.reco);
+        });
+      });
+    } else {
+      $("s-lump-title").textContent = val("pTitle");
+      $("s-lump-price").textContent = fmt(num("lumpPrice"));
+      $("s-lump-scope").textContent = lines(val("lumpScope")).map(function (s) { return "・" + s; }).join("\n");
+    }
+
+    // 金額
+    var taxMode = $("pTaxMode").value;
+    var bt = T.businessTax(subtotalOf(mode), taxMode);
+    $("s-subtotal").textContent = fmt(bt.base);
+    $("s-tax").textContent = taxMode === "none" ? "0" : fmt(bt.tax);
+    $("s-tax-label").textContent = taxMode === "none"
+      ? "個人接案，不另開立發票，未含代扣稅費"
+      : (taxMode === "inclusive"
+        ? "營業稅 " + pct(T.PARAMS.businessTaxRate) + "（已內含於上列金額）"
+        : "營業稅 " + pct(T.PARAMS.businessTaxRate) + "（外加）");
+    $("s-total").textContent = fmt(bt.total);
+    $("s-total-cn").textContent = D.chineseAmount(bt.total);
+
+    // 付款條件
+    var pct2 = Math.min(100, Math.max(0, num("tDepositPct")));
+    var deposit = Math.round(bt.total * pct2 / 100);
+    var balance = bt.total - deposit;
+    var payDays = num("tPayDays");
+    $("s-pay-terms").textContent =
+      "訂金 " + pct2 + "%，新台幣 " + fmt(deposit) + " 元，於本報價單簽回後支付；" +
+      "尾款新台幣 " + fmt(balance) + " 元，於交付驗收後 " + payDays + " 個日曆天內支付。" +
+      (taxMode === "none" ? "乙方為個人接案，不開立統一發票，得出具收據。" : "乙方於收款後開立統一發票。");
+
+    var bankBits = [val("vBankName"), val("vBankBranch")].filter(Boolean).join(" ");
+    var acct = val("vBankAccount"), holder = val("vBankHolder") || val("vName");
+    $("s-bank-row").hidden = !(bankBits || acct);
+    $("s-bank-info").textContent = [bankBits, acct ? "帳號 " + acct : "", holder ? "戶名 " + holder : ""].filter(Boolean).join("　");
+
+    var deliver = num("tDeliverDays"), rev = num("tRevisions");
+    $("s-schedule").textContent =
+      (deliver ? "自訂金到位且甲方素材齊備日起 " + deliver + " 個工作天內交付。" : "工期由雙方另行議定。") +
+      (rev ? "含 " + rev + " 次修改。" : "");
+
+    var ex = lines(val("excludes"));
+    $("s-excludes-row").hidden = !ex.length;
+    $("s-excludes").textContent = ex.map(function (s) { return "・" + s; }).join("\n");
+    var rm = val("remark");
+    $("s-remark-row").hidden = !rm;
+    $("s-remark").textContent = rm;
+
+    // 實拿試算
+    var cat = $("withCategory").value, res = $("withResidency").value, nhi = radio("nhi");
+    var w = T.withhold(bt.total, cat, res, nhi);
+    $("w-gross").textContent = fmt(w.gross);
+    $("w-tax").textContent = fmt(w.tax);
+    $("w-supp").textContent = fmt(w.supp);
+    $("w-net").textContent = fmt(w.net);
+    $("w-tax-rate").textContent = w.taxRate ? pct(w.taxRate) : "（免扣繳）";
+    $("w-supp-rate").textContent = w.supp ? pct(T.PARAMS.suppRate) : "（不扣）";
+    $("w-basis").textContent = w.taxNote + " " + w.suppNote +
+      (taxMode === "none"
+        ? " 個人接案不開發票時，報價金額不等於入帳金額：公司戶會先代扣所得稅與補充保費，實際匯進帳戶的是上面的「實際入帳」。"
+        : " 開發票的營業稅由甲方負擔，與此處的代扣是兩回事。");
+
+    var targetRaw = val("targetNet");
+    var target = targetRaw ? Number(targetRaw) || 0 : w.net;
+    var g = T.grossUpForNet(target, cat, res, nhi);
+    $("g-target").textContent = fmt(target);
+    $("g-gross").textContent = fmt(g.gross);
+    $("g-deduct").textContent = fmt(g.result.tax + g.result.supp);
+    $("g-net").textContent = fmt(g.result.net);
+    $("g-basis").textContent = targetRaw
+      ? "想實拿 " + fmt(target) + " 元，報價總額要開到 " + fmt(g.gross) + " 元（含稅前提下的最小值）。"
+      : "未填目標金額，以目前總額的實拿數 " + fmt(w.net) + " 元回推。填入你想實拿的數字，就會算出報價要開多少。";
+  }
+
+  /* ---------- case-radar 匯入 ---------- */
+  function importCase() {
+    var parsed = D.parseCase($("caseInput").value);
+    if (!parsed) { $("caseStatus").textContent = "讀不到案件資料，請確認貼上的是 case-radar 的 JSON、案件網址或 TK 編號。"; return; }
+    if (parsed.title) $("pTitle").value = parsed.title;
+    if (parsed.caseId) $("pCaseId").value = parsed.caseId;
+    if (parsed.url) $("pCaseUrl").value = parsed.url;
+    if (parsed.description) {
+      var desc = parsed.description.replace(/\s+\n/g, "\n").trim();
+      $("pScope").value = desc.length > 300 ? desc.slice(0, 300) + "…" : desc;
+    }
+    if (parsed.budget) {
+      var mode = $("quoteMode").value;
+      if (mode === "lumpsum") {
+        $("lumpPrice").value = parsed.budget;
+      } else if (mode === "tiered") {
+        $("t" + (radio("tierReco") || "2") + "Price").value = parsed.budget;
+      } else {
+        var first = $("itemRows").querySelector("tr");
+        if (first) {
+          first.querySelector(".i-price").value = parsed.budget;
+          if (!first.querySelector(".i-name").value) first.querySelector(".i-name").value = parsed.title || "專案費用";
+        }
+      }
+    }
+    $("caseStatus").textContent = "已匯入 " + (parsed.caseId || "案件") +
+      (parsed.budget ? "，預算 " + fmt(parsed.budget) + " 元已填入金額欄" : "，此來源沒有可解析的預算") + "。";
+    render();
+  }
+
+  /* ---------- 綁定 ---------- */
+  setRows(null);
+  $("docDate").value = D.today();
+  $("docNo").value = D.docNo("Q");
+  D.profile.apply(form);
+  if (!val("docNo")) $("docNo").value = D.docNo("Q");
+  if (!val("docDate")) $("docDate").value = D.today();
+
+  D.bind(form, render);
+  $("btnAddRow").addEventListener("click", function () { addRow(); render(); });
+  $("btnCase").addEventListener("click", importCase);
+
+  $("btnPrint").addEventListener("click", function () { D.print("quotation_print"); });
+
+  $("btnHandoff").addEventListener("click", function () {
+    var mode = $("quoteMode").value;
+    var bt = T.businessTax(subtotalOf(mode), $("pTaxMode").value);
+    var ok = D.handoff.save({
+      kind: KIND,
+      shared: D.formState(form),
+      items: handoffItems(),
+      meta: {
+        docNo: val("docNo"), docDate: val("docDate"),
+        validUntil: val("docDate") ? D.addDays(val("docDate"), num("tValidDays")) : "",
+        quoteMode: mode, taxMode: $("pTaxMode").value,
+        subtotal: bt.base, tax: bt.tax, total: bt.total
+      }
+    });
+    status(ok
+      ? "已存到這台瀏覽器，可在請款單或合約按「帶入上一張單」。"
+      : "寫入失敗，這個瀏覽器可能封鎖了 localStorage。");
+  });
+
+  $("btnPull").addEventListener("click", function () {
+    var shared = D.handoff.shared();
+    if (!shared || !Object.keys(shared).length) { status("沒有找到上一張單的資料。先在其他工具按「帶到下一張單」。"); return; }
+    var keepNo = val("docNo"), keepDate = val("docDate");
+    D.setFormState(form, shared);
+    $("docNo").value = keepNo || D.docNo("Q");
+    $("docDate").value = keepDate || D.today();
+    var prev = D.handoff.doc(KIND) || D.handoff.doc("payment");
+    if (prev && prev.items && prev.items.length) setRows(prev.items);
+    render();
+    status("已帶入雙方資料與專案資訊，單號與日期保留本張的。");
+  });
+
+  $("btnProfile").addEventListener("click", function () {
+    status(D.profile.save(form, PROFILE_KEYS)
+      ? "已記住乙方資料（名稱、統編、聯絡方式、收款帳戶），下次打開這頁自動帶入。"
+      : "寫入失敗，這個瀏覽器可能封鎖了 localStorage。");
+  });
+  $("btnProfileClear").addEventListener("click", function () {
+    D.profile.clear();
+    D.handoff.clear();
+    status("已清除這台瀏覽器裡的固定資料與跨單據資料。表單上現有內容不變。");
+  });
+
+  $("btnExport").addEventListener("click", function () {
+    D.downloadJson({ kind: KIND, shared: D.formState(form), items: handoffItems() },
+      "quotation-" + (val("docNo") || D.today()) + ".json");
+    status("已匯出 JSON，可存檔或帶到另一台電腦匯入。");
+  });
+  $("importFile").addEventListener("change", function (e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    D.readJsonFile(file).then(function (obj) {
+      D.setFormState(form, obj.shared || obj);
+      if (obj.items && obj.items.length) setRows(obj.items);
+      render();
+      status("已從 JSON 匯入。");
+    }).catch(function () { status("這個檔案不是本工具匯出的 JSON。"); });
+    e.target.value = "";
+  });
+
+  $("btnReset").addEventListener("click", function () {
+    form.reset();
+    setRows(null);
+    $("docDate").value = D.today();
+    $("docNo").value = D.docNo("Q");
+    $("caseStatus").textContent = "";
+    status("已清空。本機儲存的資料沒有被刪除。");
+    render();
+  });
+
+  /* 說明區的門檻與費率一律從 TWTax.PARAMS 取，年度更新只改一處 */
+  var P = T.PARAMS;
+  [["ref-prof-threshold", fmt(P.profThreshold)], ["ref-prof-rate", pct(P.profRate)],
+   ["ref-salary-threshold", fmt(P.salaryThreshold)], ["ref-salary-rate", pct(P.salaryRate)],
+   ["ref-supp-rate", pct(P.suppRate)], ["ref-supp-min", fmt(P.suppProfMin)],
+   ["ref-min-wage", fmt(P.minWage)], ["ref-year", String(P.year)],
+   ["ref-nr-rate", pct(P.nrRate)], ["ref-nr-break", fmt(P.nrSalaryBreak)],
+   ["ref-biz-rate", pct(P.businessTaxRate)]
+  ].forEach(function (p) { if ($(p[0])) $(p[0]).textContent = p[1]; });
+
+  render();
+})();
+</script>
+</body>
+</html>

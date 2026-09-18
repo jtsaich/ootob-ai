@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>外包承攬合約產生器｜系統開發、LINE 整合、AI 問答、維護月費｜ootob.ai</title>
+  <meta name="description" content="免費線上合約書產生器，五種台灣接案情境範本：系統與網站開發、LINE／WhatsApp 官方帳號整合、AI 客服與知識庫、維護與月費委任、一般專案承攬。條款可逐條開關，填完直接列印成 PDF 用印。資料只留在瀏覽器，不上傳。">
+  <meta property="og:title" content="外包承攬合約產生器｜ootob.ai">
+  <meta property="og:description" content="五種接案合約範本、條款逐條開關、即時預覽，直接列印 PDF 用印。資料不離開瀏覽器。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ootob.ai/tools/contract/">
+  <link rel="canonical" href="https://ootob.ai/tools/contract/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tools/assets/doc-kit.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"外包承攬合約產生器","url":"https://ootob.ai/tools/contract/","applicationCategory":"BusinessApplication","operatingSystem":"Web","inLanguage":"zh-Hant","offers":{"@type":"Offer","price":"0","priceCurrency":"TWD"},"description":"五種台灣接案情境的合約範本，條款可逐條開關，線上填寫即時預覽並列印成 PDF。全部在瀏覽器內處理，內容不上傳。","publisher":{"@type":"Organization","name":"歐兜拜 ootobai","url":"https://ootob.ai"}}
+  </script>
+  <script src="/tools/assets/tw-tax.js"></script>
+  <script src="/tools/assets/doc-kit.js"></script>
+  <script src="/assets/analytics.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/">ootob.ai</a>
+  <nav><a href="/work/">作品與 Demo</a><a href="/services/">服務項目與報價</a><a href="/tools/">免費工具</a><a href="/#contact">聯絡</a></nav>
+</header>
+
+<main>
+  <h1>外包承攬合約產生器</h1>
+  <p class="lede">五種台灣接案情境的合約範本：系統與網站開發、LINE／WhatsApp 官方帳號整合、AI 客服與知識庫、維護與月費委任、一般專案承攬。條款逐條開關，填完直接列印用印。</p>
+
+  <p class="privacy"><b>內容不會離開你的瀏覽器。</b>合約條文在本機組出來、在本機列印，沒有任何上傳。只有你自己按「記住我的資料」或「帶到下一張單」時，資料才會寫進這台瀏覽器的 localStorage，按「清除本機資料」即可刪除。<br>範本僅供參考，不構成法律意見。金額大或條件複雜的案子，簽署前請找律師看過。</p>
+
+  <form id="form" autocomplete="off">
+    <section class="section">
+      <p class="section-label">1. 案件與合約類型</p>
+      <div class="grid">
+        <div class="field wide">
+          <label for="caseInput">從 case-radar 匯入（貼上 <code>case-radar show &lt;TK-id&gt;</code> 的 JSON，或 Tasker 案件網址／TK-id）</label>
+          <textarea id="caseInput" placeholder='{"external_id":"TK26091610PIJZ21","title":"…","budget_ntd":80000,"url":"https://…"}'></textarea>
+          <span class="hint">會自動填入專案名稱、案件編號、合約總價與工作範圍草稿，填完再自己改。</span>
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <div class="actions" style="margin-top:0">
+            <button type="button" class="btn small" id="btnCase">匯入案件</button>
+            <span class="status" id="caseStatus"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ctType">合約範本</label>
+          <select id="ctType">
+            <option value="software">系統與網站開發承攬（後台、電商、預約系統、資料工具）</option>
+            <option value="line">LINE／WhatsApp 官方帳號整合與設定</option>
+            <option value="ai">AI 客服與知識庫問答建置</option>
+            <option value="maintain">維護與月費委任</option>
+            <option value="general">一般專案承攬（選不出類型時用這個）</option>
+          </select>
+          <span class="hint" id="ctTypeHint"></span>
+        </div>
+        <div class="field">
+          <label for="signDate">簽約日期</label>
+          <input id="signDate" type="date">
+        </div>
+        <div class="field">
+          <label for="pCaseId">案件編號（選填，印在合約標頭）</label>
+          <input id="pCaseId" type="text" placeholder="TK26091610PIJZ21">
+        </div>
+        <div class="field">
+          <label for="pCaseUrl">案件來源網址（選填，只存在你的草稿裡，不印出）</label>
+          <input id="pCaseUrl" type="url" placeholder="https://www.tasker.com.tw/case/…">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">2. 雙方資料</p>
+      <div class="grid">
+        <div class="field">
+          <label for="cName">甲方（委託方）名稱</label>
+          <input id="cName" type="text" placeholder="○○有限公司">
+        </div>
+        <div class="field">
+          <label>甲方型態</label>
+          <div class="radio-row">
+            <label><input type="radio" name="cType" value="company" checked> 公司／行號</label>
+            <label><input type="radio" name="cType" value="individual"> 個人</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="cTaxId">甲方統一編號／身分證字號</label>
+          <input id="cTaxId" type="text" placeholder="12345675" style="text-transform: uppercase">
+          <span class="err" id="cTaxIdErr" hidden>格式或檢查碼不符，請確認。仍可繼續產生合約。</span>
+        </div>
+        <div class="field">
+          <label for="cContact">甲方聯絡人</label>
+          <input id="cContact" type="text" placeholder="陳經理">
+        </div>
+        <div class="field">
+          <label for="cPhone">甲方電話</label>
+          <input id="cPhone" type="tel" placeholder="02-2345-6789">
+        </div>
+        <div class="field">
+          <label for="cEmail">甲方 Email（合約通知用）</label>
+          <input id="cEmail" type="email" placeholder="pm@example.com">
+        </div>
+        <div class="field wide">
+          <label for="cAddress">甲方地址</label>
+          <input id="cAddress" type="text" placeholder="台北市…">
+        </div>
+        <div class="field">
+          <label for="vName">乙方（受託方）名稱</label>
+          <input id="vName" type="text" placeholder="蔡承勳（歐兜拜 ootobai）">
+        </div>
+        <div class="field">
+          <label for="vTaxId">乙方統一編號／身分證字號</label>
+          <input id="vTaxId" type="text" placeholder="A123456789" style="text-transform: uppercase">
+          <span class="err" id="vTaxIdErr" hidden>格式或檢查碼不符，請確認。仍可繼續產生合約。</span>
+        </div>
+        <div class="field">
+          <label for="vPhone">乙方電話</label>
+          <input id="vPhone" type="tel" placeholder="0912-345-678">
+        </div>
+        <div class="field">
+          <label for="vEmail">乙方 Email</label>
+          <input id="vEmail" type="email" placeholder="jack@ootob.ai">
+        </div>
+        <div class="field wide">
+          <label for="vAddress">乙方地址</label>
+          <input id="vAddress" type="text" placeholder="台北市…">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">3. 標的與交付</p>
+      <div class="grid">
+        <div class="field wide">
+          <label for="pTitle">專案名稱</label>
+          <input id="pTitle" type="text" placeholder="寵物美容預約系統與店家後台建置">
+        </div>
+        <div class="field wide">
+          <label for="pScope">工作範圍（一行一項，會列成條文）</label>
+          <textarea id="pScope" placeholder="LINE 官方帳號串接與預約流程&#10;店家後台：預約看板、客戶名單、月營收報表&#10;三種權限（老闆／員工／工讀）與操作紀錄"></textarea>
+        </div>
+        <div class="field wide">
+          <label for="deliverables">交付項目（一行一項）</label>
+          <textarea id="deliverables" placeholder="可運作之系統 1 套（部署於甲方指定環境）&#10;原始碼與部署說明 1 份&#10;操作教學文件 1 份"></textarea>
+        </div>
+        <div class="field wide">
+          <label for="excludes">不包含項目（一行一項，寫清楚可以少吵一半）</label>
+          <textarea id="excludes" placeholder="文案與圖片素材製作&#10;第三方平台審核結果&#10;主機與網域月費"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">4. 價金與付款</p>
+      <div class="grid">
+        <div class="field">
+          <label for="amount">合約總價（新台幣）</label>
+          <input id="amount" type="number" min="0" step="1" inputmode="numeric" placeholder="80000">
+        </div>
+        <div class="field">
+          <label for="pTaxMode">稅務方式</label>
+          <select id="pTaxMode">
+            <option value="none">個人接案：無發票，以勞務報酬單請款</option>
+            <option value="exclusive">未稅，另加 5% 營業稅</option>
+            <option value="inclusive">含稅（已含 5% 營業稅）</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tDepositPct">訂金比例（%）</label>
+          <input id="tDepositPct" type="number" min="0" max="100" step="5" value="50">
+        </div>
+        <div class="field">
+          <label for="tPayDays">各期款付款天數（自請款日起）</label>
+          <input id="tPayDays" type="number" min="1" step="1" value="7">
+        </div>
+        <div class="field" id="monthlyWrap" hidden>
+          <label for="monthlyFee">月費（新台幣／月）</label>
+          <input id="monthlyFee" type="number" min="0" step="1" placeholder="8000">
+        </div>
+        <div class="field" id="termWrap" hidden>
+          <label for="termMonths">委任期間（月）</label>
+          <input id="termMonths" type="number" min="1" step="1" value="6">
+        </div>
+        <div class="field wide">
+          <label for="thirdPartyNote">由甲方實支的第三方費用（選填，一行一項）</label>
+          <textarea id="thirdPartyNote" placeholder="雲端主機月費（約 NT$150 起）&#10;LINE 官方帳號訊息方案費用&#10;網域與 SSL 費用"></textarea>
+        </div>
+      </div>
+      <div class="result" aria-live="polite">
+        <dl>
+          <div><dt>合約總價</dt><dd id="r-total">0</dd></div>
+          <div><dt>訂金 <small id="r-deposit-pct"></small></dt><dd id="r-deposit">0</dd></div>
+          <div><dt>尾款</dt><dd id="r-final">0</dd></div>
+          <div><dt id="r-extra-label">營業稅</dt><dd id="r-extra">0</dd></div>
+        </dl>
+        <p class="basis" id="r-basis"></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">5. 期程與驗收</p>
+      <div class="grid">
+        <div class="field">
+          <label for="tDeliverDays">工期（工作日，自訂金入帳且素材齊備起算）</label>
+          <input id="tDeliverDays" type="number" min="1" step="1" value="14">
+        </div>
+        <div class="field">
+          <label for="acceptDays">驗收期限（日曆日）</label>
+          <input id="acceptDays" type="number" min="1" step="1" value="7">
+        </div>
+        <div class="field">
+          <label for="tRevisions">包含修改次數</label>
+          <input id="tRevisions" type="number" min="0" step="1" value="2">
+        </div>
+        <div class="field">
+          <label for="warrantyDays">免費調整期（交付後日數）</label>
+          <input id="warrantyDays" type="number" min="0" step="1" value="30">
+        </div>
+        <div class="field">
+          <label for="penaltyRate">遲延違約金（每日，佔總價 %）</label>
+          <input id="penaltyRate" type="number" min="0" step="0.05" value="0.1">
+        </div>
+        <div class="field">
+          <label for="penaltyCap">違約金上限（佔總價 %）</label>
+          <input id="penaltyCap" type="number" min="0" step="1" value="10">
+        </div>
+        <div class="field">
+          <label for="noticeDays">終止通知期（日）</label>
+          <input id="noticeDays" type="number" min="1" step="1" value="30">
+        </div>
+        <div class="field">
+          <label for="court">管轄法院</label>
+          <input id="court" type="text" value="臺灣臺北地方法院">
+        </div>
+        <div class="field wide" id="aiWrap" hidden>
+          <label for="aiSourceNote">AI 回答範圍的依據文件（選填）</label>
+          <input id="aiSourceNote" type="text" placeholder="甲方核准之 FAQ 29 題與產品說明書">
+        </div>
+        <div class="field" id="regressionWrap" hidden>
+          <label for="regressionCount">回歸測試題數（驗收依據）</label>
+          <input id="regressionCount" type="number" min="1" step="1" value="30">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">6. 條款開關</p>
+      <h2>選了範本會帶入預設，逐條可關</h2>
+      <div class="switches" id="switches"></div>
+    </section>
+  </form>
+
+  <section class="section" id="preview-section">
+    <p class="section-label">7. 合約預覽</p>
+    <h2>A4 版面，列印一式兩份雙方簽名或用印</h2>
+    <div class="actions">
+      <button type="button" class="btn primary" id="btnPrint">下載 PDF（列印）</button>
+      <button type="button" class="btn" id="btnHandoff">帶到下一張單</button>
+      <button type="button" class="btn" id="btnPull">帶入上一張單</button>
+      <button type="button" class="btn" id="btnProfile">記住我的資料</button>
+      <button type="button" class="btn" id="btnExport">匯出 JSON</button>
+      <label class="btn" for="importJson" style="cursor:pointer">匯入 JSON</label>
+      <input id="importJson" type="file" accept="application/json" hidden>
+      <button type="button" class="btn" id="btnClear">清除本機資料</button>
+      <span class="status" id="opStatus"></span>
+    </div>
+    <p class="note">列印對話框選「另存為 PDF」，紙張 A4。條文會自然分頁，簽名欄不會被切斷。</p>
+    <div id="print-area">
+      <div class="sheet-wrap">
+        <div id="sheet">
+          <div class="doc-title" id="s-title">合約書</div>
+          <div class="doc-sub" id="s-sub"></div>
+          <div class="contract-body">
+            <div class="contract-parties" id="s-parties"></div>
+            <div id="s-clauses"></div>
+            <div class="sign-area" id="s-sign"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">怎麼用</p>
+    <h2>一份合約至少要寫清楚這六件事</h2>
+    <table class="ref">
+      <thead><tr><th>要素</th><th>這份範本放在哪</th></tr></thead>
+      <tbody>
+        <tr><td>當事人</td><td>合約前言：名稱、統編或身分證字號、地址、Email。寫錯對象，條文再完整也追不到人</td></tr>
+        <tr><td>標的</td><td>工作範圍與交付項目兩條，加上「不包含項目」。範圍是爭議的源頭，寧可寫囉嗦</td></tr>
+        <tr><td>價金</td><td>價金與付款條，含未稅／含稅、分期比例、付款天數、第三方費用由誰實支</td></tr>
+        <tr><td>期程</td><td>工期條：自訂金入帳且素材齊備起算，甲方配合事項逾期則工期順延</td></tr>
+        <tr><td>驗收</td><td>驗收條：期限內未提出書面具體修改意見視同驗收通過、修改次數上限</td></tr>
+        <tr><td>違約</td><td>遲延與違約條：每日比例計算並設上限，雙方對等</td></tr>
+      </tbody>
+    </table>
+
+    <h3>五種範本怎麼挑</h3>
+    <table class="ref">
+      <thead><tr><th>範本</th><th>典型案子</th><th>性質</th><th>最關鍵的條款</th></tr></thead>
+      <tbody>
+        <tr><td>系統與網站開發</td><td>後台系統、電商、預約系統、爬蟲與資料工具</td><td>承攬</td><td>規格與範圍、里程碑驗收、原始碼交付</td></tr>
+        <tr><td>LINE／WhatsApp 整合</td><td>官方帳號自動回覆、圖文選單、Messaging API、商務 API 環境</td><td>承攬＋設定服務</td><td>帳號與金鑰歸屬、只能由甲方本人操作的步驟、provider 選擇不可逆</td></tr>
+        <tr><td>AI 客服與知識庫</td><td>FAQ 問答機器人、文件問答</td><td>承攬</td><td>回答範圍限於核准內容、回歸測試作為驗收、AI 產出需人工確認</td></tr>
+        <tr><td>維護與月費委任</td><td>系統維護、代管、月費顧問</td><td>委任</td><td>服務範圍與回應時間、月費與第三方費用、終止通知</td></tr>
+        <tr><td>一般專案承攬</td><td>其他交付成果的案子</td><td>承攬</td><td>範圍、驗收、智財</td></tr>
+      </tbody>
+    </table>
+    <div class="notes">
+      <p style="margin-top:1rem">承攬以「完成一定成果」為目的，驗收通過才算履約；委任以「處理特定事務」為目的，重點是以專業注意程度處理，不保證特定結果。實際性質依約定內容與履行方式判斷，不是標題叫什麼就是什麼。</p>
+      <h3>接案方最該保住的三條</h3>
+      <ul>
+        <li><b>訂金入帳才開工。</b>工期從入帳日起算，不是從簽約日起算。已投入的工時要有底。</li>
+        <li><b>期限內不驗收視同通過。</b>「檔案收到了、人消失了」就是靠這條結案請尾款。修改意見要是書面且具體，否則不算。</li>
+        <li><b>付清才移轉著作財產權。</b>款項付清前權利留在乙方，甲方不得使用。想上線就把尾款結清。</li>
+      </ul>
+      <h3>簽名與電子檔</h3>
+      <p>本工具產出 PDF，不提供線上簽署。最沒有爭議的做法是列印一式兩份、雙方親筆簽名或用印、各留一份。依電子簽章法，雙方同意以電子方式為之時，電子文件與電子簽名原則上也有效力（法律另有規定者除外），但一般手寫電子簽名與使用憑證的數位簽章效力不同，實務上紙本用印接受度最高。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">同一份專案資料接下去</p>
+    <div class="cta">
+      <b>報價 → 合約 → 請款 → 勞報單，四張單共用同一份資料。</b>
+      在任何一張單按「帶到下一張單」，到下一個工具按「帶入上一張單」，雙方資料、專案名稱、金額與條件就會帶過去，不用重打。<br>
+      <a href="/tools/quotation/">報價單產生器</a> · <a href="/tools/payment/">請款單產生器</a> · <a href="/tools/labor-form/">勞務報酬單產生器</a> · <a href="/tools/">全部工具</a>
+    </div>
+    <p class="note">範本與說明僅供參考，不構成法律意見；重大案件請洽專業律師。</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>&copy; 2026 歐兜拜 ootobai</span>
+  <span><a href="/work/">作品</a> · <a href="/services/">服務</a> · <a href="/tools/">免費工具</a> · <a href="https://me.ootob.ai/">Jack 的個人頁</a></span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var K = window.DocKit, T = window.TWTax;
+  var form = K.$("form");
+
+  var PROFILE_KEYS = ["vName", "vTaxId", "vPhone", "vEmail", "vAddress"];
+  var CN = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十",
+            "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
+            "二十一", "二十二", "二十三", "二十四", "二十五"];
+
+  /* ---------- 條款庫 ----------
+   * 每條回傳 { title, items: [字串…] }；items 會排成條文內的編號項。
+   * f = 目前欄位快照（見 fields()）。
+   */
+  var CLAUSES = {
+    subject: function (f) {
+      var items = ["乙方受甲方委託辦理「" + f.title + "」（以下稱本專案），工作範圍如下："];
+      items.push({ list: f.scope.length ? f.scope : ["（依雙方另行確認之書面範圍）"] });
+      if (f.excludes.length) {
+        items.push("下列項目不在本契約範圍內，如有需要由雙方另行議定：");
+        items.push({ list: f.excludes });
+      }
+      items.push("工作範圍以本契約及雙方以書面或電子郵件確認之內容為準；口頭指示未經書面確認者，不生變更範圍之效力。");
+      return { title: "契約標的與工作範圍", items: items };
+    },
+    deliverables: function (f) {
+      var items = ["乙方應交付之項目如下："];
+      items.push({ list: f.deliverables.length ? f.deliverables : ["（依雙方另行確認之交付清單）"] });
+      items.push("交付方式為電子檔交付至甲方指定之電子郵件或雲端位置，並以送達之日為交付日。");
+      return { title: "交付項目與交付方式", items: items };
+    },
+    price: function (f) {
+      var items = [];
+      if (f.type === "maintain") {
+        items.push("本契約月費為新台幣 " + T.fmt(f.monthlyFee) + " 元" + f.taxWord + "，委任期間為 " + f.termMonths + " 個月，自簽約日起算。");
+        items.push("乙方於每月月底前就當月服務開立請款單，甲方應於請款日起 " + f.payDays + " 日內付款。");
+      } else {
+        items.push("本專案契約總價為新台幣 " + T.fmt(f.total) + " 元" + f.taxWord + "。");
+        if (f.taxMode === "exclusive") {
+          items.push("上列金額為未稅金額，另加 5% 營業稅新台幣 " + T.fmt(f.tax) + " 元，合計新台幣 " + T.fmt(f.grand) + " 元。");
+        }
+        if (f.taxMode === "none") {
+          items.push("乙方為個人接案者，不開立統一發票，以勞務報酬單作為甲方入帳憑證；甲方依所得稅法及全民健康保險法規定代扣所得稅與二代健保補充保費者，扣繳金額自各期應付款項中扣除，並提供扣繳憑單。");
+        }
+      }
+      if (f.thirdParty.length) {
+        items.push("下列第三方費用不含在上列價金內，由甲方以自己名義申辦並實際支付：");
+        items.push({ list: f.thirdParty });
+      }
+      return { title: "契約價金", items: items };
+    },
+    payment: function (f) {
+      var items = [
+        "本契約價金分二期支付：訂金為契約總價之 " + f.depositPct + "%，即新台幣 " + T.fmt(f.deposit) + " 元；尾款新台幣 " + T.fmt(f.finalPay) + " 元。",
+        "甲方應於簽約後 " + f.payDays + " 日內支付訂金。乙方於訂金入帳後開始作業；訂金未入帳前，乙方得不開始作業，且工期不起算。",
+        "尾款於驗收通過（或視同驗收通過）後，由乙方開立請款單，甲方應於請款日起 " + f.payDays + " 日內付款。",
+        "各期款項均以匯款方式支付至乙方指定帳戶，匯款手續費由甲方負擔。"
+      ];
+      return { title: "付款方式", items: items };
+    },
+    schedule: function (f) {
+      return {
+        title: "工期",
+        items: [
+          "乙方應於 " + f.deliverDays + " 個工作日內完成本專案並交付。工期自訂金入帳、且甲方應提供之素材、帳號與權限齊備之日起算，二者較晚之日為起算日。",
+          "因甲方未及時提供素材、帳號、權限、審核或回覆，致乙方無法繼續作業者，工期依實際延誤日數順延，乙方不負遲延責任。",
+          "因不可歸責於雙方之事由（含第三方平台政策或服務變更）致工期受影響者，雙方應協商調整期程。"
+        ]
+      };
+    },
+    acceptance: function (f) {
+      return {
+        title: "驗收",
+        items: [
+          "甲方應於乙方交付後 " + f.acceptDays + " 日內完成驗收。驗收不合格者，應於同期限內以書面或電子郵件提出具體、可執行之修改意見。",
+          "甲方於前項期限內未提出具體修改意見者，視同驗收通過，乙方得請領尾款。",
+          "本契約包含 " + f.revisions + " 次修改。修改指於原約定範圍內之調整；逾次數或超出原範圍之修改，依第「變更與追加」條另行計價。",
+          "驗收之標準為交付項目符合本契約約定之工作範圍與功能描述，不以甲方主觀偏好為準。"
+        ]
+      };
+    },
+    milestone: function (f) {
+      return {
+        title: "里程碑與階段確認",
+        items: [
+          "本專案得分階段進行。各階段完成時，乙方以書面或線上示範方式提交成果，甲方應於 " + f.acceptDays + " 日內確認；期限內未回覆者視同確認，乙方得進行下一階段。",
+          "已確認之階段成果，甲方事後要求變更者，依第「變更與追加」條辦理。"
+        ]
+      };
+    },
+    change: function (f) {
+      return {
+        title: "變更與追加",
+        items: [
+          "任一方要求變更工作範圍、規格或交付項目者，應以書面或電子郵件提出。",
+          "變更涉及工時增加者，由乙方提出追加報價與工期調整，經甲方書面同意後始行辦理；未經同意者，乙方得不予施作，原約定不受影響。",
+          "甲方要求縮減範圍者，已完成部分之價金不予退還，未開始部分依雙方協議結算。"
+        ]
+      };
+    },
+    warranty: function (f) {
+      return {
+        title: "免費調整與保固",
+        items: [
+          "交付後 " + f.warrantyDays + " 日內，就不符合本契約約定之功能瑕疵，乙方應免費修正。",
+          "下列情形不屬前項範圍，乙方得另行計價：甲方或第三人自行修改所致之異常、甲方營運環境或第三方服務變更所致之異常、新增功能或範圍外之調整。",
+          "前項期間屆滿後之維護、調整與功能新增，由雙方另立維護契約或依次計價。"
+        ]
+      };
+    },
+    ip: function (f) {
+      return {
+        title: "智慧財產權",
+        items: [
+          "本專案交付成果之著作財產權，於甲方付清全部價金之日移轉予甲方；付清前權利歸乙方所有，甲方不得使用、重製或公開。",
+          "乙方保留於本專案前已存在之工具、程式模組、框架與技術文件之權利；該等既有元件以非專屬、不可轉讓之方式授權甲方於本專案範圍內使用。",
+          "乙方得於作品集中以文字或去識別化畫面說明本專案之工作類型；如甲方要求保密，應於本契約簽署時以書面提出，乙方不得揭露甲方名稱與可識別內容。",
+          "乙方保證交付成果未侵害第三人智慧財產權；使用開放原始碼元件者，依其授權條件使用。"
+        ]
+      };
+    },
+    source: function (f) {
+      return {
+        title: "原始碼與交接",
+        items: [
+          "乙方應交付本專案之原始碼、資料庫結構與部署說明，並提供一次線上交接說明。",
+          "系統部署於甲方名下之主機、網域與第三方服務帳號；相關帳號、金鑰與付款方式均由甲方持有，乙方不留存長期存取權限。",
+          "交接完成後，乙方應移除自身之管理權限與臨時金鑰。"
+        ]
+      };
+    },
+    accounts: function (f) {
+      return {
+        title: "帳號、權限與平台限制",
+        items: [
+          "本專案所涉第三方平台（如 LINE 官方帳號、Meta 商務帳號、WhatsApp 商務帳號、金流服務）之帳號、驗證與付費方案，一律以甲方名義申辦，帳號與金鑰歸甲方所有。乙方以受邀管理員身分作業，交付後退出。",
+          "下列步驟依平台規定只能由甲方本人完成，乙方無法代為執行：建立商業帳號與填報企業資料、啟用 Messaging API 並選定 provider、以平台邀請機制發給乙方管理權限、申請付費方案或認證帳號。乙方提供帶圖操作指引或線上陪同。",
+          "LINE 官方帳號之 provider 選擇不可逆，且不同 provider 下同一使用者之識別碼不同；雙方同意 channel 一律建立於甲方自有 provider 之下。",
+          "第三方平台之審核結果、政策變更、費率調整與服務中斷，非乙方可控制事項，不構成乙方違約；因此所需之調整工作，依第「變更與追加」條辦理。"
+        ]
+      };
+    },
+    aiScope: function (f) {
+      var base = "乙方建置之問答系統，僅在甲方核准之內容範圍內回答" + (f.aiSource ? "（依據：" + f.aiSource + "）" : "") + "；超出範圍之問題，系統應明確告知無法回答，而非自行生成答案。";
+      return {
+        title: "AI 回答範圍與責任",
+        items: [
+          base,
+          "內容之正確性與合法性由甲方負責。甲方應指定負責人審核並核准知識庫內容；乙方不對內容本身之正確性負責。",
+          "系統以生成式模型輔助時，乙方應設置必要之限制與提示機制，但雙方理解生成式模型無法保證百分之百正確；乙方不承諾特定正確率，亦不就依系統回答所生之商業決策負責。",
+          "涉及金流、個資寫入或對外發送之動作，一律須經甲方人員確認後執行，不由系統自動完成。"
+        ]
+      };
+    },
+    regression: function (f) {
+      return {
+        title: "驗收測試",
+        items: [
+          "乙方應提出不少於 " + f.regressionCount + " 題之回歸測試清單，逐題記錄「應回答者是否正確回答」與「應拒答者是否正確拒答」，作為驗收依據。",
+          "測試清單經雙方確認後，全部項目通過即為驗收通過。甲方新增測試題目者，屬範圍變更，依第「變更與追加」條辦理。"
+        ]
+      };
+    },
+    maintainScope: function (f) {
+      return {
+        title: "維護服務範圍與回應時間",
+        items: [
+          "乙方於委任期間提供之服務包括：系統運作監看、已交付功能之故障排除、依甲方要求之小幅內容或設定調整。",
+          "回應時間：工作日收到通知後 1 個工作日內回覆處理方式；系統無法運作之重大異常，乙方應優先處理。",
+          "下列項目不在月費範圍內，另行計價：新功能開發、改版與重新設計、資料大量遷移、第三方平台改版所需之重新串接。",
+          "本條服務性質為委任，乙方以專業注意義務處理受託事務，不擔保特定成果或特定營運指標。"
+        ]
+      };
+    },
+    terminate: function (f) {
+      var items = [];
+      if (f.type === "maintain") {
+        items.push("任一方得於 " + f.noticeDays + " 日前以書面通知終止本契約，已預繳而未提供服務之月費按比例退還。");
+      } else {
+        items.push("甲方於專案進行中終止本契約者，訂金不予退還；乙方已完成而超出訂金比例之部分，甲方應按實際完成進度支付。");
+        items.push("乙方無正當理由拒絕繼續履約者，應返還已收取但未完成部分之價金。");
+      }
+      items.push("一方有下列情形，他方得以書面通知終止本契約並請求損害賠償：遲延履行經催告仍不履行、遲付款項逾 " + (f.payDays * 2) + " 日、或有重大違反本契約之情形。");
+      items.push("契約終止時，雙方應返還他方所有之資料與存取權限；保密義務不因契約終止而消滅。");
+      return { title: "契約終止與結算", items: items };
+    },
+    penalty: function (f) {
+      return {
+        title: "遲延與違約金",
+        items: [
+          "乙方非因甲方或不可歸責事由而遲延交付者，每遲延一日按契約總價 " + f.penaltyRate + "% 計付違約金，總額以契約總價 " + f.penaltyCap + "% 為上限。",
+          "甲方遲付款項者，每遲延一日按應付金額 " + f.penaltyRate + "% 計付遲延利息，總額以應付金額 " + f.penaltyCap + "% 為上限；遲付期間乙方得暫停作業，且工期順延。",
+          "雙方同意本條違約金為損害賠償總額之預定，並以前二項上限為限。"
+        ]
+      };
+    },
+    confidential: function (f) {
+      return {
+        title: "保密",
+        items: [
+          "雙方對於因本契約知悉之他方營業資訊、客戶資料、系統架構與帳號資訊，應保密並僅於履約目的範圍內使用。",
+          "前項義務於本契約終止後 2 年內繼續有效。已公開資訊、自第三人合法取得之資訊、依法令或主管機關要求揭露者，不在此限。"
+        ]
+      };
+    },
+    privacy: function (f) {
+      return {
+        title: "個人資料保護",
+        items: [
+          "乙方因履約而處理甲方或其客戶之個人資料時，僅依甲方指示於必要範圍內處理，不得為其他目的使用。",
+          "乙方應採取適當之安全措施；履約完成或契約終止後，除法令要求保存者外，應刪除或返還所持有之個人資料。",
+          "甲方應確保其提供之個人資料已依個人資料保護法取得合法蒐集與利用之基礎。"
+        ]
+      };
+    },
+    forcemajeure: function (f) {
+      return {
+        title: "不可抗力",
+        items: [
+          "因天災、疫情、戰爭、政府命令、網路或雲端服務大規模中斷等不可歸責於雙方之事由致無法履約者，受影響一方應即通知他方，義務於事由存續期間暫停，工期順延。",
+          "前項事由持續超過 30 日者，任一方得終止本契約，並就已完成部分結算。"
+        ]
+      };
+    },
+    misc: function (f) {
+      return {
+        title: "其他約定",
+        items: [
+          "本契約之通知以雙方於本契約所載之電子郵件為之，發送後即視為送達；地址或聯絡方式變更應即通知他方。",
+          "雙方為獨立之契約當事人，本契約不構成僱傭、代理或合夥關係。",
+          "本契約未約定事項，依中華民國法律及誠信原則處理；因本契約涉訟者，雙方合意以 " + f.court + " 為第一審管轄法院。",
+          "本契約一式二份，雙方各執一份為憑；以電子方式簽署者，依電子簽章法辦理，效力與紙本相同。"
+        ]
+      };
+    }
+  };
+
+  var CLAUSE_LABEL = {
+    subject: ["契約標的與工作範圍", "把要做什麼寫死，爭議最常出在這條"],
+    deliverables: ["交付項目與交付方式", "交什麼、怎麼交、哪天算交付"],
+    price: ["契約價金", "總價或月費、稅務方式、第三方費用誰付"],
+    payment: ["付款方式", "訂金入帳才開工，尾款驗收後請領"],
+    schedule: ["工期", "甲方卡關則工期順延，延誤不算你的"],
+    acceptance: ["驗收", "期限內未提具體書面意見視同通過"],
+    milestone: ["里程碑與階段確認", "分階段的案子建議開；階段確認後不回頭"],
+    change: ["變更與追加", "範圍外的要求先報價再做"],
+    warranty: ["免費調整與保固", "交付後一段時間修功能瑕疵，不含新需求"],
+    ip: ["智慧財產權", "付清才移轉；保留既有模組與作品集揭露權"],
+    source: ["原始碼與交接", "原始碼與文件交付、帳號在甲方名下"],
+    accounts: ["帳號、權限與平台限制", "LINE／Meta 這類案子必開：provider 不可逆、四個步驟只能甲方本人做"],
+    aiScope: ["AI 回答範圍與責任", "只在核准內容內回答、內容正確性由甲方負責、不承諾正確率"],
+    regression: ["驗收測試", "以回歸測試清單逐題驗收，避免無限期「感覺不準」"],
+    maintainScope: ["維護服務範圍與回應時間", "月費型必開：做什麼、多久回、什麼要另計"],
+    terminate: ["契約終止與結算", "做到一半喊停怎麼算"],
+    penalty: ["遲延與違約金", "雙向對等並設上限，比只罰一方容易簽"],
+    confidential: ["保密", "客戶資料與帳號資訊保密"],
+    privacy: ["個人資料保護", "會碰到客戶名單、會員資料時開"],
+    forcemajeure: ["不可抗力", "天災、平台大當機的處理"],
+    misc: ["其他約定", "通知方式、獨立承攬關係、管轄法院、一式二份"]
+  };
+
+  var TEMPLATES = {
+    software: {
+      label: "系統與網站開發承攬契約",
+      nature: "本契約性質為承攬，以完成並交付約定之系統成果為目的。",
+      hint: "適合後台系統、電商、預約系統、爬蟲與資料工具等交付成果的案子。",
+      clauses: ["subject", "deliverables", "price", "payment", "schedule", "milestone", "acceptance", "change", "warranty", "ip", "source", "terminate", "penalty", "confidential", "privacy", "forcemajeure", "misc"],
+      off: ["privacy", "forcemajeure"]
+    },
+    line: {
+      label: "LINE／WhatsApp 官方帳號整合服務契約",
+      nature: "本契約性質為承攬，並包含第三方平台設定與交接服務。",
+      hint: "官方帳號設定、圖文選單、Messaging API、商務 API 環境建置。帳號歸屬與平台限制條款務必保留。",
+      clauses: ["subject", "deliverables", "price", "payment", "schedule", "acceptance", "change", "accounts", "warranty", "ip", "source", "terminate", "penalty", "confidential", "privacy", "forcemajeure", "misc"],
+      off: ["forcemajeure"]
+    },
+    ai: {
+      label: "AI 客服與知識庫問答建置契約",
+      nature: "本契約性質為承攬，以完成並交付約定之問答系統為目的。",
+      hint: "FAQ 問答、文件問答。回答範圍與回歸測試驗收是這類案子的爭議核心。",
+      clauses: ["subject", "deliverables", "price", "payment", "schedule", "aiScope", "regression", "acceptance", "change", "warranty", "ip", "source", "terminate", "penalty", "confidential", "privacy", "forcemajeure", "misc"],
+      off: ["forcemajeure"]
+    },
+    maintain: {
+      label: "系統維護與月費委任契約",
+      nature: "本契約性質為委任，乙方以專業注意義務處理受託事務，不擔保特定成果。",
+      hint: "月費維護、代管、顧問。價金條會改成月費與委任期間。",
+      clauses: ["subject", "maintainScope", "price", "schedule", "change", "accounts", "confidential", "privacy", "terminate", "penalty", "forcemajeure", "misc"],
+      off: ["accounts", "schedule", "forcemajeure"]
+    },
+    general: {
+      label: "專案承攬契約",
+      nature: "本契約性質為承攬，以完成並交付約定之工作成果為目的。",
+      hint: "選不出類型時用這個，條款最通用。",
+      clauses: ["subject", "deliverables", "price", "payment", "schedule", "acceptance", "change", "warranty", "ip", "terminate", "penalty", "confidential", "privacy", "forcemajeure", "misc"],
+      off: ["privacy", "forcemajeure"]
+    }
+  };
+
+  /* ---------- 欄位快照 ---------- */
+  function lines(id) {
+    return (K.$(id).value || "").split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function num(id) { return Number(K.$(id).value) || 0; }
+
+  function fields() {
+    var type = K.$("ctType").value;
+    var taxMode = K.$("pTaxMode").value;
+    var total = num("amount");
+    var bt = T.businessTax(total, taxMode);
+    var depositPct = num("tDepositPct");
+    var deposit = Math.round(total * depositPct / 100);
+    return {
+      type: type,
+      tpl: TEMPLATES[type],
+      title: K.$("pTitle").value.trim() || "（專案名稱）",
+      scope: lines("pScope"),
+      deliverables: lines("deliverables"),
+      excludes: lines("excludes"),
+      thirdParty: lines("thirdPartyNote"),
+      taxMode: taxMode,
+      taxWord: taxMode === "inclusive" ? "（含營業稅）" : (taxMode === "exclusive" ? "（未稅）" : ""),
+      total: total, tax: bt.tax, grand: bt.total, base: bt.base,
+      depositPct: depositPct, deposit: deposit, finalPay: total - deposit,
+      monthlyFee: num("monthlyFee"), termMonths: num("termMonths") || 1,
+      payDays: num("tPayDays") || 7,
+      deliverDays: num("tDeliverDays") || 1,
+      acceptDays: num("acceptDays") || 1,
+      revisions: num("tRevisions"),
+      warrantyDays: num("warrantyDays"),
+      penaltyRate: K.$("penaltyRate").value || "0.1",
+      penaltyCap: num("penaltyCap"),
+      noticeDays: num("noticeDays") || 30,
+      court: K.$("court").value.trim() || "臺灣臺北地方法院",
+      aiSource: K.$("aiSourceNote").value.trim(),
+      regressionCount: num("regressionCount") || 30,
+      signDate: K.$("signDate").value,
+      caseId: K.$("pCaseId").value.trim()
+    };
+  }
+
+  /* ---------- 條款開關 ---------- */
+  function buildSwitches() {
+    var tpl = TEMPLATES[K.$("ctType").value];
+    var box = K.$("switches");
+    box.innerHTML = "";
+    tpl.clauses.forEach(function (id) {
+      var meta = CLAUSE_LABEL[id];
+      var label = document.createElement("label");
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.id = "c_" + id;
+      cb.checked = tpl.off.indexOf(id) < 0;
+      label.appendChild(cb);
+      var name = document.createElement("span");
+      name.textContent = meta[0];
+      label.appendChild(name);
+      var desc = document.createElement("span");
+      desc.className = "desc";
+      desc.textContent = meta[1];
+      label.appendChild(desc);
+      box.appendChild(label);
+    });
+  }
+
+  function activeClauses() {
+    var tpl = TEMPLATES[K.$("ctType").value];
+    return tpl.clauses.filter(function (id) {
+      var cb = K.$("c_" + id);
+      return cb && cb.checked;
+    });
+  }
+
+  /* ---------- 渲染 ---------- */
+  function partyBlock(f) {
+    var cType = form.querySelector('input[name="cType"]:checked').value;
+    var cIdLabel = cType === "company" ? "統一編號" : "身分證字號";
+    function row(role, name, idLabel, id, addr, contact, phone, mail) {
+      var bits = [];
+      bits.push("<b>" + role + "：</b>" + (name || "＿＿＿＿＿＿＿＿＿＿"));
+      if (id) bits.push(idLabel + "：" + id);
+      if (contact) bits.push("聯絡人：" + contact);
+      if (phone) bits.push("電話：" + phone);
+      if (mail) bits.push("Email：" + mail);
+      if (addr) bits.push("地址：" + addr);
+      return "<p>" + bits.join("　") + "</p>";
+    }
+    var html = "";
+    html += row("甲方（委託方）", K.$("cName").value.trim(), cIdLabel, K.$("cTaxId").value.trim(),
+      K.$("cAddress").value.trim(), K.$("cContact").value.trim(), K.$("cPhone").value.trim(), K.$("cEmail").value.trim());
+    html += row("乙方（受託方）", K.$("vName").value.trim(), "統一編號／身分證字號", K.$("vTaxId").value.trim(),
+      K.$("vAddress").value.trim(), "", K.$("vPhone").value.trim(), K.$("vEmail").value.trim());
+    html += "<p>茲就「" + f.title + "」相關事項，雙方合意訂立本契約，條款如下。" + f.tpl.nature + "</p>";
+    return html;
+  }
+
+  function renderClauses(f) {
+    var ids = activeClauses();
+    var html = "";
+    ids.forEach(function (id, i) {
+      var c = CLAUSES[id](f);
+      html += '<div class="clause"><h4>第' + (CN[i + 1] || (i + 1)) + '條　' + c.title + "</h4>";
+      var n = 0;
+      c.items.forEach(function (item) {
+        if (typeof item === "string") {
+          n += 1;
+          html += "<p>" + n + "、" + item + "</p>";
+        } else if (item && item.list) {
+          html += "<ol>" + item.list.map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ol>";
+        }
+      });
+      html += "</div>";
+    });
+    return html;
+  }
+
+  function renderSign(f) {
+    var d = f.signDate ? K.ad(f.signDate) : "＿＿＿＿ 年 ＿＿ 月 ＿＿ 日";
+    return '<table><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tbody><tr>' +
+      '<td><div class="sig-label">甲方（委託方）</div>簽名或蓋章：<br><br>代表人：<br>日期：</td>' +
+      '<td><div class="sig-label">乙方（受託方）</div>簽名或蓋章：<br><br>代表人：<br>日期：</td>' +
+      '</tr></tbody></table>' +
+      '<p class="foot">簽約日期：' + d + '　本契約一式二份，雙方各執一份。本文件由 ootob.ai 合約產生器產生，內容由雙方自行確認，範本不構成法律意見。</p>';
+  }
+
+  function render() {
+    var f = fields();
+
+    // 範本相關欄位顯示
+    K.$("ctTypeHint").textContent = f.tpl.hint;
+    K.$("monthlyWrap").hidden = f.type !== "maintain";
+    K.$("termWrap").hidden = f.type !== "maintain";
+    K.$("aiWrap").hidden = f.type !== "ai";
+    K.$("regressionWrap").hidden = f.type !== "ai";
+
+    // 統編／身分證軟驗證：兩種格式任一通過就不提示
+    var cId = K.$("cTaxId").value.trim().toUpperCase();
+    K.$("cTaxIdErr").hidden = !cId || K.validTaxId(cId) || K.validTwId(cId);
+    var vId = K.$("vTaxId").value.trim().toUpperCase();
+    K.$("vTaxIdErr").hidden = !vId || K.validTaxId(vId) || K.validTwId(vId);
+
+    // 金額摘要
+    K.$("r-total").textContent = T.fmt(f.type === "maintain" ? f.monthlyFee * f.termMonths : f.total);
+    K.$("r-deposit-pct").textContent = f.type === "maintain" ? "（月費制不適用）" : f.depositPct + "%";
+    K.$("r-deposit").textContent = T.fmt(f.type === "maintain" ? 0 : f.deposit);
+    K.$("r-final").textContent = T.fmt(f.type === "maintain" ? f.monthlyFee : f.finalPay);
+    if (f.taxMode === "none") {
+      var w = T.withhold(f.type === "maintain" ? f.monthlyFee : f.total, "9A", "local", "normal");
+      K.$("r-extra-label").textContent = "扣繳後預估實拿";
+      K.$("r-extra").textContent = T.fmt(w.net);
+      K.$("r-basis").textContent = "個人接案無發票：以勞務報酬單請款。" + w.taxNote + w.suppNote + " 想看不同所得類別與反推報價，用報價單產生器的實拿試算。";
+    } else {
+      K.$("r-extra-label").textContent = f.taxMode === "exclusive" ? "營業稅（外加 5%）" : "營業稅（已內含）";
+      K.$("r-extra").textContent = T.fmt(f.tax);
+      K.$("r-basis").textContent = f.taxMode === "exclusive"
+        ? "未稅 " + T.fmt(f.total) + " 元，加 5% 營業稅後合計 " + T.fmt(f.grand) + " 元。"
+        : "含稅總價 " + T.fmt(f.total) + " 元，其中營業稅 " + T.fmt(f.tax) + " 元、未稅 " + T.fmt(f.base) + " 元。";
+    }
+
+    // 合約本體
+    K.$("s-title").textContent = f.tpl.label;
+    var sub = [];
+    if (f.title) sub.push("專案：" + f.title);
+    if (f.caseId) sub.push("案件編號：" + f.caseId);
+    K.$("s-sub").textContent = sub.join("　｜　");
+    K.$("s-parties").innerHTML = partyBlock(f);
+    K.$("s-clauses").innerHTML = renderClauses(f);
+    K.$("s-sign").innerHTML = renderSign(f);
+  }
+
+  /* ---------- 操作 ---------- */
+  function say(msg) {
+    K.$("opStatus").textContent = msg;
+    setTimeout(function () { if (K.$("opStatus").textContent === msg) K.$("opStatus").textContent = ""; }, 6000);
+  }
+
+  K.$("btnCase").addEventListener("click", function () {
+    var c = K.parseCase(K.$("caseInput").value);
+    if (!c) { K.$("caseStatus").textContent = "讀不到案件資料，請貼 JSON 或 TK-id"; return; }
+    if (c.title) K.$("pTitle").value = c.title;
+    if (c.caseId) K.$("pCaseId").value = c.caseId;
+    if (c.url) K.$("pCaseUrl").value = c.url;
+    if (c.budget) K.$("amount").value = c.budget;
+    if (c.description && !K.$("pScope").value.trim()) {
+      K.$("pScope").value = c.description.split(/\n+/).map(function (s) { return s.trim(); })
+        .filter(Boolean).slice(0, 8).join("\n").slice(0, 600);
+    }
+    K.$("caseStatus").textContent = "已匯入 " + (c.caseId || "案件") + (c.budget ? "（預算 " + T.fmt(c.budget) + "）" : "");
+    render();
+  });
+
+  K.$("ctType").addEventListener("change", function () { buildSwitches(); render(); });
+  K.bind(form, render);
+  K.$("switches").addEventListener("change", render);
+
+  K.$("btnPrint").addEventListener("click", function () { K.print("contract_print"); });
+
+  K.$("btnHandoff").addEventListener("click", function () {
+    var f = fields();
+    var ok = K.handoff.save({
+      kind: "contract",
+      shared: K.formState(form),
+      items: [{ name: f.title, spec: f.scope.join("；"), qty: 1, unit: "式", price: f.total }],
+      meta: { total: f.total, deposit: f.deposit, finalPay: f.finalPay, template: f.type }
+    });
+    say(ok ? "已存到這台瀏覽器，去報價單或請款單按「帶入上一張單」" : "存不進 localStorage（可能是隱私模式）");
+  });
+
+  K.$("btnPull").addEventListener("click", function () {
+    var shared = K.handoff.shared();
+    if (!shared || !Object.keys(shared).length) { say("這台瀏覽器還沒有上一張單的資料"); return; }
+    K.setFormState(form, shared);
+    render();
+    say("已帶入上一張單的雙方與專案資料");
+  });
+
+  K.$("btnProfile").addEventListener("click", function () {
+    say(K.profile.save(form, PROFILE_KEYS) ? "已記住乙方固定資料，下次自動帶入" : "存不進 localStorage");
+  });
+
+  K.$("btnClear").addEventListener("click", function () {
+    K.profile.clear();
+    K.handoff.clear();
+    say("已清除這台瀏覽器上的固定資料與單據暫存");
+  });
+
+  K.$("btnExport").addEventListener("click", function () {
+    var f = fields();
+    K.downloadJson({
+      v: 1, kind: "contract", template: f.type,
+      state: K.formState(form),
+      clauses: activeClauses()
+    }, "contract-" + (f.caseId || K.today()) + ".json");
+  });
+
+  K.$("importJson").addEventListener("change", function (e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    K.readJsonFile(file).then(function (data) {
+      if (data.template && TEMPLATES[data.template]) { K.$("ctType").value = data.template; }
+      buildSwitches();
+      K.setFormState(form, data.state || data.shared || {});
+      if (Array.isArray(data.clauses)) {
+        TEMPLATES[K.$("ctType").value].clauses.forEach(function (id) {
+          var cb = K.$("c_" + id);
+          if (cb) cb.checked = data.clauses.indexOf(id) >= 0;
+        });
+      }
+      render();
+      say("已匯入 JSON 草稿");
+    }).catch(function () { say("JSON 讀取失敗"); });
+    e.target.value = "";
+  });
+
+  /* ---------- 初始化 ---------- */
+  K.$("signDate").value = K.today();
+  buildSwitches();
+  K.profile.apply(form);
+  render();
+
+  window.__contract = { fields: fields, activeClauses: activeClauses, TEMPLATES: TEMPLATES };
+})();
+</script>
+</body>
+</html>
