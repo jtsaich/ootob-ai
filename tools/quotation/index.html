@@ -21,7 +21,7 @@
     #sheet .blk { margin-top: 2mm; }
     #sheet .pre { white-space: pre-line; }
     #sheet .reco { background: #f2f2f2; }
-    #sheet .tier-list { font-size: 9pt; line-height: 1.6; white-space: pre-line; }
+    #sheet .tier-list { font-size: 10.5pt; line-height: 1.6; white-space: pre-line; }
     #sheet .cn-amount { letter-spacing: .08em; }
   </style>
   <script type="application/ld+json">
@@ -821,6 +821,7 @@
         [it.name, it.spec, String(it.qty || ""), it.unit, fmt(it.price), fmt(it.amount)].forEach(function (text, i) {
           var td = document.createElement("td");
           td.textContent = text;
+          if (i <= 1) td.className = "pre";
           if (i >= 2 && i !== 3) td.className = i === 2 ? "num" : "num money";
           tr.appendChild(td);
         });

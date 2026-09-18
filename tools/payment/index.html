@@ -715,7 +715,7 @@
     if (!body.length) { body = [{ name: "", spec: "", qty: 0, unit: "", price: 0 }]; }
     $("s-items").innerHTML = body.map(function (it) {
       var sub = Math.round(it.qty * it.price);
-      return "<tr><td>" + esc(it.name) + "</td><td class=\"rule\">" + esc(it.spec) +
+      return "<tr><td class=\"pre\">" + esc(it.name) + "</td><td class=\"rule pre\">" + esc(it.spec) +
         "</td><td class=\"num\">" + (it.qty ? esc(it.qty) : "") +
         "</td><td>" + esc(it.unit) +
         "</td><td class=\"num money\">" + (it.price ? T.fmt(it.price) : "") +

@@ -232,6 +232,90 @@
     });
   }
 
+  /* ---------- 螢幕預覽縮放 ---------- */
+  /*
+   * 以前是 @media (max-width: 860px) 直接 zoom: .46，手機上小到看不清，
+   * 而且那條選擇器的 specificity 蓋掉 @media print 的還原規則，
+   * 導致窄視窗（含 headless Chrome 的 800px）列印出來整張縮成 46%。
+   * 現在螢幕縮放一律走 .sheet-wrap 的 --sheet-zoom，列印由 @media print 以 !important 還原成 1。
+   */
+  var MIN_ZOOM = 0.3;
+
+  function naturalSheetWidth(wrap, sheet) {
+    var prev = wrap.style.getPropertyValue("--sheet-zoom");
+    wrap.style.setProperty("--sheet-zoom", "1");
+    var w = sheet.getBoundingClientRect().width;
+    if (prev) { wrap.style.setProperty("--sheet-zoom", prev); }
+    else { wrap.style.removeProperty("--sheet-zoom"); }
+    return w;
+  }
+
+  function innerWidth(wrap) {
+    var cs = getComputedStyle(wrap);
+    return wrap.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0);
+  }
+
+  function fitZoom(wrap, sheet) {
+    var natural = naturalSheetWidth(wrap, sheet);
+    if (!natural) return 1;
+    return Math.max(MIN_ZOOM, Math.min(1, innerWidth(wrap) / natural));
+  }
+
+  /**
+   * 在 #preview-section 的預覽上方插入縮放列（列印時因為不在 #print-area 裡而自動隱藏）。
+   * 預設「適應寬度」；視窗夠寬時 fit 本身就是 100%。
+   */
+  function sheetZoom() {
+    var wrap = document.querySelector("#print-area .sheet-wrap");
+    var sheet = wrap ? wrap.querySelector("#sheet") : null;
+    var host = document.getElementById("print-area");
+    if (!wrap || !sheet || !host || document.querySelector(".zoom-bar")) return null;
+
+    var bar = document.createElement("div");
+    bar.className = "zoom-bar";
+    bar.innerHTML = '<span>預覽縮放</span>'
+      + '<button type="button" data-zoom="fit">適應寬度</button>'
+      + '<button type="button" data-zoom="full">原尺寸</button>'
+      + "<output></output>";
+    host.parentNode.insertBefore(bar, host);
+
+    var out = bar.querySelector("output");
+    var buttons = $$("button", bar);
+    var mode = "fit";
+
+    function paint() {
+      var z = mode === "fit" ? fitZoom(wrap, sheet) : 1;
+      wrap.style.setProperty("--sheet-zoom", String(z));
+      out.textContent = Math.round(z * 100) + "%";
+      buttons.forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-zoom") === mode));
+      });
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        mode = b.getAttribute("data-zoom") === "fit" ? "fit" : "full";
+        paint();
+      });
+    });
+
+    var queued = false;
+    root.addEventListener("resize", function () {
+      if (mode !== "fit" || queued) return;
+      queued = true;
+      root.requestAnimationFrame(function () { queued = false; paint(); });
+    });
+
+    paint();
+    return { paint: paint, mode: function () { return mode; } };
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", sheetZoom);
+  } else {
+    sheetZoom();
+  }
+
   /* ---------- 其他 ---------- */
   function print(eventName) {
     if (root.gtag && eventName) { root.gtag("event", eventName, { page_path: location.pathname }); }
@@ -275,6 +359,7 @@
     profile: profile, handoff: handoff, parseCase: parseCase,
     bindImage: bindImage, setImages: setImages,
     downloadJson: downloadJson, readJsonFile: readJsonFile,
-    print: print, bind: bind, box: box, boxes: boxes, chineseAmount: chineseAmount
+    print: print, bind: bind, box: box, boxes: boxes, chineseAmount: chineseAmount,
+    sheetZoom: sheetZoom
   };
 })(window);

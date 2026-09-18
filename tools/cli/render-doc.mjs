@@ -214,7 +214,7 @@ async function loadDraft(file) {
   const path = resolve(file);
   let draft;
   try { draft = JSON.parse(await readFile(path, "utf8")); }
-  catch (e) { die("讀不到或解析失敗的草稿：" + path + "（" + e.message + "）"); }
+  catch (e) { throw new Error("讀不到或解析失敗的草稿：" + path + "（" + e.message + "）"); }
   return { draft, base: dirname(path) };
 }
 
@@ -312,7 +312,7 @@ async function renderOne(cdp, origin, job) {
 }
 
 async function cmdRender(file, opts) {
-  const { draft, base } = await loadDraft(file);
+  const { draft, base } = checkDraft(await loadDraft(file));
   const kind = checkKind(opts.kind || draft.kind);
   const out = opts.noPdf ? null : resolve(opts.out || draft.out || `${kind}.pdf`);
   const site = await serveSite();
@@ -326,6 +326,30 @@ async function cmdRender(file, opts) {
   }
 }
 
+/*
+ * 批次 job 的 draft 可以是內嵌物件，也可以是草稿檔路徑（相對批次檔）。
+ * 空物件或沒有任何欄位的 draft 一律報錯，不要靜靜產出空白單。
+ */
+async function resolveJobDraft(job, base) {
+  if (typeof job.draft === "string") {
+    const loaded = await loadDraft(resolve(base, job.draft));
+    return checkDraft(loaded);
+  }
+  if (job.draft && typeof job.draft === "object") return checkDraft({ draft: job.draft, base });
+  if (job.state || job.items || job.clauses || job.template) return checkDraft({ draft: job, base });
+  throw new Error("job 少了 draft：給內嵌草稿物件或草稿檔路徑");
+}
+
+function checkDraft(loaded) {
+  const d = loaded.draft || {};
+  const hasState = d.state && Object.keys(d.state).length;
+  const hasShared = d.shared && Object.keys(d.shared).length;
+  if (!hasState && !hasShared && !d.items && !d.clauses && !d.template) {
+    throw new Error("草稿是空的（沒有 state／items／clauses／template），拒絕產出空白單");
+  }
+  return loaded;
+}
+
 async function cmdBatch(file) {
   const { draft, base } = await loadDraft(file);
   const jobs = Array.isArray(draft) ? draft : draft.jobs;
@@ -336,10 +360,10 @@ async function cmdBatch(file) {
   try {
     for (const [i, job] of jobs.entries()) {
       const kind = checkKind(job.kind || draft.kind);
-      const body = job.draft || job;
       const out = job.out ? resolve(base, job.out) : resolve(base, `${kind}-${String(i + 1).padStart(2, "0")}.pdf`);
       try {
-        results.push(await renderOne(chrome.cdp, site.origin, { kind, draft: body, base, out }));
+        const one = await resolveJobDraft(job, base);
+        results.push(await renderOne(chrome.cdp, site.origin, { kind, draft: one.draft, base: one.base, out }));
       } catch (e) {
         results.push({ kind, out, error: e.message });
       }
