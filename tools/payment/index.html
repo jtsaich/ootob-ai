@@ -594,20 +594,44 @@
     });
   }
 
-  /* ---------- 渲染 ---------- */
-  function render() {
+  /* ---------- 金額計算（render／meta／summary 共用同一份數字） ---------- */
+  function totals() {
     var items = readItems();
-    var rows = $$("#itemRows tr");
-    var subtotal = 0;
-    items.forEach(function (it, i) {
-      var sub = Math.round(it.qty * it.price);
-      subtotal += sub;
-      rows[i].querySelector("[data-sub]").textContent = T.fmt(sub);
-    });
-
+    var subs = items.map(function (it) { return Math.round(it.qty * it.price); });
+    var subtotal = subs.reduce(function (a, b) { return a + b; }, 0);
     var mode = val("pTaxMode");
     var bt = T.businessTax(subtotal, mode);
-    var total = bt.total;
+    var cType = radio("cType") || "company";
+    /* 公司戶給付個人勞務報酬通常要代扣，勾選或甲方為公司即啟用 */
+    var whOn = $("withholdOn").checked || cType === "company";
+    /* 扣繳以未稅報酬計算（營業稅不是所得） */
+    var wh = whOn ? T.withhold(bt.base, val("withCategory"), val("withResidency"), radio("nhi") || "normal") : null;
+    var projectTotal = num(val("projectTotal"));
+    var paid = num(val("paidToDate"));
+    var cumulative = paid + bt.total;
+    return {
+      items: items, subs: subs, subtotal: subtotal,
+      mode: mode, bt: bt, total: bt.total,
+      cType: cType, whOn: whOn, wh: wh,
+      netIn: wh ? bt.total - wh.tax - wh.supp : bt.total,
+      projectTotal: projectTotal, paid: paid, cumulative: cumulative,
+      left: projectTotal ? projectTotal - cumulative : 0
+    };
+  }
+
+  /* ---------- 渲染 ---------- */
+  function render() {
+    var t = totals();
+    var items = t.items;
+    var rows = $$("#itemRows tr");
+    items.forEach(function (it, i) {
+      rows[i].querySelector("[data-sub]").textContent = T.fmt(t.subs[i]);
+    });
+    var subtotal = t.subtotal;
+
+    var mode = t.mode;
+    var bt = t.bt;
+    var total = t.total;
 
     var docDate = val("docDate");
     var payDays = $("tPayDays").value === "" ? 0 : Math.max(0, Math.round(num($("tPayDays").value)));
@@ -615,7 +639,7 @@
     $("dueHint").textContent = due ? "付款到期日：" + D.ad(due) + "（開立日起 " + payDays + " 天）" : "填開立日期後顯示到期日。";
 
     /* 甲乙方標籤與軟驗證 */
-    var cType = radio("cType") || "company";
+    var cType = t.cType;
     var cIdLabel = cType === "company" ? "統一編號" : "身分證字號";
     set("cTaxIdLabel", cIdLabel);
     set("s-c-id-label", cIdLabel);
@@ -626,10 +650,10 @@
     set("s-v-id-label", /^[0-9]{8}$/.test(vId) ? "統一編號" : "身分證字號");
 
     /* 第 4 區試算 */
-    var projectTotal = num(val("projectTotal"));
-    var paid = num(val("paidToDate"));
-    var cumulative = paid + total;
-    var left = projectTotal ? projectTotal - cumulative : 0;
+    var projectTotal = t.projectTotal;
+    var paid = t.paid;
+    var cumulative = t.cumulative;
+    var left = t.left;
     set("r4-sub", T.fmt(bt.base));
     set("r4-sub-note", mode === "inclusive" ? "（自含稅金額還原）" : "（未稅）");
     set("r4-tax", T.fmt(bt.tax));
@@ -641,12 +665,10 @@
       : "填了「專案總額」就會顯示累計與剩餘，並印在單據上。營業稅率與扣繳門檻皆取自 " + P.year + " 年度參數。");
 
     /* 第 5 區扣繳：扣繳以未稅報酬計算（營業稅不是所得），實際入帳＝本期請款金額減扣繳 */
-    var whOn = $("withholdOn").checked || cType === "company";
+    var whOn = t.whOn;
     $("withWrap").hidden = !whOn;
-    var wh = null, netIn = total;
+    var wh = t.wh, netIn = t.netIn;
     if (whOn) {
-      wh = T.withhold(bt.base, val("withCategory"), val("withResidency"), radio("nhi") || "normal");
-      netIn = total - wh.tax - wh.supp;
       set("r5-gross", T.fmt(total));
       set("r5-tax", T.fmt(wh.tax));
       set("r5-rate", T.pct(wh.taxRate));
@@ -778,13 +800,65 @@
   }
 
   function meta() {
-    var items = readItems();
-    var subtotal = items.reduce(function (a, it) { return a + Math.round(it.qty * it.price); }, 0);
-    var bt = T.businessTax(subtotal, val("pTaxMode"));
+    var t = totals();
     return {
       docNo: val("docNo"), docDate: val("docDate"), refQuoteNo: val("refQuoteNo"),
       stage: val("stage"), stageNote: val("stageNote"), invoiceNo: val("invoiceNo"),
-      subtotal: bt.base, tax: bt.tax, total: bt.total, taxMode: val("pTaxMode")
+      subtotal: t.bt.base, tax: t.bt.tax, total: t.total, taxMode: t.mode
+    };
+  }
+
+  /* ---------- 草稿：匯入／匯出與本機 agent 共用同一支 ---------- */
+  var IMAGE_IDS = ["s-img-sign"];
+
+  /** 唯一的「把草稿灌進表單」實作。draft: { state?, items?, images?, sign? } */
+  function applyDraft(draft) {
+    var d = draft || {};
+    D.setFormState(form, d.state || d.shared || {});
+    if (d.items) { setItems(d.items); }
+    var images = d.images || {};
+    if (d.sign !== undefined && images["s-img-sign"] === undefined) { images["s-img-sign"] = d.sign; }
+    Object.keys(images).forEach(function (id) {
+      if (IMAGE_IDS.indexOf(id) < 0) { return; }
+      D.setImages([id], images[id] || "");
+    });
+    render();
+    return summary();
+  }
+
+  /** 完整草稿，形狀與「匯出 JSON」相同，可直接餵回 applyDraft */
+  function dumpDraft() {
+    return {
+      kind: "payment", v: 1, saved: new Date().toISOString(),
+      state: D.formState(form), items: readItems(), meta: meta(), sign: signSrc()
+    };
+  }
+
+  /** 關鍵金額，值一律為 number */
+  function summary() {
+    var t = totals();
+    return {
+      subtotal: t.bt.base,
+      businessTax: t.bt.tax,
+      total: t.total,
+      withholdingTax: t.wh ? t.wh.tax : 0,
+      withholdingRate: t.wh ? t.wh.taxRate : 0,
+      supplementaryPremium: t.wh ? t.wh.supp : 0,
+      netPayable: t.netIn,
+      projectTotal: t.projectTotal,
+      paidToDate: t.paid,
+      cumulative: t.cumulative,
+      unbilled: t.left
+    };
+  }
+
+  function describe() {
+    return {
+      kind: "payment",
+      items: { fields: ["name", "spec", "qty", "unit", "price"] },
+      clauses: null,
+      template: null,
+      notes: "本期請款單：明細小計按發票與營業稅設定算出本期應付金額，甲方為公司戶時再算代扣所得稅與二代健保補充保費，並可印出專案總額、累計已請款與尚未請款。"
     };
   }
 
@@ -856,10 +930,7 @@
   });
 
   $("btnExport").addEventListener("click", function () {
-    D.downloadJson({
-      kind: "payment", v: 1, saved: new Date().toISOString(),
-      state: D.formState(form), items: readItems(), meta: meta(), sign: signSrc()
-    }, (val("docNo") || "payment") + ".json");
+    D.downloadJson(dumpDraft(), (val("docNo") || "payment") + ".json");
     status("已下載 JSON。這個檔案可以用「匯入 JSON」還原，也方便存進案件資料夾。");
   });
 
@@ -868,10 +939,7 @@
     if (!file) { return; }
     D.readJsonFile(file).then(function (data) {
       if (!data || !data.state) { status("JSON 格式不符，找不到 state 欄位。"); return; }
-      D.setFormState(form, data.state);
-      if (data.items) { setItems(data.items); }
-      D.setImages(["s-img-sign"], data.sign || "");
-      render();
+      applyDraft({ state: data.state, items: data.items, sign: data.sign || "" });
       status("已匯入 JSON。");
     }).catch(function () { status("JSON 讀取失敗，請確認檔案內容。"); });
     e.target.value = "";
@@ -893,6 +961,15 @@
   fillRefs();
   D.bind(form, render);
   render();
+
+  /* ---------- 本機 agent／CLI 介面：tools/cli/render-doc.mjs 會呼叫 ---------- */
+  window.DocGen = {
+    kind: "payment",
+    apply: applyDraft,
+    dump: dumpDraft,
+    summary: summary,
+    describe: describe
+  };
 })();
 </script>
 </body>

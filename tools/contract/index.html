@@ -812,6 +812,79 @@
     K.$("s-sign").innerHTML = renderSign(f);
   }
 
+  /* ---------- 草稿：匯入匯出與本機 agent 共用 ---------- */
+  function applyClauses(clauses) {
+    if (!clauses) return;
+    var isList = Array.isArray(clauses);
+    TEMPLATES[K.$("ctType").value].clauses.forEach(function (id) {
+      var cb = K.$("c_" + id);
+      if (!cb) return;
+      if (isList) { cb.checked = clauses.indexOf(id) >= 0; return; }
+      if (Object.prototype.hasOwnProperty.call(clauses, id)) { cb.checked = !!clauses[id]; }
+    });
+  }
+
+  function applyDraft(draft) {
+    var d = draft || {};
+    if (d.template && TEMPLATES[d.template]) { K.$("ctType").value = d.template; }
+    buildSwitches();
+    K.setFormState(form, d.state || d.shared || {});
+    applyClauses(d.clauses);
+    if (d.images) {
+      Object.keys(d.images).forEach(function (id) { K.setImages([id], d.images[id]); });
+    }
+    render();
+    return summary();
+  }
+
+  function dumpDraft() {
+    return {
+      v: 1, kind: "contract",
+      template: K.$("ctType").value,
+      state: K.formState(form),
+      clauses: activeClauses()
+    };
+  }
+
+  function summary() {
+    var f = fields();
+    var maintain = f.type === "maintain";
+    var out = {
+      total: maintain ? f.monthlyFee * f.termMonths : f.total,
+      depositPct: maintain ? 0 : f.depositPct,
+      deposit: maintain ? 0 : f.deposit,
+      finalPay: maintain ? f.monthlyFee : f.finalPay,
+      businessTax: f.tax,
+      grandTotal: f.grand,
+      base: f.base,
+      monthlyFee: maintain ? f.monthlyFee : 0,
+      termMonths: maintain ? f.termMonths : 0,
+      payDays: f.payDays,
+      clauseCount: activeClauses().length
+    };
+    if (f.taxMode === "none") {
+      var w = T.withhold(maintain ? f.monthlyFee : f.total, "9A", "local", "normal");
+      out.withholdingTax = w.tax;
+      out.supplementPremium = w.supp;
+      out.netAfterWithholding = w.net;
+    }
+    return out;
+  }
+
+  function describe() {
+    var type = K.$("ctType").value;
+    return {
+      kind: "contract",
+      items: null,
+      clauses: TEMPLATES[type].clauses.map(function (id) {
+        var cb = K.$("c_" + id);
+        return { id: id, label: CLAUSE_LABEL[id][0], on: !!(cb && cb.checked) };
+      }),
+      template: { options: Object.keys(TEMPLATES), current: type },
+      notes: "台灣接案的外包承攬／委任合約：依範本組出條文，算出契約總價、訂金與尾款；月費範本則算月費與委任期間總額。"
+    };
+  }
+
   /* ---------- 操作 ---------- */
   function say(msg) {
     K.$("opStatus").textContent = msg;
@@ -870,27 +943,14 @@
 
   K.$("btnExport").addEventListener("click", function () {
     var f = fields();
-    K.downloadJson({
-      v: 1, kind: "contract", template: f.type,
-      state: K.formState(form),
-      clauses: activeClauses()
-    }, "contract-" + (f.caseId || K.today()) + ".json");
+    K.downloadJson(dumpDraft(), "contract-" + (f.caseId || K.today()) + ".json");
   });
 
   K.$("importJson").addEventListener("change", function (e) {
     var file = e.target.files && e.target.files[0];
     if (!file) return;
     K.readJsonFile(file).then(function (data) {
-      if (data.template && TEMPLATES[data.template]) { K.$("ctType").value = data.template; }
-      buildSwitches();
-      K.setFormState(form, data.state || data.shared || {});
-      if (Array.isArray(data.clauses)) {
-        TEMPLATES[K.$("ctType").value].clauses.forEach(function (id) {
-          var cb = K.$("c_" + id);
-          if (cb) cb.checked = data.clauses.indexOf(id) >= 0;
-        });
-      }
-      render();
+      applyDraft(data);
       say("已匯入 JSON 草稿");
     }).catch(function () { say("JSON 讀取失敗"); });
     e.target.value = "";
@@ -903,6 +963,15 @@
   render();
 
   window.__contract = { fields: fields, activeClauses: activeClauses, TEMPLATES: TEMPLATES };
+
+  /* ---------- 本機 agent／CLI 介面：tools/cli/render-doc.mjs 會呼叫 ---------- */
+  window.DocGen = {
+    kind: "contract",
+    apply: applyDraft,
+    dump: dumpDraft,
+    summary: summary,
+    describe: describe
+  };
 })();
 </script>
 </body>

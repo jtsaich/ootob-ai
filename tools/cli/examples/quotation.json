@@ -1,0 +1,41 @@
+{
+  "kind": "quotation",
+  "state": {
+    "docNo": "Q-20260918-01",
+    "docDate": "2026-09-18",
+    "tValidDays": "14",
+    "pCaseId": "TK26091610PIJZ21",
+    "vName": "蔡承勳（歐兜拜 ootobai）",
+    "vTaxId": "A123456789",
+    "vPhone": "0912-345-678",
+    "vEmail": "jack@ootob.ai",
+    "vAddress": "台北市中正區…",
+    "vBankName": "808 玉山銀行",
+    "vBankBranch": "城中分行",
+    "vBankAccount": "0123456789012",
+    "vBankHolder": "蔡承勳",
+    "cName": "某某有限公司",
+    "cTaxId": "12345675",
+    "r:cType": "company",
+    "cContact": "陳經理",
+    "cPhone": "02-1234-5678",
+    "cEmail": "pm@example.com",
+    "pTitle": "寵物美容 LINE 預約系統與店家後台",
+    "quoteMode": "itemized",
+    "pScope": "LINE 官方帳號串接與預約流程\n店家後台：預約看板、客戶名單、月營收報表",
+    "pTaxMode": "none",
+    "tDepositPct": "40",
+    "tPayDays": "14",
+    "tDeliverDays": "30",
+    "tRevisions": "2",
+    "excludes": "文案與圖片素材製作\n主機與網域月費",
+    "withCategory": "9A",
+    "withResidency": "local",
+    "r:nhi": "normal"
+  },
+  "items": [
+    { "name": "LINE 預約流程建置", "spec": "官方帳號串接、圖文選單、預約與提醒", "qty": "1", "unit": "式", "price": "90000" },
+    { "name": "店家後台", "spec": "預約看板、客戶名單、月營收報表", "qty": "1", "unit": "式", "price": "70000" },
+    { "name": "權限與操作紀錄", "spec": "老闆／員工／工讀三種角色", "qty": "1", "unit": "式", "price": "20000" }
+  ]
+}

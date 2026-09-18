@@ -1,0 +1,27 @@
+{
+  "kind": "labor-form",
+  "state": {
+    "vName": "王小明",
+    "vTaxId": "A123456789",
+    "vPhone": "0912-345-678",
+    "vAddress": "台北市中正區重慶南路一段 122 號 5 樓",
+    "vEmail": "ming@example.com",
+    "residency": "local",
+    "r:nhi": "normal",
+    "category": "9A",
+    "practice": "92",
+    "amount": "60000",
+    "pTitle": "後台系統開發（9 月）",
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-30",
+    "formDate": "2026-09-18",
+    "cName": "歐兜拜有限公司",
+    "payMethod": "bank",
+    "vBankName": "808 玉山銀行",
+    "vBankBranch": "城中分行",
+    "vBankAccount": "0123456789012",
+    "vBankHolder": "王小明",
+    "handler": "蔡承勳"
+  },
+  "images": {}
+}

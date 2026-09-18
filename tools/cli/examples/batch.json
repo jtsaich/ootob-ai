@@ -1,0 +1,64 @@
+[
+  {
+    "kind": "labor-form",
+    "out": "/tmp/docgen/batch-9B-王小明.pdf",
+    "draft": {
+      "state": {
+        "vName": "王小明",
+        "vTaxId": "A123456789",
+        "residency": "local",
+        "r:nhi": "normal",
+        "category": "9B",
+        "practice": "98",
+        "amount": "36000",
+        "pTitle": "產品部落格文章 3 篇",
+        "startDate": "2026-08-01",
+        "endDate": "2026-08-31",
+        "formDate": "2026-09-18",
+        "cName": "歐兜拜有限公司",
+        "handler": "蔡承勳"
+      }
+    }
+  },
+  {
+    "kind": "labor-form",
+    "out": "/tmp/docgen/batch-50-陳大文.pdf",
+    "draft": {
+      "state": {
+        "vName": "陳大文",
+        "vTaxId": "F131234567",
+        "residency": "local",
+        "r:nhi": "union",
+        "category": "50",
+        "amount": "95000",
+        "pTitle": "9 月兼職客服時薪",
+        "startDate": "2026-09-01",
+        "endDate": "2026-09-30",
+        "formDate": "2026-09-18",
+        "cName": "歐兜拜有限公司",
+        "handler": "蔡承勳"
+      }
+    }
+  },
+  {
+    "kind": "labor-form",
+    "out": "/tmp/docgen/batch-nr-John.pdf",
+    "draft": {
+      "state": {
+        "vName": "John Smith",
+        "vTaxId": "312345678",
+        "residency": "foreignUnder183",
+        "r:nhi": "none",
+        "category": "9A",
+        "practice": "92",
+        "amount": "50000",
+        "pTitle": "英文技術文件審稿",
+        "startDate": "2026-09-05",
+        "endDate": "2026-09-12",
+        "formDate": "2026-09-18",
+        "cName": "歐兜拜有限公司",
+        "handler": "蔡承勳"
+      }
+    }
+  }
+]

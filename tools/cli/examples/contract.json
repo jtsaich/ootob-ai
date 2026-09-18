@@ -1,0 +1,37 @@
+{
+  "kind": "contract",
+  "template": "software",
+  "state": {
+    "signDate": "2026-09-18",
+    "pCaseId": "TK26091610PIJZ21",
+    "cName": "某某有限公司",
+    "r:cType": "company",
+    "cTaxId": "12345675",
+    "cContact": "陳經理",
+    "cPhone": "02-1234-5678",
+    "cEmail": "pm@example.com",
+    "cAddress": "台北市信義區…",
+    "vName": "蔡承勳（歐兜拜 ootobai）",
+    "vTaxId": "A123456789",
+    "vPhone": "0912-345-678",
+    "vEmail": "jack@ootob.ai",
+    "vAddress": "台北市中正區…",
+    "pTitle": "寵物美容 LINE 預約系統與店家後台建置",
+    "pScope": "LINE 官方帳號串接與預約流程\n店家後台：預約看板、客戶名單、月營收報表\n三種權限（老闆／員工／工讀）與操作紀錄",
+    "deliverables": "可運作之系統 1 套（部署於甲方指定環境）\n原始碼與部署說明 1 份\n操作教學文件 1 份",
+    "excludes": "文案與圖片素材製作\n第三方平台審核結果\n主機與網域月費",
+    "amount": "180000",
+    "pTaxMode": "none",
+    "tDepositPct": "40",
+    "tPayDays": "14",
+    "tDeliverDays": "30",
+    "acceptDays": "7",
+    "tRevisions": "2",
+    "warrantyDays": "30",
+    "court": "臺灣臺北地方法院"
+  },
+  "clauses": [
+    "subject", "deliverables", "price", "payment", "schedule", "acceptance",
+    "change", "warranty", "ip", "source", "terminate", "confidential", "misc"
+  ]
+}

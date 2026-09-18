@@ -743,6 +743,21 @@
     if (mode === "lumpsum") return num("lumpPrice");
     return readItems().reduce(function (a, it) { return a + it.amount; }, 0);
   }
+  /* 一張單的所有關鍵金額：render 與 summary 共用，避免兩處各算一次而走鐘 */
+  function amounts() {
+    var mode = $("quoteMode").value;
+    var bt = T.businessTax(subtotalOf(mode), $("pTaxMode").value);
+    var depositPct = Math.min(100, Math.max(0, num("tDepositPct")));
+    var deposit = Math.round(bt.total * depositPct / 100);
+    return {
+      mode: mode,
+      bt: bt,
+      depositPct: depositPct,
+      deposit: deposit,
+      balance: bt.total - deposit,
+      w: T.withhold(bt.total, $("withCategory").value, $("withResidency").value, radio("nhi"))
+    };
+  }
 
   /* ---------- 渲染 ---------- */
   function render() {
@@ -829,7 +844,8 @@
 
     // 金額
     var taxMode = $("pTaxMode").value;
-    var bt = T.businessTax(subtotalOf(mode), taxMode);
+    var A = amounts();
+    var bt = A.bt;
     $("s-subtotal").textContent = fmt(bt.base);
     $("s-tax").textContent = taxMode === "none" ? "0" : fmt(bt.tax);
     $("s-tax-label").textContent = taxMode === "none"
@@ -841,9 +857,7 @@
     $("s-total-cn").textContent = D.chineseAmount(bt.total);
 
     // 付款條件
-    var pct2 = Math.min(100, Math.max(0, num("tDepositPct")));
-    var deposit = Math.round(bt.total * pct2 / 100);
-    var balance = bt.total - deposit;
+    var pct2 = A.depositPct, deposit = A.deposit, balance = A.balance;
     var payDays = num("tPayDays");
     $("s-pay-terms").textContent =
       "訂金 " + pct2 + "%，新台幣 " + fmt(deposit) + " 元，於本報價單簽回後支付；" +
@@ -869,7 +883,7 @@
 
     // 實拿試算
     var cat = $("withCategory").value, res = $("withResidency").value, nhi = radio("nhi");
-    var w = T.withhold(bt.total, cat, res, nhi);
+    var w = A.w;
     $("w-gross").textContent = fmt(w.gross);
     $("w-tax").textContent = fmt(w.tax);
     $("w-supp").textContent = fmt(w.supp);
@@ -921,6 +935,60 @@
     $("caseStatus").textContent = "已匯入 " + (parsed.caseId || "案件") +
       (parsed.budget ? "，預算 " + fmt(parsed.budget) + " 元已填入金額欄" : "，此來源沒有可解析的預算") + "。";
     render();
+  }
+
+  /* ---------- 草稿：匯入／匯出／本機 agent 共用同一支 ---------- */
+  /**
+   * 唯一的「把草稿灌進表單」實作。
+   * @param {{state?:Object,shared?:Object,items?:Array,template?:string,images?:Object}} draft
+   */
+  function applyDraft(draft) {
+    var d = draft || {};
+    if (d.template && MODE_EDITORS[d.template]) $("quoteMode").value = d.template;
+    D.setFormState(form, d.state || d.shared || {});
+    if (!MODE_EDITORS[$("quoteMode").value]) $("quoteMode").value = "itemized";
+    if (d.items && d.items.length) setRows(d.items);
+    if (d.images) {
+      Object.keys(d.images).forEach(function (id) { D.setImages([id], d.images[id]); });
+    }
+    render();
+    return summary();
+  }
+  /** 可直接餵回 applyDraft 的完整草稿；shared 這個 key 保留，舊匯出檔照樣匯得回來 */
+  function dumpDraft() {
+    var state = D.formState(form);
+    var items = readItems().map(function (it) {
+      return { name: it.name, spec: it.spec, qty: it.qty, unit: it.unit, price: it.price };
+    });
+    return { kind: KIND, state: state, shared: state, items: items, template: $("quoteMode").value };
+  }
+  /** 關鍵金額，值一律 number */
+  function summary() {
+    var A = amounts();
+    return {
+      subtotal: A.bt.base,
+      businessTax: A.bt.tax,
+      total: A.bt.total,
+      depositPct: A.depositPct,
+      deposit: A.deposit,
+      balance: A.balance,
+      withholdTax: A.w.tax,
+      suppPremium: A.w.supp,
+      net: A.w.net
+    };
+  }
+  /** 表單欄位以外還能放什麼 */
+  function describe() {
+    return {
+      kind: KIND,
+      items: { fields: ["name", "spec", "qty", "unit", "price"] },
+      clauses: null,
+      template: {
+        options: $$("#quoteMode option").map(function (o) { return o.value; }),
+        current: $("quoteMode").value
+      },
+      notes: "報價單：依報價格式（單項計價／三方案比較／專案總價）算出小計、營業稅與總計，並給出訂金尾款與個人接案的代扣實拿試算。"
+    };
   }
 
   /* ---------- 綁定 ---------- */
@@ -981,17 +1049,14 @@
   });
 
   $("btnExport").addEventListener("click", function () {
-    D.downloadJson({ kind: KIND, shared: D.formState(form), items: handoffItems() },
-      "quotation-" + (val("docNo") || D.today()) + ".json");
+    D.downloadJson(dumpDraft(), "quotation-" + (val("docNo") || D.today()) + ".json");
     status("已匯出 JSON，可存檔或帶到另一台電腦匯入。");
   });
   $("importFile").addEventListener("change", function (e) {
     var file = e.target.files && e.target.files[0];
     if (!file) return;
     D.readJsonFile(file).then(function (obj) {
-      D.setFormState(form, obj.shared || obj);
-      if (obj.items && obj.items.length) setRows(obj.items);
-      render();
+      applyDraft(obj.state || obj.shared ? obj : { state: obj });
       status("已從 JSON 匯入。");
     }).catch(function () { status("這個檔案不是本工具匯出的 JSON。"); });
     e.target.value = "";
@@ -1018,6 +1083,15 @@
   ].forEach(function (p) { if ($(p[0])) $(p[0]).textContent = p[1]; });
 
   render();
+
+  /* ---------- 本機 agent／CLI 介面：tools/cli/render-doc.mjs 會呼叫 ---------- */
+  window.DocGen = {
+    kind: KIND,
+    apply: applyDraft,
+    dump: dumpDraft,
+    summary: summary,
+    describe: describe
+  };
 })();
 </script>
 </body>

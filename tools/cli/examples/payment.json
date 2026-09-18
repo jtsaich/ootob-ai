@@ -1,0 +1,40 @@
+{
+  "kind": "payment",
+  "state": {
+    "docNo": "INV-20260918-01",
+    "docDate": "2026-09-18",
+    "refQuoteNo": "Q-20260901-01",
+    "tPayDays": "30",
+    "pCaseId": "TK26091610PIJZ21",
+    "vName": "蔡承勳（歐兜拜 ootobai）",
+    "vTaxId": "A123456789",
+    "vPhone": "0912-345-678",
+    "vEmail": "jack@ootob.ai",
+    "vAddress": "台北市中正區…",
+    "vBankName": "808 玉山銀行",
+    "vBankBranch": "城中分行",
+    "vBankAccount": "0123456789012",
+    "vBankHolder": "蔡承勳",
+    "r:cType": "company",
+    "cName": "某某有限公司",
+    "cTaxId": "12345675",
+    "cContact": "陳小姐（會計）",
+    "cPhone": "02-1234-5678",
+    "cEmail": "ap@example.com",
+    "pTitle": "寵物美容 LINE 預約系統與店家後台",
+    "stage": "milestone",
+    "pScope": "LINE 預約流程上線\n店家後台預約看板與客戶名單",
+    "pTaxMode": "none",
+    "projectTotal": "180000",
+    "paidToDate": "40000",
+    "c:withholdOn": true,
+    "withCategory": "9A",
+    "withResidency": "local",
+    "r:nhi": "normal"
+  },
+  "items": [
+    { "name": "LINE 預約流程建置", "spec": "含官方帳號串接與圖文選單", "qty": "1", "unit": "式", "price": "48000" },
+    { "name": "店家後台第一階段", "spec": "預約看板、客戶名單", "qty": "1", "unit": "式", "price": "32000" }
+  ],
+  "images": {}
+}

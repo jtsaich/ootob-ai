@@ -16,6 +16,9 @@ demo/             可操作的概念展示（travel ×3、slow-travel-line、yiq
 tools/            接案行政文件工具（四張單共用 tools/assets/：doc-kit.css 樣式與 A4 列印、doc-kit.js 表單與 handoff、tw-tax.js 115 年度扣繳參數）
                   tools/quotation/ 報價單 · tools/contract/ 合約 · tools/payment/ 請款單 · tools/labor-form/ 勞報單
                   全部純前端，資料只在瀏覽器；稅務數字一律取 tw-tax.js 的 PARAMS，年度更新只改那一個檔
+                  每頁在 window.DocGen 暴露 { kind, apply, dump, summary, describe }，網頁上的「匯入／匯出 JSON」與 CLI 走同一支
+tools/cli/         render-doc.mjs：從 JSON 草稿產生單據 PDF（headless Chrome + CDP，Node 22+，零依賴）
+                  examples/ 四種單的範例草稿與批次檔。agent 端說明在 ~/.agents/skills/ootobai-docs/SKILL.md
 _redirects        舊個人路徑 301 到 me.ootob.ai
 _headers          Cloudflare 安全標頭
 .private/         營業證明（gitignored）

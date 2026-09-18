@@ -584,7 +584,67 @@
   K.profile.apply(form);
   render();
 
-  window.__laborForm = { calc: T.withhold, params: T.PARAMS };
+  /* ---------- 本機 agent／CLI 介面：tools/cli/render-doc.mjs 會呼叫 ---------- */
+  function applyDraft(draft) {
+    var d = draft || {};
+    var state = d.state || d.shared || {};
+    K.setFormState(form, state);
+    fillPractice();
+    if (state.practice) { K.$("practice").value = state.practice; }
+    if (d.images) {
+      Object.keys(d.images).forEach(function (id) {
+        K.setImages([id], d.images[id], togglePage2);
+      });
+    }
+    render();
+    return summary();
+  }
+
+  function dumpDraft() {
+    return { kind: "labor-form", state: K.formState(form) };
+  }
+
+  function summary() {
+    var r = T.withhold(
+      Number(K.$("amount").value) || 0,
+      K.$("category").value,
+      K.$("residency").value,
+      form.querySelector('input[name="nhi"]:checked').value
+    );
+    var row = practiceRow();
+    return {
+      gross: r.gross,
+      withholdingTax: r.tax,
+      withholdingRate: r.taxRate,
+      supplementaryPremium: r.supp,
+      netPayable: r.net,
+      expenseRatePct: row ? row[2] : 0
+    };
+  }
+
+  function describe() {
+    var practice = {};
+    Object.keys(PRACTICE).forEach(function (cat) {
+      practice[cat] = PRACTICE[cat].map(function (r) { return { code: r[0], label: r[1], expenseRatePct: r[2] }; });
+    });
+    return {
+      kind: "labor-form",
+      items: null,
+      clauses: null,
+      template: null,
+      practice: practice,
+      images: ["s-img-sign", "s-img-id-front", "s-img-id-back"],
+      notes: "勞務報酬單：依身分別與所得類別（9A／9B／50／92）算 " + T.PARAMS.year + " 年度代扣所得稅與二代健保補充保費，附身分證影本時會多一頁黏貼頁。"
+    };
+  }
+
+  window.DocGen = {
+    kind: "labor-form",
+    apply: applyDraft,
+    dump: dumpDraft,
+    summary: summary,
+    describe: describe
+  };
 })();
 </script>
 </body>
