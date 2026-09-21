@@ -489,16 +489,16 @@
     K.$("s-start").textContent = K.roc(K.$("startDate").value);
     K.$("s-end").textContent = K.roc(K.$("endDate").value);
 
-    K.$("s-residency").textContent = K.boxes([
+    K.$("s-residency").innerHTML = K.boxesHtml([
       ["local", "本國籍"], ["foreign183", "外籍滿 183 天"], ["foreignUnder183", "外籍未滿 183 天"]
     ], residency);
     K.$("s-nhi").textContent = NHI_LABEL[nhi];
-    K.$("s-pay-method").textContent = K.boxes([
+    K.$("s-pay-method").innerHTML = K.boxesHtml([
       ["bank", "匯款"], ["cash", "現金"], ["check", "支票"], ["gift", "禮券"]
     ], K.$("payMethod").value);
 
     K.$("s-category-code").textContent = category + "　" + T.CATEGORY_NAME[category].replace(/^\S+\s/, "");
-    K.$("s-category-name").textContent = K.boxes([
+    K.$("s-category-name").innerHTML = K.boxesHtml([
       ["50", "50 薪資所得"], ["9A", "9A 執行業務所得"], ["9B", "9B 稿費"], ["92", "92 其他所得"]
     ], category);
 

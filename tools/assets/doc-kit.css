@@ -120,6 +120,7 @@ table.ref th { background: #f5f4f1; font-weight: 700; }
 #sheet .pre { white-space: pre-line; }
 #sheet th { background: #f2f2f2; font-weight: 700; text-align: left; }
 #sheet td.rowhead, #sheet th.rowhead { width: 17mm; text-align: center; vertical-align: middle; font-weight: 700; background: #f2f2f2; letter-spacing: .25em; }
+#sheet .opt { white-space: nowrap; display: inline-block; margin-right: 4mm; }
 #sheet .val { display: inline-block; min-width: 18mm; border-bottom: .4pt dotted #666; padding: 0 1mm; }
 #sheet .val:empty::after { content: "\00a0"; }
 #sheet .money { font-family: 'Inter', sans-serif; }
@@ -129,7 +130,17 @@ table.ref th { background: #f5f4f1; font-weight: 700; }
 #sheet .sign-box { height: 26mm; display: flex; align-items: center; justify-content: center; }
 #sheet .sign-box img { max-height: 25mm; max-width: 100%; object-fit: contain; }
 /* 證件影本排在同一頁的表格下方，所以高度要夠看清號碼、又不能把單擠成兩頁 */
-#sheet .id-box { height: 34mm; display: flex; align-items: center; justify-content: center; }
+#sheet .id-box { height: 34mm; display: flex; align-items: center; justify-content: center; position: relative; }
+/* 影本一律壓上用途浮水印：身分證影本流出去被挪用的風險，比版面好看重要。
+   只有真的有圖時才印（:has 判斷圖片沒被隱藏）。 */
+#sheet .id-box:has(img:not([hidden]))::after {
+  content: "僅供申報";
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) rotate(-22deg);
+  font-size: 15pt; font-weight: 700; letter-spacing: .3em;
+  color: rgba(200, 30, 30, .42); border: 1.2pt solid rgba(200, 30, 30, .35);
+  padding: 1mm 3mm; border-radius: 1mm; white-space: nowrap;
+}
 #sheet .id-box img { max-height: 33mm; max-width: 100%; object-fit: contain; }
 #sheet .remark-box { height: 16mm; }
 #sheet .foot { font-size: 10.5pt; color: #333; padding-top: 1.5mm; line-height: 1.6; }

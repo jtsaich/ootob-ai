@@ -329,6 +329,14 @@
   function boxes(items, active) {
     return items.map(function (it) { return box(it[0] === active) + it[1]; }).join("　");
   }
+  // 同樣的選項列，但每個選項包成不可斷行的 span：中文在任何兩字之間都能斷行，
+  // 所以純文字版會出現「□外籍 / 滿 183 天」這種斷在選項中間的排版。
+  function boxesHtml(items, active) {
+    return items.map(function (it) {
+      var label = String(it[1]).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      return '<span class="opt">' + box(it[0] === active) + label + "</span>";
+    }).join("");
+  }
   // 國字大寫金額（單據防改用）
   var NUM = "零壹貳參肆伍陸柒捌玖", UNIT = ["", "拾", "佰", "仟"], BIG = ["", "萬", "億", "兆"];
   function chineseAmount(n) {
@@ -359,7 +367,7 @@
     profile: profile, handoff: handoff, parseCase: parseCase,
     bindImage: bindImage, setImages: setImages,
     downloadJson: downloadJson, readJsonFile: readJsonFile,
-    print: print, bind: bind, box: box, boxes: boxes, chineseAmount: chineseAmount,
+    print: print, bind: bind, box: box, boxes: boxes, boxesHtml: boxesHtml, chineseAmount: chineseAmount,
     sheetZoom: sheetZoom
   };
 })(window);
