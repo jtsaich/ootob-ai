@@ -155,10 +155,6 @@
           <datalist id="bank-list"></datalist>
         </div>
         <div class="field">
-          <label for="vBankBranch">分行</label>
-          <input id="vBankBranch" type="text" placeholder="例：城中分行">
-        </div>
-        <div class="field">
           <label for="vBankAccount">帳號</label>
           <input id="vBankAccount" type="text" inputmode="numeric" placeholder="僅數字">
         </div>
@@ -270,14 +266,11 @@
                 </td>
               </tr>
               <tr>
-                <td class="rowhead" rowspan="5">付款</td>
+                <td class="rowhead" rowspan="4">付款</td>
                 <td colspan="3">付款方式：<span id="s-pay-method"></span></td>
               </tr>
               <tr>
                 <td colspan="3">銀行：<span class="val" id="s-bank"></span></td>
-              </tr>
-              <tr>
-                <td colspan="3">分行：<span class="val" id="s-bank-branch"></span></td>
               </tr>
               <tr>
                 <td colspan="3">帳號：<span class="val" id="s-bank-account"></span></td>
@@ -385,7 +378,7 @@
   "use strict";
   var K = window.DocKit, T = window.TWTax;
   var form = K.$("form");
-  var PROFILE_KEYS = ["vName", "vTaxId", "vPhone", "vEmail", "vAddress", "vBankName", "vBankBranch", "vBankAccount", "vBankHolder"];
+  var PROFILE_KEYS = ["vName", "vTaxId", "vPhone", "vEmail", "vAddress", "vBankName", "vBankAccount", "vBankHolder"];
 
   var PRACTICE = {
     "9B": [
@@ -455,7 +448,6 @@
     ["vEmail", ["s-email"]],
     ["pTitle", ["s-service"]],
     ["vBankName", ["s-bank"]],
-    ["vBankBranch", ["s-bank-branch"]],
     ["vBankAccount", ["s-bank-account"]],
     ["handler", ["s-handler"]],
     ["cContact", ["s-company-contact"]]
