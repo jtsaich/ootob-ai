@@ -140,6 +140,11 @@ table.ref th { background: #f5f4f1; font-weight: 700; }
    加上同頁的證件影本，要收緊行距與留白才塞得進一張 A4。字級不動（10.5pt 是下限）。 */
 .doc-labor #sheet { line-height: 1.38; }
 .doc-labor #sheet td, .doc-labor #sheet th { padding: 1.4mm 2.2mm; }
+/* 列頭不加字距、不斷在字中間：17mm 加 .25em 字距會把「勞務內容」排成每行一個字 */
+.doc-labor #sheet td.rowhead { letter-spacing: 0; word-break: keep-all; }
+/* 有值就不畫底線（點線讓列印出來像塗改過）；留白的欄位才給一條手寫線 */
+.doc-labor #sheet .val { border-bottom: 0; padding: 0; }
+.doc-labor #sheet .val:empty { border-bottom: .4pt solid #666; min-width: 45mm; }
 .doc-labor #sheet .rule { line-height: 1.4; }
 .doc-labor #sheet .amount-grid { gap: 1mm 4mm; }
 .doc-labor #sheet .sign-box { height: 13mm; }
