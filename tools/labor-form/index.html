@@ -21,7 +21,7 @@
   <script src="/tools/assets/doc-kit.js"></script>
   <script src="/assets/analytics.js" defer></script>
 </head>
-<body>
+<body class="doc-labor">
 <header class="site-header">
   <a class="logo" href="/">ootob.ai</a>
   <nav><a href="/work/">作品與 Demo</a><a href="/services/">服務項目與報價</a><a href="/tools/">免費工具</a><a href="/#contact">聯絡</a></nav>
@@ -115,9 +115,14 @@
           <label for="endDate">勞務結束日期</label>
           <input id="endDate" type="date">
         </div>
-        <div class="field wide">
+        <div class="field">
           <label for="cName">給付單位（公司名稱）</label>
           <input id="cName" type="text" placeholder="歐兜拜有限公司">
+        </div>
+        <div class="field">
+          <label for="cContact">公司聯絡方式</label>
+          <input id="cContact" type="text" placeholder="聯絡人／電話／Email">
+          <span class="hint">印在單上，方便對方會計回聯。空白就留空格給人手寫。</span>
         </div>
       </div>
 
@@ -126,7 +131,7 @@
           <div><dt>支領金額</dt><dd id="r-gross">0</dd></div>
           <div><dt>代扣所得稅 <small id="r-tax-rate"></small></dt><dd id="r-tax">0</dd></div>
           <div><dt>二代健保補充保費 <small data-p="suppRate"></small></dt><dd id="r-supp">0</dd></div>
-          <div><dt>實付淨額</dt><dd id="r-net">0</dd></div>
+          <div><dt>支領淨額</dt><dd id="r-net">0</dd></div>
         </dl>
         <p class="basis" id="r-basis"></p>
       </div>
@@ -188,7 +193,7 @@
           <button type="button" class="btn" id="clearImages">清除所有圖片</button>
         </div>
       </div>
-      <p class="privacy" style="margin-top:1rem">上傳的圖片會在瀏覽器內縮到最長邊 1000px 再嵌入版面，同樣不會上傳。有放任一張證件影本時，PDF 會多一頁「證件影本黏貼頁」；沒放就只有一頁。</p>
+      <p class="privacy" style="margin-top:1rem">上傳的圖片會在瀏覽器內縮到最長邊 1000px 再嵌入版面，同樣不會上傳。證件影本會接在同一頁的表格下方，整張單維持一頁。</p>
     </section>
   </form>
 
@@ -207,7 +212,7 @@
     <div id="print-area">
       <div class="sheet-wrap">
         <div id="sheet">
-          <div class="doc-title"><span id="s-company">＿＿＿＿＿＿</span>　勞務報酬單</div>
+          <div class="doc-title">勞務報酬單</div>
           <div class="doc-meta">
             <span>所得類別：<span id="s-category-code"></span></span>
             <span>填表日期：<span id="s-form-date"></span></span>
@@ -218,7 +223,14 @@
             </colgroup>
             <tbody>
               <tr>
-                <td class="rowhead" rowspan="3">所得人</td>
+                <td class="rowhead" rowspan="2">給付單位</td>
+                <td colspan="3">公司名稱：<span class="val" id="s-company"></span></td>
+              </tr>
+              <tr>
+                <td colspan="3">公司聯絡方式：<span class="val" id="s-company-contact"></span></td>
+              </tr>
+              <tr>
+                <td class="rowhead" rowspan="3">領款人<br>基本資料</td>
                 <td>姓名：<span class="val" id="s-name"></span></td>
                 <td><span id="s-id-label">身分證字號</span>：<span class="val" id="s-id"></span></td>
                 <td>身分別：<span id="s-residency"></span></td>
@@ -232,8 +244,8 @@
                 <td>補充保費身分：<span id="s-nhi"></span></td>
               </tr>
               <tr>
-                <td class="rowhead" rowspan="2">勞務</td>
-                <td colspan="3">勞務內容：<span class="val" style="min-width:120mm" id="s-service"></span></td>
+                <td class="rowhead" rowspan="2">勞務內容</td>
+                <td colspan="3"><span class="val" style="min-width:120mm" id="s-service"></span></td>
               </tr>
               <tr>
                 <td colspan="2">期間：自 <span class="val" id="s-start"></span> 至 <span class="val" id="s-end"></span></td>
@@ -253,18 +265,25 @@
                     <div>支領金額：新台幣 <b class="money" id="s-gross">0</b> 元</div>
                     <div>代扣所得稅（<span id="s-tax-rate">0%</span>）：新台幣 <b class="money" id="s-tax">0</b> 元</div>
                     <div>二代健保補充保費（<span data-p="suppRate"></span>）：新台幣 <b class="money" id="s-supp">0</b> 元</div>
-                    <div>實付淨額：新台幣 <b class="money" id="s-net">0</b> 元</div>
+                    <div>支領淨額：新台幣 <b class="money" id="s-net">0</b> 元</div>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td class="rowhead" rowspan="2">付款</td>
+                <td class="rowhead" rowspan="5">付款</td>
                 <td colspan="3">付款方式：<span id="s-pay-method"></span></td>
               </tr>
               <tr>
-                <td>銀行：<span class="val" id="s-bank"></span></td>
-                <td>分行：<span class="val" id="s-bank-branch"></span></td>
-                <td>帳號：<span class="val" id="s-bank-account"></span>　戶名：<span class="val" id="s-account-name"></span></td>
+                <td colspan="3">銀行：<span class="val" id="s-bank"></span></td>
+              </tr>
+              <tr>
+                <td colspan="3">分行：<span class="val" id="s-bank-branch"></span></td>
+              </tr>
+              <tr>
+                <td colspan="3">帳號：<span class="val" id="s-bank-account"></span></td>
+              </tr>
+              <tr>
+                <td colspan="3">戶名：<span class="val" id="s-account-name"></span></td>
               </tr>
               <tr>
                 <td class="rowhead">備註</td>
@@ -286,14 +305,10 @@
           <p class="foot">本單金額以新台幣計算，未滿 1 元之所得稅捨去、補充保費四捨五入。所得人應於年度結算申報時將本筆所得併入申報；給付單位應依所得稅法第 89、92 條期限辦理扣繳與申報。</p>
 
           <div class="page2" id="s-page2" hidden>
-            <div class="p2-title"><span id="s-company-2"></span>　勞務報酬單－證件影本黏貼頁</div>
+            <div class="p2-title">證件影本（正／反面）<span id="s-name-2" hidden></span><span id="s-id-2" hidden></span><span id="s-id-label-2" hidden></span><span id="s-company-2" hidden></span></div>
             <table>
               <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
               <tbody>
-                <tr>
-                  <td>所得人：<span class="val" id="s-name-2"></span></td>
-                  <td><span id="s-id-label-2">身分證字號</span>：<span class="val" id="s-id-2"></span></td>
-                </tr>
                 <tr>
                   <td style="text-align:center">正面<div class="id-box"><img id="s-img-id-front" alt="" hidden></div></td>
                   <td style="text-align:center">反面<div class="id-box"><img id="s-img-id-back" alt="" hidden></div></td>
@@ -442,7 +457,8 @@
     ["vBankName", ["s-bank"]],
     ["vBankBranch", ["s-bank-branch"]],
     ["vBankAccount", ["s-bank-account"]],
-    ["handler", ["s-handler"]]
+    ["handler", ["s-handler"]],
+    ["cContact", ["s-company-contact"]]
   ];
 
   function togglePage2() {
@@ -473,7 +489,7 @@
     K.$("s-id-2").textContent = idVal;
 
     var company = K.$("cName").value.trim();
-    K.$("s-company").textContent = company || "＿＿＿＿＿＿";
+    K.$("s-company").textContent = company;
     K.$("s-company-2").textContent = company;
     K.$("s-account-name").textContent = K.$("vBankHolder").value.trim() || K.$("vName").value.trim();
 

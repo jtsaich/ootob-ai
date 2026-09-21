@@ -128,12 +128,27 @@ table.ref th { background: #f5f4f1; font-weight: 700; }
 #sheet .amount-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5mm 4mm; }
 #sheet .sign-box { height: 26mm; display: flex; align-items: center; justify-content: center; }
 #sheet .sign-box img { max-height: 25mm; max-width: 100%; object-fit: contain; }
-#sheet .id-box { height: 88mm; display: flex; align-items: center; justify-content: center; }
-#sheet .id-box img { max-height: 87mm; max-width: 100%; object-fit: contain; }
+/* 證件影本排在同一頁的表格下方，所以高度要夠看清號碼、又不能把單擠成兩頁 */
+#sheet .id-box { height: 34mm; display: flex; align-items: center; justify-content: center; }
+#sheet .id-box img { max-height: 33mm; max-width: 100%; object-fit: contain; }
 #sheet .remark-box { height: 16mm; }
 #sheet .foot { font-size: 10.5pt; color: #333; padding-top: 1.5mm; line-height: 1.6; }
 #sheet .page2 { margin-top: 4mm; }
 #sheet .page2 .p2-title { font-size: 11pt; font-weight: 700; text-align: center; padding-bottom: 1.5mm; }
+
+/* 勞報單：表格列數多（給付單位、領款人、勞務、類別、金額、付款四行、備註、簽收）
+   加上同頁的證件影本，要收緊行距與留白才塞得進一張 A4。字級不動（10.5pt 是下限）。 */
+.doc-labor #sheet { line-height: 1.38; }
+.doc-labor #sheet td, .doc-labor #sheet th { padding: 1.4mm 2.2mm; }
+.doc-labor #sheet .rule { line-height: 1.4; }
+.doc-labor #sheet .amount-grid { gap: 1mm 4mm; }
+.doc-labor #sheet .sign-box { height: 13mm; }
+.doc-labor #sheet .sign-box img { max-height: 12mm; }
+.doc-labor #sheet .remark-box { height: 8mm; }
+.doc-labor #sheet .foot { line-height: 1.4; padding-top: 1mm; }
+.doc-labor #sheet .id-box { height: 30mm; }
+.doc-labor #sheet .id-box img { max-height: 29mm; }
+.doc-labor #sheet .page2 { margin-top: 2mm; break-inside: auto; break-before: auto; }
 
 /* 合約條文排版 */
 #sheet .contract-body { font-size: 10.5pt; line-height: 2.05; }
@@ -164,5 +179,6 @@ table.ref th { background: #f5f4f1; font-weight: 700; }
   .sheet-wrap { margin: 0; padding: 0; border: 0; background: #fff; overflow: visible; --sheet-zoom: 1 !important; }
   .sheet-wrap #sheet { width: 100%; zoom: 1 !important; }
   #sheet .sheet-page + .sheet-page { break-before: page; margin-top: 0; padding-top: 0; border-top: 0; }
-  #sheet .page2 { break-before: page; margin-top: 0; }
+  /* 曾經強制換頁；勞報單要一頁到底，只避免影本被切成兩半 */
+  #sheet .page2 { break-before: auto; break-inside: avoid; margin-top: 3mm; }
 }
