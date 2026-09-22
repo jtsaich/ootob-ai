@@ -759,12 +759,12 @@
   }
 
   function renderSign(f) {
-    var d = f.signDate ? K.ad(f.signDate) : "＿＿＿＿ 年 ＿＿ 月 ＿＿ 日";
+    // 落款區只留雙方簽章。簽約日期已在合約標頭，「一式二份」已在「其他約定」條，
+    // 再印一次是重複；產生器的免責聲明更不該出現在給客戶簽的文件上。
     return '<table><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tbody><tr>' +
       '<td><div class="sig-label">甲方（委託方）</div>簽名或蓋章：<br><br>代表人：<br>日期：</td>' +
       '<td><div class="sig-label">乙方（受託方）</div>簽名或蓋章：<br><br>代表人：<br>日期：</td>' +
-      '</tr></tbody></table>' +
-      '<p class="foot">簽約日期：' + d + '　本契約一式二份，雙方各執一份。本文件由 ootob.ai 合約產生器產生，內容由雙方自行確認，範本不構成法律意見。</p>';
+      '</tr></tbody></table>';
   }
 
   function render() {
@@ -806,6 +806,8 @@
     var sub = [];
     if (f.title) sub.push("專案：" + f.title);
     if (f.caseId) sub.push("案件編號：" + f.caseId);
+    // 日期要印在文件上，但放標頭而不是落款的免責聲明裡
+    sub.push("簽約日期：" + (f.signDate ? K.ad(f.signDate) : "＿＿＿＿ 年 ＿＿ 月 ＿＿ 日"));
     K.$("s-sub").textContent = sub.join("　｜　");
     K.$("s-parties").innerHTML = partyBlock(f);
     K.$("s-clauses").innerHTML = renderClauses(f);
