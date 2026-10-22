@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cc-statement-sync Privacy Policy｜ootob.ai</title>
+  <meta name="description" content="How cc-statement-sync, a personal tool by ootobai, uses Gmail, Google Sheets and Pub/Sub data.">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://ootob.ai/privacy/cc-statement-sync/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --text: #1a1a1a; --text-secondary: #555; --bg: #fafaf8; --border: #e0ddd8; --max-w: 640px; }
+    body { font-family: 'Inter', 'Noto Sans TC', sans-serif; color: var(--text); background: var(--bg); line-height: 1.8; font-size: 17px; -webkit-font-smoothing: antialiased; }
+    .site-header { max-width: var(--max-w); margin: 0 auto; padding: 2.5rem 1.5rem 0; }
+    .site-header .logo { font-weight: 500; font-size: 14px; letter-spacing: 0.08em; text-decoration: none; color: var(--text-secondary); text-transform: uppercase; }
+    main { max-width: var(--max-w); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    h1 { font-size: 1.6rem; font-weight: 700; line-height: 1.35; margin-bottom: 0.5rem; text-wrap: balance; }
+    .subtitle { color: var(--text-secondary); font-size: 15px; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border); }
+    h2 { font-size: 1.1rem; font-weight: 700; margin: 2.5rem 0 0.8rem; }
+    p { margin-bottom: 1rem; }
+    ul { margin: 0 0 1rem 1.2rem; }
+    li { margin-bottom: 0.4rem; }
+    code { font-size: 0.9em; background: #f0eee9; padding: 0.1em 0.3em; border-radius: 3px; }
+    .note { color: var(--text-secondary); font-size: 14px; line-height: 1.8; }
+    .contact-card { margin-top: 3rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; font-size: 15px; line-height: 2; }
+    .contact-card strong { font-size: 16px; }
+    .site-footer { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem 3rem; color: var(--text-secondary); font-size: 13px; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo" href="/">ootob.ai</a>
+</header>
+
+<main>
+  <h1>cc-statement-sync Privacy Policy</h1>
+  <p class="subtitle">Last updated: October 22, 2026. This policy covers cc-statement-sync, a personal tool built and used by Jack Tsai (歐兜拜 ootobai). It is not offered to the public; the only Google account it accesses is its owner's.</p>
+
+  <h2>What the app does</h2>
+  <p>It reads its owner's monthly credit card statement emails, extracts the transactions, and adds them to a review tab in its owner's own expense spreadsheet. It runs on its owner's Mac.</p>
+
+  <h2>Google data it accesses, and why</h2>
+  <ul>
+    <li><strong>Gmail</strong> (<code>gmail.modify</code>): reads only the bank statement emails selected by its filters (the PDF attachment or the statement download link), and moves them between three labels (<code>帳單/待處理</code>, <code>帳單/已處理</code>, <code>帳單/失敗</code>) to track progress. It does not send, delete, or forward email, and does not read other messages.</li>
+    <li><strong>Gmail settings</strong> (<code>gmail.settings.basic</code>): creates the filters that label incoming statement emails. It does not change any other setting.</li>
+    <li><strong>Google Sheets</strong> (<code>spreadsheets</code>): reads the existing transactions in one spreadsheet to name, categorize, and de-duplicate new rows, and appends rows to that spreadsheet's review tab. It does not modify or delete existing rows.</li>
+    <li><strong>Cloud Pub/Sub</strong> (<code>pubsub</code>): receives Gmail's "mailbox changed" notifications so statements are processed when they arrive. The notifications contain no email content.</li>
+  </ul>
+
+  <h2>Where the data goes</h2>
+  <ul>
+    <li>Processing happens on its owner's computer. Statement PDFs are decrypted in memory and not saved.</li>
+    <li>Extracted transactions are written only to its owner's Google Sheet.</li>
+    <li>A short summary (bank, statement month, number of transactions, total amount, a link to the sheet) is sent to its owner's own Telegram and LINE accounts.</li>
+    <li>Merchant names the app doesn't recognize, together with a list of item names and categories already used in the sheet, are sent to Anthropic's Claude to suggest a name and category. Amounts, dates, and account details are not included. Anthropic's handling is governed by <a href="https://www.anthropic.com/legal/privacy" rel="noopener">its privacy policy</a>.</li>
+    <li>To download a statement from a bank's website, the app sends that bank the login details its owner configured.</li>
+  </ul>
+  <p>The app has no servers and no database of its own. Google OAuth tokens and other credentials are stored in the macOS Keychain on its owner's computer. A local log and a small file recording which errors were already reported are kept on the same computer.</p>
+
+  <h2>Sharing</h2>
+  <p>Data is not sold, rented, used for advertising, or shown to anyone other than the owner. Nothing is shared beyond the services listed above.</p>
+
+  <h2>Google API Services User Data Policy</h2>
+  <p>cc-statement-sync's use and transfer of information received from Google APIs to any other app will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+
+  <h2>Revoking access and deleting data</h2>
+  <ul>
+    <li>Revoke the app's access to a Google account at any time at <a href="https://myaccount.google.com/permissions" rel="noopener">myaccount.google.com/permissions</a>.</li>
+    <li>Uninstalling the app and deleting its Keychain items (service <code>cc-statement-sync</code>) removes every credential and local record it kept.</li>
+    <li>Rows it added to the spreadsheet and labels it applied in Gmail stay in the owner's account until the owner deletes them.</li>
+  </ul>
+
+  <h2>Changes</h2>
+  <p>Changes to this policy update the date at the top of this page.</p>
+
+  <div class="contact-card">
+    <strong>歐兜拜 ootobai</strong><br>
+    Contact: Jack Tsai<br>
+    Email: <span id="c-mail">(loading)</span><br>
+    Website: https://ootob.ai
+  </div>
+
+  <script>
+    // Email assembled in JS to keep it away from crawlers that don't run JS.
+    (function () {
+      var el = document.getElementById("c-mail");
+      if (el) el.textContent = "jack" + "\u0040" + "ootob.ai";
+    })();
+  </script>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 ootob.ai</p>
+</footer>
+
+</body>
+</html>
