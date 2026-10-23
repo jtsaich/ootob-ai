@@ -7,3 +7,7 @@
 /try-awesome-design https://me.ootob.ai/try-awesome-design/ 301
 /non-dev-guide-to-ai-agents/* https://me.ootob.ai/non-dev-guide-to-ai-agents/:splat 301
 /non-dev-guide-to-ai-agents https://me.ootob.ai/non-dev-guide-to-ai-agents/ 301
+
+# cc-statement-sync 改名 mailroom（2026-10-23）；Google OAuth 設定裡的舊網址仍可用
+/privacy/cc-statement-sync/* /privacy/mailroom/ 301
+/privacy/cc-statement-sync /privacy/mailroom/ 301
