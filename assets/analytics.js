@@ -25,7 +25,7 @@
     else if (h.indexOf("tasker.com.tw") !== -1) method = "tasker";
     else if (h.indexOf("calendly.com") !== -1) method = "call";
     if (method) { gtag("event", "contact_click", { method: method, link_url: h, page_path: location.pathname }); return; }
-    if (/railway\.app|jewelry-demo\.ootob\.ai/.test(h) || h.indexOf("/demo/") === 0) {
+    if (/railway\.app/.test(h) || h.indexOf("/demo/") === 0) {
       gtag("event", "demo_open", { link_url: h, link_text: (a.textContent || "").trim().slice(0, 60), page_path: location.pathname });
     }
   });
